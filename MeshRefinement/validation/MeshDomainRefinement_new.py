@@ -58,20 +58,8 @@ if __name__ == "__main__":
                 Airfoil_MeshSize = round_to_1(Airfoil_MeshSize)
                 print("\n\tCase ", case, "\n")
 
-                mdpa_file_name = mdpa_path + '/naca0012_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-                    AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize)
-
-                parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(mdpa_file_name)
-
-                gid_output_file_name = gid_output_path + '/DS_' + str(Domain_Length) + '/' + 'AOA_' + str(
-                    AOA) + '/' + parameters["problem_data"]["problem_name"].GetString()+ '_Case_' + str(
-                    case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(AOA) + '_Far_Field_Mesh_Size_' + str(
-                    FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize)
-
-                parameters["output_processes"]["gid_output"][0]["Parameters"]["output_name"].SetString(gid_output_file_name)
-
                 model = KratosMultiphysics.Model()
-                simulation = MeshRefinementAnalysis(model,parameters)
+                simulation = MeshRefinementAnalysis(model,parameters,case,Domain_Length,AOA,FarField_MeshSize,Airfoil_MeshSize)
                 simulation.Run()
 
                 Airfoil_MeshSize *= Airfoil_Refinement_Factor

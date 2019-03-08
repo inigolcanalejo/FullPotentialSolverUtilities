@@ -3,6 +3,7 @@ Generate_Mesh_Cosine_File_Path=$PWD/generate_mdpas/generateMeshRefinementCosine.
 Salome_Converter_File_Path=$PWD/generate_mdpas/use_converter.py
 Mesh_Refinement_File_Path=$PWD/MeshRefinement.py
 Mesh_Domain_Refinement_File_Path=$PWD/MeshDomainRefinement_new.py
+Mesh_Refinement_Analysis_File_Path=$PWD/mesh_refinement_analysis.py
 
 source settings/set_paths.sh
 
