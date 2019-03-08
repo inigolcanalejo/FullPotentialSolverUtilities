@@ -1,8 +1,3 @@
-'''
-This is a brief example on how mesh files from Salome in *.dat format can be read with the Salome-kratos-converter
-It works with a simple 2D cantilever example, fixed on one side and a load applied on the other side
-'''
-
 # Note that this has to be on the path in order to work, or you manually specify the path
 import kratos_io_utilities as kratos_utils
 import global_utilities as global_utils
