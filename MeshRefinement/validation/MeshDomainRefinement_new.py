@@ -18,7 +18,9 @@ if __name__ == "__main__":
     with open("ProjectParameters_new.json",'r') as parameter_file:
         parameters = KratosMultiphysics.Parameters(parameter_file.read())
 
-    input_mdpa_path = '/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/mdpas/'
+    work_dir = 'TBD'
+
+    input_mdpa_path = work_dir + '/mdpas/'
     output_gid_path = '/media/inigo/10740FB2740F9A1C/Outputs/05_MeshRefinement/'
 
     Number_Of_Refinements = TBD

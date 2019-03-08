@@ -1,5 +1,3 @@
-Work_Dir=/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement
-
 Generate_Mesh_File_Path=$PWD/generate_mdpas/generateMeshRefinement.py
 Generate_Mesh_Cosine_File_Path=$PWD/generate_mdpas/generateMeshRefinementCosine.py
 Salome_Converter_File_Path=$PWD/generate_mdpas/use_converter.py
@@ -53,5 +51,9 @@ sed 's|'"Initial_Domain_Size = TBD"'|'"Initial_Domain_Size = $Initial_Domain_Siz
                                 /$Mesh_Domain_Refinement_File_Path
 
 sed 's|'"Domain_Size_Factor = TBD"'|'"Domain_Size_Factor = $Domain_Size_Factor"'|g' -i /$Generate_Mesh_File_Path \
+                                /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path \
+                                /$Mesh_Domain_Refinement_File_Path
+
+sed 's|'"work_dir = 'TBD'"'|'"work_dir = '$Input_Dir'"'|g' -i /$Generate_Mesh_File_Path \
                                 /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path \
                                 /$Mesh_Domain_Refinement_File_Path

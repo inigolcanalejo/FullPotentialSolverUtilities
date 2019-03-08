@@ -25,7 +25,7 @@ cd generate_mdpas/
 #python3 runSalome.py
 #
 ##Convert salomes mesh into mdpa
-#rm $Work_Dir/mdpas/*
+#rm $Input_Dir/mdpas/*
 #python3 use_converter.py
 #
 ##Save mdpas file in a copy
