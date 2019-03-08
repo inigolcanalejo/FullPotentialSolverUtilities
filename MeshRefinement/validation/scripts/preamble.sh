@@ -12,6 +12,7 @@ echo "LD_LIBRARY_PATH = $LD_LIBRARY_PATH"
 
 GITBRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 Input_Dir=/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement
+Salome_Output=/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/output_salome
 
 DATE=`date '+%Y%m%d_%H%M%S'`
 FILE=${Input_Dir}/plots/output_terminal.txt

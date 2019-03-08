@@ -1,3 +1,6 @@
+
+source settings/unset_paths.sh
+
 sed 's|'"Number_Of_Refinements = $Number_Of_Refinements"'|'"Number_Of_Refinements = TBD"'|g' -i /$Generate_Mesh_File_Path \
                                 /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path \
                                 /$Mesh_Domain_Refinement_File_Path

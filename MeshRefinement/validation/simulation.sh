@@ -16,17 +16,17 @@ echo "The current working directory: $PWD"
 source scripts/preamble.sh
 
 #Setting the parameters
-source scripts/parameters.sh
-source generate_mdpas/set_parameters.sh
+source settings/parameters.sh
+source settings/set_parameters.sh
 cd generate_mdpas/
 
 #Run salome: generate geometry and mesh
-#rm $Input_Dir/output_salome/*
-#python3 runSalome.py
+rm $Input_Dir/output_salome/*
+python3 runSalome.py
 #
 ##Convert salomes mesh into mdpa
-#rm $Input_Dir/mdpas/*
-#python3 use_converter.py
+rm $Input_Dir/mdpas/*
+python3 use_converter.py
 #
 ##Save mdpas file in a copy
 #source save_mdpas.sh
@@ -36,7 +36,7 @@ cd ..
 #Run Kratos
 source scripts/runKratos.sh
 
-source generate_mdpas/unset_parameters.sh
+source settings/unset_parameters.sh
 
 
 

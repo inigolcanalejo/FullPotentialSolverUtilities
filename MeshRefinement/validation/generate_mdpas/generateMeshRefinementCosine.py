@@ -29,7 +29,7 @@ Ratio = 1.1
 Growth_Rate = 0.05
 
 path = os.getcwd()
-output_path = '/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/output_salome'
+output_path = 'TBD'
 
 case = 0
 Domain_Length = Initial_Domain_Size
