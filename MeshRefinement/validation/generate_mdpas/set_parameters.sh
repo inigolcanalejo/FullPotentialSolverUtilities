@@ -4,7 +4,7 @@ Generate_Mesh_File_Path=$PWD/generate_mdpas/generateMeshRefinement.py
 Generate_Mesh_Cosine_File_Path=$PWD/generate_mdpas/generateMeshRefinementCosine.py
 Salome_Converter_File_Path=$PWD/generate_mdpas/use_converter.py
 Mesh_Refinement_File_Path=$PWD/MeshRefinement.py
-Mesh_Domain_Refinement_File_Path=$PWD/MeshDomainRefinement.py
+Mesh_Domain_Refinement_File_Path=$PWD/MeshDomainRefinement_new.py
 
 sed 's|'"Number_Of_Refinements = TBD"'|'"Number_Of_Refinements = $Number_Of_Refinements"'|g' -i /$Generate_Mesh_File_Path \
                                 /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path \
