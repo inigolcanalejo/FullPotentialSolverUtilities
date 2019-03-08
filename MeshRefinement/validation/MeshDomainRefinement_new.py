@@ -1,4 +1,5 @@
-from __future__ import print_function, absolute_import, division #makes KratosMultiphysics backward compatible with python 2.6 and 2.7
+#makes KratosMultiphysics backward compatible with python 2.6 and 2.7
+from __future__ import print_function, absolute_import, division
 
 import KratosMultiphysics
 from mesh_refinement_analysis import MeshRefinementAnalysis
@@ -18,10 +19,8 @@ if __name__ == "__main__":
     with open("ProjectParameters_new.json",'r') as parameter_file:
         parameters = KratosMultiphysics.Parameters(parameter_file.read())
 
-    work_dir = 'TBD'
-
-    input_mdpa_path = work_dir + '/mdpas/'
-    output_gid_path = '/media/inigo/10740FB2740F9A1C/Outputs/05_MeshRefinement/'
+    mdpa_path = 'TBD'
+    gid_output_path = 'TBD'
 
     Number_Of_Refinements = TBD
     Number_Of_AOAS = TBD
@@ -48,23 +47,23 @@ if __name__ == "__main__":
         Domain_Width = int(Domain_Width)
         FarField_MeshSize = int(Domain_Length / 50.0)
         AOA = Initial_AOA
-        os.mkdir(output_gid_path + 'DS_' + str(Domain_Length))
+        os.mkdir(gid_output_path + '/DS_' + str(Domain_Length))
 
         for j in range(Number_Of_AOAS):
             Airfoil_MeshSize = Initial_Airfoil_MeshSize
 
-            os.mkdir(output_gid_path + 'DS_' + str(Domain_Length) + '/' + 'AOA_' + str(AOA))
+            os.mkdir(gid_output_path + '/DS_' + str(Domain_Length) + '/' + 'AOA_' + str(AOA))
 
             for i in range(Number_Of_Refinements):
                 Airfoil_MeshSize = round_to_1(Airfoil_MeshSize)
                 print("\n\tCase ", case, "\n")
 
-                mdpa_file_name = input_mdpa_path + 'naca0012_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+                mdpa_file_name = mdpa_path + '/naca0012_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                     AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize)
 
                 parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(mdpa_file_name)
 
-                gid_output_file_name = output_gid_path + 'DS_' + str(Domain_Length) + '/' + 'AOA_' + str(
+                gid_output_file_name = gid_output_path + '/DS_' + str(Domain_Length) + '/' + 'AOA_' + str(
                     AOA) + '/' + parameters["problem_data"]["problem_name"].GetString()+ '_Case_' + str(
                     case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(AOA) + '_Far_Field_Mesh_Size_' + str(
                     FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize)

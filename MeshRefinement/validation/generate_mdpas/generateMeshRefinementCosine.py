@@ -29,7 +29,7 @@ Ratio = 1.1
 Growth_Rate = 0.05
 
 path = os.getcwd()
-output_path = 'TBD'
+salome_output_path = 'TBD'
 
 case = 0
 Domain_Length = Initial_Domain_Size
@@ -206,16 +206,16 @@ for k in range(Number_Of_Domains_Size):
             smesh.SetName(UpperSurface, 'UpperSurface')
             smesh.SetName(Fluid.GetMesh(), 'Fluid')
 
-            fluid_path = output_path + '/Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            fluid_path = salome_output_path + '/Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
-            far_field_path = output_path + '/PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            far_field_path = salome_output_path + '/PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
-            upper_surface_path = output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            upper_surface_path = salome_output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
-            lower_surface_path = output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            lower_surface_path = salome_output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
             try:

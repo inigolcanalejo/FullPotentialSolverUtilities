@@ -29,8 +29,8 @@ Initial_Domain_Size = TBD
 Domain_Size_Factor = TBD
 
 
-output_salome_path = "/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/output_salome/"
-output_mdpa_path = "/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/mdpas/"
+salome_output_path = 'TBD'
+mdpa_path = 'TBD'
 
 case = 0
 Domain_Length = Initial_Domain_Size
@@ -57,13 +57,13 @@ for k in range(Number_Of_Domains_Size):
             smp_dict_upper_surface   = {"smp_name": "Body2D_UpperSurface"}
             smp_dict_lower_surface   = {"smp_name": "Body2D_LowerSurface"}
 
-            file_name_fluid         = output_salome_path + 'Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            file_name_fluid         = salome_output_path + '/Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-            file_name_far_field     = output_salome_path + 'PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            file_name_far_field     = salome_output_path + '/PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-            file_name_upper_surface = output_salome_path + 'Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            file_name_upper_surface = salome_output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-            file_name_lower_surface = output_salome_path + 'Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            file_name_lower_surface = salome_output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
             def ReadDatFile(file_name):
@@ -93,7 +93,7 @@ for k in range(Number_Of_Domains_Size):
             model.AddMesh(smp_dict_lower_surface,   mesh_dict_lower_surface,    nodes_lower_surface,    geom_entities_lower_surface)
 
             mdpa_info = "mdpa for demonstration purposes"
-            mdpa_file_name = output_mdpa_path + 'naca0012_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            mdpa_file_name = mdpa_path + '/naca0012_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize)
 
 

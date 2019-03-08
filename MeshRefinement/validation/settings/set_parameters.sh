@@ -56,6 +56,3 @@ sed 's|'"Domain_Size_Factor = TBD"'|'"Domain_Size_Factor = $Domain_Size_Factor"'
                                 /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path \
                                 /$Mesh_Domain_Refinement_File_Path
 
-sed 's|'"work_dir = 'TBD'"'|'"work_dir = '$Input_Dir'"'|g' -i /$Generate_Mesh_File_Path \
-                                /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path \
-                                /$Mesh_Domain_Refinement_File_Path
