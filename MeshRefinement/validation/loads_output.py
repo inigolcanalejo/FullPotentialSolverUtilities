@@ -46,7 +46,7 @@ def write_figures_cl(cl_data_directory_name, AOA, work_dir):
         cl_figures_file.flush()
 
 def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
-    with open(work_dir + 'plots/cl_error/figures_cl_error.tex', 'a') as cl_error_figures_file:
+    with open(work_dir + '/plots/cl_error/figures_cl_error.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -57,7 +57,7 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
                            )
         cl_error_figures_file.flush()
 
-    with open(work_dir + 'plots/cl_error/figures_cl_error_h.tex', 'a') as cl_error_figures_file:
+    with open(work_dir + '/plots/cl_error/figures_cl_error_h.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -68,7 +68,7 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
                            )
         cl_error_figures_file.flush()
 
-    with open(work_dir + 'plots/cl_error/figures_cl_error_h_log.tex', 'a') as cl_error_figures_file:
+    with open(work_dir + '/plots/cl_error/figures_cl_error_h_log.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -79,7 +79,7 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
                            )
         cl_error_figures_file.flush()
 
-    with open(work_dir + 'plots/cl_error/figures_cl_error_h_log_ok.tex', 'a') as cl_error_figures_file:
+    with open(work_dir + '/plots/cl_error/figures_cl_error_h_log_ok.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -91,7 +91,7 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
         cl_error_figures_file.flush()
     
 def write_figures_energy(energy_data_directory_name, AOA, work_dir):
-    with open(work_dir + 'plots/relative_error_energy_norm/figures_energy_h.tex', 'a') as energy_h_figures_file:
+    with open(work_dir + '/plots/relative_error_energy_norm/figures_energy_h.tex', 'a') as energy_h_figures_file:
         energy_h_figures_file.write('\n\pgfplotsset{table/search path={' + energy_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -102,7 +102,7 @@ def write_figures_energy(energy_data_directory_name, AOA, work_dir):
                            )
         energy_h_figures_file.flush()
 
-    with open(work_dir + 'plots/relative_error_energy_norm/figures_energy_n.tex', 'a') as energy_n_figures_file:
+    with open(work_dir + '/plots/relative_error_energy_norm/figures_energy_n.tex', 'a') as energy_n_figures_file:
         energy_n_figures_file.write('\n\pgfplotsset{table/search path={' + energy_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -113,7 +113,7 @@ def write_figures_energy(energy_data_directory_name, AOA, work_dir):
                            )
         energy_n_figures_file.flush()
 
-    with open(work_dir + 'plots/relative_error_energy_norm/figures_energy_variant_h.tex', 'a') as energy_variant_h_figures_file:
+    with open(work_dir + '/plots/relative_error_energy_norm/figures_energy_variant_h.tex', 'a') as energy_variant_h_figures_file:
         energy_variant_h_figures_file.write('\n\pgfplotsset{table/search path={' + energy_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -124,7 +124,7 @@ def write_figures_energy(energy_data_directory_name, AOA, work_dir):
                            )
         energy_variant_h_figures_file.flush()
 
-    with open(work_dir + 'plots/relative_error_energy_norm/figures_energy_variant_n.tex', 'a') as energy_variant_n_figures_file:
+    with open(work_dir + '/plots/relative_error_energy_norm/figures_energy_variant_n.tex', 'a') as energy_variant_n_figures_file:
         energy_variant_n_figures_file.write('\n\pgfplotsset{table/search path={' + energy_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -136,7 +136,7 @@ def write_figures_energy(energy_data_directory_name, AOA, work_dir):
         energy_variant_n_figures_file.flush()
 
 def write_figures_cd(cd_data_directory_name, AOA, work_dir):
-    with open(work_dir + 'plots/cd/figures_cd.tex', 'a') as cd_figures_file:
+    with open(work_dir + '/plots/cd/figures_cd.tex', 'a') as cd_figures_file:
         cd_figures_file.write('\n\pgfplotsset{table/search path={' + cd_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
@@ -148,7 +148,7 @@ def write_figures_cd(cd_data_directory_name, AOA, work_dir):
         cd_figures_file.flush()
 
 def write_figures_condition(condition_data_directory_name, AOA, work_dir):
-    with open(work_dir + 'plots/condition_number/figures_condition.tex', 'a') as condition_figures_file:
+    with open(work_dir + '/plots/condition_number/figures_condition.tex', 'a') as condition_figures_file:
         condition_figures_file.write('\n\pgfplotsset{table/search path={' + condition_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +

@@ -51,12 +51,10 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         else:
             self.cl_relative_error = abs(self.Cl - self.cl_reference)/abs(self.cl_reference)*100.0
 
-        '''
         cl_error_results_file_name = self.input_dir_path + "/plots/cl_error/data/cl/cl_error_results_h.dat"
         with open(cl_error_results_file_name,'a') as cl_error_file:
             cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_relative_error))
             cl_error_file.flush()
-        '''
 
     def read_cl_reference(self,AOA):
         #values computed with the panel method from xfoil

@@ -6,9 +6,9 @@ rm main*
 #cd $input_dir_path/plots/cl
 #pdflatex -interaction=batchmode main_cl.tex > main_cl_out.txt
 #pdflatex -interaction=batchmode main_cl_h.tex > main_cl_h_out.txt
-#cd $input_dir_path/plots/cl_error
+cd $input_dir_path/plots/cl_error
 #pdflatex -interaction=batchmode main_cl_error.tex > main_cl_error_out.txt
-#pdflatex -interaction=batchmode main_cl_error_h.tex > main_cl_error_h_out.txt
+pdflatex -interaction=batchmode main_cl_error_h.tex > main_cl_error_h_out.txt
 #pdflatex -interaction=batchmode main_cl_error_h_log.tex > main_cl_error_h_log_out.txt
 #pdflatex -interaction=batchmode main_cl_error_h_log_ok.tex > main_cl_error_h_log_ok_out.txt
 #cd $input_dir_path/plots/relative_error_energy_norm
