@@ -58,16 +58,18 @@
                 "epsilon"         : 1e-9
             }
         },{
-            "python_module" : "compute_lift_process",
+            "python_module" : "compute_lift_process_2d_refinement",
             "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
-            "process_name"  : "ComputeLiftProcess3D",
+            "process_name"  : "ComputeLiftProcessRefinement",
             "Parameters"    : {
                 "mesh_id"         : 0,
                 "model_part_name" : "MainModelPart",
                 "upper_surface_model_part_name" : "MainModelPart.Body2D_UpperSurface",
                 "lower_surface_model_part_name" : "MainModelPart.Body2D_LowerSurface",
                 "velocity_infinity" : [10.0,0.0,0.0],
-                "create_output_file": false
+                "create_output_file": false,
+                "angle_of_attack": 0.0,
+                "airfoil_meshsize": 1.0
             }
         },{
             "python_module" : "placeholder_process",

@@ -11,13 +11,13 @@ echo "PYTHONPATH = $PYTHONPATH"
 echo "LD_LIBRARY_PATH = $LD_LIBRARY_PATH"
 
 GITBRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-Input_Dir=/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement
-salome_output_path=$Input_Dir/output_salome
-mdpa_path=$Input_Dir/mdpas
+input_dir_path=/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement
+salome_output_path=$input_dir_path/output_salome
+mdpa_path=$input_dir_path/mdpas
 gid_output_path=/media/inigo/10740FB2740F9A1C/Outputs/05_MeshRefinement
 
 DATE=`date '+%Y%m%d_%H%M%S'`
-FILE=${Input_Dir}/plots/output_terminal.txt
+FILE=${input_dir_path}/plots/output_terminal.txt
 NAME=${FILE%.*}
 EXT=${FILE#*.}
 NEWFILE=${NAME}_${DATE}_${GITBRANCH}.${EXT}
