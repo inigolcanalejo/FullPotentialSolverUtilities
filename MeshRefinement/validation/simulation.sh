@@ -32,9 +32,12 @@ cd generate_mdpas/
 #source save_mdpas.sh
 
 cd ..
-
-#Run Kratos
+# Run Kratos
 source scripts/runKratos.sh
+# Run Latex
+source scripts/run_latex.sh
+# Copy results
+source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 

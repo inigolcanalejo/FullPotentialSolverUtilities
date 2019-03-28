@@ -13,8 +13,5 @@ unbuffer python3 MeshDomainRefinement.py 2>&1 | tee $NEWFILE
 sed 's|'"$Element"'|'"ELEMENT TBD"'|g' -i /$ProjectParameters_File_Path
 sed 's|'"$WakeProcess"'|'"WAKE PROCESS TBD"'|g' -i /$ProjectParameters_File_Path
 
-OUTPUTNAME=wake_implementation_99_17_no_corner_one_structure_TE_up
-#Remove plots after run, run latex and copy results
-source scripts/run_latex.sh
+OUTPUTNAME=incompressible2D
 
-cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement/validation

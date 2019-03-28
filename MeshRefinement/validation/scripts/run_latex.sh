@@ -1,6 +1,6 @@
 #Removing files
-rm cp*
-rm main*
+#rm cp*
+#rm main*
 
 #Running Latex
 cd $input_dir_path/plots/cl
@@ -24,13 +24,6 @@ pdflatex -interaction=batchmode cl_aoa.tex > main_aoa_out.txt
 #pdflatex -interaction=batchmode main_condition.tex > main_condition_out.txt
 cd $input_dir_path/plots/cl_error_domain_size/
 pdflatex -interaction=batchmode cl_domain.tex > cl_domain_out.txt
-#
-##Copying results
-#DIRECTORY=/media/inigo/10740FB2740F9A1C/Implementations_testing/05_MeshRefinement
-#DATE=`date '+%Y%m%d_%H%M%S'`
-#mkdir -p ${DIRECTORY}_${DATE}_${GITBRANCH}_${OUTPUTNAME}
-#mkdir -p ${DIRECTORY}_${DATE}_${GITBRANCH}_${OUTPUTNAME}/output_gid
-#
-#cp -r $input_dir_path/plots/ ${DIRECTORY}_${DATE}_${GITBRANCH}_${OUTPUTNAME}
-#cp -r /media/inigo/10740FB2740F9A1C/Outputs/05_MeshRefinement/* ${DIRECTORY}_${DATE}_${GITBRANCH}_${OUTPUTNAME}/output_gid
+
+cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement/validation
 
