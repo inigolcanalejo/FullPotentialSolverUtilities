@@ -1,6 +1,7 @@
 #Removing files
 #rm cp*
 #rm main*
+rm validation.post.lst
 
 #Running Latex
 cd $input_dir_path/plots/cl
