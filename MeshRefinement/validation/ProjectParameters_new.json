@@ -69,7 +69,9 @@
                 "velocity_infinity" : [10.0,0.0,0.0],
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
-                "airfoil_meshsize": 1.0
+                "airfoil_meshsize": 1.0,
+                "minimum_airfoil_meshsize": 1.0,
+                "domain_size": 1.0
             }
         },{
             "python_module" : "placeholder_process",

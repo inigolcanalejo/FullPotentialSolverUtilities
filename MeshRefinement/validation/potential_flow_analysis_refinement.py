@@ -19,6 +19,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
     def Run(self):
         self.SetParameters()
+        self.ExecuteBeforeDomainLoop()
         # Loop over domains
         for _ in range(self.Number_Of_Domains_Size):
             self.ExecuteBeforeAOALoop()
@@ -38,10 +39,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
                     self.case += 1
                 self.ExecuteAfterRefinementLoop()
-            self.Domain_Length /= self.Domain_Size_Factor
-            self.Domain_Width /= self.Domain_Size_Factor
+            self.ExecuteAfterAOALoop()
 
-
+    
+    
     def SetParameters(self):
         self.Number_Of_Refinements = TBD
         self.Number_Of_AOAS = TBD
@@ -60,6 +61,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Domain_Length = self.Initial_Domain_Size
         self.Domain_Width = self.Initial_Domain_Size
 
+        self.Minimum_Airfoil_MeshSize = self.Initial_Airfoil_MeshSize * \
+            (self.Airfoil_Refinement_Factor**(self.Number_Of_Refinements-1))
+
         self.SetFilePaths()
 
     def SetFilePaths(self):
@@ -69,15 +73,37 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.cl_error_results_directory_name = 'TBD'
         self.cl_error_results_h_file_name = 'TBD'
+        self.cl_results_directory_name = 'TBD'
+        self.cl_results_h_file_name = 'TBD'
+        self.cl_reference_h_file_name = 'TBD'
+
+        self.aoa_results_directory_name = 'TBD'
+        self.aoa_results_file_name = 'TBD'
+
+        self.cl_error_results_domain_directory_name = 'TBD'
+
+    def ExecuteBeforeDomainLoop(self):
+        self.AOA = self.Initial_AOA
+        for _ in range(self.Number_Of_AOAS):
+            shutil.rmtree(self.cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA), ignore_errors=True)
+            shutil.copytree(self.cl_error_results_domain_directory_name + '/domain', self.cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA))
+            loads_output.write_figures_domain_cl_error(self.cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA), self.AOA, self.input_dir_path)
+            self.AOA += self.AOA_Increment
 
     def ExecuteBeforeAOALoop(self):
         self.Domain_Length = int(self.Domain_Length)
         self.Domain_Width = int(self.Domain_Width)
         self.FarField_MeshSize = int(self.Domain_Length / 50.0)
         self.AOA = self.Initial_AOA
-        shutil.rmtree(self.gid_output_path + '/DS_' +
-                      str(self.Domain_Length), ignore_errors=True)
+        shutil.rmtree(self.gid_output_path + '/DS_' + str(self.Domain_Length), ignore_errors=True)
         os.mkdir(self.gid_output_path + '/DS_' + str(self.Domain_Length))
+
+        shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
+
+        with open(self.aoa_results_file_name,'w') as cl_aoa_file:
+            cl_aoa_file.flush()
+
+
 
     def ExecuteBeforeRefinementLoop(self):
         self.Airfoil_MeshSize = self.Initial_Airfoil_MeshSize
@@ -85,8 +111,13 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         with open(self.cl_error_results_h_file_name,'w') as cl_error_file:
             cl_error_file.flush()
+        with open(self.cl_results_h_file_name,'w') as cl_file:
+            cl_file.flush()
+        with open(self.cl_reference_h_file_name,'w') as cl_file:
+            cl_file.flush()
 
         self.cl_error_data_directory_name = 'data/cl_error_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
+        self.cl_data_directory_name = 'data/cl_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
 
     def SetParametersBeforeInitialize(self):
         self.Airfoil_MeshSize = round_to_1(self.Airfoil_MeshSize)
@@ -110,15 +141,31 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.AOA)
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["airfoil_meshsize"].SetDouble(
             self.Airfoil_MeshSize)
+        self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["minimum_airfoil_meshsize"].SetDouble(
+            self.Minimum_Airfoil_MeshSize)
+        self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["domain_size"].SetDouble(
+            self.Domain_Length)
 
         self._solver = self._CreateSolver()
         self._GetSolver().AddVariables()
 
     def ExecuteAfterRefinementLoop(self):
-        loads_output.write_figures_cl_error(self.cl_error_data_directory_name, self.AOA, self.input_dir_path)
+        loads_output.write_figures_cl_error(self.cl_error_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
+        loads_output.write_figures_cl(self.cl_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
+
+        shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
         shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
+
         os.remove(self.cl_error_results_h_file_name)
+        os.remove(self.cl_results_h_file_name)
+        os.remove(self.cl_reference_h_file_name)
         self.AOA += self.AOA_Increment
+
+    def ExecuteAfterAOALoop(self):
+        shutil.copytree(self.aoa_results_directory_name + '/data', self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length))
+
+        self.Domain_Length *= self.Domain_Size_Factor
+        self.Domain_Width *= self.Domain_Size_Factor
 
     def Finalize(self):
         super(PotentialFlowAnalysisRefinement,self).Finalize()

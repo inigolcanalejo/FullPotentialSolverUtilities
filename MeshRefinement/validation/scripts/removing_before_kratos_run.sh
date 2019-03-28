@@ -25,6 +25,8 @@ rm $input_dir_path/plots/potential_jump/plots/*
 rm -rf $input_dir_path/plots/cl_error/data/cl_*
 rm $input_dir_path/plots/cl_error/figures_cl_error*
 
+rm $input_dir_path/plots/cl_error_domain_size/figures_cl_domain*
+
 rm -rf $input_dir_path/plots/relative_error_energy_norm/data/energy_*
 rm $input_dir_path/plots/relative_error_energy_norm/figures_*
 

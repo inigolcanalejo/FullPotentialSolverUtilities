@@ -22,37 +22,49 @@ def write_case(case, AOA, FarField_MeshSize, Airfoil_MeshSize,work_dir):
     aoa_file.write('{0:4d} {1:6.2f} {2:15.2f} {3:15.2e}'.format(case, AOA, FarField_MeshSize, Airfoil_MeshSize))
     aoa_file.flush()
 
-def write_figures_cl(cl_data_directory_name, AOA, work_dir):
-    with open(work_dir + 'plots/cl/figures_cl.tex', 'a') as cl_figures_file:
+def write_figures_cl(cl_data_directory_name, AOA, work_dir, Domain_Size):
+    with open(work_dir + '/plots/cl/figures_cl.tex', 'a') as cl_figures_file:
         cl_figures_file.write('\n\pgfplotsset{table/search path={' + cl_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + cl_data_directory_name + '/cl.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
-                           '\t\label{fig:cl_AOA_' + str(AOA) + '}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) +'}\n' +
+                           '\t\label{fig:cl_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )
         cl_figures_file.flush()
 
-    with open(work_dir + 'plots/cl/figures_cl_h.tex', 'a') as cl_figures_file:
+    with open(work_dir + '/plots/cl/figures_cl_h.tex', 'a') as cl_figures_file:
         cl_figures_file.write('\n\pgfplotsset{table/search path={' + cl_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + cl_data_directory_name + '/clh.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
-                           '\t\label{fig:cl_AOA_' + str(AOA) + '}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) +'}\n' +
+                           '\t\label{fig:cl_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )
         cl_figures_file.flush()
 
-def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
+def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
+    with open(work_dir + '/plots/cl_error_domain_size/figures_cl_domain.tex', 'a') as cl_error_figures_file:
+        cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
+                           '\\begin{figure}\n' +
+                           '\t\centering\n' +
+                           '\t\input{' + cl_error_data_directory_name + '/domain_cl_error.tikz}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
+                           '\t\label{fig:cl_error_domain_AOA_' + str(AOA) + '}\n' +
+                           '\end{figure}\n'
+                           )
+        cl_error_figures_file.flush()
+
+def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir, Domain_Size):
     with open(work_dir + '/plots/cl_error/figures_cl_error.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + cl_error_data_directory_name + '/cl_error.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
-                           '\t\label{fig:cl_error_AOA_' + str(AOA) + '}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) +'}\n' +
+                           '\t\label{fig:cl_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )
         cl_error_figures_file.flush()
@@ -62,8 +74,8 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + cl_error_data_directory_name + '/cl_error_h.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
-                           '\t\label{fig:cl_error_AOA_' + str(AOA) + '}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) + '}\n' +
+                           '\t\label{fig:cl_error_h_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )
         cl_error_figures_file.flush()
@@ -73,7 +85,7 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + cl_error_data_directory_name + '/cl_error_h_log.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) + '}\n' +
                            '\t\label{fig:cl_error_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )
@@ -84,7 +96,7 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir):
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + cl_error_data_directory_name + '/cl_error_h_log_ok.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) + '}\n' +
                            '\t\label{fig:cl_error_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )

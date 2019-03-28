@@ -22,7 +22,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 "reference_area": 1,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
-                "airfoil_meshsize": 1.0
+                "airfoil_meshsize": 1.0,
+                "minimum_airfoil_meshsize": 1.0,
+                "domain_size": 1.0
             }  """)
 
         settings.ValidateAndAssignDefaults(default_parameters)
@@ -36,25 +38,50 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.reference_area =  settings["reference_area"].GetDouble()
         self.create_output_file = settings["create_output_file"].GetBool()
 
-        self.aoa = settings["angle_of_attack"].GetDouble()
-        self.cl_reference = self.read_cl_reference(self.aoa)
+        self.AOA = settings["angle_of_attack"].GetDouble()
+        self.cl_reference = self.read_cl_reference(self.AOA)
         self.mesh_size = settings["airfoil_meshsize"].GetDouble()
+        self.minimum_airfoil_meshsize = settings["minimum_airfoil_meshsize"].GetDouble()
+        self.domain_size = settings["domain_size"].GetDouble()
 
         self.input_dir_path = 'TBD'
 
     def ExecuteFinalizeSolutionStep(self):
         super(ComputeLiftProcessRefinement, self).ExecuteFinalizeSolutionStep()
-        print('AOA = ', self.aoa)
+        print('AOA = ', self.AOA)
+        print(' minimum_airfoil_meshsize = ', self.minimum_airfoil_meshsize)
 
         if(abs(self.cl_reference) < 1e-6):
             self.cl_relative_error = abs(self.Cl)*100.0
         else:
             self.cl_relative_error = abs(self.Cl - self.cl_reference)/abs(self.cl_reference)*100.0
 
-        cl_error_results_file_name = self.input_dir_path + "/plots/cl_error/data/cl/cl_error_results_h.dat"
-        with open(cl_error_results_file_name,'a') as cl_error_file:
+        cl_error_results_h_file_name = 'TBD'
+        with open(cl_error_results_h_file_name,'a') as cl_error_file:
             cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_relative_error))
             cl_error_file.flush()
+
+        cl_results_h_file_name = 'TBD'
+        with open(cl_results_h_file_name,'a') as cl_file:
+            cl_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.Cl))
+            cl_file.flush()
+
+        cl_reference_h_file_name = 'TBD'
+        with open(cl_reference_h_file_name,'a') as cl_reference_file:
+            cl_reference_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_reference))
+            cl_reference_file.flush()
+
+        if(self.mesh_size < self.minimum_airfoil_meshsize + 1e-9):
+            aoa_results_file_name = 'TBD'
+            with open(aoa_results_file_name,'a') as cl_aoa_file:
+                cl_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.Cl))
+                cl_aoa_file.flush()
+
+            cl_error_results_domain_directory_name = 'TBD'
+            cl_error_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_error_results_domain.dat'
+            with open(cl_error_results_domain_file_name,'a') as cl_error_file:
+                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.cl_relative_error))
+                cl_error_file.flush()
 
     def read_cl_reference(self,AOA):
         #values computed with the panel method from xfoil

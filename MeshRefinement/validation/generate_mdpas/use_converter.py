@@ -104,5 +104,5 @@ for k in range(Number_Of_Domains_Size):
             #FarField_MeshSize /= FarField_Refinement_Factor
             case += 1
         AOA += AOA_Increment
-    Domain_Length /= Domain_Size_Factor
-    Domain_Width /= Domain_Size_Factor
+    Domain_Length *= Domain_Size_Factor
+    Domain_Width *= Domain_Size_Factor
