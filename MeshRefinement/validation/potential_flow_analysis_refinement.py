@@ -169,4 +169,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
     def Finalize(self):
         super(PotentialFlowAnalysisRefinement,self).Finalize()
+        self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
+        self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")
         self.model.Reset()

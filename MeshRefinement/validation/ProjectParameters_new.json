@@ -30,7 +30,7 @@
                 "solver_type"             : "ExternalSolversApplication.super_lu"
         },
         "volume_model_part_name" : "Parts_Parts_Auto1",
-        "skin_parts"             : ["PotentialWallCondition2D_Far_field_Auto1","Body2D_UpperSurface","Body2D_LowerSurface"],
+        "skin_parts"             : ["PotentialWallCondition2D_Far_field_Auto1","Body2D_BodySurface"],
         "no_skin_parts"          : []
     },
     "processes" : {
@@ -50,10 +50,7 @@
             "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "DefineWakeProcess",
             "Parameters"    : {
-                "mesh_id"         : 0,
-                "model_part_name" : "Wake2D_Wake_Auto1",
-                "upper_surface_model_part_name" : "MainModelPart.Body2D_UpperSurface",
-                "lower_surface_model_part_name" : "MainModelPart.Body2D_LowerSurface",
+                "model_part_name" : "MainModelPart.Body2D_BodySurface",
                 "wake_direction"       : [1.0,0.0,0.0],
                 "epsilon"         : 1e-9
             }
@@ -62,10 +59,7 @@
             "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "ComputeLiftProcessRefinement",
             "Parameters"    : {
-                "mesh_id"         : 0,
-                "model_part_name" : "MainModelPart",
-                "upper_surface_model_part_name" : "MainModelPart.Body2D_UpperSurface",
-                "lower_surface_model_part_name" : "MainModelPart.Body2D_LowerSurface",
+                "model_part_name" : "MainModelPart.Body2D_BodySurface",
                 "velocity_infinity" : [10.0,0.0,0.0],
                 "create_output_file": false,
                 "angle_of_attack": 0.0,

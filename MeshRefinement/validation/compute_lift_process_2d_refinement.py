@@ -15,9 +15,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         default_parameters = KratosMultiphysics.Parameters("""
             {
                 "model_part_name":"PLEASE_CHOOSE_MODEL_PART_NAME",
-                "upper_surface_model_part_name" : "please specify the model part that contains the upper surface nodes",
-                "lower_surface_model_part_name" : "please specify the model part that contains the lower surface nodes",
-                "mesh_id": 0,
                 "velocity_infinity": [1.0,0.0,0],
                 "reference_area": 1,
                 "create_output_file": false,
@@ -29,8 +26,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         settings.ValidateAndAssignDefaults(default_parameters)
 
-        self.upper_surface_model_part = Model[settings["upper_surface_model_part_name"].GetString()]
-        self.lower_surface_model_part = Model[settings["lower_surface_model_part_name"].GetString()]
+        self.body_model_part = Model[settings["model_part_name"].GetString()]
         self.velocity_infinity = [0,0,0]
         self.velocity_infinity[0] = settings["velocity_infinity"][0].GetDouble()
         self.velocity_infinity[1] = settings["velocity_infinity"][1].GetDouble()
