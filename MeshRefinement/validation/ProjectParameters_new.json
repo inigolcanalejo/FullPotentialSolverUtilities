@@ -21,8 +21,8 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "element_replace_settings": {
-                    "element_name":"IncompressiblePotentialFlowElement2D3N",
-                    "condition_name": "PotentialWallCondition2D2N"
+                    "element_name":"IncompressiblePotentialFlowElement",
+                    "condition_name": "PotentialWallCondition"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 0,
