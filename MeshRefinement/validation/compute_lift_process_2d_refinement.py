@@ -1,4 +1,5 @@
 import KratosMultiphysics
+import KratosMultiphysics.CompressiblePotentialFlowApplication as CPFApp
 from KratosMultiphysics.CompressiblePotentialFlowApplication.compute_lift_process import ComputeLiftProcess
 import loads_output
 import math
@@ -27,10 +28,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         settings.ValidateAndAssignDefaults(default_parameters)
 
         self.body_model_part = Model[settings["model_part_name"].GetString()]
-        self.velocity_infinity = [0,0,0]
-        self.velocity_infinity[0] = settings["velocity_infinity"][0].GetDouble()
-        self.velocity_infinity[1] = settings["velocity_infinity"][1].GetDouble()
-        self.velocity_infinity[2] = settings["velocity_infinity"][2].GetDouble()
+        self.fluid_model_part = self.body_model_part.GetRootModelPart()
+        self.velocity_infinity = self.fluid_model_part.GetProperties()[1].GetValue(CPFApp.VELOCITY_INFINITY)
         self.reference_area =  settings["reference_area"].GetDouble()
         self.create_output_file = settings["create_output_file"].GetBool()
 
