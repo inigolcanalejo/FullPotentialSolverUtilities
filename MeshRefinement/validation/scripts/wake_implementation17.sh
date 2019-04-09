@@ -17,4 +17,4 @@ OUTPUTNAME=wake_implementation_99_17_no_corner_one_structure_TE_up
 #Remove plots after run, run latex and copy results
 source scripts/run_latex.sh
 
-cd /home/inigo/software/kratosMaster/Kratos/applications/CompressiblePotentialFlowApplication/validation
+cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement/validation

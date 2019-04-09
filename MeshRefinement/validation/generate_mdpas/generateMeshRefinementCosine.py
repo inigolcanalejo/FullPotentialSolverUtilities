@@ -29,7 +29,7 @@ Ratio = 1.1
 Growth_Rate = 0.05
 
 path = os.getcwd()
-output_path = '/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/output_salome'
+salome_output_path = 'TBD'
 
 case = 0
 Domain_Length = Initial_Domain_Size
@@ -113,6 +113,10 @@ for k in range(Number_Of_Domains_Size):
             Auto_group_for_Sub_mesh_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_2, [Edge_UpperSurface_LE, Edge_UpperSurface_TE])
 
+            #Body
+            Body_Sub_mesh = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface_LE, Edge_LowerSurface_TE, Edge_UpperSurface_LE, Edge_UpperSurface_TE])
+
             #FarField
             Auto_group_for_Sub_mesh_1_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_1_2, [Edge_1, Edge_2, Edge_7, Edge_8])
@@ -170,13 +174,13 @@ for k in range(Number_Of_Domains_Size):
             NETGEN_2D_Parameters_1.SetMinSize( 1e-15 )
 
             #Set submeshes
-            #LowerSurface
-            Regular_1D = Fluid.Segment(geom=Auto_group_for_Sub_mesh_1_1)
+            #Body
+            Regular_1D = Fluid.Segment(geom=Body_Sub_mesh)
             Geometric_Progression_1 = Regular_1D.GeometricProgression(0.001,1.01,[])
 
             #UpperSurface
-            Regular_1D_1 = Fluid.Segment(geom=Auto_group_for_Sub_mesh_2)
-            status = Fluid.AddHypothesis(Geometric_Progression_1,Auto_group_for_Sub_mesh_2)
+            #Regular_1D_1 = Fluid.Segment(geom=Auto_group_for_Sub_mesh_2)
+            #status = Fluid.AddHypothesis(Geometric_Progression_1,Auto_group_for_Sub_mesh_2)
 
             #Set geometric mesh
             Geometric_Progression_1.SetStartLength( Airfoil_MeshSize )
@@ -190,8 +194,8 @@ for k in range(Number_Of_Domains_Size):
 
             #Mesh
             isDone = Fluid.Compute()
-            LowerSurface = Regular_1D.GetSubMesh()
-            UpperSurface = Regular_1D_1.GetSubMesh()
+            Body = Regular_1D.GetSubMesh()
+            #UpperSurface = Regular_1D_1.GetSubMesh()
             FarField = Regular_1D_2.GetSubMesh()
 
 
@@ -202,20 +206,23 @@ for k in range(Number_Of_Domains_Size):
             smesh.SetName(NETGEN_2D_Parameters_1, 'NETGEN 2D Parameters_1')
             smesh.SetName(FarField, 'FarField')
             smesh.SetName(Local_Length_1, 'Local Length_1')
-            smesh.SetName(LowerSurface, 'LowerSurface')
-            smesh.SetName(UpperSurface, 'UpperSurface')
+            smesh.SetName(Body, 'Body')
+            #smesh.SetName(UpperSurface, 'UpperSurface')
             smesh.SetName(Fluid.GetMesh(), 'Fluid')
 
-            fluid_path = output_path + '/Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            fluid_path = salome_output_path + '/Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
-            far_field_path = output_path + '/PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            far_field_path = salome_output_path + '/PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
-            upper_surface_path = output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+            #upper_surface_path = salome_output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            #    AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
-            lower_surface_path = output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            #lower_surface_path = salome_output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            #    AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+
+            body_surface_path = salome_output_path + '/Body2D_Surface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
             try:
@@ -229,12 +236,7 @@ for k in range(Number_Of_Domains_Size):
             except:
                 print 'ExportPartToDAT() failed. Invalid file name?'
             try:
-                Fluid.ExportDAT( r'/' + upper_surface_path, UpperSurface )
-                pass
-            except:
-                print 'ExportPartToDAT() failed. Invalid file name?'
-            try:
-                Fluid.ExportDAT( r'/' + lower_surface_path, LowerSurface )
+                Fluid.ExportDAT( r'/' + body_surface_path, Body )
                 pass
             except:
                 print 'ExportPartToDAT() failed. Invalid file name?'
@@ -249,8 +251,8 @@ for k in range(Number_Of_Domains_Size):
             #FarField_MeshSize /= FarField_Refinement_Factor
             case +=1
         AOA += AOA_Increment
-    Domain_Length /= Domain_Size_Factor
-    Domain_Width /= Domain_Size_Factor
+    Domain_Length *= Domain_Size_Factor
+    Domain_Width *= Domain_Size_Factor
 
 
 if salome.sg.hasDesktop():
