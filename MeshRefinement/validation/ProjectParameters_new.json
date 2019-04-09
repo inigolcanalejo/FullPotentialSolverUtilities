@@ -21,7 +21,7 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "incompressible"
+            "element_type": "compressible"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 0,
