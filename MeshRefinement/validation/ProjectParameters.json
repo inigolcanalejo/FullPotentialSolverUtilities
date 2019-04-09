@@ -35,14 +35,13 @@
         "Restart_Step"     : 0
     },
     "solver_settings"                  : {
-        "solver_type"            : "Potential_flow",
+        "solver_type"            : "potential_flow",
         "model_import_settings"  : {
             "input_type"     : "mdpa",
             "input_filename" : "naca0012"
         },
-        "element_replace_settings": {
-                    "element_name":"ELEMENT TBD",
-                    "condition_name": "PotentialWallCondition2D2N"
+        "formulation": {
+            "element_type": "imcompressible_potential"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,

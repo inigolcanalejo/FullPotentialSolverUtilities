@@ -41,8 +41,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
                 self.ExecuteAfterRefinementLoop()
             self.ExecuteAfterAOALoop()
 
-    
-    
     def SetParameters(self):
         self.Number_Of_Refinements = TBD
         self.Number_Of_AOAS = TBD
@@ -169,6 +167,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
     def Finalize(self):
         super(PotentialFlowAnalysisRefinement,self).Finalize()
-        self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
-        self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")
+        self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
+        #self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
+        #self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")
         self.model.Reset()

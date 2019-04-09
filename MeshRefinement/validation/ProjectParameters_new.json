@@ -13,16 +13,15 @@
         "Restart_Step"     : 0
     },
     "solver_settings"                  : {
-        "solver_type"            : "Potential_flow",
+        "solver_type"            : "potential_flow",
         "model_part_name" : "MainModelPart",
         "domain_size"     : 2,
         "model_import_settings"  : {
             "input_type"     : "mdpa",
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
-        "element_replace_settings": {
-                    "element_name":"IncompressiblePotentialFlowElement",
-                    "condition_name": "PotentialWallCondition"
+        "formulation": {
+            "element_type": "incompressible"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 0,
