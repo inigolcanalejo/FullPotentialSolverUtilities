@@ -39,19 +39,16 @@
             "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "FarFieldProcess",
             "Parameters"    : {
-                "mesh_id"           : 0,
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "inlet_phi"         : 1.0,
-                "velocity_infinity" : [10.0,0.0,0.0]
+                "mach_infinity": 0.02941176471
             }
         },{
             "python_module" : "define_wake_process_2d",
             "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "DefineWakeProcess",
             "Parameters"    : {
-                "model_part_name" : "MainModelPart.Body2D_BodySurface",
-                "wake_direction"       : [1.0,0.0,0.0],
-                "epsilon"         : 1e-9
+                "model_part_name" : "MainModelPart.Body2D_BodySurface"
             }
         },{
             "python_module" : "compute_lift_process_2d_refinement",
