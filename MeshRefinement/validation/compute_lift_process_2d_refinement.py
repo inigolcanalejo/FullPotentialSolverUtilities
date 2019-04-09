@@ -16,7 +16,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         default_parameters = KratosMultiphysics.Parameters("""
             {
                 "model_part_name":"PLEASE_CHOOSE_MODEL_PART_NAME",
-                "velocity_infinity": [1.0,0.0,0],
                 "reference_area": 1,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
@@ -28,8 +27,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         settings.ValidateAndAssignDefaults(default_parameters)
 
         self.body_model_part = Model[settings["model_part_name"].GetString()]
-        self.fluid_model_part = self.body_model_part.GetRootModelPart()
-        self.velocity_infinity = self.fluid_model_part.GetProperties()[1].GetValue(CPFApp.VELOCITY_INFINITY)
         self.reference_area =  settings["reference_area"].GetDouble()
         self.create_output_file = settings["create_output_file"].GetBool()
 
