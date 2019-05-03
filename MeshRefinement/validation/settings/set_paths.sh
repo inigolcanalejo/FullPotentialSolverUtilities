@@ -10,6 +10,8 @@ paths[cl_reference_h_file_name]=${paths[cl_results_directory_name]}/cl_reference
 paths[aoa_results_directory_name]=$input_dir_path/plots/aoa
 paths[aoa_results_file_name]=$input_dir_path/plots/aoa/data/cl_aoa.dat
 paths[cl_error_results_domain_directory_name]=$input_dir_path/plots/cl_error_domain_size/data
+paths[cp_results_file_name]=$input_dir_path/plots/cp/data/0_original/cp_results.dat
+paths[cp_tikz_file_name]=$input_dir_path/plots/cp/data/0_original/cp.tikz
 
 for path_variable_name in "${!paths[@]}"; do
     sed 's|'"$path_variable_name = 'TBD'"'|'"$path_variable_name = '${paths[$path_variable_name]}'"'|g' -i \
@@ -18,7 +20,7 @@ done
 
 
 sed 's|'"salome_output_path = 'TBD'"'|'"salome_output_path = '$salome_output_path'"'|g' -i \
-/$Salome_Converter_File_Path /$Generate_Mesh_Cosine_File_Path 
+/$Salome_Converter_File_Path /$Generate_Mesh_Cosine_File_Path
 
 sed 's|'"mdpa_path = 'TBD'"'|'"mdpa_path = '$mdpa_path'"'|g' -i \
 /$Salome_Converter_File_Path /$Potential_Flow_Analysis_File_Path

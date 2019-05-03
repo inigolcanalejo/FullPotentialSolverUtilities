@@ -1,5 +1,5 @@
 #Removing files
-#rm cp*
+rm cp*
 #rm main*
 rm validation.post.lst
 

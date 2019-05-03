@@ -44,8 +44,24 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
     def ExecuteFinalizeSolutionStep(self):
         super(ComputeLiftProcessRefinement, self).ExecuteFinalizeSolutionStep()
-        print('AOA = ', self.AOA)
-        print(' minimum_airfoil_meshsize = ', self.minimum_airfoil_meshsize)
+
+        cp_results_file_name = 'TBD'
+        cp_file = open(cp_results_file_name,'w')
+
+        number_of_conditions = self.body_model_part.NumberOfConditions()
+
+        for cond in self.body_model_part.Conditions:
+            cp = cond.GetValue(KratosMultiphysics.PRESSURE)
+
+            x = 0.5*(cond.GetNodes()[1].X0+cond.GetNodes()[0].X0)
+
+            if(number_of_conditions > 7000):
+                if( condition_counter % factor == 0 ):
+                    cp_file.write('{0:15f} {1:15f}\n'.format(x+0.5, cp))
+            else:
+                cp_file.write('{0:15f} {1:15f}\n'.format(x+0.5, cp))
+
+        cp_file.flush()
 
         if(abs(self.cl_reference) < 1e-6):
             self.cl_relative_error = abs(self.Cl)*100.0
@@ -78,6 +94,33 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             with open(cl_error_results_domain_file_name,'a') as cl_error_file:
                 cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.cl_relative_error))
                 cl_error_file.flush()
+
+        cp_tikz_file_name = 'TBD'
+        with open(cp_tikz_file_name,'w') as cp_tikz_file:
+            cp_tikz_file.write('\\begin{tikzpicture}\n' +
+            '\\begin{axis}[\n' +
+            '\t    title={ $c_l$ = ' + "{:.6f}".format(self.Cl) + ' $c_d$ = ' + "{:.6f}".format(self.Cd) + '},\n' +
+            '\t    xlabel={$x/c$},\n' +
+            '\t    ylabel={$c_p[\\unit{-}$]},\n' +
+            '\t    xmin=-0.01, xmax=1.01,\n' +
+            '\t    y dir=reverse,\n' +
+            '\t    xtick={0,0.2,0.4,0.6,0.8,1},\n' +
+            '\t    xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
+            '\t    ymajorgrids=true,\n' +
+            '\t    xmajorgrids=true,\n' +
+            '\t    grid style=dashed,\n' +
+            '\t    width=12cm\n' +
+            ']\n\n' +
+            '\\addplot[\n' +
+            '\t    only marks,\n' +
+            '\t    color=blue,\n' +
+            '\t    mark=*,\n' +
+            '\t    ]\n' +
+            '\t    table {cp_results.dat};  \n' +
+            '\t    \\addlegendentry{h = ' + "{:.1e}".format(self.mesh_size) + ' }\n\n' +
+            '\t\end{axis}\n' +
+            '\t\end{tikzpicture}')
+            cp_tikz_file.flush()
 
     def read_cl_reference(self,AOA):
         #values computed with the panel method from xfoil

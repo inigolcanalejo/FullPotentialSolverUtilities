@@ -1,14 +1,14 @@
 def write_header(work_dir):
-    refinement_file = open(work_dir + "mesh_refinement_loads.dat",'w') 
+    refinement_file = open(work_dir + "mesh_refinement_loads.dat",'w')
     refinement_file.write("FULL POTENTIAL APPLICATION LOADS FILE\n\n")
-    refinement_file.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n\n' % 
+    refinement_file.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n\n' %
                           ("Case", "AOA", "FF_MS", "A_MS", "Con Numb", "# Nodes", "Cl_u", "Cl_l", "Cl_jump", "Cl_ref", "Cd_u", "Cd_l", "Rz"))
     refinement_file.flush()
 
 def write_header_all_cases(work_dir):
-    aoa_file = open(work_dir + "plots/results/all_cases.dat",'w') 
+    aoa_file = open(work_dir + "plots/results/all_cases.dat",'w')
     aoa_file.write("FULL POTENTIAL APPLICATION ALL CASES LOADS FILE\n\n")
-    aoa_file.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n\n' % 
+    aoa_file.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n\n' %
                           ("Case", "AOA", "FF_MS", "A_MS", "Con Numb", "# Nodes", "Cl_u", "Cl_l", "Cl_jump", "Cl_ref", "Cd_u", "Cd_l", "Rz"))
     aoa_file.flush()
 
@@ -101,7 +101,7 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir, Domain_S
                            '\end{figure}\n'
                            )
         cl_error_figures_file.flush()
-    
+
 def write_figures_energy(energy_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/relative_error_energy_norm/figures_energy_h.tex', 'a') as energy_h_figures_file:
         energy_h_figures_file.write('\n\pgfplotsset{table/search path={' + energy_data_directory_name + '},}\n\n' +
@@ -177,12 +177,12 @@ def write_cl(cl,work_dir):
     cl_aoa_file.flush()
 
 def write_cp_figures(cp_data_directory_name, AOA, case, Airfoil_MeshSize,  FarField_MeshSize, work_dir):
-    figures_file = open(work_dir + 'plots/cp/figures.tex', 'w')
+    figures_file = open(work_dir + '/plots/cp/figures.tex', 'w')
     figures_file.write('\n\pgfplotsset{table/search path={' + cp_data_directory_name + '},}\n\n' +
                        '\\begin{figure}\n' +
                        '\t\centering\n' +
                        '\t\input{' + cp_data_directory_name + '/cp.tikz}\n' +
-                       '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                       '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                        ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                        '\t\label{fig:cp_AOA_' + str(AOA) + '}\n' +
                        '\end{figure}\n'
@@ -195,7 +195,7 @@ def write_jump_figures(jump_data_directory_name, AOA, case, Airfoil_MeshSize,  F
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + jump_data_directory_name + '/jump.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                            ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                            '\t\label{fig:jump_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
@@ -208,21 +208,21 @@ def write_figures_far_field(far_field_data_directory_name, AOA, case, Airfoil_Me
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + far_field_data_directory_name + '/velocity_norm_x.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                            ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                            '\t\label{fig:velocity_norm_x_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n\n'
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + far_field_data_directory_name + '/velocity_u_x.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                            ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                            '\t\label{fig:velocity_u_x_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n\n'
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + far_field_data_directory_name + '/velocity_v_x.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                            ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                            '\t\label{fig:velocity_v_x_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
@@ -234,21 +234,21 @@ def write_figures_far_field(far_field_data_directory_name, AOA, case, Airfoil_Me
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + far_field_data_directory_name + '/velocity_norm_y.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                            ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                            '\t\label{fig:velocity_norm_y_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n\n'
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + far_field_data_directory_name + '/velocity_u_y.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                            ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                            '\t\label{fig:velocity_u_y_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n\n'
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + far_field_data_directory_name + '/velocity_v_y.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) + 
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
                            ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
                            '\t\label{fig:velocity_v_y_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
@@ -292,5 +292,5 @@ def read_cl_reference(AOA):
     else:
         return 0.0
 
-        
+
 
