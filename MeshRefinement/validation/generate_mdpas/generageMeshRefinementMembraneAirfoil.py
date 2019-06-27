@@ -26,20 +26,35 @@ import SALOMEDS
 
 geompy = geomBuilder.New(theStudy)
 
+# Create origin and axis
 O = geompy.MakeVertex(0, 0, 0)
 OX = geompy.MakeVectorDXDYDZ(1, 0, 0)
 OY = geompy.MakeVectorDXDYDZ(0, 1, 0)
 OZ = geompy.MakeVectorDXDYDZ(0, 0, 1)
+
+# Read cad file
 cad_model_moved_collapsed_igs_1 = geompy.ImportIGES("/home/inigo/simulations/membranAirfoil/cad_model_scaled_moved_collapsed.gid/cad_model_moved_collapsed.igs")
+
+# Create airfoil face
 Face_Airfoil = geompy.MakeFaceWires([cad_model_moved_collapsed_igs_1], 1)
+
+# Rotate around center to AOA
 geompy.Rotate(Face_Airfoil, OZ, -5*math.pi/180.0)
+
+# Create domain
 Face_Domain = geompy.MakePlane(O, OZ, 25)
+
+# Cut the airfoil from the domain
 Cut_1 = geompy.MakeCutList(Face_Domain, [Face_Airfoil], True)
+
+# Explode edges
 [Wire_Far_Field,Wire_Airfoil] = geompy.ExtractShapes(Cut_1, geompy.ShapeType["WIRE"], True)
 [Lower_Front,Upper_Front,Lower_Middle,Upper_Middle] = geompy.ExtractShapes(Wire_Far_Field, geompy.ShapeType["EDGE"], True)
 [Lower_Front,Upper_Front,Lower_Middle,Upper_Middle,Lower_Back,Upper_Back] = geompy.ExtractShapes(Wire_Airfoil, geompy.ShapeType["EDGE"], True)
 Auto_group_for_Sub_mesh_1 = geompy.CreateGroup(Cut_1, geompy.ShapeType["EDGE"])
 geompy.UnionList(Auto_group_for_Sub_mesh_1, [Lower_Middle, Upper_Middle])
+
+# Add to study
 geompy.addToStudy( O, 'O' )
 geompy.addToStudy( OX, 'OX' )
 geompy.addToStudy( OY, 'OY' )
@@ -66,6 +81,8 @@ import  SMESH, SALOMEDS
 from salome.smesh import smeshBuilder
 
 smesh = smeshBuilder.New(theStudy)
+
+# Set NETGEN
 Mesh_1 = smesh.Mesh(Cut_1)
 NETGEN_1D_2D = Mesh_1.Triangle(algo=smeshBuilder.NETGEN_1D2D)
 NETGEN_2D_Parameters_1 = NETGEN_1D_2D.Parameters()
