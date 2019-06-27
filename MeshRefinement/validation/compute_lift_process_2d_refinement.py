@@ -15,22 +15,19 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         default_parameters = KratosMultiphysics.Parameters("""
             {
                 "model_part_name":"PLEASE_CHOOSE_MODEL_PART_NAME",
-                "velocity_infinity": [1.0,0.0,0],
                 "reference_area": 1,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
                 "airfoil_meshsize": 1.0,
                 "minimum_airfoil_meshsize": 1.0,
-                "domain_size": 1.0
+                "domain_size": 1.0,
+                "moment_reference_point" : [0.0,0.0,0.0]
             }  """)
 
         settings.ValidateAndAssignDefaults(default_parameters)
 
         self.body_model_part = Model[settings["model_part_name"].GetString()]
-        self.velocity_infinity = [0,0,0]
-        self.velocity_infinity[0] = settings["velocity_infinity"][0].GetDouble()
-        self.velocity_infinity[1] = settings["velocity_infinity"][1].GetDouble()
-        self.velocity_infinity[2] = settings["velocity_infinity"][2].GetDouble()
+        self.fluid_model_part = self.body_model_part.GetRootModelPart()
         self.reference_area =  settings["reference_area"].GetDouble()
         self.create_output_file = settings["create_output_file"].GetBool()
 
@@ -41,6 +38,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.domain_size = settings["domain_size"].GetDouble()
 
         self.input_dir_path = 'TBD'
+        self.moment_reference_point = settings["moment_reference_point"].GetVector()
 
     def ExecuteFinalizeSolutionStep(self):
         super(ComputeLiftProcessRefinement, self).ExecuteFinalizeSolutionStep()
@@ -64,9 +62,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         cp_file.flush()
 
         if(abs(self.cl_reference) < 1e-6):
-            self.cl_relative_error = abs(self.Cl)*100.0
+            self.cl_relative_error = abs(self.lift_coefficient)*100.0
         else:
-            self.cl_relative_error = abs(self.Cl - self.cl_reference)/abs(self.cl_reference)*100.0
+            self.cl_relative_error = abs(self.lift_coefficient - self.cl_reference)/abs(self.cl_reference)*100.0
 
         cl_error_results_h_file_name = 'TBD'
         with open(cl_error_results_h_file_name,'a') as cl_error_file:
@@ -75,7 +73,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         cl_results_h_file_name = 'TBD'
         with open(cl_results_h_file_name,'a') as cl_file:
-            cl_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.Cl))
+            cl_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.lift_coefficient))
             cl_file.flush()
 
         cl_reference_h_file_name = 'TBD'
@@ -86,7 +84,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         if(self.mesh_size < self.minimum_airfoil_meshsize + 1e-9):
             aoa_results_file_name = 'TBD'
             with open(aoa_results_file_name,'a') as cl_aoa_file:
-                cl_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.Cl))
+                cl_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.lift_coefficient))
                 cl_aoa_file.flush()
 
             cl_error_results_domain_directory_name = 'TBD'
@@ -99,7 +97,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
-            '\t    title={ $c_l$ = ' + "{:.6f}".format(self.Cl) + ' $c_d$ = ' + "{:.6f}".format(self.Cd) + '},\n' +
+            '\t    title={ $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
             '\t    xlabel={$x/c$},\n' +
             '\t    ylabel={$c_p[\\unit{-}$]},\n' +
             '\t    xmin=-0.01, xmax=1.01,\n' +
