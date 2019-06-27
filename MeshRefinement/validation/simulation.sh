@@ -21,8 +21,8 @@ source settings/set_parameters.sh
 cd generate_mdpas/
 
 #Run salome: generate geometry and mesh
-#rm $input_dir_path/output_salome/*
-#python3 runSalome.py
+rm $input_dir_path/output_salome/*
+python3 runSalome.py
 #
 ##Convert salomes mesh into mdpa
 #rm $input_dir_path/mdpas/*
@@ -33,11 +33,11 @@ cd generate_mdpas/
 
 cd ..
 # Run Kratos
-source scripts/runKratos.sh
+#source scripts/runKratos.sh
 # Run Latex
-source scripts/run_latex.sh
+#source scripts/run_latex.sh
 # Copy results
-source scripts/copy_results.sh
+#source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 
