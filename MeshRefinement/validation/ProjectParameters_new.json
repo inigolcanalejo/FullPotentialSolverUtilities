@@ -41,7 +41,7 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.02941176471,
+                "mach_infinity": 0.06,
                 "free_stream_density"  : 1.0,
                 "speed_of_sound": 340,
                 "heat_capacity_ratio": 1.4,
