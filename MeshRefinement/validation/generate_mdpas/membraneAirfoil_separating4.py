@@ -26,24 +26,43 @@ import SALOMEDS
 
 geompy = geomBuilder.New(theStudy)
 
+# Create origin and axis
 O = geompy.MakeVertex(0, 0, 0)
 OX = geompy.MakeVectorDXDYDZ(1, 0, 0)
 OY = geompy.MakeVectorDXDYDZ(0, 1, 0)
 OZ = geompy.MakeVectorDXDYDZ(0, 0, 1)
+
+# Import CAD
 cad_model_moved_collapsed_igs_1 = geompy.ImportIGES("/home/inigo/simulations/membranAirfoil/cad_model_scaled_moved_collapsed.gid/cad_model_moved_collapsed.igs")
+
+# Create airfoil face
 Face_Airfoil = geompy.MakeFaceWires([cad_model_moved_collapsed_igs_1], 1)
+
+# Rotate around center to AOA
 geompy.Rotate(Face_Airfoil, OZ, -5*math.pi/180.0)
+
+# Create domain
 Face_Domain = geompy.MakeFaceHW(25, 25, 1)
+
+# Cut the airfoil from the domain
 Cut_Domain = geompy.MakeCutList(Face_Domain, [Face_Airfoil], True)
+
+# Explode edges
 [Inlet,Wall_Down,Lower_LE,Upper_LE,Lower_Middle,Upper_Middle,Lower_TE,Upper_TE,Wall_Up,Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
+
+# Create far field group
 Group_FarField = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
 geompy.UnionList(Group_FarField, [Inlet, Wall_Down, Wall_Up, Outlet])
+
+
 Auto_group_for_Sub_mesh_1 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
 geompy.UnionList(Auto_group_for_Sub_mesh_1, [Upper_LE, Lower_TE])
 Auto_group_for_Sub_mesh_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
 geompy.UnionList(Auto_group_for_Sub_mesh_2, [Lower_LE, Upper_TE])
 Auto_group_for_Sub_mesh_3 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
 geompy.UnionList(Auto_group_for_Sub_mesh_3, [Lower_Middle, Upper_Middle])
+
+# Add to study
 geompy.addToStudy( O, 'O' )
 geompy.addToStudy( OX, 'OX' )
 geompy.addToStudy( OY, 'OY' )
@@ -75,6 +94,8 @@ import  SMESH, SALOMEDS
 from salome.smesh import smeshBuilder
 
 smesh = smeshBuilder.New(theStudy)
+
+# Set NETGEN
 Mesh_Domain = smesh.Mesh(Cut_Domain)
 NETGEN_1D_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_1D2D)
 NETGEN_2D_Parameters_1 = NETGEN_1D_2D.Parameters()
@@ -89,9 +110,13 @@ NETGEN_2D_Parameters_1.SetMinSize( 1e-10 )
 NETGEN_2D_Parameters_1.SetUseSurfaceCurvature( 1 )
 NETGEN_2D_Parameters_1.SetFuseEdges( 1 )
 NETGEN_2D_Parameters_1.SetQuadAllowed( 0 )
+
+# Set FarField mesh
 Regular_1D = Mesh_Domain.Segment(geom=Group_FarField)
 FarField_Mesh = Regular_1D.GetSubMesh()
 Local_Length_FarField = Regular_1D.LocalLength(1,None,1e-07)
+
+# Set Airfoil meshes
 Start_and_End_Length_BigToSmall = smesh.CreateHypothesis('StartEndLength')
 Start_and_End_Length_BigToSmall.SetStartLength( 0.0001 )
 Start_and_End_Length_BigToSmall.SetEndLength( 0.001 )
@@ -110,6 +135,8 @@ Sub_mesh_3 = Regular_1D_3.GetSubMesh()
 Local_Length_Middle = Regular_1D_3.LocalLength(0.001,None,1e-07)
 isDone = Mesh_Domain.Compute()
 Compound_Mesh_Airfoil = smesh.Concatenate([Sub_mesh_1, Sub_mesh_2, Sub_mesh_3], 1, 1, 1e-05)
+
+# Export meshes
 try:
   Mesh_Domain.ExportDAT( r'/home/inigo/simulations/membranAirfoil/salome/dat_files/FarField_Mesh.dat', FarField_Mesh )
   pass
