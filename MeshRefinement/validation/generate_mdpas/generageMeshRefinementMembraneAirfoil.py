@@ -91,13 +91,20 @@ NETGEN_2D_Parameters_1.SetOptimize( 1 )
 NETGEN_2D_Parameters_1.SetUseSurfaceCurvature( 1 )
 NETGEN_2D_Parameters_1.SetFuseEdges( 1 )
 NETGEN_2D_Parameters_1.SetQuadAllowed( 0 )
+
+# Set submeshes
+# Upper front
 Regular_1D = Mesh_1.Segment(geom=Upper_Front)
 status = Mesh_1.RemoveHypothesis(Regular_1D,Upper_Front)
 #Mesh_1.GetMesh().RemoveSubMesh( smeshObj_1 ) ### smeshObj_1 has not been yet created
 Regular_1D_1 = Mesh_1.Segment(geom=Upper_Front)
+
+# Lower front
 Start_and_End_Length_1 = Regular_1D.StartEndLength(0.001,0.0001,[])
 Regular_1D_2 = Mesh_1.Segment(geom=Lower_Front)
 Start_and_End_Length_2 = Regular_1D_2.StartEndLength(0.0001,0.001,[])
+
+# Middle
 Regular_1D_3 = Mesh_1.Segment(geom=Auto_group_for_Sub_mesh_1)
 Middle_Length_1 = Regular_1D_3.LocalLength(0.001,None,1e-07)
 Regular_1D_4 = Mesh_1.Segment(geom=Lower_Back)
