@@ -49,7 +49,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         number_of_conditions = self.body_model_part.NumberOfConditions()
 
         for cond in self.body_model_part.Conditions:
-            cp = cond.GetValue(KratosMultiphysics.PRESSURE)
+            cp = cond.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
 
             x = 0.5*(cond.GetNodes()[1].X0+cond.GetNodes()[0].X0)
 
