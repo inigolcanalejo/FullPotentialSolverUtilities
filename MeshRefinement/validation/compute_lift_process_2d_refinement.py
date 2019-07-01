@@ -100,10 +100,10 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '\t    title={ $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
             '\t    xlabel={$x/c$},\n' +
             '\t    ylabel={$c_p[\\unit{-}$]},\n' +
-            '\t    xmin=-0.01, xmax=1.01,\n' +
+            '\t    %xmin=-0.01, xmax=1.01,\n' +
             '\t    y dir=reverse,\n' +
-            '\t    xtick={0,0.2,0.4,0.6,0.8,1},\n' +
-            '\t    xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
+            '\t    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
+            '\t    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
             '\t    ymajorgrids=true,\n' +
             '\t    xmajorgrids=true,\n' +
             '\t    grid style=dashed,\n' +
