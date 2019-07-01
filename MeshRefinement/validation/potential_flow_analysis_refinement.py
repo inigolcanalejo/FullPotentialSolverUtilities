@@ -96,6 +96,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.AOA += self.AOA_Increment
 
         self.merger_all_cp = PdfFileMerger()
+        loads_output.write_header_all_cases(self.input_dir_path)
 
     def ExecuteBeforeAOALoop(self):
         self.Domain_Length = int(self.Domain_Length)
@@ -151,6 +152,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
 
     def SetParametersBeforeInitialize(self):
+        loads_output.write_case(self.case, self.AOA, self.FarField_MeshSize, self.Airfoil_MeshSize, self.input_dir_path)
         self.Airfoil_MeshSize = round_to_1(self.Airfoil_MeshSize)
         print("\n\tCase ", self.case, "\n")
 

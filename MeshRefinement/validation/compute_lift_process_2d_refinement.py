@@ -124,6 +124,11 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '\t\end{tikzpicture}')
             cp_tikz_file.flush()
 
+        NumberOfNodes = self.fluid_model_part.NumberOfNodes()
+        with open(self.input_dir_path + "/plots/results/all_cases.dat",'a') as aoa_file:
+            aoa_file.write('{0:16.2e} {1:15f} {2:15f} {3:15f} {4:15f}\n'.format(NumberOfNodes, self.lift_coefficient, self.lift_coefficient_jump, self.cl_reference, self.drag_coefficient))
+            aoa_file.flush()
+
     def read_cl_reference(self,AOA):
         #values computed with the panel method from xfoil
         if(abs(AOA - 0.0) < 1e-3):
