@@ -25,19 +25,19 @@ rm $input_dir_path/output_salome/*
 python3 runSalome.py
 #
 ##Convert salomes mesh into mdpa
-#rm $input_dir_path/mdpas/*
-#python3 use_converter.py
+rm $input_dir_path/mdpas/*
+python3 use_converter.py
 #
 ##Save mdpas file in a copy
-#source save_mdpas.sh
+source save_mdpas.sh
 
 cd ..
 # Run Kratos
-#source scripts/runKratos.sh
+source scripts/runKratos.sh
 # Run Latex
-#source scripts/run_latex.sh
+source scripts/run_latex.sh
 # Copy results
-#source scripts/copy_results.sh
+source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 
