@@ -62,6 +62,7 @@
             "process_name"  : "ComputeLiftProcessRefinement",
             "Parameters"    : {
                 "model_part_name" : "MainModelPart.Body2D_BodySurface",
+                "reference_area": 0.23,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
                 "airfoil_meshsize": 1.0,
