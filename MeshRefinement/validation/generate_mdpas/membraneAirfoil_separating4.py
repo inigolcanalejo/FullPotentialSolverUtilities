@@ -165,6 +165,7 @@ for k in range(Number_Of_Domains_Size):
             Regular_1D_2 = Mesh_Domain.Segment(geom=Group_Airfoil)
             Airfoil_Mesh = Regular_1D_2.GetSubMesh()
             Local_Length_FarField = Regular_1D_2.LocalLength( Airfoil_MeshSize ,None,1e-15)
+            #Adaptive_1 = Regular_1D_2.Adaptive(Airfoil_MeshSize,0.001,Airfoil_MeshSize)
 
             # Set Airfoil meshes
             #Start_and_End_Length_BigToSmall = smesh.CreateHypothesis('StartEndLength')
