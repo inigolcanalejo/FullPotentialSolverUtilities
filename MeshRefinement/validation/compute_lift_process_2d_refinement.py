@@ -32,7 +32,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.create_output_file = settings["create_output_file"].GetBool()
 
         self.AOA = settings["angle_of_attack"].GetDouble()
-        self.cl_reference = self.read_cl_reference(self.AOA)
+        #self.cl_reference = self.read_cl_reference(self.AOA)
+        self.cl_reference = self.read_cl_reference_membrane(self.AOA)
         self.mesh_size = settings["airfoil_meshsize"].GetDouble()
         self.minimum_airfoil_meshsize = settings["minimum_airfoil_meshsize"].GetDouble()
         self.domain_size = settings["domain_size"].GetDouble()
@@ -159,3 +160,30 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             return 1.7916
         else:
             return 0.0
+
+    def read_cl_reference_membrane(self,AOA):
+        #values computed with the panel method from xfoil
+        if(abs(AOA - 0.0) < 1e-3):
+            return 0.391162386
+        elif(abs(AOA - 2.0) < 1e-3):
+            return 0.578745185
+        elif(abs(AOA - 4.0) < 1e-3):
+            return 0.76447573300
+        elif(abs(AOA - 6.0) < 1e-3):
+            return 0.942408097000
+        elif(abs(AOA - 8.0) < 1e-3):
+            return 1.107749899000
+        elif(abs(AOA - 10.0) < 1e-3):
+            return 1.258567592000
+        elif(abs(AOA - 12.0) < 1e-3):
+            return 1.370671228000
+        elif(abs(AOA - 14.0) < 1e-3):
+            return 1.062561017000
+        elif(abs(AOA - 16.0) < 1e-3):
+            return 1.062478416000
+        elif(abs(AOA - 18.0) < 1e-3):
+            return 1.062804501000
+        elif(abs(AOA - 20.0) < 1e-3):
+            return 1.089679153000
+        else:
+            print('There is no reference for this AOA')
