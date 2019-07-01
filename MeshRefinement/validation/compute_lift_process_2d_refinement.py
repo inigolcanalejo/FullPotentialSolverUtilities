@@ -48,6 +48,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         number_of_conditions = self.body_model_part.NumberOfConditions()
 
+        factor = math.floor(number_of_conditions / 7000+1)
         condition_counter = 0
         for cond in self.body_model_part.Conditions:
             condition_counter +=1
