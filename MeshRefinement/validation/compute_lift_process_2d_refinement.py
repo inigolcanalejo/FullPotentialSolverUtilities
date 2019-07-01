@@ -42,6 +42,20 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.moment_reference_point = settings["moment_reference_point"].GetVector()
 
     def ExecuteFinalizeSolutionStep(self):
+
+        # This function finds and saves the trailing edge for further computations
+        min_x_coordinate = 1e30
+        max_x_coordinate = -1e30
+        for node in self.body_model_part.Nodes:
+            if(node.X < min_x_coordinate):
+                min_x_coordinate = node.X
+            if(node.X > max_x_coordinate):
+                max_x_coordinate = node.X
+
+        self.reference_area = max_x_coordinate - min_x_coordinate
+        print ('reference_area = ', self.reference_area)
+
+
         super(ComputeLiftProcessRefinement, self).ExecuteFinalizeSolutionStep()
 
         cp_results_file_name = 'TBD'
@@ -55,13 +69,13 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             condition_counter +=1
             cp = cond.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
 
-            x = 0.5*(cond.GetNodes()[1].X0+cond.GetNodes()[0].X0)
+            x = (0.5*(cond.GetNodes()[1].X0+cond.GetNodes()[0].X0) - min_x_coordinate) / self.reference_area
 
             if(number_of_conditions > 7000):
                 if( condition_counter % factor == 0 ):
-                    cp_file.write('{0:15f} {1:15f}\n'.format(x+0.5, cp))
+                    cp_file.write('{0:15f} {1:15f}\n'.format(x, cp))
             else:
-                cp_file.write('{0:15f} {1:15f}\n'.format(x+0.5, cp))
+                cp_file.write('{0:15f} {1:15f}\n'.format(x, cp))
 
         cp_file.flush()
 
