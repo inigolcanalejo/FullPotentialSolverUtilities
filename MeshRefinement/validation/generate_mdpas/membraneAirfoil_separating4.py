@@ -99,6 +99,15 @@ for k in range(Number_Of_Domains_Size):
             Group_Airfoil = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Group_Airfoil, [Lower_LE,Upper_LE,Lower_Middle,Upper_Middle,Lower_TE,Upper_TE])
 
+            Group_Upper_Airfoil = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Group_Upper_Airfoil, [Lower_LE,Upper_LE])
+
+            Group_Lower_Airfoil = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Group_Lower_Airfoil, [Lower_TE,Upper_TE])
+
+            Group_Middle_Airfoil = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Group_Middle_Airfoil, [Lower_Middle,Upper_Middle])
+
             # Explode vertex
             [Vertex_LE,Vertex_2] = geompy.ExtractShapes(Lower_LE, geompy.ShapeType["VERTEX"], True)
             [Vertex_1,Vertex_TE] = geompy.ExtractShapes(Upper_TE, geompy.ShapeType["VERTEX"], True)
@@ -135,6 +144,8 @@ for k in range(Number_Of_Domains_Size):
             geompy.addToStudyInFather( Cut_Domain, Outlet, 'Outlet' )
             geompy.addToStudyInFather( Cut_Domain, Group_FarField, 'Group_FarField' )
             geompy.addToStudyInFather( Cut_Domain, Group_Airfoil, 'Group_Airfoil' )
+            geompy.addToStudyInFather( Cut_Domain, Group_Upper_Airfoil, 'Group_Upper_Airfoil' )
+            geompy.addToStudyInFather( Cut_Domain, Group_Lower_Airfoil, 'Group_Lower_Airfoil' )
             #geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_1, 'Auto_group_for_Sub-mesh_1' )
             #geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_2, 'Auto_group_for_Sub-mesh_2' )
             #geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_3, 'Auto_group_for_Sub-mesh_3' )
@@ -169,18 +180,35 @@ for k in range(Number_Of_Domains_Size):
             FarField_Mesh = Regular_1D.GetSubMesh()
             Local_Length_FarField = Regular_1D.LocalLength( FarField_MeshSize ,None,1e-07)
 
+            #'''
             # Set vertex mesh
             Length_Near_Vertex_1 = smesh.CreateHypothesis('SegmentLengthAroundVertex')
             Length_Near_Vertex_1.SetLength( Airfoil_MeshSize )
             SegmentAroundVertex_0D = smesh.CreateHypothesis('SegmentAroundVertex_0D')
             status = Mesh_Domain.AddHypothesis(SegmentAroundVertex_0D,Group_Vertex)
             status = Mesh_Domain.AddHypothesis(Length_Near_Vertex_1,Group_Vertex)
+            #'''
 
-            # Set FarField mesh
+            # Set Airfoil mesh
             Regular_1D_2 = Mesh_Domain.Segment(geom=Group_Airfoil)
             Airfoil_Mesh = Regular_1D_2.GetSubMesh()
-            Local_Length_FarField = Regular_1D_2.LocalLength( 0.001 ,None,1e-15)
+            Local_Length_Airfoil = Regular_1D_2.LocalLength( 0.001 ,None,1e-15)
             #Adaptive_1 = Regular_1D_2.Adaptive(Airfoil_MeshSize,0.001,Airfoil_MeshSize)
+
+            # Set Group_Upper_Airfoil mesh
+            Regular_1D_3 = Mesh_Domain.Segment(geom=Group_Upper_Airfoil)
+            Upper_Airfoil_Mesh = Regular_1D_3.GetSubMesh()
+            Local_Length_Airfoil = Regular_1D_3.LocalLength( 0.001 ,None,1e-15)
+
+            # Set Group_Lower_Airfoil mesh
+            Regular_1D_4 = Mesh_Domain.Segment(geom=Group_Lower_Airfoil)
+            Lower_Airfoil_Mesh = Regular_1D_4.GetSubMesh()
+            Local_Length_Airfoil = Regular_1D_4.LocalLength( 0.001 ,None,1e-15)
+
+            # Set Group_Middle_Airfoil mesh
+            Regular_1D_5 = Mesh_Domain.Segment(geom=Group_Middle_Airfoil)
+            Middle_Airfoil_Mesh = Regular_1D_5.GetSubMesh()
+            Local_Length_Airfoil = Regular_1D_5.LocalLength( 0.001 ,None,1e-15)
 
             # Set Airfoil meshes
             #Start_and_End_Length_BigToSmall = smesh.CreateHypothesis('StartEndLength')
@@ -213,6 +241,15 @@ for k in range(Number_Of_Domains_Size):
             body_surface_path = salome_output_path + '/Body2D_Surface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
+            upper_surface_path = salome_output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+
+            lower_surface_path = salome_output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+
+            middle_surface_path = salome_output_path + '/Body2D_MiddleSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+
             #Compound_Mesh_Airfoil = smesh.Concatenate([Sub_mesh_1, Sub_mesh_2, Sub_mesh_3], 1, 1, 1e-10)
 
             # Export meshes
@@ -223,6 +260,21 @@ for k in range(Number_Of_Domains_Size):
               print 'ExportPartToDAT() failed. Invalid file name?'
             try:
               Mesh_Domain.ExportDAT( r'/' + body_surface_path, Airfoil_Mesh )
+              pass
+            except:
+              print 'ExportDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + upper_surface_path, Upper_Airfoil_Mesh )
+              pass
+            except:
+              print 'ExportDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + lower_surface_path, Lower_Airfoil_Mesh )
+              pass
+            except:
+              print 'ExportDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + middle_surface_path, Middle_Airfoil_Mesh )
               pass
             except:
               print 'ExportDAT() failed. Invalid file name?'
