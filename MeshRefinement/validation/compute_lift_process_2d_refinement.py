@@ -52,9 +52,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             if(node.X > max_x_coordinate):
                 max_x_coordinate = node.X
 
-        self.reference_area = max_x_coordinate - min_x_coordinate
+        plot_reference_chord_projected = max_x_coordinate - min_x_coordinate
         print ('reference_area = ', self.reference_area)
-
+        print ('plot_reference_chord_projected = ', plot_reference_chord_projected)
 
         super(ComputeLiftProcessRefinement, self).ExecuteFinalizeSolutionStep()
 
@@ -69,7 +69,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             condition_counter +=1
             cp = cond.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
 
-            x = (0.5*(cond.GetNodes()[1].X0+cond.GetNodes()[0].X0) - min_x_coordinate) / self.reference_area
+            x = (0.5*(cond.GetNodes()[1].X0+cond.GetNodes()[0].X0) - min_x_coordinate) / plot_reference_chord_projected
 
             if(number_of_conditions > 7000):
                 if( condition_counter % factor == 0 ):
