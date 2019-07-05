@@ -198,6 +198,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.AOA += self.AOA_Increment
 
     def ExecuteAfterAOALoop(self):
+        latex_aoa = subprocess.Popen(['pdflatex', '-interaction=batchmode', '-output-directory', self.input_dir_path + '/plots/aoa/data', self.input_dir_path + '/plots/aoa/data/cl_aoa.tex'], stdout=self.latex_output)
+        latex_aoa.communicate()
         shutil.copytree(self.aoa_results_directory_name + '/data', self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length))
 
         self.Domain_Length *= self.Domain_Size_Factor
