@@ -49,20 +49,23 @@ for k in range(Number_Of_Domains_Size):
             # Specifying the names of the submeshes (Kratos Name: SubModelPart)
             smp_dict_fluid           = {"smp_name": "Parts_Parts_Auto1"}
             smp_dict_far_field       = {"smp_name": "PotentialWallCondition2D_Far_field_Auto1"}
-            smp_dict_upper_surface   = {"smp_name": "Body2D_LeadingEdge"}
-            smp_dict_lower_surface   = {"smp_name": "Body2D_TrailingEdge"}
-            smp_dict_middle_surface   = {"smp_name": "Body2D_MiddleSurface"}
+            smp_dict_le_surface   = {"smp_name": "Body2D_LeadingEdge"}
+            smp_dict_te_surface   = {"smp_name": "Body2D_TrailingEdge"}
+            smp_dict_lower_middle_surface   = {"smp_name": "Body2D_LowerMiddleSurface"}
+            smp_dict_upper_middle_surface   = {"smp_name": "Body2D_UpperMiddleSurface"}
             smp_dict_body_surface   = {"smp_name": "Body2D_BodySurface"}
 
             file_name_fluid         = salome_output_path + '/Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
             file_name_far_field     = salome_output_path + '/PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-            file_name_upper_surface = salome_output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            file_name_le_surface = salome_output_path + '/Body2D_LESurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-            file_name_lower_surface = salome_output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            file_name_te_surface = salome_output_path + '/Body2D_TESurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-            file_name_middle_surface = salome_output_path + '/Body2D_MiddleSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+            file_name_lower_middle_surface = salome_output_path + '/Body2D_LowerMiddleSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
+                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+            file_name_upper_middle_surface = salome_output_path + '/Body2D_UpperMiddleSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
             file_name_body_surface = salome_output_path + '/Body2D_Surface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
@@ -76,29 +79,33 @@ for k in range(Number_Of_Domains_Size):
             nodes_fluid,            geom_entities_fluid         = ReadDatFile(file_name_fluid)
             nodes_far_field,        geom_entities_far_field     = ReadDatFile(file_name_far_field)
             nodes_body_surface,     geom_entities_body_surface  = ReadDatFile(file_name_body_surface)
-            nodes_upper_surface,    geom_entities_upper_surface = ReadDatFile(file_name_upper_surface)
-            nodes_lower_surface,    geom_entities_lower_surface = ReadDatFile(file_name_lower_surface)
-            nodes_middle_surface,   geom_entities_middle_surface = ReadDatFile(file_name_middle_surface)
+            nodes_le_surface,    geom_entities_le_surface = ReadDatFile(file_name_le_surface)
+            nodes_te_surface,    geom_entities_te_surface = ReadDatFile(file_name_te_surface)
+            nodes_lower_middle_surface,   geom_entities_lower_middle_surface = ReadDatFile(file_name_lower_middle_surface)
+            nodes_upper_middle_surface,   geom_entities_upper_middle_surface = ReadDatFile(file_name_upper_middle_surface)
 
             # Here we specify which Kratos-entities will be created from the general geometric entities
             mesh_dict_fluid         = {'write_smp': 1,
                                    'entity_creation': {203: {'Element': {'Element2D3N': '1'}}}}
             mesh_dict_far_field     = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
-            mesh_dict_upper_surface = {'write_smp': 1,
+            mesh_dict_le_surface = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
-            mesh_dict_lower_surface = {'write_smp': 1,
+            mesh_dict_te_surface = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
-            mesh_dict_middle_surface = {'write_smp': 1,
+            mesh_dict_lower_middle_surface = {'write_smp': 1,
+                                   'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
+            mesh_dict_upper_middle_surface = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
             mesh_dict_body_surface = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
 
             model.AddMesh(smp_dict_fluid,           mesh_dict_fluid,            nodes_fluid,            geom_entities_fluid)
             model.AddMesh(smp_dict_far_field,       mesh_dict_far_field,        nodes_far_field,        geom_entities_far_field)
-            model.AddMesh(smp_dict_upper_surface,   mesh_dict_upper_surface,    nodes_upper_surface,    geom_entities_upper_surface)
-            model.AddMesh(smp_dict_lower_surface,   mesh_dict_lower_surface,    nodes_lower_surface,    geom_entities_lower_surface)
-            model.AddMesh(smp_dict_middle_surface,  mesh_dict_middle_surface,   nodes_middle_surface,   geom_entities_middle_surface)
+            model.AddMesh(smp_dict_le_surface,   mesh_dict_le_surface,    nodes_le_surface,    geom_entities_le_surface)
+            model.AddMesh(smp_dict_te_surface,   mesh_dict_te_surface,    nodes_te_surface,    geom_entities_te_surface)
+            model.AddMesh(smp_dict_lower_middle_surface,  mesh_dict_lower_middle_surface,   nodes_lower_middle_surface,   geom_entities_lower_middle_surface)
+            model.AddMesh(smp_dict_upper_middle_surface,  mesh_dict_upper_middle_surface,   nodes_upper_middle_surface,   geom_entities_upper_middle_surface)
             model.AddMesh(smp_dict_body_surface,    mesh_dict_body_surface,     nodes_body_surface,     geom_entities_body_surface)
 
             mdpa_info = "mdpa for demonstration purposes"
