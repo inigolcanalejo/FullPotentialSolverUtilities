@@ -112,30 +112,40 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 cl_error_file.flush()
 
         cp_tikz_file_name = 'TBD'
+        output_file_name = 'cp_tau_aoa_' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
-            '\t    title={ $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
-            '\t    xlabel={$x/c$},\n' +
-            '\t    ylabel={$c_p[\\unit{-}$]},\n' +
-            '\t    %xmin=-0.01, xmax=1.01,\n' +
-            '\t    y dir=reverse,\n' +
-            '\t    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
-            '\t    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
-            '\t    ymajorgrids=true,\n' +
-            '\t    xmajorgrids=true,\n' +
-            '\t    grid style=dashed,\n' +
-            '\t    width=12cm\n' +
+            '    title={ $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            '    xlabel={$x/c$},\n' +
+            '    ylabel={$c_p[\\unit{-}$]},\n' +
+            '    %xmin=-0.01, xmax=1.01,\n' +
+            '    y dir=reverse,\n' +
+            '    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    ymajorgrids=true,\n' +
+            '    xmajorgrids=true,\n' +
+            '    grid style=dashed,\n' +
+            '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+            '    width=12cm\n' +
             ']\n\n' +
             '\\addplot[\n' +
-            '\t    only marks,\n' +
-            '\t    color=blue,\n' +
-            '\t    mark=*,\n' +
-            '\t    ]\n' +
-            '\t    table {cp_results.dat};  \n' +
-            '\t    \\addlegendentry{h = ' + "{:.1e}".format(self.mesh_size) + ' }\n\n' +
-            '\t\end{axis}\n' +
-            '\t\end{tikzpicture}')
+            '    only marks,\n' +
+            '    color=blue,\n' +
+            '    mark=*,\n' +
+            '    ]\n' +
+            '    table {cp_results.dat};  \n' +
+            '    \\addlegendentry{Kratos}\n\n' +
+            '\\addplot[\n' +
+            '    only marks,\n' +
+            '    color=red,\n' +
+            '    mark=square*,\n' +
+            '    mark options={solid},\n' +
+            '    ]\n' +
+            '    table {' + output_file_name + '};  \n' +
+            '    \\addlegendentry{TAU}\n\n' +
+            '\end{axis}\n' +
+            '\end{tikzpicture}')
             cp_tikz_file.flush()
 
         NumberOfNodes = self.fluid_model_part.NumberOfNodes()
