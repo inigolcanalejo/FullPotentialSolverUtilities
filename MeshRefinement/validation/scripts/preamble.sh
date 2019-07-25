@@ -17,7 +17,7 @@ GITBRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 input_dir_path=/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement
 salome_output_path=$input_dir_path/output_salome
 mdpa_path=$input_dir_path/mdpas
-#mdpa_path=$input_dir_path/mdpas_cosine_20190503_154524_Domain_Size_1e4_AOA_0.0_AMS_1e-3_FMS_2e6
+#mdpa_path=$input_dir_path/mdpas_cosine_20190705_140938_Domain_Size_1e3_AOA_0.0_AMS_1e-6_FMS_1.0
 gid_output_path=/media/inigo/10740FB2740F9A1C/Outputs/05_MeshRefinement
 
 DATE=`date '+%Y%m%d_%H%M%S'`

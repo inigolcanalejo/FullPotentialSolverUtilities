@@ -27,6 +27,7 @@ cd generate_mdpas/
 ##Convert salomes mesh into mdpa
 #rm $input_dir_path/mdpas/*
 #python3 use_converter.py
+#python3 use_converter_membrane.py
 #
 ##Save mdpas file in a copy
 #source save_mdpas.sh
@@ -37,7 +38,7 @@ source scripts/runKratos.sh
 # Run Latex
 source scripts/run_latex.sh
 # Copy results
-source scripts/copy_results.sh
+#source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 

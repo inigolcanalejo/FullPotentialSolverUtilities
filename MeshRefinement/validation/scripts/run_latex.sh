@@ -19,8 +19,8 @@ pdflatex -interaction=batchmode main_cl_error_h.tex > main_cl_error_h_out.txt
 #pdflatex -interaction=batchmode main_energy_variant_n.tex > main_energy_variannt_n_out.txt
 #cd $input_dir_path/plots/cd
 #pdflatex -interaction=batchmode main_cd.tex > main_cd_out.txt
-cd $input_dir_path/plots/aoa/data
-pdflatex -interaction=batchmode cl_aoa.tex > main_aoa_out.txt
+#cd $input_dir_path/plots/aoa/data
+#pdflatex -interaction=batchmode cl_aoa.tex > main_aoa_out.txt
 #cd $input_dir_path/plots/condition_number/
 #pdflatex -interaction=batchmode main_condition.tex > main_condition_out.txt
 cd $input_dir_path/plots/cl_error_domain_size/

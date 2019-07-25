@@ -96,6 +96,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.AOA += self.AOA_Increment
 
         self.merger_all_cp = PdfFileMerger()
+        loads_output.write_header_all_cases(self.input_dir_path)
 
     def ExecuteBeforeAOALoop(self):
         self.Domain_Length = int(self.Domain_Length)
@@ -151,6 +152,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
 
     def SetParametersBeforeInitialize(self):
+        loads_output.write_case(self.case, self.AOA, self.FarField_MeshSize, self.Airfoil_MeshSize, self.input_dir_path)
         self.Airfoil_MeshSize = round_to_1(self.Airfoil_MeshSize)
         print("\n\tCase ", self.case, "\n")
 
@@ -196,6 +198,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.AOA += self.AOA_Increment
 
     def ExecuteAfterAOALoop(self):
+        latex_aoa = subprocess.Popen(['pdflatex', '-interaction=batchmode', '-output-directory', self.input_dir_path + '/plots/aoa/data', self.input_dir_path + '/plots/aoa/data/cl_aoa.tex'], stdout=self.latex_output)
+        latex_aoa.communicate()
         shutil.copytree(self.aoa_results_directory_name + '/data', self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length))
 
         self.Domain_Length *= self.Domain_Size_Factor

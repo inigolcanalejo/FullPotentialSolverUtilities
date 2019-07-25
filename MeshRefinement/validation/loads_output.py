@@ -6,19 +6,19 @@ def write_header(work_dir):
     refinement_file.flush()
 
 def write_header_all_cases(work_dir):
-    aoa_file = open(work_dir + "plots/results/all_cases.dat",'w')
+    aoa_file = open(work_dir + "/plots/results/all_cases.dat",'w')
     aoa_file.write("FULL POTENTIAL APPLICATION ALL CASES LOADS FILE\n\n")
-    aoa_file.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n\n' %
-                          ("Case", "AOA", "FF_MS", "A_MS", "Con Numb", "# Nodes", "Cl_u", "Cl_l", "Cl_jump", "Cl_ref", "Cd_u", "Cd_l", "Rz"))
+    aoa_file.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s\n\n' %
+                          ("Case", "AOA", "FF_MS", "A_MS", "# Nodes", "Cl", "Cl_jump", "Cl_ref", "Cd"))
     aoa_file.flush()
 
 
 def write_case(case, AOA, FarField_MeshSize, Airfoil_MeshSize,work_dir):
-    refinement_file = open(work_dir + "mesh_refinement_loads.dat",'a')
-    refinement_file.write('{0:4d} {1:6.2f} {2:15.2f} {3:15.2e}'.format(case, AOA, FarField_MeshSize, Airfoil_MeshSize))
-    refinement_file.flush()
+    #refinement_file = open(work_dir + "mesh_refinement_loads.dat",'a')
+    #refinement_file.write('{0:4d} {1:6.2f} {2:15.2f} {3:15.2e}'.format(case, AOA, FarField_MeshSize, Airfoil_MeshSize))
+    #refinement_file.flush()
 
-    aoa_file = open(work_dir + "plots/results/all_cases.dat",'a')
+    aoa_file = open(work_dir + "/plots/results/all_cases.dat",'a')
     aoa_file.write('{0:4d} {1:6.2f} {2:15.2f} {3:15.2e}'.format(case, AOA, FarField_MeshSize, Airfoil_MeshSize))
     aoa_file.flush()
 
