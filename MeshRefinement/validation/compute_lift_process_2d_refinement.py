@@ -15,6 +15,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         default_parameters = KratosMultiphysics.Parameters("""
             {
                 "model_part_name":"PLEASE_CHOOSE_MODEL_PART_NAME",
+                "far_field_model_part_name" : "",
                 "reference_area": 1,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
@@ -28,12 +29,18 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         self.body_model_part = Model[settings["model_part_name"].GetString()]
         self.fluid_model_part = self.body_model_part.GetRootModelPart()
+        far_field_model_part_name = settings["far_field_model_part_name"].GetString()
+        if far_field_model_part_name == "":
+            err_msg = "Empty model_part_name in ComputeLiftProcess\n"
+            err_msg += "Please specify the model part that contains the far field surface nodes"
+            raise Exception(err_msg)
+        self.far_field_model_part = Model[far_field_model_part_name]
         self.reference_area =  settings["reference_area"].GetDouble()
         self.create_output_file = settings["create_output_file"].GetBool()
 
         self.AOA = settings["angle_of_attack"].GetDouble()
-        #self.cl_reference = self.read_cl_reference(self.AOA)
-        self.cl_reference = self.read_cl_reference_membrane(self.AOA)
+        self.cl_reference = self.read_cl_reference(self.AOA)
+        #self.cl_reference = self.read_cl_reference_membrane(self.AOA)
         self.mesh_size = settings["airfoil_meshsize"].GetDouble()
         self.minimum_airfoil_meshsize = settings["minimum_airfoil_meshsize"].GetDouble()
         self.domain_size = settings["domain_size"].GetDouble()
