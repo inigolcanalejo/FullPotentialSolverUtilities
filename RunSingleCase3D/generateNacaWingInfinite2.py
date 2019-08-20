@@ -8,10 +8,10 @@ run this script with:
 salome -t python generateNacaWingInfinite.py
 '''
 # Indicate pah
-script_path = '/home/inigo/simulations/wing/00_models/00_runSalome'
+script_path = '/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D'
 # Indicate angle of attack
 AOA = 5
-Domain_Length = 100
+Domain_Length = 20
 Domain_Height = Domain_Length
 Domain_Width = 0.001
 
@@ -28,7 +28,7 @@ theStudy = salome.myStudy
 
 import salome_notebook
 notebook = salome_notebook.NoteBook(theStudy)
-sys.path.insert( 0, r'/home/inigo/simulations/wing/00_models/00_runSalome')
+sys.path.insert( 0, r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D')
 
 ###
 ### GEOM component
@@ -250,22 +250,22 @@ print(' Number of elements    :', Mesh_Domain.NbTetras())
 
 # Export meshes into data files
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/simulations/wing/00_models/00_runSalome/salome_output/Mesh_Domain.dat' )
+  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Mesh_Domain.dat' )
   pass
 except:
   print 'ExportDAT() failed. Invalid file name?'
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/simulations/wing/00_models/00_runSalome/salome_output/Sub-mesh_TE.dat', Sub_mesh_TE )
+  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Sub-mesh_TE.dat', Sub_mesh_TE )
   pass
 except:
   print 'ExportPartToDAT() failed. Invalid file name?'
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/simulations/wing/00_models/00_runSalome/salome_output/Sub-mesh_Wing.dat', Sub_mesh_Wing )
+  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Sub-mesh_Wing.dat', Sub_mesh_Wing )
   pass
 except:
   print 'ExportPartToDAT() failed. Invalid file name?'
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/simulations/wing/00_models/00_runSalome/salome_output/Sub-mesh_FarField.dat', Sub_mesh_FarField )
+  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Sub-mesh_FarField.dat', Sub_mesh_FarField )
   pass
 except:
   print 'ExportPartToDAT() failed. Invalid file name?'
@@ -277,7 +277,7 @@ status = Mesh_Wake_Surface.AddHypothesis(NETGEN_2D_Parameters_FarField)
 NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
 isDone = Mesh_Wake_Surface.Compute()
 try:
-  Mesh_Wake_Surface.ExportSTL( r'/home/inigo/simulations/wing/00_models/00_runSalome/case/wake_stl.stl', 1 )
+  Mesh_Wake_Surface.ExportSTL( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/case/wake_stl.stl', 1 )
   pass
 except:
   print 'ExportSTL() failed. Invalid file name?'

@@ -7,7 +7,7 @@ import os
 def round_to_1(x):
     return round(x, -int(floor(log10(abs(x)))))
 
-script_path = '/home/inigo/simulations/wing/00_models/00_runSalome'
+script_path = '/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D'
 salome_output_path = script_path + '/salome_output'
 mdpa_path = script_path + '/case'
 
