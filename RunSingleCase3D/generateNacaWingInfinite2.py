@@ -11,13 +11,16 @@ salome -t python generateNacaWingInfinite.py
 script_path = '/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D'
 # Indicate angle of attack
 AOA = 5
-Domain_Length = 20
+Domain_Length = 100
 Domain_Height = Domain_Length
-Domain_Width = 0.001
+Domain_Width = 1.0
 
-LE_Mesh_Size = 0.1
-TE_Mesh_Size = 0.1
+Airfoil_Mesh_Size = 0.001
+Biggest_Airfoil_Mesh_Size = 0.05
+LE_Mesh_Size = Airfoil_Mesh_Size
+TE_Mesh_Size = Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/50.0
+Growth_Rate_Wing = 0.3
 
 import sys
 import salome
@@ -185,13 +188,13 @@ Local_Length_LE = Regular_1D_1.LocalLength(LE_Mesh_Size,None,1e-07)
 
 # Set Airfoils
 Regular_1D_5 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_MiddleEdges)
-Local_Length_Width2 = Regular_1D_5.LocalLength(Domain_Width,None,1e-07)
+Local_Length_Width2 = Regular_1D_5.LocalLength(Biggest_Airfoil_Mesh_Size,None,1e-07)
 
 Regular_1D_6 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Airfoils)
-Start_and_End_Length_LE = Regular_1D_6.StartEndLength(0.001,0.01,[])
+Start_and_End_Length_LE = Regular_1D_6.StartEndLength(Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[])
 Start_and_End_Length_LE.SetObjectEntry( 'Extrusion_Domain' )
 Regular_1D_7 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Airfoils)
-Start_and_End_Length_TE = Regular_1D_7.StartEndLength(0.01,0.001,[])
+Start_and_End_Length_TE = Regular_1D_7.StartEndLength(Biggest_Airfoil_Mesh_Size,Airfoil_Mesh_Size,[])
 Start_and_End_Length_TE.SetObjectEntry( 'Extrusion_Domain' )
 
 # Far Field edges
@@ -205,14 +208,14 @@ Local_Length_Width = Regular_1D_3.LocalLength(Domain_Width,None,1e-07)
 NETGEN_1D_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing)
 Sub_mesh_Wing = NETGEN_1D_2D.GetSubMesh()
 NETGEN_2D_Parameters_Wing = NETGEN_1D_2D.Parameters()
-NETGEN_2D_Parameters_Wing.SetMaxSize( 0.1 )
+NETGEN_2D_Parameters_Wing.SetMaxSize( Biggest_Airfoil_Mesh_Size )
 NETGEN_2D_Parameters_Wing.SetSecondOrder( 0 )
 NETGEN_2D_Parameters_Wing.SetOptimize( 1 )
 NETGEN_2D_Parameters_Wing.SetFineness( 5 )
-NETGEN_2D_Parameters_Wing.SetGrowthRate( 0.3 )
-NETGEN_2D_Parameters_Wing.SetNbSegPerEdge( 1 )
-NETGEN_2D_Parameters_Wing.SetNbSegPerRadius( 2 )
-NETGEN_2D_Parameters_Wing.SetMinSize( 0.001 )
+NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wing )
+NETGEN_2D_Parameters_Wing.SetNbSegPerEdge( 3 )
+NETGEN_2D_Parameters_Wing.SetNbSegPerRadius( 5 )
+NETGEN_2D_Parameters_Wing.SetMinSize( Airfoil_Mesh_Size )
 NETGEN_2D_Parameters_Wing.SetUseSurfaceCurvature( 1 )
 NETGEN_2D_Parameters_Wing.SetFuseEdges( 1 )
 NETGEN_2D_Parameters_Wing.SetQuadAllowed( 0 )
@@ -229,7 +232,7 @@ NETGEN_2D_Parameters_FarField.SetFineness( 5 )
 NETGEN_2D_Parameters_FarField.SetGrowthRate( 0.3 )
 NETGEN_2D_Parameters_FarField.SetNbSegPerEdge( 1 )
 NETGEN_2D_Parameters_FarField.SetNbSegPerRadius( 2 )
-NETGEN_2D_Parameters_FarField.SetMinSize( 0.001 )
+NETGEN_2D_Parameters_FarField.SetMinSize( Airfoil_Mesh_Size )
 NETGEN_2D_Parameters_FarField.SetUseSurfaceCurvature( 1 )
 NETGEN_2D_Parameters_FarField.SetFuseEdges( 1 )
 NETGEN_2D_Parameters_FarField.SetQuadAllowed( 0 )
