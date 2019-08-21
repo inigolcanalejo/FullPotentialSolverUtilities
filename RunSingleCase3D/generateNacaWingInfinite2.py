@@ -13,7 +13,7 @@ script_path = '/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D
 AOA = 5
 Domain_Length = 100
 Domain_Height = Domain_Length
-Domain_Width = 1.0
+Domain_Width = 2.0
 
 Airfoil_Mesh_Size = 0.001
 Biggest_Airfoil_Mesh_Size = 0.05
@@ -80,15 +80,28 @@ if Domain_Width > 5.1:
   [Edge_Left_US_LE,geomObj_1,Edge_US_Middle,Edge_Right_US_LE] = geompy.ExtractShapes(Face_UP_LE, geompy.ShapeType["EDGE"], True)
   [Edge_Left_LS_TE,geomObj_1,Edge_TE,Edge_Right_LS_TE] = geompy.ExtractShapes(Face_LS_TE, geompy.ShapeType["EDGE"], True)
   [Edge_Left_US_TE,geomObj_1,geomObj_2,Edge_Right_US_TE] = geompy.ExtractShapes(Face_US_TE, geompy.ShapeType["EDGE"], True)
-else:
+elif Domain_Width > 0.9:
   [Face_Inlet,Face_LS_LE,Face_UP_LE,Face_Left,Face_Bottom,Face_Top,Face_Right,Face_LS_TE,Face_US_TE,Face_Outlet] = geompy.ExtractShapes(Extrusion_Domain, geompy.ShapeType["FACE"], True)
-  [Face_Inlet,Face_LS_LE,Face_UP_LE,Face_Bottom,Face_Left,Face_Right,Face_Top,Face_LS_TE,Face_US_TE,Face_Outlet] = geompy.ExtractShapes(Extrusion_Domain, geompy.ShapeType["FACE"], True)
+  # Wing
   [Edge_LE,Edge_Left_LS_LE,Edge_Right_LS_LE,Edge_LS_Middle] = geompy.ExtractShapes(Face_LS_LE, geompy.ShapeType["EDGE"], True)
   [geomObj_1,Edge_Left_US_LE,Edge_Right_US_LE,Edge_US_Middle] = geompy.ExtractShapes(Face_UP_LE, geompy.ShapeType["EDGE"], True)
   [geomObj_1,Edge_Left_LS_TE,Edge_Right_LS_TE,Edge_TE] = geompy.ExtractShapes(Face_LS_TE, geompy.ShapeType["EDGE"], True)
   [geomObj_1,Edge_Left_US_TE,Edge_Right_US_TE,geomObj_2] = geompy.ExtractShapes(Face_US_TE, geompy.ShapeType["EDGE"], True)
+  # Far field
+  [Edge_Inlet_Left,Edge_Inlet_Down,Edge_Inlet_Up,Edge_Inlet_Right] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
+  [geomObj_1,Edge_Bottom_Left,Edge_Bottom_Right,geomObj_2] = geompy.ExtractShapes(Face_Bottom, geompy.ShapeType["EDGE"], True)
+  [geomObj_1,Edge_Top_Left,Edge_Top_Right,geomObj_2] = geompy.ExtractShapes(Face_Top, geompy.ShapeType["EDGE"], True)
+  [Edge_Outlet_Left,Edge_Oulet_Down,Edge_Outlet_Top,Edge_Outlet_Right] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
+else:
+  [Face_Inlet,Face_LS_LE,Face_UP_LE,Face_Bottom,Face_Left,Face_Right,Face_Top,Face_LS_TE,Face_US_TE,Face_Outlet] = geompy.ExtractShapes(Extrusion_Domain, geompy.ShapeType["FACE"], True)
+  # Wing
+  [Edge_LE,Edge_Left_LS_LE,Edge_Right_LS_LE,Edge_LS_Middle] = geompy.ExtractShapes(Face_LS_LE, geompy.ShapeType["EDGE"], True)
+  [geomObj_1,Edge_Left_US_LE,Edge_Right_US_LE,Edge_US_Middle] = geompy.ExtractShapes(Face_UP_LE, geompy.ShapeType["EDGE"], True)
+  [geomObj_1,Edge_Left_LS_TE,Edge_Right_LS_TE,Edge_TE] = geompy.ExtractShapes(Face_LS_TE, geompy.ShapeType["EDGE"], True)
+  [geomObj_1,Edge_Left_US_TE,Edge_Right_US_TE,geomObj_2] = geompy.ExtractShapes(Face_US_TE, geompy.ShapeType["EDGE"], True)
+  # Far field
   [Edge_Inlet_Down,Edge_Inlet_Left,Edge_Inlet_Right,Edge_Inlet_Up] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
-  [Extrusion_Wake,Edge_Bottom_Left,Edge_Bottom_Right,Edge_Top_Left] = geompy.ExtractShapes(Face_Bottom, geompy.ShapeType["EDGE"], True)
+  [geomObj_1,Edge_Bottom_Left,Edge_Bottom_Right,geomObj_2] = geompy.ExtractShapes(Face_Bottom, geompy.ShapeType["EDGE"], True)
   [geomObj_1,Edge_Top_Left,Edge_Top_Right,geomObj_2] = geompy.ExtractShapes(Face_Top, geompy.ShapeType["EDGE"], True)
   [Edge_Oulet_Down,Edge_Outlet_Left,Edge_Outlet_Right,Edge_Outlet_Top] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
 
