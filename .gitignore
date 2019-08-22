@@ -2,6 +2,7 @@
 .post.bin
 .post.msh
 .post.res
+.post.lst
 .stl
 # Byte-compiled / optimized / DLL files
 __pycache__/
