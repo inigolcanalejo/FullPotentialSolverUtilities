@@ -1,3 +1,8 @@
+.mdpa
+.post.bin
+.post.msh
+.post.res
+.stl
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -102,3 +107,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+RunSingleCase3D/salome_output/Mesh_Domain.dat
+RunSingleCase3D/salome_output/Sub-mesh_FarField.dat
+RunSingleCase3D/salome_output/Sub-mesh_TE.dat
+RunSingleCase3D/salome_output/Sub-mesh_Wing.dat
