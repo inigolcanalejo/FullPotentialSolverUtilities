@@ -112,3 +112,6 @@ RunSingleCase3D/salome_output/Mesh_Domain.dat
 RunSingleCase3D/salome_output/Sub-mesh_FarField.dat
 RunSingleCase3D/salome_output/Sub-mesh_TE.dat
 RunSingleCase3D/salome_output/Sub-mesh_Wing.dat
+RunSingleCase3D/case/representation_of_wake_0.post.res
+RunSingleCase3D/case/case.post.lst
+RunSingleCase3D/case/representation_of_wake_0.post.msh
