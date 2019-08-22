@@ -8,7 +8,9 @@ run this script with:
 salome -t python generateNacaWingInfinite2.py
 '''
 # Indicate pah
-script_path = '/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D'
+import os
+script_path = os.path.dirname(os.path.realpath(__file__))
+
 # Indicate angle of attack
 AOA = 5
 Domain_Length = 100
@@ -31,7 +33,6 @@ theStudy = salome.myStudy
 
 import salome_notebook
 notebook = salome_notebook.NoteBook(theStudy)
-sys.path.insert( 0, r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D')
 
 ###
 ### GEOM component
@@ -126,46 +127,6 @@ geompy.UnionList(Auto_group_for_Sub_mesh_MiddleEdges, [Edge_LS_Middle, Edge_US_M
 # Generate wake
 Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
 Extrusion_Wake = geompy.MakePrismVecH(Edge_TE, Vector_Wake_Direction, Domain_Length*0.5)
-
-# Add to study
-geompy.addToStudy( O, 'O' )
-geompy.addToStudy( OX, 'OX' )
-geompy.addToStudy( OY, 'OY' )
-geompy.addToStudy( OZ, 'OZ' )
-geompy.addToStudy( Curve_UpperSurface_LE, 'Curve_UpperSurface_LE' )
-geompy.addToStudy( Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
-geompy.addToStudy( Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
-geompy.addToStudy( Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
-geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
-geompy.addToStudy( Face_Domain, 'Face_Domain' )
-geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
-geompy.addToStudy( Extrusion_Domain, 'Extrusion_Domain' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_Inlet, 'Face_Inlet' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_Left, 'Face_Left' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_LS_LE, 'Face_LS_LE' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_UP_LE, 'Face_UP_LE' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_Bottom, 'Face_Bottom' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_Top, 'Face_Top' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_LS_TE, 'Face_LS_TE' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_US_TE, 'Face_US_TE' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_Right, 'Face_Right' )
-geompy.addToStudyInFather( Extrusion_Domain, Face_Outlet, 'Face_Outlet' )
-geompy.addToStudyInFather( Face_LS_LE, Edge_Left_LS_LE, 'Edge_Left_LS_LE' )
-geompy.addToStudyInFather( Face_LS_LE, Edge_LE, 'Edge_LE' )
-geompy.addToStudyInFather( Face_LS_LE, Edge_LS_Middle, 'Edge_LS_Middle' )
-geompy.addToStudyInFather( Face_LS_LE, Edge_Right_LS_LE, 'Edge_Right_LS_LE' )
-geompy.addToStudyInFather( Face_UP_LE, Edge_Left_US_LE, 'Edge_Left_US_LE' )
-geompy.addToStudyInFather( Face_LS_TE, Edge_Left_LS_TE, 'Edge_Left_LS_TE' )
-geompy.addToStudyInFather( Face_UP_LE, Edge_US_Middle, 'Edge_US_Middle' )
-geompy.addToStudyInFather( Face_UP_LE, Edge_Right_US_LE, 'Edge_Right_US_LE' )
-geompy.addToStudyInFather( Face_US_TE, Edge_Left_US_TE, 'Edge_Left_US_TE' )
-geompy.addToStudyInFather( Face_LS_TE, Edge_TE, 'Edge_TE' )
-geompy.addToStudyInFather( Face_LS_TE, Edge_Right_LS_TE, 'Edge_Right_LS_TE' )
-geompy.addToStudyInFather( Extrusion_Domain, Auto_group_for_Sub_mesh_Wing, 'Auto_group_for_Sub-mesh_Wing' )
-geompy.addToStudyInFather( Extrusion_Domain, Auto_group_for_Sub_mesh_FarField, 'Auto_group_for_Sub-mesh_FarField' )
-geompy.addToStudyInFather( Face_US_TE, Edge_Right_US_TE, 'Edge_Right_US_TE' )
-geompy.addToStudy( Vector_Wake_Direction, 'Vector_Wake_Direction' )
-geompy.addToStudy( Extrusion_Wake, 'Extrusion_Wake' )
 
 ###
 ### SMESH component
@@ -265,22 +226,22 @@ print(' Number of elements    :', NumberOfElements)
 
 # Export meshes into data files
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Mesh_Domain.dat' )
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Mesh_Domain.dat' )
   pass
 except:
   print 'ExportDAT() failed. Invalid file name?'
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Sub-mesh_TE.dat', Sub_mesh_TE )
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_TE.dat', Sub_mesh_TE )
   pass
 except:
   print 'ExportPartToDAT() failed. Invalid file name?'
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Sub-mesh_Wing.dat', Sub_mesh_Wing )
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_Wing.dat', Sub_mesh_Wing )
   pass
 except:
   print 'ExportPartToDAT() failed. Invalid file name?'
 try:
-  Mesh_Domain.ExportDAT( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/salome_output/Sub-mesh_FarField.dat', Sub_mesh_FarField )
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_FarField.dat', Sub_mesh_FarField )
   pass
 except:
   print 'ExportPartToDAT() failed. Invalid file name?'
@@ -292,35 +253,13 @@ status = Mesh_Wake_Surface.AddHypothesis(NETGEN_2D_Parameters_FarField)
 NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
 isDone = Mesh_Wake_Surface.Compute()
 try:
-  Mesh_Wake_Surface.ExportSTL( r'/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D/case/wake_stl.stl', 1 )
+  Mesh_Wake_Surface.ExportSTL( script_path + '/case/wake_stl.stl', 1 )
   pass
 except:
   print 'ExportSTL() failed. Invalid file name?'
 
-
-## Set names of Mesh objects
-smesh.SetName(Sub_mesh_FarField, 'Sub-mesh_FarField')
-smesh.SetName(Sub_mesh_Wing, 'Sub-mesh_Wing')
-smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
-smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
-smesh.SetName(NETGEN_1D_2D.GetAlgorithm(), 'NETGEN 1D-2D')
-smesh.SetName(Mesh_Domain.GetMesh(), 'Mesh_Domain')
-smesh.SetName(Local_Length_LE, 'Local Length_LE')
-smesh.SetName(Local_Length_TE, 'Local Length_TE')
-smesh.SetName(NETGEN_3D_Parameters_1, 'NETGEN 3D Parameters_1')
-smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN 2D Parameters_FarField')
-smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
-smesh.SetName(Sub_mesh_LE, 'Sub-mesh_LE')
-smesh.SetName(Sub_mesh_TE, 'Sub-mesh_TE')
-
 with open('case/results_3d.dat', 'a+') as file:
-  # file.write('\n\n%6s %10s %10s %10s %10s %10s %15s %15s %10s %11s %12s %12s %12s\n' %
-  #   ("AOA", "D_L", "D_W", "A_MS", "BA_MS", "GRW", "# Nodes", "# Elements", "MT", "Cl_p", "Cd_p", "Cl_f", "Cd_f"))
   file.write('\n{0:6.0f} {1:10.0f} {2:10.0e} {3:10.0e} {4:10.0e} {5:10.2f} {6:15.1e} {7:15.1e} {8:10.1f}'.format(
     AOA, Domain_Length, Domain_Width, Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size, Growth_Rate_Wing,
     NumberOfNodes/1000.0, NumberOfElements/1000.0, exe_time/60.0))
   file.flush()
-
-
-if salome.sg.hasDesktop():
-  salome.sg.updateObjBrowser(True)
