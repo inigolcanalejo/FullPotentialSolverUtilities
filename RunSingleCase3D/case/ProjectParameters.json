@@ -54,7 +54,7 @@
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
-            "solver_type": "amgcl",
+            "solver_type": "ExternalSolversApplication.super_lu",
             "max_iteration": 200,
             "gmres_krylov_space_dimension": 100,
             "smoother_type":"ilu0",
@@ -65,7 +65,7 @@
             "verbosity": 2,
             "scaling": false
         },
-        "reference_chord": 0.9
+        "reference_chord": 0.1
     },
     "processes"        : {
         "boundary_conditions_process_list" : [{
@@ -87,7 +87,7 @@
                 "epsilon"         : 1e-12
             }
         },{
-            "python_module" : "compute_lift_process",
+            "python_module" : "write_forces_process",
             "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "ComputeLiftProcess3D",
             "Parameters"    : {

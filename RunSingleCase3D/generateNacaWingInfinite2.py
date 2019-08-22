@@ -5,7 +5,7 @@
 ###
 '''
 run this script with:
-salome -t python generateNacaWingInfinite.py
+salome -t python generateNacaWingInfinite2.py
 '''
 # Indicate pah
 script_path = '/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D'
@@ -13,10 +13,10 @@ script_path = '/home/inigo/software/FullPotentialSolverUtilities/RunSingleCase3D
 AOA = 5
 Domain_Length = 100
 Domain_Height = Domain_Length
-Domain_Width = 2.0
+Domain_Width = 0.1
 
 Airfoil_Mesh_Size = 0.001
-Biggest_Airfoil_Mesh_Size = 0.05
+Biggest_Airfoil_Mesh_Size = 0.01
 LE_Mesh_Size = Airfoil_Mesh_Size
 TE_Mesh_Size = Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/50.0
@@ -61,8 +61,8 @@ Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0", "-0.6*(0.2969
 Face_Airfoil = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE], 1)
 
 # Rotate around center to AOA
-AOA *=math.pi/180.0
-geompy.Rotate(Face_Airfoil, OY, AOA)
+AOArad = AOA*math.pi/180.0
+geompy.Rotate(Face_Airfoil, OY, AOArad)
 
 # Create domain face
 Face_Domain = geompy.MakeFaceHW(Domain_Length, Domain_Height, 3)
@@ -256,13 +256,12 @@ start_time = time.time()
 # Compute mesh
 isDone = Mesh_Domain.Compute()
 exe_time = time.time() - start_time
+NumberOfNodes = Mesh_Domain.NbNodes()
+NumberOfElements = Mesh_Domain.NbTetras()
 print(' Mesh execution tool ', str(round(exe_time, 2)), ' sec')
 print(' Information about volume mesh:')
-print(' Number of nodes       :', Mesh_Domain.NbNodes())
-print(' Number of elements    :', Mesh_Domain.NbTetras())
-# print(' Information about wing mesh:')
-# print(' Number of nodes       :', Sub_mesh_Wing.NbNodes())
-# print(' Number of elements    :', Sub_mesh_Wing.NbTetras())
+print(' Number of nodes       :', NumberOfNodes)
+print(' Number of elements    :', NumberOfElements)
 
 # Export meshes into data files
 try:
@@ -313,6 +312,14 @@ smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN 2D Parameters_FarField')
 smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
 smesh.SetName(Sub_mesh_LE, 'Sub-mesh_LE')
 smesh.SetName(Sub_mesh_TE, 'Sub-mesh_TE')
+
+with open('case/results_3d.dat', 'a+') as file:
+  # file.write('\n\n%6s %10s %10s %10s %10s %10s %15s %15s %10s %11s %12s %12s %12s\n' %
+  #   ("AOA", "D_L", "D_W", "A_MS", "BA_MS", "GRW", "# Nodes", "# Elements", "MT", "Cl_p", "Cd_p", "Cl_f", "Cd_f"))
+  file.write('\n{0:6.0f} {1:10.0f} {2:10.0e} {3:10.0e} {4:10.0e} {5:10.2f} {6:15.1e} {7:15.1e} {8:10.1f}'.format(
+    AOA, Domain_Length, Domain_Width, Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size, Growth_Rate_Wing,
+    NumberOfNodes/1000.0, NumberOfElements/1000.0, exe_time/60.0))
+  file.flush()
 
 
 if salome.sg.hasDesktop():
