@@ -54,7 +54,7 @@
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
-            "solver_type": "ExternalSolversApplication.super_lu",
+            "solver_type": "amgcl",
             "max_iteration": 200,
             "gmres_krylov_space_dimension": 100,
             "smoother_type":"ilu0",
@@ -65,7 +65,7 @@
             "verbosity": 2,
             "scaling": false
         },
-        "reference_chord": 0.1
+        "reference_chord": 5.0
     },
     "processes"        : {
         "boundary_conditions_process_list" : [{
