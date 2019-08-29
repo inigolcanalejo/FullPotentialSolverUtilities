@@ -15,14 +15,16 @@ script_path = os.path.dirname(os.path.realpath(__file__))
 AOA = 5
 Domain_Length = 100
 Domain_Height = Domain_Length
-Domain_Width = 5.0
+Domain_Width = 0.1
 
 Airfoil_Mesh_Size = 0.001
-Biggest_Airfoil_Mesh_Size = 0.01
+Biggest_Airfoil_Mesh_Size = 0.05
 LE_Mesh_Size = Airfoil_Mesh_Size
 TE_Mesh_Size = Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/50.0
 Growth_Rate_Wing = 0.3
+Growth_Rate_Far_Field = 0.05
+Growth_Rate_Domain = 0.3
 
 import sys
 import salome
@@ -162,10 +164,10 @@ NETGEN_3D_Parameters_1 = NETGEN_3D.Parameters()
 NETGEN_3D_Parameters_1.SetMaxSize( Far_Field_Mesh_Size )
 NETGEN_3D_Parameters_1.SetOptimize( 1 )
 NETGEN_3D_Parameters_1.SetFineness( 5 )
-NETGEN_3D_Parameters_1.SetGrowthRate( 0.3 )
+NETGEN_3D_Parameters_1.SetGrowthRate( Growth_Rate_Domain )
 NETGEN_3D_Parameters_1.SetNbSegPerEdge( 6.92034e-310 )
 NETGEN_3D_Parameters_1.SetNbSegPerRadius( 1.47958e-316 )
-NETGEN_3D_Parameters_1.SetMinSize( 0.001 )
+NETGEN_3D_Parameters_1.SetMinSize( Airfoil_Mesh_Size )
 NETGEN_3D_Parameters_1.SetUseSurfaceCurvature( 0 )
 NETGEN_3D_Parameters_1.SetSecondOrder( 100 )
 NETGEN_3D_Parameters_1.SetFuseEdges( 80 )
@@ -221,7 +223,7 @@ NETGEN_2D_Parameters_FarField.SetMaxSize( Far_Field_Mesh_Size )
 NETGEN_2D_Parameters_FarField.SetSecondOrder( 0 )
 NETGEN_2D_Parameters_FarField.SetOptimize( 1 )
 NETGEN_2D_Parameters_FarField.SetFineness( 5 )
-NETGEN_2D_Parameters_FarField.SetGrowthRate( 0.3 )
+NETGEN_2D_Parameters_FarField.SetGrowthRate( Growth_Rate_Far_Field )
 NETGEN_2D_Parameters_FarField.SetNbSegPerEdge( 1 )
 NETGEN_2D_Parameters_FarField.SetNbSegPerRadius( 2 )
 NETGEN_2D_Parameters_FarField.SetMinSize( Airfoil_Mesh_Size )
