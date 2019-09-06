@@ -78,8 +78,12 @@ for k in range(Number_Of_Domains_Size):
             if kink_case:
                 Upper_Elipse = geompy.MakeCurveParametric("t-0.5", "0.1*sqrt(1 - ((t-0.5)/0.5)**2)", "0", 0, 1, 999, GEOM.Interpolation, True)
                 Lower_Elipse = geompy.MakeCurveParametric("t-0.5", "-0.1*sqrt(1 - ((t-0.5)/0.5)**2)", "0", 0, 1, 999, GEOM.Interpolation, True)
+                NewObject_1 = geompy.DivideEdge(Lower_Elipse, -1, 0.5, 0)
+                NewObject_2 = geompy.DivideEdge(Upper_Elipse, -1, 0.5, 0)
+                [Edge_UpperLE,Edge_LowerLE] = geompy.ExtractShapes(NewObject_1, geompy.ShapeType["EDGE"], True)
+                [Edge_UpperTE,Edge_LowerTE] = geompy.ExtractShapes(NewObject_2, geompy.ShapeType["EDGE"], True)
                 #Create face
-                Face_Airfoil = geompy.MakeFaceWires([Upper_Elipse, Lower_Elipse], 1)
+                Face_Airfoil = geompy.MakeFaceWires([Edge_UpperTE, Edge_LowerTE, Edge_UpperLE, Edge_LowerLE], 1)
 
             else:
                 Upper_Elipse = geompy.MakeCurveParametric("0.5*sqrt(1 - ((0.2*t - 0.1)/0.1)**2)", "0.2*t - 0.1", "0", 0, 1, 999, GEOM.Interpolation, True)
@@ -102,14 +106,16 @@ for k in range(Number_Of_Domains_Size):
 
             #Explode edges
             if kink_case:
-                [Edge_1,Edge_2,Edge_LowerSurface,Edge_UpperSurface,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
+                #[Edge_1,Edge_2,Edge_LowerSurface,Edge_UpperSurface,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
+                [Edge_1,Edge_2,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
             else:
                 [Edge_1,Edge_2,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
 
             #Body
             Body_Sub_mesh = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             if kink_case:
-                geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface, Edge_UpperSurface])
+                #geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface, Edge_UpperSurface])
+                geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface_LE, Edge_LowerSurface_TE, Edge_UpperSurface_LE, Edge_UpperSurface_TE])
             else:
                 geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface_LE, Edge_LowerSurface_TE, Edge_UpperSurface_LE, Edge_UpperSurface_TE])
 
@@ -152,6 +158,17 @@ for k in range(Number_Of_Domains_Size):
             #Start_and_End_Length_LE = Regular_1D.StartEndLength(Airfoil_MeshSize,Airfoil_MeshSize*10,[])
             if kink_case:
                 Start_and_End_Length_LE = Regular_1D.StartEndLength(Airfoil_MeshSize,0.01,[])
+                Regular_1D_3 = Fluid.Segment(geom=Edge_LowerSurface_LE)
+                Start_and_End_Length_LE_3 = Regular_1D_3.StartEndLength(Airfoil_MeshSize,0.005,[])
+
+                Regular_1D_4 = Fluid.Segment(geom=Edge_LowerSurface_TE)
+                Start_and_End_Length_LE_4 = Regular_1D_4.StartEndLength(0.005,0.01,[])
+
+                Regular_1D_5 = Fluid.Segment(geom=Edge_UpperSurface_LE)
+                Start_and_End_Length_LE_5 = Regular_1D_5.StartEndLength(Airfoil_MeshSize,0.005,[])
+
+                Regular_1D_6 = Fluid.Segment(geom=Edge_UpperSurface_TE)
+                Start_and_End_Length_LE_6 = Regular_1D_6.StartEndLength(0.005,0.01,[])
             else:
                 Start_and_End_Length_LE = Regular_1D.StartEndLength(0.01,0.01,[])
 
