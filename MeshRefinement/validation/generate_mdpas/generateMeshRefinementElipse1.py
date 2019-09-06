@@ -31,7 +31,7 @@ Growth_Rate = 0.05
 path = os.getcwd()
 salome_output_path = 'TBD'
 
-kink_case = True
+kink_case = False
 
 case = 0
 Domain_Length = Initial_Domain_Size
@@ -167,16 +167,16 @@ for k in range(Number_Of_Domains_Size):
 
             if not kink_case:
                 Regular_1D_3 = Fluid.Segment(geom=Edge_LowerSurface_LE)
-                Start_and_End_Length_LE_3 = Regular_1D_3.StartEndLength(0.001,Airfoil_MeshSize,[])
+                Start_and_End_Length_LE_3 = Regular_1D_3.StartEndLength(0.005,Airfoil_MeshSize,[])
 
                 Regular_1D_4 = Fluid.Segment(geom=Edge_LowerSurface_TE)
-                Start_and_End_Length_LE_4 = Regular_1D_4.StartEndLength(0.001,0.01,[])
+                Start_and_End_Length_LE_4 = Regular_1D_4.StartEndLength(0.005,0.01,[])
 
                 Regular_1D_5 = Fluid.Segment(geom=Edge_UpperSurface_LE)
-                Start_and_End_Length_LE_5 = Regular_1D_5.StartEndLength(Airfoil_MeshSize,0.001,[])
+                Start_and_End_Length_LE_5 = Regular_1D_5.StartEndLength(Airfoil_MeshSize,0.005,[])
 
                 Regular_1D_6 = Fluid.Segment(geom=Edge_UpperSurface_TE)
-                Start_and_End_Length_LE_6 = Regular_1D_6.StartEndLength(0.01,0.001,[])
+                Start_and_End_Length_LE_6 = Regular_1D_6.StartEndLength(0.01,0.005,[])
 
             #Set farfield mesh
             Regular_1D_2 = Fluid.Segment(geom=Auto_group_for_Sub_mesh_1_2)
