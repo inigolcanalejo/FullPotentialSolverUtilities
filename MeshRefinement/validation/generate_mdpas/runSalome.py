@@ -5,8 +5,9 @@ start_time = time.time()
 
 salome_cmd = "salome -t python"
 #salome_script_name = "generateMeshRefinement.py"
-salome_script_name = "generateMeshRefinementCosine.py"
+#salome_script_name = "generateMeshRefinementCosine.py"
 #salome_script_name = "membraneAirfoil_separating4.py"
+salome_script_name = "generateMeshRefinementElipse1.py"
 
 salome_exe = " ".join([salome_cmd, salome_script_name])
 

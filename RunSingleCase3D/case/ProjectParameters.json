@@ -92,7 +92,9 @@
             "process_name"  : "ComputeLiftProcess3D",
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Body3D_Body_Auto1",
-                "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1"
+                "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
+                "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
+                "is_infinite_wing": true
             }
         }],
         "auxiliar_process_list" :[]
