@@ -1,5 +1,5 @@
 ##Copying results
-DIRECTORY=/media/inigo/10740FB2740F9A1C/Results/eclipse/05_MeshRefinement
+DIRECTORY=/media/inigo/10740FB2740F9A1C/Results/cp_peak_aoa0/05_MeshRefinement
 DATE=`date '+%Y%m%d_%H%M%S'`
 mkdir -p ${DIRECTORY}_${DATE}_${GITBRANCH}_${OUTPUTNAME}
 mkdir -p ${DIRECTORY}_${DATE}_${GITBRANCH}_${OUTPUTNAME}/output_gid
