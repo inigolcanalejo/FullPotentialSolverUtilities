@@ -1,0 +1,100 @@
+{
+    "problem_data"     : {
+        "problem_name"  : "salome_wing",
+        "parallel_type" : "OpenMP",
+        "echo_level"    : 0,
+        "start_time"    : 0.0,
+        "end_time"      : 1
+    },
+    "output_processes" : {
+        "gid_output" : [{
+            "python_module" : "gid_output_process",
+            "kratos_module" : "KratosMultiphysics",
+            "process_name"  : "GiDOutputProcess",
+            "help"          : "This process writes postprocessing files for GiD",
+            "Parameters"    : {
+                "model_part_name"        : "fluid_computational_model_part",
+                "output_name"            : "salome_wing",
+                "postprocess_parameters" : {
+                    "result_file_configuration" : {
+                        "gidpost_flags"       : {
+                            "GiDPostMode"           : "GiD_PostBinary",
+                            "WriteDeformedMeshFlag" : "WriteDeformed",
+                            "WriteConditionsFlag"   : "WriteConditions",
+                            "MultiFileFlag"         : "SingleFile"
+                        },
+                        "file_label"          : "step",
+                        "output_control_type" : "step",
+                        "output_frequency"    : 1,
+                        "body_output"         : true,
+                        "node_output"         : false,
+                        "skin_output"         : false,
+                        "plane_output"        : [],
+                        "nodal_nonhistorical_results" : ["WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
+                        "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL","DISTANCE"],
+                        "gauss_point_results" : ["VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT"]
+                    },
+                    "point_data_configuration"  : []
+                }
+            }
+        }]
+    },
+    "solver_settings"  : {
+        "model_part_name"        : "FluidModelPart",
+        "domain_size"            : 3,
+        "solver_type"            : "potential_flow",
+        "model_import_settings"  : {
+            "input_type"     : "mdpa",
+            "input_filename" : "salome_wing"
+        },
+        "maximum_iterations"     : 10,
+        "echo_level"             : 0,
+        "volume_model_part_name" : "Parts_Parts_Auto1",
+        "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
+        "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1"],
+        "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
+        "linear_solver_settings"  : {
+            "solver_type": "ExternalSolversApplication.super_lu",
+            "max_iteration": 200,
+            "gmres_krylov_space_dimension": 100,
+            "smoother_type":"ilu0",
+            "coarsening_type":"ruge_stuben",
+            "coarse_enough" : 5000,
+            "krylov_type": "lgmres",
+            "tolerance": 1e-3,
+            "verbosity": 2,
+            "scaling": false
+        },
+        "reference_chord": 0.1
+    },
+    "processes"        : {
+        "boundary_conditions_process_list" : [{
+            "python_module" : "apply_far_field_process",
+            "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
+            "Parameters"    : {
+                "model_part_name" : "PotentialWallCondition3D_Far_field_Auto1",
+                "angle_of_attack" : 0.0,
+                "mach_infinity"   : 0.03,
+                "speed_of_sound"  : 340.0
+            }
+        },{
+            "python_module" : "define_wake_process_3d",
+            "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
+            "Parameters"    : {
+                "model_part_name" : "Wake3D_Wake_Auto1",
+                "body_model_part_name": "Body3D_Body_Auto1",
+                "wake_stl_file_name" : "wake_stl.stl",
+                "epsilon"         : 1e-12
+            }
+        },{
+            "python_module" : "write_forces_process",
+            "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
+            "process_name"  : "ComputeLiftProcess3D",
+            "Parameters"    : {
+                "model_part_name" : "FluidModelPart.Body3D_Body_Auto1",
+                "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1"
+            }
+        }],
+        "auxiliar_process_list" :[]
+    }
+}
