@@ -8,7 +8,7 @@ rm case/salome_wing.mdpa
 python3 use_converter_wing.py
 
 #Run Kratos
-source /home/inigo/Documents/paths/kratosMaster3.sh
+source /home/inigo/Documents/paths/kratosMaster.sh
 cd case/
 #python3 MainKratos_withoutWake.py
 python3 MainKratos.py
