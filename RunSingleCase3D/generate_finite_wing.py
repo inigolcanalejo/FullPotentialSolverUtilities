@@ -261,8 +261,13 @@ Local_Length_LE = Regular_1D_4.LocalLength(LE_Mesh_Size,None,1e-07)
 Regular_1D_4 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Middle)
 Local_Length_Middle = Regular_1D_4.LocalLength(Biggest_Airfoil_Mesh_Size,None,1e-07)
 
+import time as time
+print(' Starting meshing ')
+start_time = time.time()
 # Compute mesh
 isDone = Mesh_Domain.Compute()
+exe_time = time.time() - start_time
+print(' Mesh execution took ', str(round(exe_time, 2)), ' sec')
 
 NumberOfNodes = Mesh_Domain.NbNodes()
 NumberOfElements = Mesh_Domain.NbTetras()
@@ -333,6 +338,12 @@ smesh.SetName(Mesh_Wake_Surface, 'Mesh_Wake_Surface')
 # Saving file to open from salome's gui
 file_name = "/salome_files/generate_finite_wing.hdf"
 salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
+
+with open('case/results_3d_finite_wing.dat', 'a+') as file:
+  file.write('\n{0:6.0f} {1:10.0f} {2:10.0e} {3:10.0e} {4:10.0e} {5:10.2f} {6:10.2f} {7:15.1e} {8:15.1e} {9:10.1f}'.format(
+    AOA, Domain_Length, Domain_Width, Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size, Growth_Rate_Wing, Growth_Rate_Domain,
+    NumberOfNodes/1000.0, NumberOfElements/1000.0, exe_time/60.0))
+  file.flush()
 
 
 if salome.sg.hasDesktop():
