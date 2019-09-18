@@ -1,0 +1,12 @@
+Legend:
+ AOA        Angle Of Attack
+ D_L        Domain Length
+ D_W        Domain Width
+ A_MS       Airfoil Mesh Size
+ BA_MS      Biggest Airfoil Mesh Size
+ WMGR       Wing Mesh Growth Rate
+ DMGR       Domain Mesh Growth Rate
+ MT         Mesh execution Time
+
+   AOA        D_L        D_W       A_MS      BA_MS       WMGR       DMGR         # Nodes      # Elements         MT        Cl_p         Cd_p         Cl_f         Cd_f   Solver
+     5        100      1e+02      1e-02      5e-02       0.70       0.70         1.8e+01         8.0e+01        0.2      0.2706     1.03e-02       0.3942     1.62e-03
