@@ -54,7 +54,8 @@
             "process_name"  : "DefineWakeProcess",
             "Parameters"    : {
                 "model_part_name" : "MainModelPart.Body2D_BodySurface",
-                "epsilon"         : 1e-9
+                "epsilon"         : 1e-9,
+                "echo_level": 0
             }
         },{
             "python_module" : "compute_lift_process_2d_refinement",
@@ -113,7 +114,7 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","TRAILING_EDGE","WAKE"],
+                        "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","TRAILING_EDGE","WAKE","ZERO_VELOCITY_CONDITION"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
                         "gauss_point_results" : ["PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]

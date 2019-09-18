@@ -22,7 +22,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 "airfoil_meshsize": 1.0,
                 "minimum_airfoil_meshsize": 1.0,
                 "domain_size": 1.0,
-                "moment_reference_point" : [0.0,0.0,0.0]
+                "moment_reference_point" : [0.0,0.0,0.0],
+                "is_infinite_wing": false
             }  """)
 
         settings.ValidateAndAssignDefaults(default_parameters)
@@ -30,11 +31,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.body_model_part = Model[settings["model_part_name"].GetString()]
         self.fluid_model_part = self.body_model_part.GetRootModelPart()
         far_field_model_part_name = settings["far_field_model_part_name"].GetString()
-        if far_field_model_part_name == "":
-            err_msg = "Empty model_part_name in ComputeLiftProcess\n"
-            err_msg += "Please specify the model part that contains the far field surface nodes"
-            raise Exception(err_msg)
-        self.far_field_model_part = Model[far_field_model_part_name]
+        if far_field_model_part_name != "":
+            self.far_field_model_part = Model[far_field_model_part_name]
+            self.compute_far_field_forces = True
         self.reference_area =  settings["reference_area"].GetDouble()
         self.create_output_file = settings["create_output_file"].GetBool()
 
@@ -47,6 +46,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         self.input_dir_path = 'TBD'
         self.moment_reference_point = settings["moment_reference_point"].GetVector()
+        self.is_infinite_wing = settings["is_infinite_wing"].GetBool()
 
     def ExecuteFinalizeSolutionStep(self):
 
