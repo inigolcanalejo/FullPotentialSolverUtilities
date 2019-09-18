@@ -10,7 +10,7 @@ class WriteForcesProcess(ComputeLiftProcess):
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
 
-        with open('results_3d.dat', 'a') as file:
-            file.write('{0:12.4f} {1:12.2e} {2:12.4f} {3:12.2e}'.format(
-                self.lift_coefficient, self.drag_coefficient, self.lift_coefficient_far_field, self.drag_coefficient_far_field))
-            file.flush()
+        # with open('results_3d_finite_wing.dat', 'a') as file:
+        #     file.write('{0:12.4f} {1:12.2e} {2:12.4f} {3:12.2e}'.format(
+        #         self.lift_coefficient, self.drag_coefficient, self.lift_coefficient_far_field, self.drag_coefficient_far_field))
+        #     file.flush()

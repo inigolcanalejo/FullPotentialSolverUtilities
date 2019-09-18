@@ -11,7 +11,7 @@ Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
 
-Airfoil_Mesh_Size = 0.01
+Airfoil_Mesh_Size = 0.001
 Biggest_Airfoil_Mesh_Size = 0.05
 LE_Mesh_Size = Airfoil_Mesh_Size
 TE_Mesh_Size = Airfoil_Mesh_Size
