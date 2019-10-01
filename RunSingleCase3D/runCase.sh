@@ -1,5 +1,5 @@
 # #Run salome: generate geometry and mesh
-# rm salome_output/*
+# #rm salome_output/*
 # python3 runSalome.py
 
 # #Convert salomes mesh into mdpa
@@ -8,7 +8,8 @@
 # python3 use_converter_wing.py
 
 #Run Kratos
-source /home/inigo/Documents/paths/kratosMaster.sh
+#source /home/inigo/Documents/paths/kratosMaster.sh
+source /home/inigo/Documents/paths/kratosMerge.sh
 cd case/
 #python3 MainKratos_withoutWake.py
 python3 MainKratos.py
