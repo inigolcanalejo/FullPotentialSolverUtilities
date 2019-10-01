@@ -76,13 +76,16 @@ Cut_Domain = geompy.MakeCutList(Extrusion_Domain, [Extrusion_Wing], True)
 Box_Wake = geompy.MakeBoxDXDYDZ(Domain_Length*0.45, Wing_span, Wake_Thickness)
 
 # Translate wake
-geompy.TranslateDXDYDZ(Box_Wake, Domain_Length*0.05, -Wing_span*0.5, -0.5*(Wake_Thickness + math.sin(AOA*math.pi/180.0)))
+geompy.TranslateDXDYDZ(Box_Wake, Domain_Length*0.05, -Wing_span*0.5, -0.5*(math.sin(AOA*math.pi/180.0)))
+
+geompy.addToStudy( Box_Wake, 'Box_Wake' )
 
 # Create partition
 Partition_Domain = geompy.MakePartition([Cut_Domain], [Box_Wake], [], [], geompy.ShapeType["SOLID"], 0, [], 0)
 
 # Explode faces and edges
-[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_LE_Wake,Face_Left_Wake,Face_Down_Wake,Face_Top_Wake,Face_Right_Wake,Face_Outlet_Wake,Face_Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
+#[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_LE_Wake,Face_Left_Wake,Face_Down_Wake,Face_Top_Wake,Face_Right_Wake,Face_Outlet_Wake,Face_Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
+[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_LE_Wake,Face_Left_Wake,Face_Down_Wake,Face_Top_Wake,Face_Right_Wake,Face_Outlet,Face_Outlet_Wake] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
 
 # Explode faces and edges
 #[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["FACE"], True)
@@ -91,7 +94,8 @@ Partition_Domain = geompy.MakePartition([Cut_Domain], [Box_Wake], [], [], geompy
 [Edge_1,Edge_2,Edge_3,Edge_4] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
 [Obj1,Edge_6,Edge_7,Obj2] = geompy.ExtractShapes(Face_Left_Wall, geompy.ShapeType["EDGE"], True)
 [Obj1,Edge_8,Edge_9,Obj2] = geompy.ExtractShapes(Face_Right_Wall, geompy.ShapeType["EDGE"], True)
-[Edge_5,Edge_Wake_Left,Edge_10,Edge_Wake_Down,Edge_Wake_Up,Edge_11,Edge_Wake_Right,Edge_12] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
+#[Edge_5,Edge_Wake_Left,Edge_10,Edge_Wake_Down,Edge_Wake_Up,Edge_11,Edge_Wake_Right,Edge_12] = geompy.SubShapeAll(Face_Outlet, geompy.ShapeType["EDGE"])
+[Edge_5,Edge_12,Edge_10,Edge_11,Edge_Wake_Left,Edge_Wake_Down,Edge_Wake_Right,Edge_Wake_Up] = geompy.SubShapeAll(Face_Outlet, geompy.ShapeType["EDGE"])
 
 # Extruding wing
 [Edge_Left_LowerLE,Edge_Left_UpperLE,Edge_Left_Lower_TE,Edge_Left_Upper_TE] = geompy.ExtractShapes(Face_Left_Wing, geompy.ShapeType["EDGE"], True)
@@ -170,6 +174,12 @@ geompy.addToStudyInFather( Partition_Domain, Face_Lower_TE, 'Face_Lower_TE' )
 geompy.addToStudyInFather( Partition_Domain, Face_Upper_TE, 'Face_Upper_TE' )
 geompy.addToStudyInFather( Partition_Domain, Face_Right_Wall, 'Face_Right_Wall' )
 geompy.addToStudyInFather( Partition_Domain, Face_Outlet, 'Face_Outlet' )
+geompy.addToStudyInFather( Partition_Domain, Face_Outlet_Wake, 'Face_Outlet_Wake' )
+geompy.addToStudyInFather( Partition_Domain, Face_Right_Wake, 'Face_Right_Wake' )
+geompy.addToStudyInFather( Partition_Domain, Face_Top_Wake, 'Face_Top_Wake' )
+geompy.addToStudyInFather( Partition_Domain, Face_Down_Wake, 'Face_Down_Wake' )
+geompy.addToStudyInFather( Partition_Domain, Face_Left_Wake, 'Face_Left_Wake' )
+geompy.addToStudyInFather( Partition_Domain, Face_LE_Wake, 'Face_LE_Wake' )
 geompy.addToStudyInFather( Face_Inlet, Edge_1, 'Edge_1' )
 geompy.addToStudyInFather( Face_Inlet, Edge_2, 'Edge_2' )
 geompy.addToStudyInFather( Face_Inlet, Edge_3, 'Edge_3' )
@@ -194,6 +204,10 @@ geompy.addToStudyInFather( Face_Lower_TE, Edge_TE, 'Edge_TE' )
 geompy.addToStudyInFather( Face_Outlet, Edge_10, 'Edge_10' )
 geompy.addToStudyInFather( Face_Outlet, Edge_11, 'Edge_11' )
 geompy.addToStudyInFather( Face_Outlet, Edge_12, 'Edge_12' )
+geompy.addToStudyInFather( Face_Outlet, Edge_Wake_Left, 'Edge_Wake_Left' )
+geompy.addToStudyInFather( Face_Outlet, Edge_Wake_Down, 'Edge_Wake_Down' )
+geompy.addToStudyInFather( Face_Outlet, Edge_Wake_Up, 'Edge_Wake_Up' )
+geompy.addToStudyInFather( Face_Outlet, Edge_Wake_Right, 'Edge_Wake_Right' )
 geompy.addToStudy( Extrusion_Wake, 'Extrusion_Wake' )
 geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Far_Field_Surface, 'Auto_group_for_Sub-mesh_Far_Field_Surface' )
 geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Wing_Surface, 'Auto_group_for_Sub-mesh_Wing_Surface' )
@@ -317,31 +331,31 @@ print(' Number of nodes       :', NumberOfNodes)
 print(' Number of elements    :', NumberOfElements)
 
 # Export data files
-# try:
-#   Mesh_Domain.ExportDAT( script_path + '/salome_output/Mesh_Domain.dat' )
-#   pass
-# except:
-#   print 'ExportDAT() failed. Invalid file name?'
-# try:
-#   Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_Wing.dat', Sub_mesh_Wing_Surface )
-#   pass
-# except:
-#   print 'ExportPartToDAT() failed. Invalid file name?'
-# try:
-#   Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_FarField.dat', Sub_mesh_Far_Field_Surface )
-#   pass
-# except:
-#   print 'ExportPartToDAT() failed. Invalid file name?'
-# try:
-#   Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub_mesh_Wake_Surface.dat', Sub_mesh_Wake_Surface )
-#   pass
-# except:
-#   print 'ExportPartToDAT() failed. Invalid file name?'
-# try:
-#   Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_TE.dat', Sub_mesh_TE )
-#   pass
-# except:
-#   print 'ExportPartToDAT() failed. Invalid file name?'
+try:
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Mesh_Domain.dat' )
+  pass
+except:
+  print 'ExportDAT() failed. Invalid file name?'
+try:
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_Wing.dat', Sub_mesh_Wing_Surface )
+  pass
+except:
+  print 'ExportPartToDAT() failed. Invalid file name?'
+try:
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_FarField.dat', Sub_mesh_Far_Field_Surface )
+  pass
+except:
+  print 'ExportPartToDAT() failed. Invalid file name?'
+try:
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub_mesh_Wake_Surface.dat', Sub_mesh_Wake_Surface )
+  pass
+except:
+  print 'ExportPartToDAT() failed. Invalid file name?'
+try:
+  Mesh_Domain.ExportDAT( script_path + '/salome_output/Sub-mesh_TE.dat', Sub_mesh_TE )
+  pass
+except:
+  print 'ExportPartToDAT() failed. Invalid file name?'
 Sub_mesh_Far_Field_Edges = Regular_1D.GetSubMesh()
 Sub_mesh_LE_Airfoils = Regular_1D_1.GetSubMesh()
 Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
