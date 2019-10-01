@@ -18,7 +18,7 @@ TE_Mesh_Size = Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/10.0
 Growth_Rate_Wing = 0.3
 Growth_Rate_Domain = 0.5
-Wake_Thickness = Far_Field_Mesh_Size*0.01
+Wake_Thickness = Far_Field_Mesh_Size*0.001
 
 import sys
 import salome
@@ -84,8 +84,8 @@ geompy.addToStudy( Box_Wake, 'Box_Wake' )
 Partition_Domain = geompy.MakePartition([Cut_Domain], [Box_Wake], [], [], geompy.ShapeType["SOLID"], 0, [], 0)
 
 # Explode faces and edges
-#[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_LE_Wake,Face_Left_Wake,Face_Down_Wake,Face_Top_Wake,Face_Right_Wake,Face_Outlet_Wake,Face_Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
-[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_LE_Wake,Face_Left_Wake,Face_Down_Wake,Face_Top_Wake,Face_Right_Wake,Face_Outlet,Face_Outlet_Wake] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
+[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_LE_Wake,Face_Left_Wake,Face_Down_Wake,Face_Top_Wake,Face_Right_Wake,Face_Outlet_Wake,Face_Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
+#[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_LE_Wake,Face_Left_Wake,Face_Down_Wake,Face_Top_Wake,Face_Right_Wake,Face_Outlet,Face_Outlet_Wake] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
 
 # Explode faces and edges
 #[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["FACE"], True)
