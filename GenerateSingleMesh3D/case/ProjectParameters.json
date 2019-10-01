@@ -31,7 +31,7 @@
                         "skin_output"         : false,
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
-                        "nodal_results"       : ["PSI","VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL","DISTANCE"],
+                        "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL","DISTANCE"],
                         "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT"]
                     },
                     "point_data_configuration"  : []
@@ -45,7 +45,7 @@
         "solver_type"            : "potential_flow",
         "model_import_settings"  : {
             "input_type"     : "mdpa",
-            "input_filename" : "/media/inigo/10740FB2740F9A1C/Results/01_finite_wing/02_97_nodes/salome_wing"
+            "input_filename" : "salome_wing"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 2,

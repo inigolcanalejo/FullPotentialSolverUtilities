@@ -114,11 +114,11 @@ for k in range(Number_Of_Domains_Size):
 
             #FarField
             Auto_group_for_Sub_mesh_1_2 = geompy.CreateGroup(Fuse_1, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_1_2, [Edge_Inlet, Edge_Down, Edge_Up, Edge_Outlet_Down, Edge_Outlet_Up])
+            geompy.UnionList(Auto_group_for_Sub_mesh_1_2, [Edge_Inlet, Edge_Down, Edge_Up, Edge_Outlet_Down, Edge_Outlet_Up, Edge_Outlet_Middle])
 
             # Wake
             Auto_group_for_Sub_mesh_Wake = geompy.CreateGroup(Fuse_1, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wake, [Edge_Wake_LE, Edge_Wake_Down, Edge_Wake_Up, Edge_Outlet_Middle])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wake, [Edge_Wake_LE, Edge_Wake_Down, Edge_Wake_Up])
 
             #Add to study
             geompy.addToStudy( O, 'O' )
