@@ -84,7 +84,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
-                "wake_stl_file_name" : "wake_stl.stl",
+                "wake_stl_file_name" : "wake_stl_new.stl",
                 "epsilon"         : 1e-12
             }
         },{
