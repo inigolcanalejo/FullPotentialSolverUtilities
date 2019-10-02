@@ -54,7 +54,7 @@
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
-            "solver_type": "ExternalSolversApplication.super_lu",
+            "solver_type": "eigen_pardiso_lu",
             "max_iteration": 400,
             "gmres_krylov_space_dimension": 100,
             "smoother_type":"damped_jacobi",
@@ -95,7 +95,7 @@
                 "model_part_name" : "FluidModelPart.Body3D_Body_Auto1",
                 "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
-                "is_infinite_wing": true
+                "is_infinite_wing": false
             }
         }],
         "auxiliar_process_list" :[]

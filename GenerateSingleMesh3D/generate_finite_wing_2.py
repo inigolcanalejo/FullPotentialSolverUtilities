@@ -7,9 +7,9 @@
 # Parameters:
 AOA = 5.0
 Wing_span = 4.0
-Domain_Length = 10
+Domain_Length = 100
 Domain_Height = Domain_Length
-Domain_Width = 10
+Domain_Width = 100
 
 Airfoil_Mesh_Size = 0.01
 Biggest_Airfoil_Mesh_Size = 0.05
@@ -18,9 +18,10 @@ TE_Mesh_Size = Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/10.0
 Growth_Rate_Wing = 0.7
 Growth_Rate_Domain = 0.7
+Growth_Rate_Wake = 0.7
 
-Outlet_Min_Mesh_Size = 0.05
-Outlet_Max_Mesh_Size = 0.5
+Outlet_Min_Mesh_Size = 0.1
+Outlet_Max_Mesh_Size = 0.01
 
 import sys
 import salome
@@ -84,22 +85,22 @@ Extrusion_Domain = geompy.MakePrismVecH2Ways(Face_Domain, OY, Domain_Width/2.0)
 # Cut wing from the domain
 Cut_Domain = geompy.MakeCutList(Extrusion_Domain, [Extrusion_Wing], True)
 
-# # Generate wake
-# Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
-# Extrusion_Wake = geompy.MakePrismVecH(Edge_TE, Vector_Wake_Direction, Domain_Length*0.5)
+# Generate wake
+Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
+Extrusion_Wake = geompy.MakePrismVecH(Edge_TE, Vector_Wake_Direction, Domain_Length*0.5)
 
 # Generate wake
 Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
 Translation_1 = geompy.MakeTranslation(Edge_TE, 0, 0, 0)
 Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
 Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
-Extrusion_Wake = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
+Extrusion_Wake_stl = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
 
 # Partition
 Partition_2 = geompy.MakePartition([Cut_Domain], [Extrusion_Wake], [], [], geompy.ShapeType["SOLID"], 0, [], 1)
 
 # Explode
-[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_Wake,Face_Outlet] = geompy.ExtractShapes(Partition_2, geompy.ShapeType["FACE"], True)
+[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE_2,Face_Upper_TE,Face_Right_Wall,Face_Wake,Face_Outlet] = geompy.ExtractShapes(Partition_2, geompy.ShapeType["FACE"], True)
 
 # Explode faces and edges
 #[Face_Inlet,Face_Left_Wall,Face_Left_Wing,Face_Lower_LE,Face_Upper_LE,Face_Down_Wall,Face_Top_Wall,Face_Right_Wing,Face_Lower_TE,Face_Upper_TE,Face_Right_Wall,Face_Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["FACE"], True)
@@ -115,7 +116,7 @@ Partition_2 = geompy.MakePartition([Cut_Domain], [Extrusion_Wake], [], [], geomp
 [Edge_LE,Obj1,Obj2,Edge_Middle_Lower] = geompy.ExtractShapes(Face_Lower_LE, geompy.ShapeType["EDGE"], True)
 [Obj1,Obj2,Obj3,Edge_Middle_Upper] = geompy.ExtractShapes(Face_Upper_LE, geompy.ShapeType["EDGE"], True)
 [Edge_Right_LowerLE,Edge_Right_UpperLE,Edge_Right_LowerTE,Edge_Right_UpperTE] = geompy.ExtractShapes(Face_Right_Wing, geompy.ShapeType["EDGE"], True)
-[Obj1,Obj2,Obj3,Edge_TE] = geompy.ExtractShapes(Face_Lower_TE, geompy.ShapeType["EDGE"], True)
+[Obj1,Obj2,Obj3,Edge_TE] = geompy.ExtractShapes(Face_Lower_TE_2, geompy.ShapeType["EDGE"], True)
 
 # Exploding wake
 [Obj1,Edge_Wake_Left,Edge_Wake_Right,Obj2] = geompy.ExtractShapes(Face_Wake, geompy.ShapeType["EDGE"], True)
@@ -160,7 +161,7 @@ geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Surface, [Face_Inlet, Face_Le
 
 # Wing surface
 Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Partition_2, geompy.ShapeType["FACE"])
-geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Left_Wing, Face_Lower_LE, Face_Upper_LE, Face_Right_Wing, Face_Lower_TE, Face_Upper_TE])
+geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Left_Wing, Face_Lower_LE, Face_Upper_LE, Face_Right_Wing, Face_Lower_TE_2, Face_Upper_TE])
 
 # Adding to study
 geompy.addToStudy( O, 'O' )
@@ -185,7 +186,7 @@ geompy.addToStudyInFather( Partition_2, Face_Upper_LE, 'Face_Upper_LE' )
 geompy.addToStudyInFather( Partition_2, Face_Down_Wall, 'Face_Down_Wall' )
 geompy.addToStudyInFather( Partition_2, Face_Top_Wall, 'Face_Top_Wall' )
 geompy.addToStudyInFather( Partition_2, Face_Right_Wing, 'Face_Right_Wing' )
-geompy.addToStudyInFather( Partition_2, Face_Lower_TE, 'Face_Lower_TE' )
+geompy.addToStudyInFather( Partition_2, Face_Lower_TE_2, 'Face_Lower_TE_2' )
 geompy.addToStudyInFather( Partition_2, Face_Upper_TE, 'Face_Upper_TE' )
 geompy.addToStudyInFather( Partition_2, Face_Right_Wall, 'Face_Right_Wall' )
 geompy.addToStudyInFather( Partition_2, Face_Outlet, 'Face_Outlet' )
@@ -210,7 +211,7 @@ geompy.addToStudyInFather( Face_Right_Wing, Edge_Right_UpperTE, 'Edge_Right_Uppe
 geompy.addToStudyInFather( Face_Outlet, Edge_5, 'Edge_5' )
 geompy.addToStudyInFather( Face_Right_Wall, Edge_8, 'Edge_8' )
 geompy.addToStudyInFather( Face_Right_Wall, Edge_9, 'Edge_9' )
-geompy.addToStudyInFather( Face_Lower_TE, Edge_TE, 'Edge_TE' )
+geompy.addToStudyInFather( Face_Lower_TE_2, Edge_TE, 'Edge_TE' )
 geompy.addToStudyInFather( Face_Outlet, Edge_10, 'Edge_10' )
 geompy.addToStudyInFather( Face_Outlet, Edge_11, 'Edge_11' )
 geompy.addToStudyInFather( Face_Outlet, Edge_12, 'Edge_12' )
@@ -287,10 +288,11 @@ NETGEN_2D_Parameters_Wing.SetFuseEdges( 80 )
 # Wake surface
 NETGEN_2D_2 = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_Wake)
 Sub_mesh_Wake_Surface = NETGEN_2D_2.GetSubMesh()
-NETGEN_2D_Parameters_Wake = NETGEN_2D.Parameters()
+NETGEN_2D_Parameters_Wake = NETGEN_2D_2.Parameters()
 NETGEN_2D_Parameters_Wake.SetMaxSize( Outlet_Max_Mesh_Size )
 NETGEN_2D_Parameters_Wake.SetOptimize( 1 )
-NETGEN_2D_Parameters_Wake.SetFineness( 1 )
+NETGEN_2D_Parameters_Wake.SetFineness( 5 )
+NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wake )
 NETGEN_2D_Parameters_Wake.SetMinSize( Airfoil_Mesh_Size )
 NETGEN_2D_Parameters_Wake.SetUseSurfaceCurvature( 1 )
 NETGEN_2D_Parameters_Wake.SetQuadAllowed( 0 )
@@ -386,7 +388,7 @@ except:
   print 'ExportPartToDAT() failed. Invalid file name?'
 
 # Mesh wake and export STL
-Mesh_Wake_Surface = smesh.Mesh(Extrusion_Wake)
+Mesh_Wake_Surface = smesh.Mesh(Extrusion_Wake_stl)
 status = Mesh_Wake_Surface.AddHypothesis(NETGEN_2D_Parameters_FarField)
 NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
 isDone = Mesh_Wake_Surface.Compute()
@@ -434,11 +436,22 @@ smesh.SetName(Sub_mesh_Wake_Outlet_Edge, 'Sub_mesh_Wake_Outlet_Edge')
 file_name = "/salome_files/generate_finite_wing_wake_2.hdf"
 salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
 
-# with open('case/results_3d_finite_wing.dat', 'a+') as file:
-#   file.write('\n{0:6.0f} {1:10.0f} {2:10.0e} {3:10.0e} {4:10.0e} {5:10.2f} {6:10.2f} {7:15.1e} {8:15.1e} {9:10.1f}'.format(
-#     AOA, Domain_Length, Domain_Width, Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size, Growth_Rate_Wing, Growth_Rate_Domain,
-#     NumberOfNodes/1000.0, NumberOfElements/1000.0, exe_time/60.0))
-#   file.flush()
+with open('case/results_3d_finite_wing.dat', 'a+') as file:
+  file.write('\n{0:6.0f} {1:10.0f} {2:10.0e} {3:10.0e} {4:10.0e} {5:10.0e} {6:10.0e} {7:10.2f} {8:10.2f} {9:10.2f} {10:15.1e} {11:15.1e} {12:10.1f}'.format(
+    AOA, # 0
+    Domain_Length, # 1
+    Airfoil_Mesh_Size, # 2
+    Biggest_Airfoil_Mesh_Size, # 3
+    Far_Field_Mesh_Size, # 4
+    Outlet_Min_Mesh_Size, # 5
+    Outlet_Max_Mesh_Size, # 6
+    Growth_Rate_Wing, # 7
+    Growth_Rate_Domain, # 8
+    Growth_Rate_Wake, # 9
+    NumberOfNodes/1000.0, # 10
+    NumberOfElements/1000.0, # 11
+    exe_time/60.0)) # 12
+  file.flush()
 
 
 if salome.sg.hasDesktop():
