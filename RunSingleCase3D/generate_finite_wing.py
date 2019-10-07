@@ -11,7 +11,7 @@ Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
 
-Airfoil_Mesh_Size = 0.001
+Airfoil_Mesh_Size = 0.01
 Biggest_Airfoil_Mesh_Size = 0.05
 LE_Mesh_Size = Airfoil_Mesh_Size
 TE_Mesh_Size = Airfoil_Mesh_Size
@@ -335,14 +335,23 @@ smesh.SetName(Sub_mesh_TE_Airfoils, 'Sub-mesh_TE_Airfoils')
 smesh.SetName(Sub_mesh_LE_Airfoils, 'Sub-mesh_LE_Airfoils')
 smesh.SetName(Mesh_Wake_Surface, 'Mesh_Wake_Surface')
 
-# Saving file to open from salome's gui
-file_name = "/salome_files/generate_finite_wing.hdf"
-salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
+# # Saving file to open from salome's gui
+# file_name = "/salome_files/generate_finite_wing.hdf"
+# salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
 
 with open('case/results_3d_finite_wing.dat', 'a+') as file:
-  file.write('\n{0:6.0f} {1:10.0f} {2:10.0e} {3:10.0e} {4:10.0e} {5:10.2f} {6:10.2f} {7:15.1e} {8:15.1e} {9:10.1f}'.format(
-    AOA, Domain_Length, Domain_Width, Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size, Growth_Rate_Wing, Growth_Rate_Domain,
-    NumberOfNodes/1000.0, NumberOfElements/1000.0, exe_time/60.0))
+  file.write('\n{0:5.0f} {1:5.0f} {2:10.0f} {3:10.4f} {4:10.3f} {5:10.0f} {6:10.2f} {7:10.2f} {8:15.1e} {9:15.1e} {10:10.1f}'.format(
+    AOA, # 0
+    Wing_span, # 1
+    Domain_Length, # 2
+    Airfoil_Mesh_Size, # 3
+    Biggest_Airfoil_Mesh_Size, # 4
+    Far_Field_Mesh_Size, # 5
+    Growth_Rate_Wing, # 6
+    Growth_Rate_Domain, # 7
+    NumberOfNodes/1000.0, # 8
+    NumberOfElements/1000.0, # 9
+    exe_time/60.0)) # 10
   file.flush()
 
 

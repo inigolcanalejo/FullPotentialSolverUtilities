@@ -45,7 +45,7 @@
         "solver_type"            : "potential_flow",
         "model_import_settings"  : {
             "input_type"     : "mdpa",
-            "input_filename" : "/media/inigo/10740FB2740F9A1C/Results/04_finite_wing_wake_ref/06_279033_nodes/salome_wing"
+            "input_filename" : "salome_wing"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 2,
