@@ -54,7 +54,7 @@
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
-            "solver_type": "eigen_pardiso_lu",
+            "solver_type": "EigenSolversApplication.pardiso_lu",
             "max_iteration": 400,
             "gmres_krylov_space_dimension": 100,
             "smoother_type":"damped_jacobi",
@@ -120,6 +120,6 @@
             "scaling": false
         },
     "_3linear_solver_settings"  : {
-            "solver_type": "eigen_pardiso_lu"
+            "solver_type": "EigenSolversApplication.pardiso_lu"
         }
 }
