@@ -45,7 +45,7 @@
         "solver_type"            : "potential_flow",
         "model_import_settings"  : {
             "input_type"     : "mdpa",
-            "input_filename" : "/media/inigo/10740FB2740F9A1C/Results/01_finite_wing/02_97_nodes/salome_wing"
+            "input_filename" : "salome_wing"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 2,
@@ -54,7 +54,7 @@
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
-            "solver_type": "eigen_pardiso_lu",
+            "solver_type": "EigenSolversApplication.pardiso_lu",
             "max_iteration": 400,
             "gmres_krylov_space_dimension": 100,
             "smoother_type":"damped_jacobi",
@@ -79,7 +79,7 @@
                 "initialize_flow_field": false
             }
         },{
-            "python_module" : "write_forces_process",
+            "python_module" : "compute_lift_process",
             "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "ComputeLiftProcess3D",
             "Parameters"    : {
