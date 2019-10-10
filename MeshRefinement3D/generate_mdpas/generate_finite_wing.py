@@ -5,20 +5,20 @@
 ###
 
 # Parameters:
-Wing_span = 4.0
+Wing_span = TBD
 Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
 
-Airfoil_Mesh_Size = 0.01
-Biggest_Airfoil_Mesh_Size = 0.05
-LE_Mesh_Size = Airfoil_Mesh_Size
-TE_Mesh_Size = Airfoil_Mesh_Size
+Smallest_Airfoil_Mesh_Size = TBD
+Biggest_Airfoil_Mesh_Size = TBD
+LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
+TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/10.0
 
 print '\nWing_span = ', Wing_span
 print 'Domain_Length = ', Domain_Length
-print 'Airfoil_Mesh_Size = ', Airfoil_Mesh_Size
+print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
 print 'Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 print 'Far_Field_Mesh_Size = ', Far_Field_Mesh_Size
 
@@ -31,9 +31,6 @@ AOA_Increment = TBD
 
 Initial_Growth_Rate_Wing = TBD
 Growth_Rate_Wing_Refinement_Factor = TBD
-
-Initial_FarField_MeshSize = TBD
-FarField_Refinement_Factor = TBD
 
 Initial_Growth_Rate_Domain = TBD
 Growth_Rate_Domain_Refinement_Factor = TBD
@@ -48,7 +45,7 @@ for k in range(Number_Of_AOAS):
     for j in range(Number_Of_Domains_Refinements):
         Growth_Rate_Wing = Initial_Growth_Rate_Wing
         for i in range(Number_Of_Wing_Refinements):
-            print ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
+            print '\n AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
 
             import sys
             import salome
@@ -229,7 +226,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_3D_Parameters_1.SetGrowthRate( Growth_Rate_Domain )
             NETGEN_3D_Parameters_1.SetNbSegPerEdge( 3 )
             NETGEN_3D_Parameters_1.SetNbSegPerRadius( 5 )
-            NETGEN_3D_Parameters_1.SetMinSize( Airfoil_Mesh_Size )
+            NETGEN_3D_Parameters_1.SetMinSize( Smallest_Airfoil_Mesh_Size )
             NETGEN_3D_Parameters_1.SetUseSurfaceCurvature( 0 )
             NETGEN_3D_Parameters_1.SetSecondOrder( 106 )
             NETGEN_3D_Parameters_1.SetFuseEdges( 80 )
@@ -258,7 +255,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wing )
             NETGEN_2D_Parameters_Wing.SetNbSegPerEdge( 6.92154e-310 )
             NETGEN_2D_Parameters_Wing.SetNbSegPerRadius( 5.32336e-317 )
-            NETGEN_2D_Parameters_Wing.SetMinSize( Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing.SetMinSize( Smallest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Wing.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_Wing.SetQuadAllowed( 0 )
             NETGEN_2D_Parameters_Wing.SetSecondOrder( 106 )
@@ -270,12 +267,12 @@ for k in range(Number_Of_AOAS):
 
             # LE Airfoils
             Regular_1D_1 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Airfoils)
-            Start_and_End_Length_LE = Regular_1D_1.StartEndLength(Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[])
+            Start_and_End_Length_LE = Regular_1D_1.StartEndLength(Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[])
             Start_and_End_Length_LE.SetObjectEntry( 'Cut_Domain' )
 
             # TE Airfoils
             Regular_1D_2 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Airfoils)
-            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Airfoil_Mesh_Size,[])
+            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size,[])
             Start_and_End_Length_TE.SetObjectEntry( 'Cut_Domain' )
 
             # TE
@@ -307,19 +304,19 @@ for k in range(Number_Of_AOAS):
             print('       Number of elements    :', NumberOfElements)
 
             fluid_path = salome_output_path + '/Mesh_Domain_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
             far_field_path = salome_output_path + '/Sub-mesh_FarField_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
             body_surface_path = salome_output_path + '/Sub-mesh_Wing_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
             te_path = salome_output_path + '/Sub-mesh_TE_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
             # Export data files
@@ -329,12 +326,12 @@ for k in range(Number_Of_AOAS):
             except:
               print 'ExportDAT() failed. Invalid file name?'
             try:
-              Mesh_Domain.ExportDAT( r'/' + far_field_path, Sub_mesh_Wing_Surface )
+              Mesh_Domain.ExportDAT( r'/' + body_surface_path, Sub_mesh_Wing_Surface )
               pass
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
             try:
-              Mesh_Domain.ExportDAT( r'/' + body_surface_path, Sub_mesh_Far_Field_Surface )
+              Mesh_Domain.ExportDAT( r'/' + far_field_path, Sub_mesh_Far_Field_Surface )
               pass
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
@@ -354,7 +351,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
             isDone = Mesh_Wake_Surface.Compute()
             wake_path = salome_output_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.stl'
             try:
               Mesh_Wake_Surface.ExportSTL( wake_path, 1 )
@@ -394,7 +391,7 @@ for k in range(Number_Of_AOAS):
             #     AOA, # 0
             #     Wing_span, # 1
             #     Domain_Length, # 2
-            #     Airfoil_Mesh_Size, # 3
+            #     Smallest_Airfoil_Mesh_Size, # 3
             #     Biggest_Airfoil_Mesh_Size, # 4
             #     Far_Field_Mesh_Size, # 5
             #     Growth_Rate_Wing, # 6

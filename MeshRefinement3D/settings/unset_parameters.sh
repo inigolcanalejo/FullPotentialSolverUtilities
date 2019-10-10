@@ -32,13 +32,15 @@ sed 's|'"Growth_Rate_Wing_Refinement_Factor = $Growth_Rate_Wing_Refinement_Facto
                                 /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path /$Generate_Mesh_Cosine_Wake_File_Path \
                                 /$Potential_Flow_Analysis_File_Path /$Generate_Mesh_Membrane_File_Path /$Salome_Converter_Membrane_File_Path
 
-
-
-sed 's|'"Initial_FarField_MeshSize = $Initial_FarField_MeshSize"'|'"Initial_FarField_MeshSize = TBD"'|g' -i /$Generate_Mesh_File_Path \
+sed 's|'"Smallest_Airfoil_Mesh_Size = $Smallest_Airfoil_Mesh_Size"'|'"Smallest_Airfoil_Mesh_Size = TBD"'|g' -i /$Generate_Mesh_File_Path \
                                 /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path /$Generate_Mesh_Cosine_Wake_File_Path \
                                 /$Potential_Flow_Analysis_File_Path /$Generate_Mesh_Membrane_File_Path /$Salome_Converter_Membrane_File_Path
 
-sed 's|'"FarField_Refinement_Factor = $FarField_Refinement_Factor"'|'"FarField_Refinement_Factor = TBD"'|g' -i /$Generate_Mesh_File_Path \
+sed 's|'"Biggest_Airfoil_Mesh_Size = $Biggest_Airfoil_Mesh_Size"'|'"Biggest_Airfoil_Mesh_Size = TBD"'|g' -i /$Generate_Mesh_File_Path \
+                                /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path /$Generate_Mesh_Cosine_Wake_File_Path \
+                                /$Potential_Flow_Analysis_File_Path /$Generate_Mesh_Membrane_File_Path /$Salome_Converter_Membrane_File_Path
+
+sed 's|'"Wing_span = $Wing_span"'|'"Wing_span = TBD"'|g' -i /$Generate_Mesh_File_Path \
                                 /$Salome_Converter_File_Path /$Mesh_Refinement_File_Path /$Generate_Mesh_Cosine_File_Path /$Generate_Mesh_Cosine_Wake_File_Path \
                                 /$Potential_Flow_Analysis_File_Path /$Generate_Mesh_Membrane_File_Path /$Salome_Converter_Membrane_File_Path
 

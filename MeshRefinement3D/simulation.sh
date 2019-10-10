@@ -20,25 +20,25 @@ source settings/parameters.sh
 source settings/set_parameters.sh
 cd generate_mdpas/
 
-# Run salome: generate geometry and mesh
-rm $input_dir_path/output_salome/*
-python3 runSalome.py
+# # Run salome: generate geometry and mesh
+# rm $input_dir_path/output_salome/*
+# python3 runSalome.py
 
 # # Convert salomes mesh into mdpa
 # rm $input_dir_path/mdpas/*
 # python3 use_converter.py
 # #python3 use_converter_membrane.py
 
-# # # Save mdpas file in a copy
-# # #source save_mdpas.sh
+# # Save mdpas file in a copy
+# source save_mdpas.sh
 
 cd ..
-# # Run Kratos
-# source scripts/runKratos.sh
+# Run Kratos
+source runKratos/runKratos.sh
 # # Run Latex
 # #source scripts/run_latex.sh
-# # Copy results
-# #source scripts/copy_results.sh
+# Copy results
+source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 
