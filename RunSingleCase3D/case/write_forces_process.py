@@ -1,5 +1,6 @@
 import KratosMultiphysics
 from KratosMultiphysics.CompressiblePotentialFlowApplication.compute_lift_process import ComputeLiftProcess
+import KratosMultiphysics.CompressiblePotentialFlowApplication as CPFApp
 
 def Factory(settings, Model):
     if( not isinstance(settings,KratosMultiphysics.Parameters) ):
@@ -9,6 +10,9 @@ def Factory(settings, Model):
 class WriteForcesProcess(ComputeLiftProcess):
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
+
+        nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["PRESSURE_COEFFICIENT"])
+        nodal_value_process.Execute()
 
         # with open('results_3d_finite_wing.dat', 'a') as file:
         #     file.write('{0:12.4f} {1:12.4f} {2:12.4f} {3:12.2e} {4:12.2e} {4:12.2e} {6:12.4e}'.format(

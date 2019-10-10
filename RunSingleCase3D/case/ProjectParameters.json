@@ -30,7 +30,7 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
+                        "nodal_nonhistorical_results" : ["PRESSURE_COEFFICIENT","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL","DISTANCE"],
                         "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT"]
                     },
@@ -89,12 +89,12 @@
             }
         },{
             "python_module" : "write_forces_process",
-            "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "ComputeLiftProcess3D",
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Body3D_Body_Auto1",
                 "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
+                "moment_reference_point" : [-0.498097349046,0.0,0.043577871374],
                 "is_infinite_wing": false
             }
         }],
