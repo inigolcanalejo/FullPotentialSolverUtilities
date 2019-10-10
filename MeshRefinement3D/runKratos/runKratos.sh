@@ -1,5 +1,5 @@
 #Removing plots
-#source scripts/removing_before_kratos_run.sh
+source scripts/removing_before_kratos_run.sh
 
 #Set element and wake process
 #Element=IncompressiblePotentialFlowElement2D3N
@@ -9,7 +9,6 @@
 cd runKratos/
 #Run Kratos
 unbuffer python3 MeshDomainRefinement.py 2>&1 | tee $NEWFILE
-rm MeshRefinement3D.post.lst
 rm runKratos.post.lst
 cd ..
 

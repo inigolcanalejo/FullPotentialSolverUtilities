@@ -8,7 +8,7 @@ import KratosMultiphysics
 from KratosMultiphysics.CompressiblePotentialFlowApplication.potential_flow_analysis import PotentialFlowAnalysis
 
 import os
-#import loads_output
+import loads_output
 import shutil
 import subprocess
 from PyPDF2 import PdfFileReader, PdfFileMerger
@@ -47,22 +47,22 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         #self.ExecuteAfterAOALoop()
 
     def SetParameters(self):
-        self.Wing_span = 4.0
-        self.Smallest_Airfoil_Mesh_Size = 0.01
-        self.Biggest_Airfoil_Mesh_Size = 0.05
+        self.Wing_span = TBD
+        self.Smallest_Airfoil_Mesh_Size = TBD
+        self.Biggest_Airfoil_Mesh_Size = TBD
 
-        self.Number_Of_AOAS = 1
-        self.Number_Of_Domains_Refinements = 1
-        self.Number_Of_Wing_Refinements = 1
+        self.Number_Of_AOAS = TBD
+        self.Number_Of_Domains_Refinements = TBD
+        self.Number_Of_Wing_Refinements = TBD
 
-        self.Initial_AOA = 5.0
-        self.AOA_Increment = 2.0
+        self.Initial_AOA = TBD
+        self.AOA_Increment = TBD
 
-        self.Initial_Growth_Rate_Wing = 0.7
-        self.Growth_Rate_Wing_Refinement_Factor = 0.1
+        self.Initial_Growth_Rate_Wing = TBD
+        self.Growth_Rate_Wing_Refinement_Factor = TBD
 
-        self.Initial_Growth_Rate_Domain = 0.7
-        self.Growth_Rate_Domain_Refinement_Factor = 0.1
+        self.Initial_Growth_Rate_Domain = TBD
+        self.Growth_Rate_Domain_Refinement_Factor = TBD
 
         self.case = 0
         self.Domain_Length = 100
@@ -75,15 +75,15 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.SetFilePaths()
 
     def SetFilePaths(self):
-        self.input_dir_path = '/media/inigo/10740FB2740F9A1C/3d_results'
-        self.mdpa_path = '/media/inigo/10740FB2740F9A1C/3d_results/mdpas'
-        self.gid_output_path = '/media/inigo/10740FB2740F9A1C/3d_results/output_gid'
+        self.input_dir_path = 'TBD'
+        self.mdpa_path = 'TBD'
+        self.gid_output_path = 'TBD'
 
-        # self.cl_error_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/cl_error/data/cl'
-        # self.cl_error_results_h_file_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/cl_error/data/cl/cl_error_results_h.dat'
-        # self.cl_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/cl/data/cl'
-        # self.cl_results_h_file_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/cl/data/cl/cl_results_h.dat'
-        # self.cl_reference_h_file_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/cl/data/cl/cl_reference_h.dat'
+        self.cl_error_results_directory_name = 'TBD'
+        self.cl_error_results_h_file_name = 'TBD'
+        self.cl_results_directory_name = 'TBD'
+        self.cl_p_results_file_name = 'TBD'
+        # self.cl_reference_h_file_name = 'TBD'
 
         # self.aoa_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa'
         # self.aoa_results_file_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa/data/cl_aoa.dat'
@@ -109,6 +109,12 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.rmtree(self.gid_output_path + '/AOA_' + str(self.AOA), ignore_errors=True)
         os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA))
 
+        #self.cl_error_data_directory_name = 'data/cl_error_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
+        self.cl_data_directory_name = 'data/cl_AOA_' + str(self.AOA)
+        shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
+        loads_output.create_cl_p_results_file(self.input_dir_path, self.cl_data_directory_name, self.Growth_Rate_Domain)
+        self.Growth_Rate_Domain_Counter = 0
+
         # shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
 
         # with open(self.aoa_results_file_name,'w') as cl_aoa_file:
@@ -127,9 +133,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         #     cl_file.flush()
         # with open(self.cl_reference_h_file_name,'w') as cl_file:
         #     cl_file.flush()
-
-        # self.cl_error_data_directory_name = 'data/cl_error_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
-        # self.cl_data_directory_name = 'data/cl_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
 
         # self.cp_data_directory_start = self.input_dir_path + '/plots/cp/data/DS_' + str(self.Domain_Length) + '/' + 'AOA_' + str(self.AOA)
         # os.mkdir(self.cp_data_directory_start)
@@ -182,8 +185,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.project_parameters["processes"]["boundary_conditions_process_list"][1]["Parameters"]["wake_stl_file_name"].SetString(
             wake_file_name)
 
-        # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["angle_of_attack"].SetDouble(
-        #     self.AOA)
+        self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["growth_rate_domain"].SetDouble(
+            self.Growth_Rate_Domain)
+        self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["angle_of_attack"].SetDouble(
+            self.AOA)
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["airfoil_meshsize"].SetDouble(
         #     self.Airfoil_MeshSize)
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["minimum_airfoil_meshsize"].SetDouble(
@@ -195,24 +200,28 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self._GetSolver().AddVariables()
 
     def ExecuteAfterWingRefinementLoop(self):
-        # loads_output.write_figures_cl_error(self.cl_error_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
-        # loads_output.write_figures_cl(self.cl_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
-
-        # shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
-        # shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
-
-        # os.remove(self.cl_error_results_h_file_name)
-        # os.remove(self.cl_results_h_file_name)
-        # os.remove(self.cl_reference_h_file_name)
-
         # cp_refienment_file_name = self.input_dir_path + '/plots/cp/cp_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA) + '.pdf'
         # self.merger_refinement_cp.write(cp_refienment_file_name)
+        loads_output.add_cl_to_tikz(self.input_dir_path, self.cl_data_directory_name, self.cl_p_results_file_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
         self.Growth_Rate_Domain -= self.Growth_Rate_Domain_Refinement_Factor
+        self.Growth_Rate_Domain_Counter += 1
 
     def ExecuteAfterDomainRefinementLoop(self):
         # latex_aoa = subprocess.Popen(['pdflatex', '-interaction=batchmode', '-output-directory', self.input_dir_path + '/plots/aoa/data', self.input_dir_path + '/plots/aoa/data/cl_aoa.tex'], stdout=self.latex_output)
         # latex_aoa.communicate()
         # shutil.copytree(self.aoa_results_directory_name + '/data', self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length))
+
+        # loads_output.write_figures_cl_error(self.cl_error_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
+        loads_output.write_figures_cl(self.cl_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
+        loads_output.close_cl_tikz(self.input_dir_path, self.cl_data_directory_name)
+
+
+        #shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_error_data_directory_name)
+
+        # os.remove(self.cl_error_results_h_file_name)
+        # os.remove(self.cl_results_h_file_name)
+        # os.remove(self.cl_reference_h_file_name)
+        #os.remove(self.cl_p_results_file_name)
 
         self.AOA += self.AOA_Increment
 

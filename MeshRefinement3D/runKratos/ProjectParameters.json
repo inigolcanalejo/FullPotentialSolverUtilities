@@ -95,7 +95,9 @@
                 "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
                 "moment_reference_point" : [-0.498097349046,0.0,0.043577871374],
-                "is_infinite_wing": false
+                "is_infinite_wing": false,
+                "growth_rate_domain": 0.0,
+                "angle_of_attack": 0.0
             }
         }],
         "auxiliar_process_list" :[]
