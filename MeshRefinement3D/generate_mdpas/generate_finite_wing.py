@@ -5,7 +5,6 @@
 ###
 
 # Parameters:
-AOA = 5.0
 Wing_span = 4.0
 Domain_Length = 100
 Domain_Height = Domain_Length
@@ -16,45 +15,40 @@ Biggest_Airfoil_Mesh_Size = 0.05
 LE_Mesh_Size = Airfoil_Mesh_Size
 TE_Mesh_Size = Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/10.0
-Growth_Rate_Wing = 0.7
-Growth_Rate_Domain = 0.7
 
-Number_Of_Refinements = TBD
+print '\nWing_span = ', Wing_span
+print 'Domain_Length = ', Domain_Length
+print 'Airfoil_Mesh_Size = ', Airfoil_Mesh_Size
+print 'Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
+print 'Far_Field_Mesh_Size = ', Far_Field_Mesh_Size
+
 Number_Of_AOAS = TBD
-Number_Of_Domains_Size = TBD
+Number_Of_Domains_Refinements = TBD
+Number_Of_Wing_Refinements = TBD
 
 Initial_AOA = TBD
 AOA_Increment = TBD
 
-Initial_Airfoil_MeshSize = TBD
-Airfoil_Refinement_Factor = TBD
+Initial_Growth_Rate_Wing = TBD
+Growth_Rate_Wing_Refinement_Factor = TBD
 
 Initial_FarField_MeshSize = TBD
 FarField_Refinement_Factor = TBD
 
-Initial_Domain_Size = TBD
-Domain_Size_Factor = TBD
+Initial_Growth_Rate_Domain = TBD
+Growth_Rate_Domain_Refinement_Factor = TBD
 
 salome_output_path = 'TBD'
 
 case = 0
-Domain_Length = Initial_Domain_Size
-Domain_Width = Initial_Domain_Size
+AOA = Initial_AOA
 
-
-for k in range(Number_Of_Domains_Size):
-    Domain_Length = int(Domain_Length)
-    Domain_Width = int(Domain_Width)
-    FarField_MeshSize = int(Domain_Length / 10.0)
-    AOA = Initial_AOA
-    print 'Domain_Size = ', Domain_Length
-    for j in range(Number_Of_AOAS):
-        Airfoil_MeshSize = Initial_Airfoil_MeshSize
-        #FarField_MeshSize = Initial_FarField_MeshSize
-        print 'AOA = ', AOA
-        for i in range(Number_Of_Refinements):
-            print 'FarField_MeshSize = ', FarField_MeshSize
-            print 'Airfoil_MeshSize = ', Airfoil_MeshSize
+for k in range(Number_Of_AOAS):
+    Growth_Rate_Domain = Initial_Growth_Rate_Domain
+    for j in range(Number_Of_Domains_Refinements):
+        Growth_Rate_Wing = Initial_Growth_Rate_Wing
+        for i in range(Number_Of_Wing_Refinements):
+            print ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
 
             import sys
             import salome
@@ -299,30 +293,34 @@ for k in range(Number_Of_Domains_Size):
             Local_Length_Middle = Regular_1D_4.LocalLength(Biggest_Airfoil_Mesh_Size,None,1e-07)
 
             import time as time
-            print(' Starting meshing ')
+            print('       Starting meshing ')
             start_time = time.time()
             # Compute mesh
             isDone = Mesh_Domain.Compute()
             exe_time = time.time() - start_time
-            print(' Mesh execution took ', str(round(exe_time, 2)), ' sec')
+            print('       Mesh execution took ', str(round(exe_time, 2)), ' sec')
 
             NumberOfNodes = Mesh_Domain.NbNodes()
             NumberOfElements = Mesh_Domain.NbTetras()
-            print(' Information about volume mesh:')
-            print(' Number of nodes       :', NumberOfNodes)
-            print(' Number of elements    :', NumberOfElements)
+            print('       Information about volume mesh:')
+            print('       Number of nodes       :', NumberOfNodes)
+            print('       Number of elements    :', NumberOfElements)
 
-            fluid_path = salome_output_path + '/Mesh_Domain_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+            fluid_path = salome_output_path + '/Mesh_Domain_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
-            far_field_path = salome_output_path + '/Sub-mesh_FarField_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+            far_field_path = salome_output_path + '/Sub-mesh_FarField_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
-            body_surface_path = salome_output_path + '/Sub-mesh_Wing_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+            body_surface_path = salome_output_path + '/Sub-mesh_Wing_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
-            te_path = salome_output_path + '/Sub-mesh_TE_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
+            te_path = salome_output_path + '/Sub-mesh_TE_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
             # Export data files
             try:
@@ -355,8 +353,9 @@ for k in range(Number_Of_Domains_Size):
             status = Mesh_Wake_Surface.AddHypothesis(NETGEN_2D_Parameters_FarField)
             NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
             isDone = Mesh_Wake_Surface.Compute()
-            wake_path = salome_output_path + '/wake_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-                AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.stl'
+            wake_path = salome_output_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.stl'
             try:
               Mesh_Wake_Surface.ExportSTL( wake_path, 1 )
               pass
@@ -405,12 +404,12 @@ for k in range(Number_Of_Domains_Size):
             #     exe_time/60.0)) # 10
             #   file.flush()
 
-            Airfoil_MeshSize *= Airfoil_Refinement_Factor
+            #Airfoil_MeshSize *= Airfoil_Refinement_Factor
             #FarField_MeshSize /= FarField_Refinement_Factor
+            Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
             case +=1
-        AOA += AOA_Increment
-    Domain_Length *= Domain_Size_Factor
-    Domain_Width *= Domain_Size_Factor
+        Growth_Rate_Domain -= Growth_Rate_Domain_Refinement_Factor
+    AOA += AOA_Increment
 
 
 if salome.sg.hasDesktop():
