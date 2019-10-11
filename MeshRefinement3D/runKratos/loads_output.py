@@ -299,8 +299,26 @@ def add_cl_to_tikz(input_dir_path, cl_data_directory_name, cl_p_results_file_nam
     cl_p_results_file_name_tmp = 'cl_p_results_GRD_' +  str(GRD) + '.dat'
     if GRD_counter < 1:
         color = 'red'
-    else:
+    elif GRD_counter < 2:
         color = 'blue'
+    elif GRD_counter < 3:
+        color = 'black'
+    elif GRD_counter < 4:
+        color = 'brown'
+    elif GRD_counter < 5:
+        color = 'violet'
+    elif GRD_counter < 6:
+        color = 'orange'
+    elif GRD_counter < 7:
+        color = 'magenta'
+    elif GRD_counter < 8:
+        color = 'gray'
+    elif GRD_counter < 9:
+        color = 'teal'
+    elif GRD_counter < 10:
+        color = 'purple'
+
+
     with open(cl_tikz_file_name, 'a') as cl_tikz_file:
         cl_tikz_file.write('\n\n\\addplot[\n' +
             '    color=' + color + ',\n' +
