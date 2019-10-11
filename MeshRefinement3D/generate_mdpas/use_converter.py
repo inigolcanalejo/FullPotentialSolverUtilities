@@ -40,12 +40,15 @@ case = 0
 AOA = Initial_AOA
 
 for k in range(Number_Of_AOAS):
+    AOA = round(AOA, 1)
     Growth_Rate_Domain = Initial_Growth_Rate_Domain
     for j in range(Number_Of_Domains_Refinements):
+        Growth_Rate_Domain = round(Growth_Rate_Domain, 1)
         Growth_Rate_Wing = Initial_Growth_Rate_Wing
         for i in range(Number_Of_Wing_Refinements):
             #round(Airfoil_MeshSize, 1)
             #Airfoil_MeshSize = round_to_1(Airfoil_MeshSize)
+            Growth_Rate_Wing = round(Growth_Rate_Wing, 1)
             print('Writing mdpa...')
             print('\n AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing)
             model = kratos_utils.MainModelPart() # Main mesh object to which we will add the submeshes (Kratos Name: ModelPart)

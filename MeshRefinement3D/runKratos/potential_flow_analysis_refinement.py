@@ -105,6 +105,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         # loads_output.write_header_all_cases(self.input_dir_path)
 
     def ExecuteBeforeDomainRefinementLoop(self):
+        self.AOA = round(self.AOA, 1)
         self.Growth_Rate_Domain = self.Initial_Growth_Rate_Domain
         shutil.rmtree(self.gid_output_path + '/AOA_' + str(self.AOA), ignore_errors=True)
         os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA))
@@ -124,6 +125,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         # os.mkdir(cp_data_directory_start_ds)
 
     def ExecuteBeforeWingRefinementLoop(self):
+        self.Growth_Rate_Domain = round(self.Growth_Rate_Domain, 1)
         self.Growth_Rate_Wing = self.Initial_Growth_Rate_Wing
         os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA) + '/DR_' + str(self.Growth_Rate_Domain))
 
@@ -158,6 +160,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     #     self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
 
     def SetParametersBeforeInitialize(self):
+        self.Growth_Rate_Wing = round(self.Growth_Rate_Wing, 1)
         #loads_output.write_case(self.case, self.AOA, self.FarField_MeshSize, self.Airfoil_MeshSize, self.input_dir_path)
         self.Smallest_Airfoil_Mesh_Size = round_to_1(self.Smallest_Airfoil_Mesh_Size)
         print("\n\tCase ", self.case, "\n")
