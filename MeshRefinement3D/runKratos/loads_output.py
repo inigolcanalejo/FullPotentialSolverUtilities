@@ -48,6 +48,19 @@ def write_figures_cd(cd_data_directory_name, AOA, work_dir, Domain_Size, Wing_Sp
                            )
         cd_figures_file.flush()
 
+def write_figures_cm(cm_data_directory_name, AOA, work_dir, Domain_Size, Wing_Span, Smallest_Airfoil_Element_Size):
+    with open(work_dir + '/plots/cm/figures_cm.tex', 'a') as cm_figures_file:
+        cm_figures_file.write('\n\pgfplotsset{table/search path={' + cm_data_directory_name + '},}\n\n' +
+                           '\\begin{figure}\n' +
+                           '\t\centering\n' +
+                           '\t\input{' + cm_data_directory_name + '/cm.tikz}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size)
+                               + ', Wing Span = ' + str(Wing_Span) + ', Smallest Element Size = ' + str(Smallest_Airfoil_Element_Size) +'}\n' +
+                           '\t\label{fig:cm_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
+                           '\end{figure}\n'
+                           )
+        cm_figures_file.flush()
+
 def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/cl_error_domain_size/figures_cl_domain.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
@@ -366,6 +379,21 @@ def add_cd_to_tikz(input_dir_path, cd_data_directory_name, GRD, GRD_counter):
             '    \\addlegendentry{Far Field GRD '+ str(GRD) +'}\n\n')
         cd_tikz_file.flush()
 
+def add_cm_to_tikz(input_dir_path, cm_data_directory_name, GRD, GRD_counter):
+
+    color = SetColor(GRD_counter)
+
+    cm_tikz_file_name = input_dir_path + '/plots/cm/' + cm_data_directory_name + '/cm.tikz'
+    cm_p_results_file_name_tmp = 'cm_p_results_GRD_' +  str(GRD) + '.dat'
+    with open(cm_tikz_file_name, 'a') as cm_tikz_file:
+        cm_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=square,\n' +
+            '    ]\n' +
+            '    table {' + cm_p_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
+        cm_tikz_file.flush()
+
 def add_cl_reference_to_tikz(input_dir_path, cl_data_directory_name):
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
     cl_ref_file_name_tmp = 'cl_ref.dat'
@@ -390,6 +418,18 @@ def add_cd_reference_to_tikz(input_dir_path, cd_data_directory_name):
             '    \\addlegendentry{XFLR5}\n\n')
         cd_tikz_file.flush()
 
+def add_cm_reference_to_tikz(input_dir_path, cm_data_directory_name):
+    cm_tikz_file_name = input_dir_path + '/plots/cm/' + cm_data_directory_name + '/cm.tikz'
+    cm_ref_file_name_tmp = 'cm_ref.dat'
+    with open(cm_tikz_file_name, 'a') as cm_tikz_file:
+        cm_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    ]\n' +
+            '    table {' + cm_ref_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{XFLR5}\n\n')
+        cm_tikz_file.flush()
+
 
 def close_cl_tikz(input_dir_path, cl_data_directory_name):
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
@@ -404,6 +444,13 @@ def close_cd_tikz(input_dir_path, cd_data_directory_name):
         cd_tikz_file.write('\end{axis}\n' +
             '\end{tikzpicture}')
         cd_tikz_file.flush()
+
+def close_cm_tikz(input_dir_path, cm_data_directory_name):
+    cm_tikz_file_name = input_dir_path + '/plots/cm/' + cm_data_directory_name + '/cm.tikz'
+    with open(cm_tikz_file_name, 'a') as cm_tikz_file:
+        cm_tikz_file.write('\end{axis}\n' +
+            '\end{tikzpicture}')
+        cm_tikz_file.flush()
 
 
 

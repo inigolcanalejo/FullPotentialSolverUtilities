@@ -27,6 +27,8 @@ pdflatex main_cd.tex > main_cd_out.txt
 #pdflatex -interaction=batchmode main_condition.tex > main_condition_out.txt
 #cd $input_dir_path/plots/cl_error_domain_size/
 #pdflatex -interaction=batchmode cl_domain.tex > cl_domain_out.txt
+cd $input_dir_path/plots/cm
+pdflatex main_cm.tex > main_cm_out.txt
 
 cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D
 

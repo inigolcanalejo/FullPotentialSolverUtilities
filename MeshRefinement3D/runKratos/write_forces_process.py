@@ -65,6 +65,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         NumberOfNodes = self.fluid_model_part.NumberOfNodes()
         self.cl_reference = self.read_cl_reference(self.AOA)
         self.cd_reference = self.read_cd_reference(self.AOA)
+        self.cm_reference = self.read_cm_reference(self.AOA)
 
         cl_data_directory_name = self.input_dir_path + '/plots/cl/' + 'data/cl_AOA_' + str(self.AOA)
         cl_p_results_file_name = cl_data_directory_name + '/cl_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
@@ -88,19 +89,30 @@ class WriteForcesProcess(ComputeLiftProcess):
             cl_file.flush()
 
         cd_data_directory_name = self.input_dir_path + '/plots/cd/' + 'data/cd_AOA_' + str(self.AOA)
-        cl_p_results_file_name = cd_data_directory_name + '/cd_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
-        with open(cl_p_results_file_name,'a') as cl_file:
+        cd_p_results_file_name = cd_data_directory_name + '/cd_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
+        with open(cd_p_results_file_name,'a') as cl_file:
             cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.drag_coefficient))
             cl_file.flush()
 
-        cl_d_results_file_name = cd_data_directory_name + '/cd_f_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
-        with open(cl_d_results_file_name,'a') as cl_file:
+        cd_results_file_name = cd_data_directory_name + '/cd_f_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
+        with open(cd_results_file_name,'a') as cl_file:
             cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.drag_coefficient_far_field))
             cl_file.flush()
 
         cd_reference_results_file_name = cd_data_directory_name + '/cd_ref.dat'
         with open(cd_reference_results_file_name,'a') as cl_file:
             cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cd_reference))
+            cl_file.flush()
+
+        cm_data_directory_name = self.input_dir_path + '/plots/cm/' + 'data/cm_AOA_' + str(self.AOA)
+        cm_results_file_name = cm_data_directory_name + '/cm_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
+        with open(cm_results_file_name,'a') as cl_file:
+            cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.moment_coefficient[1]))
+            cl_file.flush()
+
+        cm_reference_results_file_name = cm_data_directory_name + '/cm_ref.dat'
+        with open(cm_reference_results_file_name,'a') as cl_file:
+            cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cm_reference))
             cl_file.flush()
 
 
