@@ -170,7 +170,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Growth_Rate_Wing = round(self.Growth_Rate_Wing, 1)
         #loads_output.write_case(self.case, self.AOA, self.FarField_MeshSize, self.Airfoil_MeshSize, self.input_dir_path)
         self.Smallest_Airfoil_Mesh_Size = round_to_1(self.Smallest_Airfoil_Mesh_Size)
-        print("\n\tCase ", self.case, "\n")
+        print("\n\tCase ", self.case, ' AOA = ', self.AOA, ' Growth_Rate_Domain = ', self.Growth_Rate_Domain, ' Growth_Rate_Wing = ', self.Growth_Rate_Wing, "\n")
 
         mdpa_file_name = self.mdpa_path + '/wing_Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Wing_Span_' + str(
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
