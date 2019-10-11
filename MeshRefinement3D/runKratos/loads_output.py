@@ -30,10 +30,23 @@ def write_figures_cl(cl_data_directory_name, AOA, work_dir, Domain_Size, Wing_Sp
                            '\t\input{' + cl_data_directory_name + '/cl.tikz}\n' +
                            '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size)
                                + ', Wing Span = ' + str(Wing_Span) + ', Smallest Element Size = ' + str(Smallest_Airfoil_Element_Size) +'}\n' +
-                           '\t\label{fig:cl_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
+                           '\t\label{fig:cl_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )
         cl_figures_file.flush()
+
+def write_figures_cd(cd_data_directory_name, AOA, work_dir, Domain_Size, Wing_Span, Smallest_Airfoil_Element_Size):
+    with open(work_dir + '/plots/cd/figures_cd.tex', 'a') as cd_figures_file:
+        cd_figures_file.write('\n\pgfplotsset{table/search path={' + cd_data_directory_name + '},}\n\n' +
+                           '\\begin{figure}\n' +
+                           '\t\centering\n' +
+                           '\t\input{' + cd_data_directory_name + '/cd.tikz}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size)
+                               + ', Wing Span = ' + str(Wing_Span) + ', Smallest Element Size = ' + str(Smallest_Airfoil_Element_Size) +'}\n' +
+                           '\t\label{fig:cd_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
+                           '\end{figure}\n'
+                           )
+        cd_figures_file.flush()
 
 def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/cl_error_domain_size/figures_cl_domain.tex', 'a') as cl_error_figures_file:
@@ -136,18 +149,6 @@ def write_figures_energy(energy_data_directory_name, AOA, work_dir):
                            '\end{figure}\n'
                            )
         energy_variant_n_figures_file.flush()
-
-def write_figures_cd(cd_data_directory_name, AOA, work_dir):
-    with open(work_dir + '/plots/cd/figures_cd.tex', 'a') as cd_figures_file:
-        cd_figures_file.write('\n\pgfplotsset{table/search path={' + cd_data_directory_name + '},}\n\n' +
-                           '\\begin{figure}\n' +
-                           '\t\centering\n' +
-                           '\t\input{' + cd_data_directory_name + '/cd.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$}\n' +
-                           '\t\label{fig:cd_AOA_' + str(AOA) + '}\n' +
-                           '\end{figure}\n'
-                           )
-        cd_figures_file.flush()
 
 def write_figures_condition(condition_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/condition_number/figures_condition.tex', 'a') as condition_figures_file:
@@ -282,30 +283,32 @@ def read_cl_reference(AOA):
     else:
         return 0.0
 
+def SetColor(GRD_counter):
+    # Set the color
+    if GRD_counter < 1:
+        return 'red'
+    elif GRD_counter < 2:
+        return 'blue'
+    elif GRD_counter < 3:
+        return 'purple'
+    elif GRD_counter < 4:
+        return 'brown'
+    elif GRD_counter < 5:
+        return 'violet'
+    elif GRD_counter < 6:
+        return 'orange'
+    elif GRD_counter < 7:
+        return 'magenta'
+    elif GRD_counter < 8:
+        return 'gray'
+    elif GRD_counter < 9:
+        return 'teal'
+    elif GRD_counter < 10:
+        return 'black'
 
 def add_cl_to_tikz(input_dir_path, cl_data_directory_name, GRD, GRD_counter):
 
-    # Set the color
-    if GRD_counter < 1:
-        color = 'red'
-    elif GRD_counter < 2:
-        color = 'blue'
-    elif GRD_counter < 3:
-        color = 'purple'
-    elif GRD_counter < 4:
-        color = 'brown'
-    elif GRD_counter < 5:
-        color = 'violet'
-    elif GRD_counter < 6:
-        color = 'orange'
-    elif GRD_counter < 7:
-        color = 'magenta'
-    elif GRD_counter < 8:
-        color = 'gray'
-    elif GRD_counter < 9:
-        color = 'teal'
-    elif GRD_counter < 10:
-        color = 'black'
+    color = SetColor(GRD_counter)
 
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
     cl_p_results_file_name_tmp = 'cl_p_results_GRD_' +  str(GRD) + '.dat'
@@ -338,6 +341,31 @@ def add_cl_to_tikz(input_dir_path, cl_data_directory_name, GRD, GRD_counter):
             '    \\addlegendentry{Jump GRD '+ str(GRD) +'}\n\n')
         cl_tikz_file.flush()
 
+def add_cd_to_tikz(input_dir_path, cd_data_directory_name, GRD, GRD_counter):
+
+    color = SetColor(GRD_counter)
+
+    cd_tikz_file_name = input_dir_path + '/plots/cd/' + cd_data_directory_name + '/cd.tikz'
+    cd_p_results_file_name_tmp = 'cd_p_results_GRD_' +  str(GRD) + '.dat'
+    with open(cd_tikz_file_name, 'a') as cd_tikz_file:
+        cd_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=square,\n' +
+            '    ]\n' +
+            '    table {' + cd_p_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
+        cd_tikz_file.flush()
+
+    cd_f_results_file_name_tmp = 'cd_f_results_GRD_' +  str(GRD) + '.dat'
+    with open(cd_tikz_file_name, 'a') as cd_tikz_file:
+        cd_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=diamond,\n' +
+            '    ]\n' +
+            '    table {' + cd_f_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Far Field GRD '+ str(GRD) +'}\n\n')
+        cd_tikz_file.flush()
+
 def add_cl_reference_to_tikz(input_dir_path, cl_data_directory_name):
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
     cl_ref_file_name_tmp = 'cl_ref.dat'
@@ -350,6 +378,18 @@ def add_cl_reference_to_tikz(input_dir_path, cl_data_directory_name):
             '    \\addlegendentry{XFLR5}\n\n')
         cl_tikz_file.flush()
 
+def add_cd_reference_to_tikz(input_dir_path, cd_data_directory_name):
+    cd_tikz_file_name = input_dir_path + '/plots/cd/' + cd_data_directory_name + '/cd.tikz'
+    cd_ref_file_name_tmp = 'cd_ref.dat'
+    with open(cd_tikz_file_name, 'a') as cd_tikz_file:
+        cd_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    ]\n' +
+            '    table {' + cd_ref_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{XFLR5}\n\n')
+        cd_tikz_file.flush()
+
 
 def close_cl_tikz(input_dir_path, cl_data_directory_name):
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
@@ -357,6 +397,13 @@ def close_cl_tikz(input_dir_path, cl_data_directory_name):
         cl_tikz_file.write('\end{axis}\n' +
             '\end{tikzpicture}')
         cl_tikz_file.flush()
+
+def close_cd_tikz(input_dir_path, cd_data_directory_name):
+    cd_tikz_file_name = input_dir_path + '/plots/cd/' + cd_data_directory_name + '/cd.tikz'
+    with open(cd_tikz_file_name, 'a') as cd_tikz_file:
+        cd_tikz_file.write('\end{axis}\n' +
+            '\end{tikzpicture}')
+        cd_tikz_file.flush()
 
 
 

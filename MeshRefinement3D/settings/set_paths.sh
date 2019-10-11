@@ -5,8 +5,8 @@ declare -A paths
 # paths[cl_error_results_directory_name]=$input_dir_path/plots/cl_error/data/cl
 # paths[cl_error_results_file_name]=${paths[cl_error_results_directory_name]}/cl_error_results_h.dat
 paths[cl_results_directory_name]=$input_dir_path/plots/cl/data/cl
-paths[cl_p_results_file_name]=${paths[cl_results_directory_name]}/cl_p_results
-paths[cl_reference_h_file_name]=${paths[cl_results_directory_name]}/cl_reference_h.dat
+paths[cd_results_directory_name]=$input_dir_path/plots/cd/data/cd
+#paths[cl_reference_h_file_name]=${paths[cl_results_directory_name]}/cl_reference_h.dat
 # paths[aoa_results_directory_name]=$input_dir_path/plots/aoa
 # paths[aoa_results_file_name]=$input_dir_path/plots/aoa/data/cl_aoa.dat
 # paths[cl_error_results_domain_directory_name]=$input_dir_path/plots/cl_error_domain_size/data

@@ -18,7 +18,8 @@ pdflatex main_cl.tex > main_cl_out.txt
 #pdflatex -interaction=batchmode main_energy_n.tex > main_energy_n_out.txt
 #pdflatex -interaction=batchmode main_energy_variant_h.tex > main_energy_variant_h_out.txt
 #pdflatex -interaction=batchmode main_energy_variant_n.tex > main_energy_variannt_n_out.txt
-#cd $input_dir_path/plots/cd
+cd $input_dir_path/plots/cd
+pdflatex main_cd.tex > main_cd_out.txt
 #pdflatex -interaction=batchmode main_cd.tex > main_cd_out.txt
 #cd $input_dir_path/plots/aoa/data
 #pdflatex -interaction=batchmode cl_aoa.tex > main_aoa_out.txt
