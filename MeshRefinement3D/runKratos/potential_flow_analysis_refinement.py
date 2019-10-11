@@ -113,7 +113,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         #self.cl_error_data_directory_name = 'data/cl_error_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
         self.cl_data_directory_name = 'data/cl_AOA_' + str(self.AOA)
         shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
-        loads_output.create_cl_p_results_file(self.input_dir_path, self.cl_data_directory_name, self.Growth_Rate_Domain)
         self.Growth_Rate_Domain_Counter = 0
 
         # shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
@@ -205,7 +204,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     def ExecuteAfterWingRefinementLoop(self):
         # cp_refienment_file_name = self.input_dir_path + '/plots/cp/cp_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA) + '.pdf'
         # self.merger_refinement_cp.write(cp_refienment_file_name)
-        loads_output.add_cl_to_tikz(self.input_dir_path, self.cl_data_directory_name, self.cl_p_results_file_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
+        loads_output.add_cl_to_tikz(self.input_dir_path, self.cl_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
         self.Growth_Rate_Domain -= self.Growth_Rate_Domain_Refinement_Factor
         self.Growth_Rate_Domain_Counter += 1
 
@@ -216,6 +215,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         # loads_output.write_figures_cl_error(self.cl_error_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
         loads_output.write_figures_cl(self.cl_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
+        loads_output.add_cl_reference_to_tikz(self.input_dir_path, self.cl_data_directory_name)
         loads_output.close_cl_tikz(self.input_dir_path, self.cl_data_directory_name)
 
 

@@ -35,17 +35,6 @@ def write_figures_cl(cl_data_directory_name, AOA, work_dir, Domain_Size, Wing_Sp
                            )
         cl_figures_file.flush()
 
-    with open(work_dir + '/plots/cl/figures_cl_h.tex', 'a') as cl_figures_file:
-        cl_figures_file.write('\n\pgfplotsset{table/search path={' + cl_data_directory_name + '},}\n\n' +
-                           '\\begin{figure}\n' +
-                           '\t\centering\n' +
-                           '\t\input{' + cl_data_directory_name + '/clh.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) +'}\n' +
-                           '\t\label{fig:cl_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
-                           '\end{figure}\n'
-                           )
-        cl_figures_file.flush()
-
 def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/cl_error_domain_size/figures_cl_domain.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
@@ -294,15 +283,15 @@ def read_cl_reference(AOA):
         return 0.0
 
 
-def add_cl_to_tikz(input_dir_path, cl_data_directory_name, cl_p_results_file_name, GRD, GRD_counter):
-    cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
-    cl_p_results_file_name_tmp = 'cl_p_results_GRD_' +  str(GRD) + '.dat'
+def add_cl_to_tikz(input_dir_path, cl_data_directory_name, GRD, GRD_counter):
+
+    # Set the color
     if GRD_counter < 1:
         color = 'red'
     elif GRD_counter < 2:
         color = 'blue'
     elif GRD_counter < 3:
-        color = 'black'
+        color = 'purple'
     elif GRD_counter < 4:
         color = 'brown'
     elif GRD_counter < 5:
@@ -316,9 +305,10 @@ def add_cl_to_tikz(input_dir_path, cl_data_directory_name, cl_p_results_file_nam
     elif GRD_counter < 9:
         color = 'teal'
     elif GRD_counter < 10:
-        color = 'purple'
+        color = 'black'
 
-
+    cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
+    cl_p_results_file_name_tmp = 'cl_p_results_GRD_' +  str(GRD) + '.dat'
     with open(cl_tikz_file_name, 'a') as cl_tikz_file:
         cl_tikz_file.write('\n\n\\addplot[\n' +
             '    color=' + color + ',\n' +
@@ -328,17 +318,45 @@ def add_cl_to_tikz(input_dir_path, cl_data_directory_name, cl_p_results_file_nam
             '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
         cl_tikz_file.flush()
 
+    cl_f_results_file_name_tmp = 'cl_f_results_GRD_' +  str(GRD) + '.dat'
+    with open(cl_tikz_file_name, 'a') as cl_tikz_file:
+        cl_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=diamond,\n' +
+            '    ]\n' +
+            '    table {' + cl_f_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Far Field GRD '+ str(GRD) +'}\n\n')
+        cl_tikz_file.flush()
+
+    cl_j_results_file_name_tmp = 'cl_j_results_GRD_' +  str(GRD) + '.dat'
+    with open(cl_tikz_file_name, 'a') as cl_tikz_file:
+        cl_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=o,\n' +
+            '    ]\n' +
+            '    table {' + cl_j_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Jump GRD '+ str(GRD) +'}\n\n')
+        cl_tikz_file.flush()
+
+def add_cl_reference_to_tikz(input_dir_path, cl_data_directory_name):
+    cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
+    cl_ref_file_name_tmp = 'cl_ref.dat'
+    with open(cl_tikz_file_name, 'a') as cl_tikz_file:
+        cl_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    ]\n' +
+            '    table {' + cl_ref_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{XFLR5}\n\n')
+        cl_tikz_file.flush()
+
+
 def close_cl_tikz(input_dir_path, cl_data_directory_name):
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
     with open(cl_tikz_file_name, 'a') as cl_tikz_file:
         cl_tikz_file.write('\end{axis}\n' +
             '\end{tikzpicture}')
         cl_tikz_file.flush()
-
-def create_cl_p_results_file(input_dir_path, cl_data_directory_name, GRD):
-    cl_p_results_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl_p_results_GRD_' +  str(GRD) + '.dat'
-    with open(cl_p_results_file_name,'w+') as cl_file:
-        cl_file.flush()
 
 
 
