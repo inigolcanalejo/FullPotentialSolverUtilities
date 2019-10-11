@@ -84,6 +84,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cl_results_directory_name = 'TBD'
         self.cd_results_directory_name = 'TBD'
         self.cm_results_directory_name = 'TBD'
+        self.cl_error_results_directory_name = 'TBD'
         # self.cl_reference_h_file_name = 'TBD'
 
         # self.aoa_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa'
@@ -115,9 +116,11 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cl_data_directory_name = 'data/cl_AOA_' + str(self.AOA)
         self.cd_data_directory_name = 'data/cd_AOA_' + str(self.AOA)
         self.cm_data_directory_name = 'data/cm_AOA_' + str(self.AOA)
+        self.cl_error_data_directory_name = 'data/cl_error_AOA_' + str(self.AOA)
         shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
         shutil.copytree(self.cd_results_directory_name, self.input_dir_path + '/plots/cd/' + self.cd_data_directory_name)
         shutil.copytree(self.cm_results_directory_name, self.input_dir_path + '/plots/cm/' + self.cm_data_directory_name)
+        shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
         self.Growth_Rate_Domain_Counter = 0
 
         # shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
@@ -212,6 +215,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         loads_output.add_cl_to_tikz(self.input_dir_path, self.cl_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
         loads_output.add_cd_to_tikz(self.input_dir_path, self.cd_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
         loads_output.add_cm_to_tikz(self.input_dir_path, self.cm_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
+        loads_output.add_cl_error_to_tikz(self.input_dir_path, self.cl_error_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
         self.Growth_Rate_Domain -= self.Growth_Rate_Domain_Refinement_Factor
         self.Growth_Rate_Domain_Counter += 1
 
@@ -224,12 +228,14 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         loads_output.write_figures_cl(self.cl_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
         loads_output.write_figures_cd(self.cd_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
         loads_output.write_figures_cm(self.cm_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
+        loads_output.write_figures_cl_error(self.cl_error_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
         loads_output.add_cl_reference_to_tikz(self.input_dir_path, self.cl_data_directory_name)
         loads_output.add_cd_reference_to_tikz(self.input_dir_path, self.cd_data_directory_name)
         loads_output.add_cm_reference_to_tikz(self.input_dir_path, self.cm_data_directory_name)
         loads_output.close_cl_tikz(self.input_dir_path, self.cl_data_directory_name)
         loads_output.close_cd_tikz(self.input_dir_path, self.cd_data_directory_name)
         loads_output.close_cm_tikz(self.input_dir_path, self.cm_data_directory_name)
+        loads_output.close_cl_error_tikz(self.input_dir_path, self.cl_error_data_directory_name)
 
 
         #shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_error_data_directory_name)

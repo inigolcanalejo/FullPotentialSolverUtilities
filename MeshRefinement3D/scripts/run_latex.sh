@@ -5,8 +5,8 @@
 
 #Running Latex
 cd $input_dir_path/plots/cl
-#pdflatex -interaction=batchmode main_cl.tex > main_cl_out.txt
-pdflatex main_cl.tex > main_cl_out.txt
+pdflatex -interaction=batchmode main_cl.tex > main_cl_out.txt
+#pdflatex main_cl.tex > main_cl_out.txt
 #pdflatex -interaction=batchmode main_cl_h.tex > main_cl_h_out.txt
 #cd $input_dir_path/plots/cl_error
 #pdflatex -interaction=batchmode main_cl_error.tex > main_cl_error_out.txt
@@ -19,8 +19,8 @@ pdflatex main_cl.tex > main_cl_out.txt
 #pdflatex -interaction=batchmode main_energy_variant_h.tex > main_energy_variant_h_out.txt
 #pdflatex -interaction=batchmode main_energy_variant_n.tex > main_energy_variannt_n_out.txt
 cd $input_dir_path/plots/cd
-pdflatex main_cd.tex > main_cd_out.txt
-#pdflatex -interaction=batchmode main_cd.tex > main_cd_out.txt
+#pdflatex main_cd.tex > main_cd_out.txt
+pdflatex -interaction=batchmode main_cd.tex > main_cd_out.txt
 #cd $input_dir_path/plots/aoa/data
 #pdflatex -interaction=batchmode cl_aoa.tex > main_aoa_out.txt
 #cd $input_dir_path/plots/condition_number/
@@ -28,7 +28,11 @@ pdflatex main_cd.tex > main_cd_out.txt
 #cd $input_dir_path/plots/cl_error_domain_size/
 #pdflatex -interaction=batchmode cl_domain.tex > cl_domain_out.txt
 cd $input_dir_path/plots/cm
-pdflatex main_cm.tex > main_cm_out.txt
+#pdflatex main_cm.tex > main_cm_out.txt
+pdflatex -interaction=batchmode main_cm.tex > main_cm_out.txt
+
+cd $input_dir_path/plots/cl_error
+pdflatex -interaction=batchmode main_cl_error.tex > main_cl_error_out.txt
 
 cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D
 

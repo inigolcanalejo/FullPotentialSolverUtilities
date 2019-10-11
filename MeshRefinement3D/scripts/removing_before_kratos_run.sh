@@ -7,6 +7,9 @@ rm $input_dir_path/plots/cd/figures_cd.tex
 rm -rf $input_dir_path/plots/cm/data/cm_*
 rm $input_dir_path/plots/cm/figures_cm.tex
 
+rm -rf $input_dir_path/plots/cl_error/data/cl_error_*
+rm $input_dir_path/plots/cl_error/figures_cl_error*
+
 # rm -rf $input_dir_path/plots/condition_number/data/condition_*
 # rm $input_dir_path/plots/condition_number/figures_condition.tex
 

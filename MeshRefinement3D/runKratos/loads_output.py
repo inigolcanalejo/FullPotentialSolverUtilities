@@ -61,6 +61,19 @@ def write_figures_cm(cm_data_directory_name, AOA, work_dir, Domain_Size, Wing_Sp
                            )
         cm_figures_file.flush()
 
+def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir, Domain_Size, Wing_Span, Smallest_Airfoil_Element_Size):
+    with open(work_dir + '/plots/cl_error/figures_cl_error.tex', 'a') as cl_error_figures_file:
+        cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
+                           '\\begin{figure}\n' +
+                           '\t\centering\n' +
+                           '\t\input{' + cl_error_data_directory_name + '/cl_error.tikz}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size)
+                               + ', Wing Span = ' + str(Wing_Span) + ', Smallest Element Size = ' + str(Smallest_Airfoil_Element_Size) +'}\n' +
+                           '\t\label{fig:cl_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
+                           '\end{figure}\n'
+                           )
+        cl_error_figures_file.flush()
+
 def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/cl_error_domain_size/figures_cl_domain.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
@@ -73,50 +86,7 @@ def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
                            )
         cl_error_figures_file.flush()
 
-def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir, Domain_Size):
-    with open(work_dir + '/plots/cl_error/figures_cl_error.tex', 'a') as cl_error_figures_file:
-        cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
-                           '\\begin{figure}\n' +
-                           '\t\centering\n' +
-                           '\t\input{' + cl_error_data_directory_name + '/cl_error.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) +'}\n' +
-                           '\t\label{fig:cl_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
-                           '\end{figure}\n'
-                           )
-        cl_error_figures_file.flush()
 
-    with open(work_dir + '/plots/cl_error/figures_cl_error_h.tex', 'a') as cl_error_figures_file:
-        cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
-                           '\\begin{figure}\n' +
-                           '\t\centering\n' +
-                           '\t\input{' + cl_error_data_directory_name + '/cl_error_h.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) + '}\n' +
-                           '\t\label{fig:cl_error_h_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
-                           '\end{figure}\n'
-                           )
-        cl_error_figures_file.flush()
-
-    with open(work_dir + '/plots/cl_error/figures_cl_error_h_log.tex', 'a') as cl_error_figures_file:
-        cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
-                           '\\begin{figure}\n' +
-                           '\t\centering\n' +
-                           '\t\input{' + cl_error_data_directory_name + '/cl_error_h_log.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) + '}\n' +
-                           '\t\label{fig:cl_error_AOA_' + str(AOA) + '}\n' +
-                           '\end{figure}\n'
-                           )
-        cl_error_figures_file.flush()
-
-    with open(work_dir + '/plots/cl_error/figures_cl_error_h_log_ok.tex', 'a') as cl_error_figures_file:
-        cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
-                           '\\begin{figure}\n' +
-                           '\t\centering\n' +
-                           '\t\input{' + cl_error_data_directory_name + '/cl_error_h_log_ok.tikz}\n' +
-                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) + '}\n' +
-                           '\t\label{fig:cl_error_AOA_' + str(AOA) + '}\n' +
-                           '\end{figure}\n'
-                           )
-        cl_error_figures_file.flush()
 
 def write_figures_energy(energy_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/relative_error_energy_norm/figures_energy_h.tex', 'a') as energy_h_figures_file:
@@ -394,6 +364,21 @@ def add_cm_to_tikz(input_dir_path, cm_data_directory_name, GRD, GRD_counter):
             '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
         cm_tikz_file.flush()
 
+def add_cl_error_to_tikz(input_dir_path, cl_error_data_directory_name, GRD, GRD_counter):
+
+    color = SetColor(GRD_counter)
+
+    cl_error_tikz_file_name = input_dir_path + '/plots/cl_error/' + cl_error_data_directory_name + '/cl_error.tikz'
+    cl_error_p_results_file_name_tmp = 'cl_error_p_results_GRD_' +  str(GRD) + '.dat'
+    with open(cl_error_tikz_file_name, 'a') as cl_error_tikz_file:
+        cl_error_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=square,\n' +
+            '    ]\n' +
+            '    table {' + cl_error_p_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
+        cl_error_tikz_file.flush()
+
 def add_cl_reference_to_tikz(input_dir_path, cl_data_directory_name):
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
     cl_ref_file_name_tmp = 'cl_ref.dat'
@@ -451,6 +436,13 @@ def close_cm_tikz(input_dir_path, cm_data_directory_name):
         cm_tikz_file.write('\end{axis}\n' +
             '\end{tikzpicture}')
         cm_tikz_file.flush()
+
+def close_cl_error_tikz(input_dir_path, cl_error_data_directory_name):
+    cl_error_tikz_file_name = input_dir_path + '/plots/cl_error/' + cl_error_data_directory_name + '/cl_error.tikz'
+    with open(cl_error_tikz_file_name, 'a') as cl_error_tikz_file:
+        cl_error_tikz_file.write('\end{axis}\n' +
+            '\end{tikzpicture}')
+        cl_error_tikz_file.flush()
 
 
 

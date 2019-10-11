@@ -67,6 +67,21 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.cd_reference = self.read_cd_reference(self.AOA)
         self.cm_reference = self.read_cm_reference(self.AOA)
 
+        if(abs(self.cl_reference) < 1e-6):
+            self.cl_p_relative_error = abs(self.lift_coefficient - self.cl_reference)
+        else:
+            self.cl_p_relative_error = abs(self.lift_coefficient - self.cl_reference)/abs(self.cl_reference)*100.0
+
+        if(abs(self.cd_reference) < 1e-6):
+            self.cd_p_relative_error = abs(self.drag_coefficient - self.cd_reference)
+        else:
+            self.cd_p_relative_error = abs(self.drag_coefficient - self.cd_reference)/abs(self.cd_reference)*100.0
+
+        if(abs(self.cm_reference) < 1e-6):
+            self.cm_p_relative_error = abs(self.moment_coefficient[1] - self.cm_reference)
+        else:
+            self.cm_p_relative_error = abs(self.moment_coefficient[1] - self.cm_reference)/abs(self.cm_reference)*100.0
+
         cl_data_directory_name = self.input_dir_path + '/plots/cl/' + 'data/cl_AOA_' + str(self.AOA)
         cl_p_results_file_name = cl_data_directory_name + '/cl_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
         with open(cl_p_results_file_name,'a') as cl_file:
@@ -113,6 +128,12 @@ class WriteForcesProcess(ComputeLiftProcess):
         cm_reference_results_file_name = cm_data_directory_name + '/cm_ref.dat'
         with open(cm_reference_results_file_name,'a') as cl_file:
             cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cm_reference))
+            cl_file.flush()
+
+        cl_error_data_directory_name = self.input_dir_path + '/plots/cl_error/' + 'data/cl_error_AOA_' + str(self.AOA)
+        cl_error_p_results_file_name = cl_error_data_directory_name + '/cl_error_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
+        with open(cl_error_p_results_file_name,'a') as cl_file:
+            cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cl_p_relative_error))
             cl_file.flush()
 
 
