@@ -189,14 +189,14 @@ def write_cp_figures(cp_data_directory_name, AOA, case, Airfoil_MeshSize,  FarFi
                        )
     figures_file.flush()
 
-def write_jump_figures(jump_data_directory_name, AOA, case, Airfoil_MeshSize,  FarField_MeshSize, work_dir):
-    with open(work_dir + 'plots/potential_jump/figures_jump.tex', 'w') as jump_figures_file:
+def write_jump_figures(jump_data_directory_name, AOA, case, Growth_Rate_Domain,  Growth_Rate_Wing, work_dir):
+    with open(work_dir + '/plots/potential_jump/figures_jump.tex', 'w') as jump_figures_file:
         jump_figures_file.write('\n\pgfplotsset{table/search path={' + jump_data_directory_name + '},}\n\n' +
                            '\\begin{figure}\n' +
                            '\t\centering\n' +
                            '\t\input{' + jump_data_directory_name + '/jump.tikz}\n' +
                            '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, case = ' + str(case) +
-                           ' Far field mesh size = ' + str(FarField_MeshSize) + ' Airfoil mesh size = ' + str(Airfoil_MeshSize)+ '}\n' +
+                           ' Growth rate domain = ' + str(Growth_Rate_Domain) + ' Growth rate wing = ' + str(Growth_Rate_Wing)+ '}\n' +
                            '\t\label{fig:jump_AOA_' + str(AOA) + '}\n' +
                            '\end{figure}\n'
                            )

@@ -20,6 +20,9 @@ rm -rf $input_dir_path/plots/cl_aoa/data/cl_ao*
 rm -rf $input_dir_path/plots/cd_aoa/data/cd_ao*
 rm -rf $input_dir_path/plots/cm_aoa/data/cm_ao*
 
+rm -rf $input_dir_path/plots/potential_jump/data/AOA*
+rm -rf $input_dir_path/plots/potential_jump/data/potential_jump_AOA_*
+
 # rm -rf $input_dir_path/plots/condition_number/data/condition_*
 # rm $input_dir_path/plots/condition_number/figures_condition.tex
 

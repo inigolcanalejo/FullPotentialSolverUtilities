@@ -184,6 +184,19 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cm_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.cm_reference))
                 cm_aoa_file.flush()
 
+        potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+
+        potential_jump_file_name = potential_jump_dir_name + '/potential_jump_results.dat'
+
+        with open(potential_jump_file_name, 'w') as jump_file:
+            for node in self.trailing_edge_model_part.Nodes:
+                potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
+                auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
+                potential_jump = potential - auxiliary_potential
+
+                jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
+
 
 
     def read_cl_reference(self,AOA):

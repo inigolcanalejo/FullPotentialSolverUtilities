@@ -95,6 +95,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cl_aoa_results_directory_name = 'TBD'
         self.cd_aoa_results_directory_name = 'TBD'
         self.cm_aoa_results_directory_name = 'TBD'
+        self.potential_jump_results_directory_name = self.input_dir_path + '/plots/potential_jump/data/potential_jump'
         # self.cl_reference_h_file_name = 'TBD'
 
         # self.aoa_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa'
@@ -103,8 +104,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         # self.cl_error_results_domain_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/cl_error_domain_size/data'
 
     def ExecuteBeforeAOALoop(self):
-        # self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
-        # self.latex_output.flush()
+        self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
+        self.latex_output.flush()
         self.AOA = self.Initial_AOA
 
         # for _ in range(self.Number_Of_AOAS):
@@ -139,6 +140,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.cd_aoa_results_directory_name, self.cd_aoa_results_directory_name + 'oa')
         shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
         self.Growth_Rate_Domain_Counter = 0
+
+        self.merger_local_jump = PdfFileMerger()
 
         # shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
 
@@ -188,6 +191,11 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         #loads_output.write_case(self.case, self.AOA, self.FarField_MeshSize, self.Airfoil_MeshSize, self.input_dir_path)
         self.Smallest_Airfoil_Mesh_Size = round_to_1(self.Smallest_Airfoil_Mesh_Size)
         print("\n\tCase ", self.case, ' AOA = ', self.AOA, ' Growth_Rate_Domain = ', self.Growth_Rate_Domain, ' Growth_Rate_Wing = ', self.Growth_Rate_Wing, "\n")
+
+        potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copytree(self.potential_jump_results_directory_name, potential_jump_dir_name)
+        loads_output.write_jump_figures(potential_jump_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path)
 
         mdpa_file_name = self.mdpa_path + '/wing_Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Wing_Span_' + str(
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
@@ -265,6 +273,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         loads_output.close_cd_error_tikz(self.input_dir_path, self.cd_error_data_directory_name)
         loads_output.close_cm_error_tikz(self.input_dir_path, self.cm_error_data_directory_name)
 
+        jump_final_file_name = self.input_dir_path + '/plots/potential_jump/AOA_' + str(self.AOA) + '.pdf'
+        self.merger_local_jump.write(jump_final_file_name)
 
         #shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_error_data_directory_name)
 
@@ -280,6 +290,12 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     #     self.merger_all_cp.write(cp_final_global_file_name)
 
     def Finalize(self):
+        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/potential_jump/main_potential_jump.tex'], stdout=self.latex_output)
+        latex.communicate()
+        jump_file_name = self.input_dir_path + '/plots/potential_jump/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copyfile('main_potential_jump.pdf',jump_file_name)
+        self.merger_local_jump.append(PdfFileReader(jump_file_name), 'case_' + str(self.case))
         super(PotentialFlowAnalysisRefinement,self).Finalize()
         self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
         #self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
