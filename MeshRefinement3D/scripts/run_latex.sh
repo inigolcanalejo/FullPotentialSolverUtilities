@@ -40,5 +40,14 @@ pdflatex -interaction=batchmode main_cd_error.tex > main_cd_error_out.txt
 cd $input_dir_path/plots/cm_error
 pdflatex -interaction=batchmode main_cm_error.tex > main_cm_error_out.txt
 
+cd $input_dir_path/plots/cl_aoa
+pdflatex -interaction=batchmode main_cl_aoa.tex > main_cl_aoa_out.txt
+
+cd $input_dir_path/plots/cd_aoa
+pdflatex -interaction=batchmode main_cd_aoa.tex > main_cd_aoa_out.txt
+
+cd $input_dir_path/plots/cm_aoa
+pdflatex -interaction=batchmode main_cm_aoa.tex > main_cm_aoa_out.txt
+
 cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D
 

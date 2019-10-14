@@ -16,6 +16,10 @@ rm $input_dir_path/plots/cd_error/figures_cd_error*
 rm -rf $input_dir_path/plots/cm_error/data/cm_error_*
 rm $input_dir_path/plots/cm_error/figures_cm_error*
 
+rm -rf $input_dir_path/plots/cl_aoa/data/cl_ao*
+rm -rf $input_dir_path/plots/cd_aoa/data/cd_ao*
+rm -rf $input_dir_path/plots/cm_aoa/data/cm_ao*
+
 # rm -rf $input_dir_path/plots/condition_number/data/condition_*
 # rm $input_dir_path/plots/condition_number/figures_condition.tex
 

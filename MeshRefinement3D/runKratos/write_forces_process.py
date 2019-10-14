@@ -18,7 +18,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             "trailing_edge_model_part_name": "",
             "is_infinite_wing": false,
             "growth_rate_domain": 0.0,
-            "angle_of_attack": 0.0
+            "growth_rate_wing": 0.0,
+            "angle_of_attack": 0.0,
+            "minimum_mesh_growth_rate": 0.0
         }''')
 
         settings.ValidateAndAssignDefaults(default_parameters)
@@ -42,7 +44,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             raise Exception('The reference area should be larger than 0.')
 
         self.Growth_Rate_Domain = settings["growth_rate_domain"].GetDouble()
+        self.Growth_Rate_Wing = settings["growth_rate_wing"].GetDouble()
         self.AOA = settings["angle_of_attack"].GetDouble()
+        self.minimum_mesh_growth_rate = settings["minimum_mesh_growth_rate"].GetDouble()
         self.input_dir_path = 'TBD'
 
     def ExecuteFinalizeSolutionStep(self):
@@ -147,6 +151,38 @@ class WriteForcesProcess(ComputeLiftProcess):
         with open(cm_error_p_results_file_name,'a') as cm_file:
             cm_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cm_p_relative_error))
             cm_file.flush()
+
+        mesh_size = self.Growth_Rate_Wing * self.Growth_Rate_Domain
+        if mesh_size < self.minimum_mesh_growth_rate + 1e-9:
+            cl_aoa_results_file_name = self.input_dir_path + '/plots/cl_aoa/' + 'data/cl_aoa/cl_aoa.dat'
+            with open(cl_aoa_results_file_name,'a') as cl_aoa_file:
+                cl_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.lift_coefficient))
+                cl_aoa_file.flush()
+
+            cl_aoa_ref_results_file_name = self.input_dir_path + '/plots/cl_aoa/' + 'data/cl_aoa/cl_aoa_ref.dat'
+            with open(cl_aoa_ref_results_file_name,'a') as cl_aoa_file:
+                cl_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.cl_reference))
+                cl_aoa_file.flush()
+
+            cd_aoa_results_file_name = self.input_dir_path + '/plots/cd_aoa/' + 'data/cd_aoa/cd_aoa.dat'
+            with open(cd_aoa_results_file_name,'a') as cd_aoa_file:
+                cd_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.drag_coefficient))
+                cd_aoa_file.flush()
+
+            cd_aoa_ref_results_file_name = self.input_dir_path + '/plots/cd_aoa/' + 'data/cd_aoa/cd_aoa_ref.dat'
+            with open(cd_aoa_ref_results_file_name,'a') as cd_aoa_file:
+                cd_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.cd_reference))
+                cd_aoa_file.flush()
+
+            cm_aoa_results_file_name = self.input_dir_path + '/plots/cm_aoa/' + 'data/cm_aoa/cm_aoa.dat'
+            with open(cm_aoa_results_file_name,'a') as cm_aoa_file:
+                cm_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.moment_coefficient[1]))
+                cm_aoa_file.flush()
+
+            cm_aoa_ref_results_file_name = self.input_dir_path + '/plots/cm_aoa/' + 'data/cm_aoa/cm_aoa_ref.dat'
+            with open(cm_aoa_ref_results_file_name,'a') as cm_aoa_file:
+                cm_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.cm_reference))
+                cm_aoa_file.flush()
 
 
 

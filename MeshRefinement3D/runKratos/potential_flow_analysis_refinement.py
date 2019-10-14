@@ -69,8 +69,13 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Domain_Width = self.Domain_Length
         self.FarField_MeshSize = int(self.Domain_Length / 10.0)
 
-        # self.Minimum_Airfoil_MeshSize = self.Initial_Airfoil_MeshSize * \
-        #     (self.Airfoil_Refinement_Factor**(self.Number_Of_Refinements-1))
+        minimum_mesh_growth_rate_wing = self.Initial_Growth_Rate_Wing - \
+            (self.Growth_Rate_Wing_Refinement_Factor*(self.Number_Of_Wing_Refinements-1))
+
+        minimum_mesh_growth_rate_domain = self.Initial_Growth_Rate_Domain - \
+            (self.Growth_Rate_Domain_Refinement_Factor*(self.Number_Of_Domains_Refinements-1))
+
+        self.minimum_mesh_growth_rate = minimum_mesh_growth_rate_wing * minimum_mesh_growth_rate_domain
 
         self.SetFilePaths()
 
@@ -87,6 +92,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cl_error_results_directory_name = 'TBD'
         self.cd_error_results_directory_name = 'TBD'
         self.cm_error_results_directory_name = 'TBD'
+        self.cl_aoa_results_directory_name = 'TBD'
+        self.cd_aoa_results_directory_name = 'TBD'
+        self.cm_aoa_results_directory_name = 'TBD'
         # self.cl_reference_h_file_name = 'TBD'
 
         # self.aoa_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa'
@@ -127,6 +135,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
         shutil.copytree(self.cd_error_results_directory_name, self.input_dir_path + '/plots/cd_error/' + self.cd_error_data_directory_name)
         shutil.copytree(self.cm_error_results_directory_name, self.input_dir_path + '/plots/cm_error/' + self.cm_error_data_directory_name)
+        shutil.copytree(self.cl_aoa_results_directory_name, self.cl_aoa_results_directory_name + 'oa')
+        shutil.copytree(self.cd_aoa_results_directory_name, self.cd_aoa_results_directory_name + 'oa')
+        shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
         self.Growth_Rate_Domain_Counter = 0
 
         # shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
@@ -203,8 +214,13 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["growth_rate_domain"].SetDouble(
             self.Growth_Rate_Domain)
+        self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["growth_rate_wing"].SetDouble(
+            self.Growth_Rate_Wing)
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["angle_of_attack"].SetDouble(
             self.AOA)
+        self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["minimum_mesh_growth_rate"].SetDouble(
+            self.minimum_mesh_growth_rate)
+
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["airfoil_meshsize"].SetDouble(
         #     self.Airfoil_MeshSize)
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["minimum_airfoil_meshsize"].SetDouble(

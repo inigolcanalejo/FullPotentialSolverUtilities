@@ -97,7 +97,9 @@
                 "moment_reference_point" : [-0.498097349046,0.0,0.043577871374],
                 "is_infinite_wing": false,
                 "growth_rate_domain": 0.0,
-                "angle_of_attack": 0.0
+                "growth_rate_wing": 0.0,
+                "angle_of_attack": 0.0,
+                "minimum_mesh_growth_rate": 0.0
             }
         }],
         "auxiliar_process_list" :[]
