@@ -34,5 +34,11 @@ pdflatex -interaction=batchmode main_cm.tex > main_cm_out.txt
 cd $input_dir_path/plots/cl_error
 pdflatex -interaction=batchmode main_cl_error.tex > main_cl_error_out.txt
 
+cd $input_dir_path/plots/cd_error
+pdflatex -interaction=batchmode main_cd_error.tex > main_cd_error_out.txt
+
+cd $input_dir_path/plots/cm_error
+pdflatex -interaction=batchmode main_cm_error.tex > main_cm_error_out.txt
+
 cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D
 

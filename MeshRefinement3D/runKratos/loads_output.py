@@ -74,6 +74,32 @@ def write_figures_cl_error(cl_error_data_directory_name, AOA, work_dir, Domain_S
                            )
         cl_error_figures_file.flush()
 
+def write_figures_cd_error(cd_error_data_directory_name, AOA, work_dir, Domain_Size, Wing_Span, Smallest_Airfoil_Element_Size):
+    with open(work_dir + '/plots/cd_error/figures_cd_error.tex', 'a') as cd_error_figures_file:
+        cd_error_figures_file.write('\n\pgfplotsset{table/search path={' + cd_error_data_directory_name + '},}\n\n' +
+                           '\\begin{figure}\n' +
+                           '\t\centering\n' +
+                           '\t\input{' + cd_error_data_directory_name + '/cd_error.tikz}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size)
+                               + ', Wing Span = ' + str(Wing_Span) + ', Smallest Element Size = ' + str(Smallest_Airfoil_Element_Size) +'}\n' +
+                           '\t\label{fig:cd_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
+                           '\end{figure}\n'
+                           )
+        cd_error_figures_file.flush()
+
+def write_figures_cm_error(cm_error_data_directory_name, AOA, work_dir, Domain_Size, Wing_Span, Smallest_Airfoil_Element_Size):
+    with open(work_dir + '/plots/cm_error/figures_cm_error.tex', 'a') as cm_error_figures_file:
+        cm_error_figures_file.write('\n\pgfplotsset{table/search path={' + cm_error_data_directory_name + '},}\n\n' +
+                           '\\begin{figure}\n' +
+                           '\t\centering\n' +
+                           '\t\input{' + cm_error_data_directory_name + '/cm_error.tikz}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size)
+                               + ', Wing Span = ' + str(Wing_Span) + ', Smallest Element Size = ' + str(Smallest_Airfoil_Element_Size) +'}\n' +
+                           '\t\label{fig:cm_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
+                           '\end{figure}\n'
+                           )
+        cm_error_figures_file.flush()
+
 def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/cl_error_domain_size/figures_cl_domain.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +
@@ -379,6 +405,36 @@ def add_cl_error_to_tikz(input_dir_path, cl_error_data_directory_name, GRD, GRD_
             '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
         cl_error_tikz_file.flush()
 
+def add_cd_error_to_tikz(input_dir_path, cd_error_data_directory_name, GRD, GRD_counter):
+
+    color = SetColor(GRD_counter)
+
+    cd_error_tikz_file_name = input_dir_path + '/plots/cd_error/' + cd_error_data_directory_name + '/cd_error.tikz'
+    cd_error_p_results_file_name_tmp = 'cd_error_p_results_GRD_' +  str(GRD) + '.dat'
+    with open(cd_error_tikz_file_name, 'a') as cd_error_tikz_file:
+        cd_error_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=square,\n' +
+            '    ]\n' +
+            '    table {' + cd_error_p_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
+        cd_error_tikz_file.flush()
+
+def add_cm_error_to_tikz(input_dir_path, cm_error_data_directory_name, GRD, GRD_counter):
+
+    color = SetColor(GRD_counter)
+
+    cm_error_tikz_file_name = input_dir_path + '/plots/cm_error/' + cm_error_data_directory_name + '/cm_error.tikz'
+    cm_error_p_results_file_name_tmp = 'cm_error_p_results_GRD_' +  str(GRD) + '.dat'
+    with open(cm_error_tikz_file_name, 'a') as cm_error_tikz_file:
+        cm_error_tikz_file.write('\n\n\\addplot[\n' +
+            '    color=' + color + ',\n' +
+            '    mark=square,\n' +
+            '    ]\n' +
+            '    table {' + cm_error_p_results_file_name_tmp + '};  \n' +
+            '    \\addlegendentry{Pressure GRD '+ str(GRD) +'}\n\n')
+        cm_error_tikz_file.flush()
+
 def add_cl_reference_to_tikz(input_dir_path, cl_data_directory_name):
     cl_tikz_file_name = input_dir_path + '/plots/cl/' + cl_data_directory_name + '/cl.tikz'
     cl_ref_file_name_tmp = 'cl_ref.dat'
@@ -444,5 +500,18 @@ def close_cl_error_tikz(input_dir_path, cl_error_data_directory_name):
             '\end{tikzpicture}')
         cl_error_tikz_file.flush()
 
+def close_cd_error_tikz(input_dir_path, cd_error_data_directory_name):
+    cd_error_tikz_file_name = input_dir_path + '/plots/cd_error/' + cd_error_data_directory_name + '/cd_error.tikz'
+    with open(cd_error_tikz_file_name, 'a') as cd_error_tikz_file:
+        cd_error_tikz_file.write('\end{axis}\n' +
+            '\end{tikzpicture}')
+        cd_error_tikz_file.flush()
+
+def close_cm_error_tikz(input_dir_path, cm_error_data_directory_name):
+    cm_error_tikz_file_name = input_dir_path + '/plots/cm_error/' + cm_error_data_directory_name + '/cm_error.tikz'
+    with open(cm_error_tikz_file_name, 'a') as cm_error_tikz_file:
+        cm_error_tikz_file.write('\end{axis}\n' +
+            '\end{tikzpicture}')
+        cm_error_tikz_file.flush()
 
 

@@ -136,6 +136,18 @@ class WriteForcesProcess(ComputeLiftProcess):
             cl_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cl_p_relative_error))
             cl_file.flush()
 
+        cd_error_data_directory_name = self.input_dir_path + '/plots/cd_error/' + 'data/cd_error_AOA_' + str(self.AOA)
+        cd_error_p_results_file_name = cd_error_data_directory_name + '/cd_error_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
+        with open(cd_error_p_results_file_name,'a') as cd_file:
+            cd_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cd_p_relative_error))
+            cd_file.flush()
+
+        cm_error_data_directory_name = self.input_dir_path + '/plots/cm_error/' + 'data/cm_error_AOA_' + str(self.AOA)
+        cm_error_p_results_file_name = cm_error_data_directory_name + '/cm_error_p_results_GRD_' +  str(self.Growth_Rate_Domain) + '.dat'
+        with open(cm_error_p_results_file_name,'a') as cm_file:
+            cm_file.write('{0:16.2e} {1:15f}\n'.format(NumberOfNodes, self.cm_p_relative_error))
+            cm_file.flush()
+
 
 
     def read_cl_reference(self,AOA):
