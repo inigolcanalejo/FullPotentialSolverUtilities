@@ -40,7 +40,7 @@ source runKratos/runKratos.sh
 # Run Latex
 source scripts/run_latex.sh
 # Copy results
-source scripts/copy_results.sh
+#source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 
