@@ -85,6 +85,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.cl_error_results_domain_directory_name = 'TBD'
 
+        self.cm_results_directory_name = 'TBD'
+        self.cm_results_h_file_name = 'TBD'
+
     def ExecuteBeforeDomainLoop(self):
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
         self.latex_output.flush()
@@ -127,6 +130,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.cl_error_data_directory_name = 'data/cl_error_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
         self.cl_data_directory_name = 'data/cl_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
+        self.cm_data_directory_name = 'data/cm_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
 
         self.cp_data_directory_start = self.input_dir_path + '/plots/cp/data/DS_' + str(self.Domain_Length) + '/' + 'AOA_' + str(self.AOA)
         os.mkdir(self.cp_data_directory_start)
@@ -185,11 +189,14 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     def ExecuteAfterRefinementLoop(self):
         loads_output.write_figures_cl_error(self.cl_error_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
         loads_output.write_figures_cl(self.cl_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
+        loads_output.write_figures_cm(self.cm_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length)
 
         shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
         shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
+        shutil.copytree(self.cm_results_directory_name, self.input_dir_path + '/plots/cm/' + self.cm_data_directory_name)
 
         os.remove(self.cl_error_results_h_file_name)
+        os.remove(self.cm_results_h_file_name)
         os.remove(self.cl_results_h_file_name)
         os.remove(self.cl_reference_h_file_name)
 

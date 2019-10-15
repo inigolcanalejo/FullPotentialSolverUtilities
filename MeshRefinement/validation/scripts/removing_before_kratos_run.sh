@@ -1,6 +1,9 @@
 rm -rf $input_dir_path/plots/cl/data/cl_*
 rm $input_dir_path/plots/cl/figures_cl*
 
+rm -rf $input_dir_path/plots/cm/data/cm_*
+rm $input_dir_path/plots/cm/figures_cm*
+
 rm -rf $input_dir_path/plots/cd/data/cd_*
 rm $input_dir_path/plots/cd/figures_cd.tex
 

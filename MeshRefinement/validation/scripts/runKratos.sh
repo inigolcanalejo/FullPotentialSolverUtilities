@@ -8,6 +8,7 @@ source scripts/removing_before_kratos_run.sh
 
 #Run Kratos
 unbuffer python3 MeshDomainRefinement.py 2>&1 | tee $NEWFILE
+rm main_cp*
 
 #Unset element and wake process
 sed 's|'"$Element"'|'"ELEMENT TBD"'|g' -i /$ProjectParameters_File_Path

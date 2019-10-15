@@ -160,6 +160,11 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             aoa_file.write('{0:16.2e} {1:15f} {2:15f} {3:15f} {4:15f}\n'.format(NumberOfNodes, self.lift_coefficient, self.lift_coefficient_jump, self.cl_reference, self.drag_coefficient))
             aoa_file.flush()
 
+        cm_results_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_results_h.dat'
+        with open(cm_results_h_file_name,'a') as cm_file:
+            cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.moment_coefficient[2]))
+            cm_file.flush()
+
     def read_cl_reference(self,AOA):
         #values computed with the panel method from xfoil
         if(abs(AOA - 0.0) < 1e-3):
