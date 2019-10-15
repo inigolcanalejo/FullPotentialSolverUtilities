@@ -213,7 +213,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.project_parameters["output_processes"]["gid_output"][0]["Parameters"]["output_name"].SetString(
             gid_output_file_name)
 
-        wake_file_name = self.input_dir_path + '/output_salome' + '/wake_Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Wing_Span_' + str(
+        wake_file_name = self.mdpa_path + '/wake_Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Wing_Span_' + str(
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '.stl'
 

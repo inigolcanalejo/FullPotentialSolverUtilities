@@ -36,6 +36,7 @@ Initial_Growth_Rate_Domain = TBD
 Growth_Rate_Domain_Refinement_Factor = TBD
 
 salome_output_path = 'TBD'
+mdpa_path = 'TBD'
 
 case = 0
 AOA = Initial_AOA
@@ -356,7 +357,7 @@ for k in range(Number_Of_AOAS):
             status = Mesh_Wake_Surface.AddHypothesis(NETGEN_2D_Parameters_FarField)
             NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
             isDone = Mesh_Wake_Surface.Compute()
-            wake_path = salome_output_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+            wake_path = mdpa_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.stl'
             try:
