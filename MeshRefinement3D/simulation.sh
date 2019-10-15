@@ -26,8 +26,7 @@ rm $input_dir_path/mdpas/wa*
 python3 runSalome.py
 
 # Convert salomes mesh into mdpa
-rm $input_dir_path/mdpas/M*
-rm $input_dir_path/mdpas/S*
+rm $input_dir_path/mdpas/wi*
 python3 use_converter.py
 rm $input_dir_path/output_salome/*
 
