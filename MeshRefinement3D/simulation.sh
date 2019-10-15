@@ -36,7 +36,6 @@ rm $input_dir_path/output_salome/*
 
 cd ..
 # Run Kratos
-rm -rf $input_dir_path/output_gid/*
 source runKratos/runKratos.sh
 # Run Latex
 source scripts/run_latex.sh

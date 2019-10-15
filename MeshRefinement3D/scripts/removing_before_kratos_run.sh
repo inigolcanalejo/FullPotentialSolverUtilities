@@ -1,3 +1,5 @@
+rm -rf $input_dir_path/output_gid/*
+
 rm -rf $input_dir_path/plots/cl/data/cl_*
 rm $input_dir_path/plots/cl/figures_cl*
 
