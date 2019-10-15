@@ -57,6 +57,18 @@ def write_figures_cm(cm_data_directory_name, AOA, work_dir, Domain_Size):
                            )
         cm_figures_file.flush()
 
+def write_figures_cm_error(cm_data_directory_name, AOA, work_dir, Domain_Size):
+    with open(work_dir + '/plots/cm_error/figures_cm_error_h.tex', 'a') as cm_figures_file:
+        cm_figures_file.write('\n\pgfplotsset{table/search path={' + cm_data_directory_name + '},}\n\n' +
+                           '\\begin{figure}\n' +
+                           '\t\centering\n' +
+                           '\t\input{' + cm_data_directory_name + '/cm_error_h.tikz}\n' +
+                           '\t\caption{$\\alpha = ' + str(AOA) + '\degree$, Domain size = ' + str(Domain_Size) +'}\n' +
+                           '\t\label{fig:cm_error_DS_' + str(Domain_Size) + '_AOA_' + str(AOA) + '}\n' +
+                           '\end{figure}\n'
+                           )
+        cm_figures_file.flush()
+
 def write_figures_domain_cl_error(cl_error_data_directory_name, AOA, work_dir):
     with open(work_dir + '/plots/cl_error_domain_size/figures_cl_domain.tex', 'a') as cl_error_figures_file:
         cl_error_figures_file.write('\n\pgfplotsset{table/search path={' + cl_error_data_directory_name + '},}\n\n' +

@@ -29,5 +29,8 @@ pdflatex -interaction=batchmode cl_domain.tex > cl_domain_out.txt
 cd $input_dir_path/plots/cm
 pdflatex -interaction=batchmode main_cm_h.tex > main_cm_h_out.txt
 
+cd $input_dir_path/plots/cm_error
+pdflatex -interaction=batchmode main_cm_error_h.tex > main_cm_error_h_out.txt
+
 cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement/validation
 

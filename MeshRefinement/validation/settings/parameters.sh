@@ -1,6 +1,6 @@
 #Parameters
 Number_Of_Domains_Size=1
-Number_Of_Refinements=3
+Number_Of_Refinements=6
 Number_Of_AOAS=1
 
 Initial_Domain_Size=1e4

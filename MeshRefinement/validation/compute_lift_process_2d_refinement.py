@@ -48,6 +48,12 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.moment_reference_point = settings["moment_reference_point"].GetVector()
         self.is_infinite_wing = settings["is_infinite_wing"].GetBool()
 
+        aoa_rad = self.AOA * math.pi / 180.0
+        x = self.moment_reference_point[0] * math.cos(aoa_rad) + self.moment_reference_point[1] * math.sin(aoa_rad)
+        y = self.moment_reference_point[1] * math.cos(aoa_rad) - self.moment_reference_point[0] * math.sin(aoa_rad)
+        self.moment_reference_point[0] = x
+        self.moment_reference_point[1] = y
+
     def ExecuteFinalizeSolutionStep(self):
 
         # This function finds and saves the trailing edge for further computations
@@ -165,6 +171,24 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.moment_coefficient[2]))
             cm_file.flush()
 
+        self.cm_reference = self.read_cm_reference(self.AOA)
+
+        cm_results_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_reference_h.dat'
+        with open(cm_results_h_file_name,'a') as cm_file:
+            cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cm_reference))
+            cm_file.flush()
+
+        if(abs(self.cm_reference) < 1e-6):
+            self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)
+        else:
+            self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)/abs(self.cm_reference)*100.0
+
+        cm_error_results_h_file_name = self.input_dir_path + '/plots/cm_error/data/cm_error/cm_error_results_h.dat'
+        with open(cm_error_results_h_file_name,'a') as cm_file:
+            cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cm_relative_error))
+            cm_file.flush()
+
+
     def read_cl_reference(self,AOA):
         #values computed with the panel method from xfoil
         if(abs(AOA - 0.0) < 1e-3):
@@ -228,3 +252,40 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             return 1.089679153000
         else:
             print('There is no reference for this AOA')
+
+    def read_cm_reference(self,AOA):
+        #values computed with the panel method from xfoil
+        if(abs(AOA - 0.0) < 1e-3):
+            return 0.0
+        elif(abs(AOA - 1.0) < 1e-3):
+            return -0.0315
+        elif(abs(AOA - 2.0) < 1e-3):
+            return -0.0631
+        elif(abs(AOA - 3.0) < 1e-3):
+            return -0.0945
+        elif(abs(AOA - 4.0) < 1e-3):
+            return -0.1258
+        elif(abs(AOA - 5.0) < 1e-3):
+            return -0.1570
+        elif(abs(AOA - 6.0) < 1e-3):
+            return -0.1879
+        elif(abs(AOA - 7.0) < 1e-3):
+            return -0.2187
+        elif(abs(AOA - 8.0) < 1e-3):
+            return -0.2492
+        elif(abs(AOA - 9.0) < 1e-3):
+            return -0.2793
+        elif(abs(AOA - 10.0) < 1e-3):
+            return -0.3092
+        elif(abs(AOA - 11.0) < 1e-3):
+            return -0.3386
+        elif(abs(AOA - 12.0) < 1e-3):
+            return -0.3677
+        elif(abs(AOA - 13.0) < 1e-3):
+            return -0.3963
+        elif(abs(AOA - 14.0) < 1e-3):
+            return -0.4244
+        elif(abs(AOA - 15.0) < 1e-3):
+            return -0.4520
+        else:
+            return 0.0
