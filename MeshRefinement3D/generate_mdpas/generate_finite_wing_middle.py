@@ -372,6 +372,10 @@ for k in range(Number_Of_AOAS):
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
+            middle_airfoil = salome_output_path + '/Sub_mesh_Middle_Airfoil_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+
             # Export data files
             try:
               Mesh_Domain.ExportDAT( r'/' + fluid_path )
@@ -393,6 +397,11 @@ for k in range(Number_Of_AOAS):
               pass
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + middle_airfoil, Sub_mesh_Middle_Airfoils )
+              pass
+            except:
+              print 'ExportPartToDAT() failed. Invalid file name?'
             Sub_mesh_Far_Field_Edges = Regular_1D.GetSubMesh()
             Sub_mesh_LE_Airfoils = Regular_1D_1.GetSubMesh()
             Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
@@ -407,10 +416,10 @@ for k in range(Number_Of_AOAS):
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.stl'
             try:
-              Mesh_Wake_Surface.ExportSTL( wake_path, 1 )
-              pass
+                Mesh_Wake_Surface.ExportSTL( wake_path, 1 )
+                pass
             except:
-              print 'ExportSTL() failed. Invalid file name?''
+                print 'ExportSTL() failed. Invalid file name?'
 
 
             ## Set names of Mesh objects
