@@ -1,12 +1,12 @@
 #Parameters
-Number_Of_AOAS=10
-Number_Of_Domains_Refinements=7
-Number_Of_Wing_Refinements=7
+Number_Of_AOAS=1
+Number_Of_Domains_Refinements=1
+Number_Of_Wing_Refinements=1
 
-Initial_AOA=0.0
+Initial_AOA=1.0
 AOA_Increment=1.0
 
-Initial_Growth_Rate_Domain=0.7
+Initial_Growth_Rate_Domain=0.6
 Growth_Rate_Domain_Refinement_Factor=0.1
 
 Initial_Growth_Rate_Wing=0.7
