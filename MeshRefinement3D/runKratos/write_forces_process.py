@@ -1,6 +1,7 @@
 import KratosMultiphysics
 from KratosMultiphysics.CompressiblePotentialFlowApplication.compute_lift_process import ComputeLiftProcess
 import KratosMultiphysics.CompressiblePotentialFlowApplication as CPFApp
+import math
 
 def Factory(settings, Model):
     if( not isinstance(settings,KratosMultiphysics.Parameters) ):
@@ -12,8 +13,9 @@ class WriteForcesProcess(ComputeLiftProcess):
         KratosMultiphysics.Process.__init__(self)
 
         default_parameters = KratosMultiphysics.Parameters(r'''{
-            "model_part_name": "please specify the model part that contains the surface nodes",
-            "far_field_model_part_name": "please specify the model part that contains the surface nodes",
+            "model_part_name": "",
+            "far_field_model_part_name": "",
+            "middle_airfoil_model_part_name": "",
             "moment_reference_point" : [0.0,0.0,0.0],
             "trailing_edge_model_part_name": "",
             "is_infinite_wing": false,
@@ -48,6 +50,13 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.AOA = settings["angle_of_attack"].GetDouble()
         self.minimum_mesh_growth_rate = settings["minimum_mesh_growth_rate"].GetDouble()
         self.input_dir_path = 'TBD'
+
+        middle_airfoil_model_part_name = settings["middle_airfoil_model_part_name"].GetString()
+        if middle_airfoil_model_part_name != "":
+            if not self.fluid_model_part.HasSubModelPart(middle_airfoil_model_part_name):
+                middle_airfoil_model_part_name = 'Middle_Airfoil'
+                self.middle_airfoil_model_part = self.fluid_model_part.CreateSubModelPart(middle_airfoil_model_part_name)
+            else: self.middle_airfoil_model_part = self.fluid_model_part.GetSubModelPart(middle_airfoil_model_part_name)
 
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
@@ -196,6 +205,19 @@ class WriteForcesProcess(ComputeLiftProcess):
                 potential_jump = potential - auxiliary_potential
 
                 jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
+
+        cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+
+        cp_file_name = cp_dir_name + '/cp_results.dat'
+
+        with open(cp_file_name, 'w') as cp_file:
+            for node in self.middle_airfoil_model_part.Nodes:
+                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                aoa_rad = self.AOA * math.pi / 180.0
+                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                #x = node.X + 0.5
+                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
 
 

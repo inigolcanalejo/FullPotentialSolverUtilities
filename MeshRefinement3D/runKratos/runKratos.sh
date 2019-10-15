@@ -11,6 +11,7 @@ cd runKratos/
 unbuffer python3 MeshDomainRefinement.py 2>&1 | tee $NEWFILE
 rm runKratos.post.lst
 rm main_potential_jump*
+rm main_cp*
 cd ..
 
 # #Unset element and wake process

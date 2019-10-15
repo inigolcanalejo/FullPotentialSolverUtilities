@@ -1,4 +1,4 @@
-rm -rf $input_dir_path/output_gid/*
+rm -rf $input_dir_path/output_gid/A*
 
 rm -rf $input_dir_path/plots/cl/data/cl_*
 rm $input_dir_path/plots/cl/figures_cl*
@@ -23,7 +23,14 @@ rm -rf $input_dir_path/plots/cd_aoa/data/cd_ao*
 rm -rf $input_dir_path/plots/cm_aoa/data/cm_ao*
 
 rm -rf $input_dir_path/plots/potential_jump/data/AOA*
-rm -rf $input_dir_path/plots/potential_jump/data/potential_jump_AOA_*
+#rm -rf $input_dir_path/plots/potential_jump/data/potential_jump_AOA_*
+rm -rf $input_dir_path/plots/potential_jump/A*
+rm -rf $input_dir_path/plots/potential_jump/plots/C*
+
+rm -rf $input_dir_path/plots/cp/data/AOA*
+#rm -rf $input_dir_path/plots/cp/data/cp_AOA_*
+rm -rf $input_dir_path/plots/cp/A*
+rm -rf $input_dir_path/plots/cp/plots/C*
 
 # rm -rf $input_dir_path/plots/condition_number/data/condition_*
 # rm $input_dir_path/plots/condition_number/figures_condition.tex
