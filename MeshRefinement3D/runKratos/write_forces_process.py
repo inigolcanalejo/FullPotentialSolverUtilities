@@ -211,10 +211,10 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         cp_file_name = cp_dir_name + '/cp_results.dat'
 
+        aoa_rad = self.AOA * math.pi / 180.0
         with open(cp_file_name, 'w') as cp_file:
             for node in self.middle_airfoil_model_part.Nodes:
                 pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
-                aoa_rad = self.AOA * math.pi / 180.0
                 x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
                 #x = node.X + 0.5
                 cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
