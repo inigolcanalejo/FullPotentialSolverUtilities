@@ -108,6 +108,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
         self.latex_output.flush()
         self.AOA = self.Initial_AOA
+        shutil.copytree(self.cl_aoa_results_directory_name, self.cl_aoa_results_directory_name + 'oa')
+        shutil.copytree(self.cd_aoa_results_directory_name, self.cd_aoa_results_directory_name + 'oa')
+        shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
 
         # for _ in range(self.Number_Of_AOAS):
         #     shutil.rmtree(self.cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA), ignore_errors=True)
@@ -137,9 +140,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
         shutil.copytree(self.cd_error_results_directory_name, self.input_dir_path + '/plots/cd_error/' + self.cd_error_data_directory_name)
         shutil.copytree(self.cm_error_results_directory_name, self.input_dir_path + '/plots/cm_error/' + self.cm_error_data_directory_name)
-        shutil.copytree(self.cl_aoa_results_directory_name, self.cl_aoa_results_directory_name + 'oa')
-        shutil.copytree(self.cd_aoa_results_directory_name, self.cd_aoa_results_directory_name + 'oa')
-        shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
         self.Growth_Rate_Domain_Counter = 0
 
         self.merger_local_jump = PdfFileMerger()
