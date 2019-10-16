@@ -23,7 +23,13 @@ gid_output_path=$input_dir_path/output_gid
 #gid_output_path=/media/inigo/10740FB2740F9A1C/Results/06_wing_mesh_refinement/20191014_112855_AOA_0.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.01_Biggest_Airfoil_Mesh_Size_0.05_Initial_Growth_Rate_Domain_0.7_Initial_Growth_Rate_Wing_0.7/output_salome
 
 DATE=`date '+%Y%m%d_%H%M%S'`
-FILE=${input_dir_path}/plots/output_terminal.txt
-NAME=${FILE%.*}
-EXT=${FILE#*.}
-NEWFILE=${NAME}_${DATE}_${GITBRANCH}.${EXT}
+FILEK=${input_dir_path}/plots/output_terminal_kratos.txt
+FILES=${input_dir_path}/plots/output_terminal_salome.txt
+FILEC=${input_dir_path}/plots/output_terminal_converter.txt
+NAMEK=${FILEK%.*}
+NAMES=${FILES%.*}
+NAMEC=${FILEC%.*}
+EXT=${FILEK#*.}
+FILEKRATOS=${NAMEK}_${DATE}_${GITBRANCH}.${EXT}
+FILESALOME=${NAMES}_${DATE}_${GITBRANCH}.${EXT}
+FILECONVERTER=${NAMEC}_${DATE}_${GITBRANCH}.${EXT}
