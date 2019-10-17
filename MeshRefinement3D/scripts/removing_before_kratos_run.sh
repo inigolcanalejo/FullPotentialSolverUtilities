@@ -62,5 +62,5 @@ rm -rf $input_dir_path/plots/cp/plots/C*
 # rm $input_dir_path/plots/relative_error_energy_norm/figures_*
 
 # rm $input_dir_path/plots/results/*
-rm $input_dir_path/plots/output_terminal_*
+rm $input_dir_path/plots/output_terminal_kratos*
 # rm -rf /media/inigo/10740FB2740F9A1C/Outputs/05_MeshRefinement/*
