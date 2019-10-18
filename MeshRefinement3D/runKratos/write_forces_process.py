@@ -227,25 +227,25 @@ class WriteForcesProcess(ComputeLiftProcess):
         if(abs(AOA - 0.0) < 1e-3):
             return 0.0
         elif(abs(AOA - 1.0) < 1e-3):
-            return 0.068439
+            return 0.067343
         elif(abs(AOA - 2.0) < 1e-3):
-            return 0.136047
+            return 0.134628
         elif(abs(AOA - 3.0) < 1e-3):
-            return 0.203540
+            return 0.201797
         elif(abs(AOA - 4.0) < 1e-3):
-            return 0.270858
+            return 0.268793
         elif(abs(AOA - 5.0) < 1e-3):
-            return 0.337945
+            return 0.335557
         elif(abs(AOA - 6.0) < 1e-3):
-            return 0.404744
+            return 0.402033
         elif(abs(AOA - 7.0) < 1e-3):
-            return 0.471199
+            return 0.468165
         elif(abs(AOA - 8.0) < 1e-3):
-            return 0.537254
+            return 0.533897
         elif(abs(AOA - 9.0) < 1e-3):
-            return 0.602854
+            return 0.599175
         elif(abs(AOA - 10.0) < 1e-3):
-            return 0.667947
+            return 0.663944
         # elif(abs(AOA - 11.0) < 1e-3):
         #     return 1.3208
         # elif(abs(AOA - 12.0) < 1e-3):
@@ -265,25 +265,25 @@ class WriteForcesProcess(ComputeLiftProcess):
         if(abs(AOA - 0.0) < 1e-3):
             return 0.0
         elif(abs(AOA - 1.0) < 1e-3):
-            return 0.000365
+            return 0.000359
         elif(abs(AOA - 2.0) < 1e-3):
-            return 0.001444
+            return 0.001435
         elif(abs(AOA - 3.0) < 1e-3):
-            return 0.003232
+            return 0.003224
         elif(abs(AOA - 4.0) < 1e-3):
-            return 0.005725
+            return 0.005721
         elif(abs(AOA - 5.0) < 1e-3):
-            return 0.008915
+            return 0.008919
         elif(abs(AOA - 6.0) < 1e-3):
-            return 0.012791
+            return 0.012807
         elif(abs(AOA - 7.0) < 1e-3):
-            return 0.017343
+            return 0.017374
         elif(abs(AOA - 8.0) < 1e-3):
-            return 0.022557
+            return 0.022606
         elif(abs(AOA - 9.0) < 1e-3):
-            return 0.028416
+            return 0.028487
         elif(abs(AOA - 10.0) < 1e-3):
-            return 0.034903
+            return 0.034999
         # elif(abs(AOA - 11.0) < 1e-3):
         #     return 1.3208
         # elif(abs(AOA - 12.0) < 1e-3):
@@ -303,25 +303,25 @@ class WriteForcesProcess(ComputeLiftProcess):
         if(abs(AOA - 0.0) < 1e-3):
             return 0.0
         elif(abs(AOA - 1.0) < 1e-3):
-            return -0.016078
+            return -0.015634
         elif(abs(AOA - 2.0) < 1e-3):
-            return -0.031858
+            return -0.031218
         elif(abs(AOA - 3.0) < 1e-3):
-            return -0.047599
+            return -0.046734
         elif(abs(AOA - 4.0) < 1e-3):
-            return -0.063282
+            return -0.062163
         elif(abs(AOA - 5.0) < 1e-3):
-            return -0.078888
+            return -0.077485
         elif(abs(AOA - 6.0) < 1e-3):
-            return -0.094398
+            return -0.092683
         elif(abs(AOA - 7.0) < 1e-3):
-            return -0.109794
+            return -0.107738
         elif(abs(AOA - 8.0) < 1e-3):
-            return -0.125056
+            return -0.122632
         elif(abs(AOA - 9.0) < 1e-3):
-            return -0.140165
+            return -0.137345
         elif(abs(AOA - 10.0) < 1e-3):
-            return -0.155104
+            return -0.151861
         # elif(abs(AOA - 11.0) < 1e-3):
         #     return 1.3208
         # elif(abs(AOA - 12.0) < 1e-3):
