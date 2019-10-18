@@ -24,24 +24,29 @@ cd generate_mdpas/
 #rm $input_dir_path/output_salome/*
 #rm $input_dir_path/mdpas/wa*
 #python3 runSalome.py
-unbuffer python3 runSalome.py 2>&1 | tee $FILESALOME
+#/bin/bash salome -t python generate_finite_wing_middle.py
+#python3 runSalome.py &> $FILESALOME
+#unbuffer python3 runSalome.py &> $FILESALOME
+#unbuffer python3 runSalome.py 2>&1 | tee $FILESALOME
+#unbuffer python3 runSalome.py | tee $FILESALOME
 
-# # Convert salomes mesh into mdpa
+# # # Convert salomes mesh into mdpa
 # rm $input_dir_path/mdpas/wi*
-# #python3 use_converter.py
+# rm $input_dir_path/plots/output_terminal_converter*
+# # #python3 use_converter.py
 # unbuffer python3 use_converter.py 2>&1 | tee $FILECONVERTER
-# rm $input_dir_path/output_salome/*
+# # rm $input_dir_path/output_salome/*
 
 # # Save mdpas file in a copy
 # source save_mdpas.sh
 
 cd ..
 # Run Kratos
-#source runKratos/runKratos.sh
+source runKratos/runKratos.sh
 # Run Latex
-#source scripts/run_latex.sh
+source scripts/run_latex.sh
 # Copy results
-#source scripts/copy_results.sh
+source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 
