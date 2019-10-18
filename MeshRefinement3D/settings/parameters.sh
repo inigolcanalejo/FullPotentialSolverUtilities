@@ -12,6 +12,6 @@ Growth_Rate_Domain_Refinement_Factor=0.1
 Initial_Growth_Rate_Wing=0.7
 Growth_Rate_Wing_Refinement_Factor=0.1
 
-Smallest_Airfoil_Mesh_Size=0.01
+Smallest_Airfoil_Mesh_Size=0.001
 Biggest_Airfoil_Mesh_Size=0.05
 Wing_span=4.0
