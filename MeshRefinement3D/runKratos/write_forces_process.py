@@ -3,6 +3,9 @@ from KratosMultiphysics.CompressiblePotentialFlowApplication.compute_lift_proces
 import KratosMultiphysics.CompressiblePotentialFlowApplication as CPFApp
 import math
 
+def _DotProduct(A,B):
+    return sum(i[0]*i[1] for i in zip(A, B))
+
 def Factory(settings, Model):
     if( not isinstance(settings,KratosMultiphysics.Parameters) ):
         raise Exception("expected input shall be a Parameters object, encapsulating a json string")
@@ -18,6 +21,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             "middle_airfoil_model_part_name": "",
             "moment_reference_point" : [0.0,0.0,0.0],
             "trailing_edge_model_part_name": "",
+            "trefft_plane_cut_model_part_name": "",
             "is_infinite_wing": false,
             "growth_rate_domain": 0.0,
             "growth_rate_wing": 0.0,
@@ -42,6 +46,11 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.moment_reference_point = settings["moment_reference_point"].GetVector()
         self.is_infinite_wing = settings["is_infinite_wing"].GetBool()
 
+        trefft_plane_cut_model_part_name = settings["trefft_plane_cut_model_part_name"].GetString()
+        if trefft_plane_cut_model_part_name != "":
+            self.trefft_plane_cut_model_part = Model[trefft_plane_cut_model_part_name]
+            self.compute_trefft_plane_forces = True
+
         if not self.reference_area > 0.0:
             raise Exception('The reference area should be larger than 0.')
 
@@ -61,8 +70,31 @@ class WriteForcesProcess(ComputeLiftProcess):
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
 
-        nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["PRESSURE_COEFFICIENT"])
+        nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["PRESSURE_COEFFICIENT", "VELOCITY"])
         nodal_value_process.Execute()
+
+        if self.compute_trefft_plane_forces:
+            potential_integral = 0.0
+            drag_integral = 0.0
+            for cond in self.trefft_plane_cut_model_part.Conditions:
+                length = cond.GetGeometry().Area()
+                for node in cond.GetNodes():
+                    potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
+                    auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
+                    velocity = node.GetValue(KratosMultiphysics.VELOCITY)
+                    velocity_normal_component = _DotProduct(self.wake_direction,velocity)
+                    potential_jump = auxiliary_potential - potential
+                    potential_integral += 0.5 * length * potential_jump
+                    drag_integral += 0.5 * length * potential_jump * velocity_normal_component
+
+            self.lift_coefficient_jump_trefft = 2*potential_integral/(self.free_stream_velocity_norm*self.reference_area)
+
+            free_stream_velocity = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_VELOCITY)
+            free_stream_velocity_norm2 = _DotProduct(free_stream_velocity,free_stream_velocity)
+            self.drag_coefficient_jump_trefft = drag_integral/(free_stream_velocity_norm2*self.reference_area)
+            KratosMultiphysics.Logger.PrintInfo('ComputeLiftProcess',' Cl = ', self.lift_coefficient_jump_trefft, 'Potential Jump Trefft Plane')
+            KratosMultiphysics.Logger.PrintInfo('ComputeLiftProcess',' Cd = ', self.drag_coefficient_jump_trefft, 'Potential Jump Trefft Plane')
+
 
         # with open('results_3d_finite_wing.dat', 'a') as file:
         #     file.write('{0:12.4f} {1:12.4f} {2:12.4f} {3:12.2e} {4:12.2e} {4:12.2e} {6:12.4e}'.format(
