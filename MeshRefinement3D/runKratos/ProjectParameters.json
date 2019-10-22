@@ -30,7 +30,7 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["PRESSURE_COEFFICIENT","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
+                        "nodal_nonhistorical_results" : ["PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
                         "nodal_results"       : ["PSI","VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL","DISTANCE"],
                         "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT"]
                     },
@@ -51,7 +51,7 @@
         "echo_level"             : 2,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
-        "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1","Middle_Airfoil"],
+        "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1","Middle_Airfoil","Trefft_Plane_Cut"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
             "solver_type": "EigenSolversApplication.pardiso_lu",
@@ -96,6 +96,7 @@
                 "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
                 "middle_airfoil_model_part_name": "Middle_Airfoil",
+                "trefft_plane_cut_model_part_name": "Trefft_Plane_Cut",
                 "moment_reference_point" : [-0.498097349046,0.0,0.043577871374],
                 "is_infinite_wing": false,
                 "growth_rate_domain": 0.0,
