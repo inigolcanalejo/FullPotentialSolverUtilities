@@ -15,13 +15,13 @@ Smallest_Airfoil_Mesh_Size = 0.01
 Biggest_Airfoil_Mesh_Size = 0.05
 LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
-Far_Field_Mesh_Size = Domain_Length/50.0
+Far_Field_Mesh_Size = Domain_Length/10.0
 Growth_Rate_Wing = 0.7
 Growth_Rate_Domain = 0.7
 Growth_Rate_Wake = 0.7
 
-Outlet_Min_Mesh_Size = 0.1
-Outlet_Max_Mesh_Size = 0.5
+Outlet_Min_Mesh_Size = 0.05
+Outlet_Max_Mesh_Size = 0.1
 
 import sys
 import salome
