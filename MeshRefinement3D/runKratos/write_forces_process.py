@@ -240,7 +240,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             '\\addplot[\n' +
             '    only marks,\n' +
             '    color=red,\n' +
-            '    mark=square,\n' +
+            #'    mark=square,\n' +
+            '    mark=*,\n' +
+            '    mark size=1pt,\n' +
             '    ]\n' +
             '    table {cp_results.dat};  \n' +
             '    \\addlegendentry{Kratos}\n\n' +
