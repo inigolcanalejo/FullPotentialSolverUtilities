@@ -12,6 +12,7 @@ Domain_Width = 100
 
 Outlet_Min_Mesh_Size = 0.1
 Outlet_Max_Mesh_Size = 0.5
+Growth_Rate_Wake = 0.7
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
@@ -474,6 +475,10 @@ for k in range(Number_Of_AOAS):
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
+            trefftz_plane_cut_path = salome_output_path + '/Sub_mesh_Trefft_Plane_Cut_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+
             # Export data files
             try:
               Mesh_Domain.ExportDAT( r'/' + fluid_path )
@@ -500,10 +505,11 @@ for k in range(Number_Of_AOAS):
               pass
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
-            Sub_mesh_Far_Field_Edges = Regular_1D.GetSubMesh()
-            Sub_mesh_LE_Airfoils = Regular_1D_1.GetSubMesh()
-            Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
-            Sub_mesh_Middle = Regular_1D_4.GetSubMesh()
+            try:
+              Mesh_Domain.ExportDAT( r'/' + trefftz_plane_cut_path, Sub_mesh_Wake_Outlet_Edge )
+              pass
+            except:
+              print 'ExportPartToDAT() failed. Invalid file name?'
 
             # Mesh wake and export STL
             Mesh_Wake_Surface = smesh.Mesh(Extrusion_Wake_stl)
