@@ -89,7 +89,6 @@
             }
         },{
             "python_module" : "write_forces_process",
-            "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
             "process_name"  : "ComputeLiftProcess3D",
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Body3D_Body_Auto1",
