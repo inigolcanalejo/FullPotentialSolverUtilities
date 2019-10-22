@@ -18,7 +18,7 @@ Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
 LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
-Far_Field_Mesh_Size = Domain_Length/10.0
+Far_Field_Mesh_Size = Domain_Length/20.0
 
 print '\nWing_span = ', Wing_span
 print 'Domain_Length = ', Domain_Length
