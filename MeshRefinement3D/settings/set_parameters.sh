@@ -1,5 +1,6 @@
 Generate_Mesh_File_Path=$PWD/generate_mdpas/generate_finite_wing.py
 Generate_Mesh_Middle_File_Path=$PWD/generate_mdpas/generate_finite_wing_middle.py
+Generate_Mesh_Wake_Middle_File_Path=$PWD/generate_mdpas/generate_finite_wing_wake_middle.py
 Salome_Converter_File_Path=$PWD/generate_mdpas/use_converter.py
 Potential_Flow_Analysis_File_Path=$PWD/runKratos/potential_flow_analysis_refinement.py
 
@@ -12,6 +13,7 @@ declare -A PathNames
 
 PathNames[Generate_Mesh_File_Path]=$PWD/generate_mdpas/generate_finite_wing.py
 PathNames[Generate_Mesh_Middle_File_Path]=$PWD/generate_mdpas/generate_finite_wing_middle.py
+PathNames[Generate_Mesh_Wake_Middle_File_Path]=$PWD/generate_mdpas/generate_finite_wing_wake_middle.py
 PathNames[Salome_Converter_File_Path]=$PWD/generate_mdpas/use_converter.py
 PathNames[Potential_Flow_Analysis_File_Path]=$PWD/runKratos/potential_flow_analysis_refinement.py
 
