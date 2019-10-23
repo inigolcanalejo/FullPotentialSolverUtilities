@@ -377,7 +377,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Wake.SetMaxSize( Outlet_Max_Mesh_Size )
             NETGEN_2D_Parameters_Wake.SetOptimize( 1 )
             NETGEN_2D_Parameters_Wake.SetFineness( 5 )
-            NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wake )
+            NETGEN_2D_Parameters_Wake.SetGrowthRate( Growth_Rate_Wake )
             NETGEN_2D_Parameters_Wake.SetMinSize( Smallest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Wake.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_Wake.SetQuadAllowed( 0 )
