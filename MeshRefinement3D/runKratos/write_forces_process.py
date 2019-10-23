@@ -70,7 +70,7 @@ class WriteForcesProcess(ComputeLiftProcess):
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
 
-        nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["PRESSURE_COEFFICIENT", "VELOCITY"])
+        nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["PRESSURE_COEFFICIENT"])
         nodal_value_process.Execute()
 
         if self.compute_trefft_plane_forces:
@@ -82,10 +82,10 @@ class WriteForcesProcess(ComputeLiftProcess):
                     potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
                     auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
                     velocity = node.GetValue(KratosMultiphysics.VELOCITY)
-                    velocity_normal_component = _DotProduct(self.wake_direction,velocity)
+                    velocity_normal_component = _DotProduct(self.wake_normal,velocity)
                     potential_jump = auxiliary_potential - potential
                     potential_integral += 0.5 * length * potential_jump
-                    drag_integral += 0.5 * length * potential_jump * velocity_normal_component
+                    drag_integral -= 0.5 * length * potential_jump * velocity_normal_component
 
             self.lift_coefficient_jump_trefft = 2*potential_integral/(self.free_stream_velocity_norm*self.reference_area)
 
