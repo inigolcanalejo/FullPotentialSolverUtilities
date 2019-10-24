@@ -259,6 +259,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
                 x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
                 #x = node.X + 0.5
+                #if node.GetValue(CPFApp.UPPER_SURFACE):
                 cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_dir_name + '/cp.tikz'
