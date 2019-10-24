@@ -196,6 +196,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         #self.Smallest_Airfoil_Mesh_Size = round_to_1(self.Smallest_Airfoil_Mesh_Size)
         self.Smallest_Airfoil_Mesh_Size = round(self.Smallest_Airfoil_Mesh_Size, 3)
         print("\n\tCase ", self.case, ' AOA = ', self.AOA, ' Growth_Rate_Domain = ', self.Growth_Rate_Domain, ' Growth_Rate_Wing = ', self.Growth_Rate_Wing, "\n")
+        print("Smallest_Airfoil_Mesh_Size = ", self.Smallest_Airfoil_Mesh_Size)
 
         potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
