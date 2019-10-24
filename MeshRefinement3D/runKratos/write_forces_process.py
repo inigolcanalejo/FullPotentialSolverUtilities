@@ -299,6 +299,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             '\end{tikzpicture}')
             cp_tikz_file.flush()
 
+        velocity_nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["VELOCITY"])
+        velocity_nodal_value_process.Execute()
+
 
 
     def read_cl_reference(self,AOA):
