@@ -38,7 +38,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
                     self.Finalize()
 
                     #self.OutputCp()
-                    self.Growth_Rate_Wing -= self.Growth_Rate_Wing_Refinement_Factor
+                    #self.Growth_Rate_Wing -= self.Growth_Rate_Wing_Refinement_Factor
+                    self.Growth_Rate_Wing /= self.Growth_Rate_Wing_Refinement_Factor
+                    self.Smallest_Airfoil_Mesh_Size -= 0.001
                     #self.FarField_MeshSize /= FarField_Refinement_Factor
 
                     self.case += 1
@@ -189,9 +191,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     #     self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
 
     def SetParametersBeforeInitialize(self):
-        self.Growth_Rate_Wing = round(self.Growth_Rate_Wing, 1)
+        self.Growth_Rate_Wing = round(self.Growth_Rate_Wing, 2)
         #loads_output.write_case(self.case, self.AOA, self.FarField_MeshSize, self.Airfoil_MeshSize, self.input_dir_path)
-        self.Smallest_Airfoil_Mesh_Size = round_to_1(self.Smallest_Airfoil_Mesh_Size)
+        #self.Smallest_Airfoil_Mesh_Size = round_to_1(self.Smallest_Airfoil_Mesh_Size)
+        self.Smallest_Airfoil_Mesh_Size = round(self.Smallest_Airfoil_Mesh_Size, 3)
         print("\n\tCase ", self.case, ' AOA = ', self.AOA, ' Growth_Rate_Domain = ', self.Growth_Rate_Domain, ' Growth_Rate_Wing = ', self.Growth_Rate_Wing, "\n")
 
         potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(

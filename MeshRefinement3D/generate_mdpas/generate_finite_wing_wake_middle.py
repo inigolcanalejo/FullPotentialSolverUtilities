@@ -10,8 +10,8 @@ Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
 
-Outlet_Min_Mesh_Size = 0.1
-Outlet_Max_Mesh_Size = 0.5
+Outlet_Min_Mesh_Size = 0.5
+Outlet_Max_Mesh_Size = 1.0
 Growth_Rate_Wake = 0.7
 
 Smallest_Airfoil_Mesh_Size = TBD
@@ -25,6 +25,11 @@ print 'Domain_Length = ', Domain_Length
 print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
 print 'Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 print 'Far_Field_Mesh_Size = ', Far_Field_Mesh_Size
+
+print '\nOutlet_Min_Mesh_Size = ', Outlet_Min_Mesh_Size
+print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size
+print 'Growth_Rate_Wake = ', Growth_Rate_Wake
+
 
 Number_Of_AOAS = TBD
 Number_Of_Domains_Refinements = TBD
@@ -52,8 +57,10 @@ for k in range(Number_Of_AOAS):
         Growth_Rate_Domain = round(Growth_Rate_Domain, 1)
         Growth_Rate_Wing = Initial_Growth_Rate_Wing
         for i in range(Number_Of_Wing_Refinements):
-            Growth_Rate_Wing = round(Growth_Rate_Wing, 1)
+            Growth_Rate_Wing = round(Growth_Rate_Wing, 2)
+            Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 3)
             print '\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
+            print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
 
             import sys
             import salome
@@ -582,7 +589,9 @@ for k in range(Number_Of_AOAS):
 
             #Airfoil_MeshSize *= Airfoil_Refinement_Factor
             #FarField_MeshSize /= FarField_Refinement_Factor
-            Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
+            #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
+            Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
+            Smallest_Airfoil_Mesh_Size -= 0.001
             case +=1
         Growth_Rate_Domain -= Growth_Rate_Domain_Refinement_Factor
     AOA += AOA_Increment

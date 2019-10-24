@@ -48,9 +48,11 @@ for k in range(Number_Of_AOAS):
         for i in range(Number_Of_Wing_Refinements):
             #round(Airfoil_MeshSize, 1)
             #Airfoil_MeshSize = round_to_1(Airfoil_MeshSize)
-            Growth_Rate_Wing = round(Growth_Rate_Wing, 1)
+            Growth_Rate_Wing = round(Growth_Rate_Wing, 2)
+            Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 3)
             print('Writing mdpa...')
             print('\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing)
+            print('Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size)
             model = kratos_utils.MainModelPart() # Main mesh object to which we will add the submeshes (Kratos Name: ModelPart)
 
             # Specifying the names of the submeshes (Kratos Name: SubModelPart)
@@ -128,7 +130,9 @@ for k in range(Number_Of_AOAS):
 
             model.WriteMesh(mdpa_file_name, mdpa_info)
 
-            Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
+            #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
+            Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
+            Smallest_Airfoil_Mesh_Size -= 0.001
             case +=1
         Growth_Rate_Domain -= Growth_Rate_Domain_Refinement_Factor
     AOA += AOA_Increment
