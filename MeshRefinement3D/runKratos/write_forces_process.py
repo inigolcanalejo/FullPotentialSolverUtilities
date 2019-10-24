@@ -238,6 +238,16 @@ class WriteForcesProcess(ComputeLiftProcess):
 
                 jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
 
+        potential_jump_file_name = potential_jump_dir_name + '/potential_jump_trefftz_results.dat'
+
+        with open(potential_jump_file_name, 'w') as jump_file:
+            for node in self.trefft_plane_cut_model_part.Nodes:
+                potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
+                auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
+                potential_jump = auxiliary_potential - potential
+
+                jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
+
         cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
 
