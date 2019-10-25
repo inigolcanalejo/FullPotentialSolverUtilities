@@ -45,7 +45,7 @@
         "solver_type"            : "potential_flow",
         "model_import_settings"  : {
             "input_type"     : "mdpa",
-            "input_filename" : "salome_wing"
+            "input_filename" : "/media/inigo/10740FB2740F9A1C/3d_results/mdpas/wing_Case_0_AOA_5.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.01_Growth_Rate_Wing_0.64_Growth_Rate_Domain_0.7"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 2,
@@ -84,7 +84,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
-                "wake_stl_file_name" : "wake_stl_new.stl",
+                "wake_stl_file_name" : "/media/inigo/10740FB2740F9A1C/3d_results/mdpas/wake_Case_0_AOA_5.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.01_Growth_Rate_Wing_0.64_Growth_Rate_Domain_0.7.stl",
                 "epsilon"         : 1e-12
             }
         },{
