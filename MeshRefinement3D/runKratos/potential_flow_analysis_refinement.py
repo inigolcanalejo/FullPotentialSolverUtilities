@@ -40,7 +40,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
                     #self.OutputCp()
                     #self.Growth_Rate_Wing -= self.Growth_Rate_Wing_Refinement_Factor
                     self.Growth_Rate_Wing /= self.Growth_Rate_Wing_Refinement_Factor
-                    self.Smallest_Airfoil_Mesh_Size -= 0.001
+                    self.Smallest_Airfoil_Mesh_Size /= 2.0
                     #self.FarField_MeshSize /= FarField_Refinement_Factor
 
                     self.case += 1
@@ -156,7 +156,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         # os.mkdir(cp_data_directory_start_ds)
 
     def ExecuteBeforeWingRefinementLoop(self):
-        self.Growth_Rate_Domain = round(self.Growth_Rate_Domain, 1)
+        self.Growth_Rate_Domain = round(self.Growth_Rate_Domain, 2)
         self.Growth_Rate_Wing = self.Initial_Growth_Rate_Wing
         os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA) + '/DR_' + str(self.Growth_Rate_Domain))
 
@@ -259,7 +259,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         loads_output.add_cl_error_to_tikz(self.input_dir_path, self.cl_error_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
         loads_output.add_cd_error_to_tikz(self.input_dir_path, self.cd_error_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
         loads_output.add_cm_error_to_tikz(self.input_dir_path, self.cm_error_data_directory_name, self.Growth_Rate_Domain, self.Growth_Rate_Domain_Counter)
-        self.Growth_Rate_Domain -= self.Growth_Rate_Domain_Refinement_Factor
+        self.Growth_Rate_Domain /= self.Growth_Rate_Domain_Refinement_Factor
         self.Growth_Rate_Domain_Counter += 1
 
     def ExecuteAfterDomainRefinementLoop(self):
