@@ -43,7 +43,7 @@ for k in range(Number_Of_AOAS):
     AOA = round(AOA, 1)
     Growth_Rate_Domain = Initial_Growth_Rate_Domain
     for j in range(Number_Of_Domains_Refinements):
-        Growth_Rate_Domain = round(Growth_Rate_Domain, 1)
+        Growth_Rate_Domain = round(Growth_Rate_Domain, 2)
         Growth_Rate_Wing = Initial_Growth_Rate_Wing
         for i in range(Number_Of_Wing_Refinements):
             #round(Airfoil_MeshSize, 1)
@@ -132,7 +132,7 @@ for k in range(Number_Of_AOAS):
 
             #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
             Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
-            Smallest_Airfoil_Mesh_Size -= 0.001
+            Smallest_Airfoil_Mesh_Size /= 2.0
             case +=1
-        Growth_Rate_Domain -= Growth_Rate_Domain_Refinement_Factor
+        Growth_Rate_Domain /= Growth_Rate_Domain_Refinement_Factor
     AOA += AOA_Increment
