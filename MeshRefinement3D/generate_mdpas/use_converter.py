@@ -14,6 +14,7 @@ Domain_Height = Domain_Length
 Domain_Width = 100
 
 Smallest_Airfoil_Mesh_Size = TBD
+Initial_Smallest_Airfoil_Mesh_Size = Smallest_Airfoil_Mesh_Size
 Biggest_Airfoil_Mesh_Size = TBD
 LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
@@ -45,6 +46,7 @@ for k in range(Number_Of_AOAS):
     for j in range(Number_Of_Domains_Refinements):
         Growth_Rate_Domain = round(Growth_Rate_Domain, 2)
         Growth_Rate_Wing = Initial_Growth_Rate_Wing
+        Smallest_Airfoil_Mesh_Size = Initial_Smallest_Airfoil_Mesh_Size
         for i in range(Number_Of_Wing_Refinements):
             #round(Airfoil_MeshSize, 1)
             #Airfoil_MeshSize = round_to_1(Airfoil_MeshSize)

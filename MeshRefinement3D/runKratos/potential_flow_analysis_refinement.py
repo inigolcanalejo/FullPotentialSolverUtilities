@@ -51,6 +51,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     def SetParameters(self):
         self.Wing_span = TBD
         self.Smallest_Airfoil_Mesh_Size = TBD
+        self.Initial_Smallest_Airfoil_Mesh_Size = self.Smallest_Airfoil_Mesh_Size
         self.Biggest_Airfoil_Mesh_Size = TBD
 
         self.Number_Of_AOAS = TBD
@@ -158,6 +159,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     def ExecuteBeforeWingRefinementLoop(self):
         self.Growth_Rate_Domain = round(self.Growth_Rate_Domain, 2)
         self.Growth_Rate_Wing = self.Initial_Growth_Rate_Wing
+        self.Smallest_Airfoil_Mesh_Size = self.Initial_Smallest_Airfoil_Mesh_Size
         os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA) + '/DR_' + str(self.Growth_Rate_Domain))
 
         # with open(self.cl_error_results_h_file_name,'w') as cl_error_file:
