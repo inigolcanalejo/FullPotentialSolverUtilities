@@ -430,12 +430,12 @@ for k in range(Number_Of_AOAS):
             # TE
             Regular_1D_3 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Edges)
             Sub_mesh_TE = Regular_1D_3.GetSubMesh()
-            Local_Length_TE = Regular_1D_3.LocalLength(TE_Mesh_Size,None,1e-07)
+            Local_Length_TE = Regular_1D_3.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
 
             # LE
             Regular_1D_4 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Edges)
             Sub_mesh_LE = Regular_1D_4.GetSubMesh()
-            Local_Length_LE = Regular_1D_4.LocalLength(LE_Mesh_Size,None,1e-07)
+            Local_Length_LE = Regular_1D_4.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
 
             # Middle
             Regular_1D_5 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Middle)
