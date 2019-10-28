@@ -121,6 +121,7 @@ for k in range(Number_Of_AOAS):
             model.AddMesh(smp_dict_trailing_edge,   mesh_dict_trailing_edge,    nodes_trailing_edge,    geom_entities_trailing_edge)
             if valid_file_middle_airfoil:
                 model.AddMesh(smp_dict_middle_airfoil,   mesh_dict_middle_airfoil,    nodes_middle_airfoil,    geom_entities_middle_airfoil)
+            if valid_file_trefft_plane_cut:
                 model.AddMesh(smp_dict_trefft_plane_cut,   mesh_dict_trefft_plane_cut,    nodes_trefft_plane_cut,    geom_entities_trefft_plane_cut)
 
             mdpa_info = "mdpa for demonstration purposes"

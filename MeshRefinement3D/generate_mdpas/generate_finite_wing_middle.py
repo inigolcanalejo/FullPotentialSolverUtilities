@@ -14,7 +14,7 @@ Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
 LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
-Far_Field_Mesh_Size = Domain_Length/10.0
+Far_Field_Mesh_Size = Domain_Length/20.0
 
 print '\nWing_span = ', Wing_span
 print 'Domain_Length = ', Domain_Length
@@ -45,11 +45,13 @@ for k in range(Number_Of_AOAS):
     AOA = round(AOA, 1)
     Growth_Rate_Domain = Initial_Growth_Rate_Domain
     for j in range(Number_Of_Domains_Refinements):
-        Growth_Rate_Domain = round(Growth_Rate_Domain, 1)
+        Growth_Rate_Domain = round(Growth_Rate_Domain, 2)
         Growth_Rate_Wing = Initial_Growth_Rate_Wing
         for i in range(Number_Of_Wing_Refinements):
-            Growth_Rate_Wing = round(Growth_Rate_Wing, 1)
+            Growth_Rate_Wing = round(Growth_Rate_Wing, 2)
+            Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 3)
             print '\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
+            print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
 
             import sys
             import salome
@@ -325,12 +327,12 @@ for k in range(Number_Of_AOAS):
             # TE
             Regular_1D_3 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Edges)
             Sub_mesh_TE = Regular_1D_3.GetSubMesh()
-            Local_Length_TE = Regular_1D_3.LocalLength(TE_Mesh_Size,None,1e-07)
+            Local_Length_TE = Regular_1D_3.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
 
             # LE
             Regular_1D_4 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Edges)
             Sub_mesh_LE = Regular_1D_4.GetSubMesh()
-            Local_Length_LE = Regular_1D_4.LocalLength(LE_Mesh_Size,None,1e-07)
+            Local_Length_LE = Regular_1D_4.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
 
             # Middle
             Regular_1D_5 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Middle)
@@ -470,9 +472,11 @@ for k in range(Number_Of_AOAS):
 
             #Airfoil_MeshSize *= Airfoil_Refinement_Factor
             #FarField_MeshSize /= FarField_Refinement_Factor
-            Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
+            #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
+            Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
+            Smallest_Airfoil_Mesh_Size /= 2.0
             case +=1
-        Growth_Rate_Domain -= Growth_Rate_Domain_Refinement_Factor
+        Growth_Rate_Domain /= Growth_Rate_Domain_Refinement_Factor
     AOA += AOA_Increment
 
 

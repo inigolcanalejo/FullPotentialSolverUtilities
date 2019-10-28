@@ -48,8 +48,11 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         trefft_plane_cut_model_part_name = settings["trefft_plane_cut_model_part_name"].GetString()
         if trefft_plane_cut_model_part_name != "":
-            self.trefft_plane_cut_model_part = Model[trefft_plane_cut_model_part_name]
             self.compute_trefft_plane_forces = True
+            if not self.fluid_model_part.HasSubModelPart(trefft_plane_cut_model_part_name):
+                trefft_plane_cut_model_part_name = 'Trefft_Plane_Cut'
+                self.trefft_plane_cut_model_part = self.fluid_model_part.CreateSubModelPart(trefft_plane_cut_model_part_name)
+            else: self.trefft_plane_cut_model_part = self.fluid_model_part.GetSubModelPart(trefft_plane_cut_model_part_name)
 
         if not self.reference_area > 0.0:
             raise Exception('The reference area should be larger than 0.')
