@@ -51,6 +51,7 @@ case = 0
 AOA = Initial_AOA
 
 Initial_Smallest_Airfoil_Mesh_Size = Smallest_Airfoil_Mesh_Size
+Initial_Biggest_Airfoil_Mesh_Size = Biggest_Airfoil_Mesh_Size
 
 for k in range(Number_Of_AOAS):
     AOA = round(AOA, 1)
@@ -59,11 +60,13 @@ for k in range(Number_Of_AOAS):
         Growth_Rate_Domain = round(Growth_Rate_Domain, 2)
         Growth_Rate_Wing = Initial_Growth_Rate_Wing
         Smallest_Airfoil_Mesh_Size = Initial_Smallest_Airfoil_Mesh_Size
+        Biggest_Airfoil_Mesh_Size = Initial_Biggest_Airfoil_Mesh_Size
         for i in range(Number_Of_Wing_Refinements):
             Growth_Rate_Wing = round(Growth_Rate_Wing, 2)
             Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 3)
+            Biggest_Airfoil_Mesh_Size = round(Biggest_Airfoil_Mesh_Size, 3)
             print '\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
-            print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
+            print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size, ' Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 
             import sys
             import salome
@@ -595,6 +598,7 @@ for k in range(Number_Of_AOAS):
             #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
             Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
             Smallest_Airfoil_Mesh_Size /= 2.0
+            Biggest_Airfoil_Mesh_Size /= 2.0
             case +=1
         Growth_Rate_Domain /= Growth_Rate_Domain_Refinement_Factor
     AOA += AOA_Increment
