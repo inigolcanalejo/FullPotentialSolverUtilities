@@ -72,11 +72,11 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Domain_Width = self.Domain_Length
         self.FarField_MeshSize = int(self.Domain_Length / 10.0)
 
-        minimum_mesh_growth_rate_wing = self.Initial_Growth_Rate_Wing - \
-            (self.Growth_Rate_Wing_Refinement_Factor*(self.Number_Of_Wing_Refinements-1))
+        minimum_mesh_growth_rate_wing = self.Initial_Growth_Rate_Wing / \
+            self.Growth_Rate_Wing_Refinement_Factor**(self.Number_Of_Wing_Refinements-1)
 
-        minimum_mesh_growth_rate_domain = self.Initial_Growth_Rate_Domain - \
-            (self.Growth_Rate_Domain_Refinement_Factor*(self.Number_Of_Domains_Refinements-1))
+        minimum_mesh_growth_rate_domain = self.Initial_Growth_Rate_Domain / \
+            self.Growth_Rate_Domain_Refinement_Factor**(self.Number_Of_Domains_Refinements-1)
 
         self.minimum_mesh_growth_rate = minimum_mesh_growth_rate_wing * minimum_mesh_growth_rate_domain
 
