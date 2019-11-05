@@ -11,17 +11,17 @@ Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
 
-Smallest_Airfoil_Mesh_Size = 0.01
-Biggest_Airfoil_Mesh_Size = 0.05
+Smallest_Airfoil_Mesh_Size = 0.032
+Biggest_Airfoil_Mesh_Size = 0.128
 LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
-Far_Field_Mesh_Size = Domain_Length/10.0
-Growth_Rate_Wing = 0.7
-Growth_Rate_Domain = 0.7
+Far_Field_Mesh_Size = Domain_Length/20.0
+Growth_Rate_Wing = 0.64
+Growth_Rate_Domain = 0.64
 Growth_Rate_Wake = 0.7
 
-Outlet_Min_Mesh_Size = 0.05
-Outlet_Max_Mesh_Size = 0.1
+Outlet_Min_Mesh_Size = 0.5
+Outlet_Max_Mesh_Size = 1.0
 
 import sys
 import salome
@@ -324,6 +324,7 @@ NETGEN_2D_Parameters_FarField.SetFuseEdges( 80 )
 
 # Wing surface
 NETGEN_2D_1 = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Surface)
+#NETGEN_2D_1 = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_1D2D,geom=Auto_group_for_Sub_mesh_Wing_Surface)
 Sub_mesh_Wing_Surface = NETGEN_2D_1.GetSubMesh()
 NETGEN_2D_Parameters_Wing = NETGEN_2D_1.Parameters()
 NETGEN_2D_Parameters_Wing.SetMaxSize( Biggest_Airfoil_Mesh_Size )
