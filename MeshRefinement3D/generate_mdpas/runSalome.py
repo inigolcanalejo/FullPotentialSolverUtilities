@@ -6,7 +6,8 @@ start_time = time.time()
 salome_cmd = "salome -t python"
 #salome_script_name = "generate_finite_wing.py"
 #salome_script_name = "generate_finite_wing_middle.py"
-salome_script_name = "generate_finite_wing_wake_middle.py"
+#salome_script_name = "generate_finite_wing_wake_middle.py"
+salome_script_name = "generate_finite_wing_wake_sections.py"
 
 salome_exe = " ".join([salome_cmd, salome_script_name])
 
