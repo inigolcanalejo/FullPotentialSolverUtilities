@@ -100,6 +100,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cm_aoa_results_directory_name = 'TBD'
         self.potential_jump_results_directory_name = self.input_dir_path + '/plots/potential_jump/data/potential_jump'
         self.cp_results_directory_name = self.input_dir_path + '/plots/cp/data/cp'
+        self.cp_100_results_directory_name = self.input_dir_path + '/plots/cp_section_100/data/cp'
+        self.cp_150_results_directory_name = self.input_dir_path + '/plots/cp_section_150/data/cp'
+        self.cp_180_results_directory_name = self.input_dir_path + '/plots/cp_section_180/data/cp'
         # self.cl_reference_h_file_name = 'TBD'
 
         # self.aoa_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa'
@@ -147,6 +150,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.merger_local_jump = PdfFileMerger()
         self.merger_local_cp = PdfFileMerger()
+        self.merger_local_cp_100 = PdfFileMerger()
+        self.merger_local_cp_150 = PdfFileMerger()
+        self.merger_local_cp_180 = PdfFileMerger()
 
         # shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
 
@@ -208,7 +214,26 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
         shutil.copytree(self.cp_results_directory_name, cp_dir_name)
-        loads_output.write_cp_figures(cp_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path)
+
+        loads_output.write_cp_figures(cp_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp')
+
+        cp_100_dir_name = self.input_dir_path + '/plots/cp_section_100/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copytree(self.cp_100_results_directory_name, cp_100_dir_name)
+
+        loads_output.write_cp_figures(cp_100_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp_section_100')
+
+        cp_150_dir_name = self.input_dir_path + '/plots/cp_section_150/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copytree(self.cp_150_results_directory_name, cp_150_dir_name)
+
+        loads_output.write_cp_figures(cp_150_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp_section_150')
+
+        cp_180_dir_name = self.input_dir_path + '/plots/cp_section_180/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copytree(self.cp_180_results_directory_name, cp_180_dir_name)
+
+        loads_output.write_cp_figures(cp_180_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp_section_180')
 
         mdpa_file_name = self.mdpa_path + '/wing_Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Wing_Span_' + str(
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
@@ -292,6 +317,15 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         cp_final_file_name = self.input_dir_path + '/plots/cp/AOA_' + str(self.AOA) + '.pdf'
         self.merger_local_cp.write(cp_final_file_name)
 
+        cp_100_final_file_name = self.input_dir_path + '/plots/cp_section_100/AOA_' + str(self.AOA) + '.pdf'
+        self.merger_local_cp_100.write(cp_100_final_file_name)
+
+        cp_150_final_file_name = self.input_dir_path + '/plots/cp_section_150/AOA_' + str(self.AOA) + '.pdf'
+        self.merger_local_cp_150.write(cp_150_final_file_name)
+
+        cp_180_final_file_name = self.input_dir_path + '/plots/cp_section_180/AOA_' + str(self.AOA) + '.pdf'
+        self.merger_local_cp_180.write(cp_180_final_file_name)
+
         #shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_error_data_directory_name)
 
         # os.remove(self.cl_error_results_h_file_name)
@@ -319,6 +353,27 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
         shutil.copyfile('main_cp.pdf',cp_file_name)
         self.merger_local_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
+
+        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_100/main_cp_100.tex'], stdout=self.latex_output)
+        latex.communicate()
+        cp_100_file_name = self.input_dir_path + '/plots/cp_section_100/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copyfile('main_cp_100.pdf',cp_100_file_name)
+        self.merger_local_cp_100.append(PdfFileReader(cp_100_file_name), 'case_' + str(self.case))
+
+        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_150/main_cp_150.tex'], stdout=self.latex_output)
+        latex.communicate()
+        cp_150_file_name = self.input_dir_path + '/plots/cp_section_150/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copyfile('main_cp_150.pdf',cp_150_file_name)
+        self.merger_local_cp_150.append(PdfFileReader(cp_150_file_name), 'case_' + str(self.case))
+
+        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_180/main_cp_180.tex'], stdout=self.latex_output)
+        latex.communicate()
+        cp_180_file_name = self.input_dir_path + '/plots/cp_section_180/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copyfile('main_cp_180.pdf',cp_180_file_name)
+        self.merger_local_cp_180.append(PdfFileReader(cp_180_file_name), 'case_' + str(self.case))
 
         super(PotentialFlowAnalysisRefinement,self).Finalize()
         self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")

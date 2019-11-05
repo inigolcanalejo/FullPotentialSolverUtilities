@@ -26,7 +26,10 @@ class WriteForcesProcess(ComputeLiftProcess):
             "growth_rate_domain": 0.0,
             "growth_rate_wing": 0.0,
             "angle_of_attack": 0.0,
-            "minimum_mesh_growth_rate": 0.0
+            "minimum_mesh_growth_rate": 0.0,
+            "section_100_model_part_name": "",
+            "section_150_model_part_name": "",
+            "section_180_model_part_name": ""
         }''')
 
         settings.ValidateAndAssignDefaults(default_parameters)
@@ -69,6 +72,27 @@ class WriteForcesProcess(ComputeLiftProcess):
                 middle_airfoil_model_part_name = 'Middle_Airfoil'
                 self.middle_airfoil_model_part = self.fluid_model_part.CreateSubModelPart(middle_airfoil_model_part_name)
             else: self.middle_airfoil_model_part = self.fluid_model_part.GetSubModelPart(middle_airfoil_model_part_name)
+
+        section_100_model_part_name = settings["section_100_model_part_name"].GetString()
+        if section_100_model_part_name != "":
+            if not self.fluid_model_part.HasSubModelPart(section_100_model_part_name):
+                section_100_model_part_name = 'Section_100'
+                self.section_100_model_part = self.fluid_model_part.CreateSubModelPart(section_100_model_part_name)
+            else: self.section_100_model_part = self.fluid_model_part.GetSubModelPart(section_100_model_part_name)
+
+        section_150_model_part_name = settings["section_150_model_part_name"].GetString()
+        if section_150_model_part_name != "":
+            if not self.fluid_model_part.HasSubModelPart(section_150_model_part_name):
+                section_150_model_part_name = 'section_150'
+                self.section_150_model_part = self.fluid_model_part.CreateSubModelPart(section_150_model_part_name)
+            else: self.section_150_model_part = self.fluid_model_part.GetSubModelPart(section_150_model_part_name)
+
+        section_180_model_part_name = settings["section_180_model_part_name"].GetString()
+        if section_180_model_part_name != "":
+            if not self.fluid_model_part.HasSubModelPart(section_180_model_part_name):
+                section_180_model_part_name = 'section_180'
+                self.section_180_model_part = self.fluid_model_part.CreateSubModelPart(section_180_model_part_name)
+            else: self.section_180_model_part = self.fluid_model_part.GetSubModelPart(section_180_model_part_name)
 
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
@@ -271,6 +295,162 @@ class WriteForcesProcess(ComputeLiftProcess):
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
             '    title={ $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            '    xlabel={$x/c$},\n' +
+            '    ylabel={$c_p[\\unit{-}$]},\n' +
+            '    %xmin=-0.01, xmax=1.01,\n' +
+            '    y dir=reverse,\n' +
+            '    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    ymajorgrids=true,\n' +
+            '    xmajorgrids=true,\n' +
+            '    grid style=dashed,\n' +
+            '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+            '    width=12cm\n' +
+            ']\n\n' +
+            '\\addplot[\n' +
+            '    only marks,\n' +
+            '    color=red,\n' +
+            #'    mark=square,\n' +
+            '    mark=*,\n' +
+            '    mark size=1pt,\n' +
+            '    ]\n' +
+            '    table {cp_results.dat};  \n' +
+            '    \\addlegendentry{Kratos}\n\n' +
+            '\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    mark options={solid},\n' +
+            '    ]\n' +
+            '    table {' + output_file_name + '};  \n' +
+            '    \\addlegendentry{XFLR5}\n\n' +
+            '\end{axis}\n' +
+            '\end{tikzpicture}')
+            cp_tikz_file.flush()
+
+        cp_100_dir_name = self.input_dir_path + '/plots/cp_section_100/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+
+        cp_100_file_name = cp_100_dir_name + '/cp_results.dat'
+
+        aoa_rad = self.AOA * math.pi / 180.0
+        with open(cp_100_file_name, 'w') as cp_file:
+            for node in self.section_100_model_part.Nodes:
+                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                #x = node.X + 0.5
+                #if node.GetValue(CPFApp.UPPER_SURFACE):
+                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
+
+        cp_tikz_file_name = cp_100_dir_name + '/cp.tikz'
+        output_file_name = cp_100_dir_name + '/aoa' + str(int(self.AOA)) + '.dat'
+        with open(cp_tikz_file_name,'w') as cp_tikz_file:
+            cp_tikz_file.write('\\begin{tikzpicture}\n' +
+            '\\begin{axis}[\n' +
+            '    title={ Section 100, $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            '    xlabel={$x/c$},\n' +
+            '    ylabel={$c_p[\\unit{-}$]},\n' +
+            '    %xmin=-0.01, xmax=1.01,\n' +
+            '    y dir=reverse,\n' +
+            '    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    ymajorgrids=true,\n' +
+            '    xmajorgrids=true,\n' +
+            '    grid style=dashed,\n' +
+            '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+            '    width=12cm\n' +
+            ']\n\n' +
+            '\\addplot[\n' +
+            '    only marks,\n' +
+            '    color=red,\n' +
+            #'    mark=square,\n' +
+            '    mark=*,\n' +
+            '    mark size=1pt,\n' +
+            '    ]\n' +
+            '    table {cp_results.dat};  \n' +
+            '    \\addlegendentry{Kratos}\n\n' +
+            '\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    mark options={solid},\n' +
+            '    ]\n' +
+            '    table {' + output_file_name + '};  \n' +
+            '    \\addlegendentry{XFLR5}\n\n' +
+            '\end{axis}\n' +
+            '\end{tikzpicture}')
+            cp_tikz_file.flush()
+
+        cp_150_dir_name = self.input_dir_path + '/plots/cp_section_150/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+
+        cp_150_file_name = cp_150_dir_name + '/cp_results.dat'
+
+        aoa_rad = self.AOA * math.pi / 180.0
+        with open(cp_150_file_name, 'w') as cp_file:
+            for node in self.section_150_model_part.Nodes:
+                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                #x = node.X + 0.5
+                #if node.GetValue(CPFApp.UPPER_SURFACE):
+                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
+
+        cp_tikz_file_name = cp_150_dir_name + '/cp.tikz'
+        output_file_name = cp_150_dir_name + '/aoa' + str(int(self.AOA)) + '.dat'
+        with open(cp_tikz_file_name,'w') as cp_tikz_file:
+            cp_tikz_file.write('\\begin{tikzpicture}\n' +
+            '\\begin{axis}[\n' +
+            '    title={ Section 150, $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            '    xlabel={$x/c$},\n' +
+            '    ylabel={$c_p[\\unit{-}$]},\n' +
+            '    %xmin=-0.01, xmax=1.01,\n' +
+            '    y dir=reverse,\n' +
+            '    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
+            '    ymajorgrids=true,\n' +
+            '    xmajorgrids=true,\n' +
+            '    grid style=dashed,\n' +
+            '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+            '    width=12cm\n' +
+            ']\n\n' +
+            '\\addplot[\n' +
+            '    only marks,\n' +
+            '    color=red,\n' +
+            #'    mark=square,\n' +
+            '    mark=*,\n' +
+            '    mark size=1pt,\n' +
+            '    ]\n' +
+            '    table {cp_results.dat};  \n' +
+            '    \\addlegendentry{Kratos}\n\n' +
+            '\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    mark options={solid},\n' +
+            '    ]\n' +
+            '    table {' + output_file_name + '};  \n' +
+            '    \\addlegendentry{XFLR5}\n\n' +
+            '\end{axis}\n' +
+            '\end{tikzpicture}')
+            cp_tikz_file.flush()
+
+        cp_180_dir_name = self.input_dir_path + '/plots/cp_section_180/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+
+        cp_180_file_name = cp_180_dir_name + '/cp_results.dat'
+
+        aoa_rad = self.AOA * math.pi / 180.0
+        with open(cp_180_file_name, 'w') as cp_file:
+            for node in self.section_180_model_part.Nodes:
+                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                #x = node.X + 0.5
+                #if node.GetValue(CPFApp.UPPER_SURFACE):
+                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
+
+        cp_tikz_file_name = cp_180_dir_name + '/cp.tikz'
+        output_file_name = cp_180_dir_name + '/aoa' + str(int(self.AOA)) + '.dat'
+        with open(cp_tikz_file_name,'w') as cp_tikz_file:
+            cp_tikz_file.write('\\begin{tikzpicture}\n' +
+            '\\begin{axis}[\n' +
+            '    title={ Section 180, $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
             '    xlabel={$x/c$},\n' +
             '    ylabel={$c_p[\\unit{-}$]},\n' +
             '    %xmin=-0.01, xmax=1.01,\n' +

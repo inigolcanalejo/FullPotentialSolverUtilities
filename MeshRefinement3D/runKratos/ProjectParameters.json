@@ -51,7 +51,7 @@
         "echo_level"             : 2,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
-        "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1","Middle_Airfoil","Trefft_Plane_Cut"],
+        "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1","Middle_Airfoil","Trefft_Plane_Cut","Section_100","Section_150","Section_180"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
             "solver_type": "EigenSolversApplication.pardiso_lu",
@@ -102,7 +102,10 @@
                 "growth_rate_domain": 0.0,
                 "growth_rate_wing": 0.0,
                 "angle_of_attack": 0.0,
-                "minimum_mesh_growth_rate": 0.0
+                "minimum_mesh_growth_rate": 0.0,
+                "section_100_model_part_name": "Section_100",
+                "section_150_model_part_name": "Section_150",
+                "section_180_model_part_name": "Section_180"
             }
         }],
         "auxiliar_process_list" :[]

@@ -32,6 +32,21 @@ rm -rf $input_dir_path/plots/cp/data/AOA*
 rm -rf $input_dir_path/plots/cp/A*
 rm -rf $input_dir_path/plots/cp/plots/C*
 
+rm -rf $input_dir_path/plots/cp_section_100/data/AOA*
+#rm -rf $input_dir_path/plots/cp/data/cp_AOA_*
+rm -rf $input_dir_path/plots/cp_section_100/A*
+rm -rf $input_dir_path/plots/cp_section_100/plots/C*
+
+rm -rf $input_dir_path/plots/cp_section_150/data/AOA*
+#rm -rf $input_dir_path/plots/cp/data/cp_AOA_*
+rm -rf $input_dir_path/plots/cp_section_150/A*
+rm -rf $input_dir_path/plots/cp_section_150/plots/C*
+
+rm -rf $input_dir_path/plots/cp_section_180/data/AOA*
+#rm -rf $input_dir_path/plots/cp/data/cp_AOA_*
+rm -rf $input_dir_path/plots/cp_section_180/A*
+rm -rf $input_dir_path/plots/cp_section_180/plots/C*
+
 # rm -rf $input_dir_path/plots/condition_number/data/condition_*
 # rm $input_dir_path/plots/condition_number/figures_condition.tex
 

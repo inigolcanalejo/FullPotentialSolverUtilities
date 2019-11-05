@@ -176,8 +176,8 @@ def write_cl(cl,work_dir):
     cl_aoa_file.write('{0:15f}\n'.format(cl))
     cl_aoa_file.flush()
 
-def write_cp_figures(cp_data_directory_name, AOA, case, Growth_Rate_Domain,  Growth_Rate_Wing, work_dir):
-    with open(work_dir + '/plots/cp/figures_cp.tex', 'w') as cp_figures_file:
+def write_cp_figures(cp_data_directory_name, AOA, case, Growth_Rate_Domain,  Growth_Rate_Wing, work_dir, section):
+    with open(work_dir + '/plots/' + section + '/figures_cp.tex', 'w') as cp_figures_file:
         cp_figures_file.write('\n\pgfplotsset{table/search path={' + cp_data_directory_name + '},}\n\n' +
                        '\\begin{figure}\n' +
                        '\t\centering\n' +
