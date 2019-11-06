@@ -48,7 +48,7 @@
             "input_filename" : ""
         },
         "maximum_iterations"     : 10,
-        "echo_level"             : 2,
+        "echo_level"             : 1,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1","Middle_Airfoil","Trefft_Plane_Cut","Section_100","Section_150","Section_180"],
