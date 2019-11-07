@@ -45,10 +45,10 @@
         "solver_type"            : "potential_flow",
         "model_import_settings"  : {
             "input_type"     : "mdpa",
-            "input_filename" : "/media/inigo/10740FB2740F9A1C/3d_results/mdpas/wing_Case_0_AOA_5.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.01_Growth_Rate_Wing_0.64_Growth_Rate_Domain_0.7"
+            "input_filename" : "/media/inigo/10740FB2740F9A1C/3d_results/mdpas/wing_Case_0_AOA_5.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.032_Growth_Rate_Wing_0.64_Growth_Rate_Domain_0.64"
         },
-        "maximum_iterations"     : 10,
-        "echo_level"             : 2,
+        "maximum_iterations"     : 2,
+        "echo_level"             : 1,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1"],
@@ -84,7 +84,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
-                "wake_stl_file_name" : "/media/inigo/10740FB2740F9A1C/3d_results/mdpas/wake_Case_0_AOA_5.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.01_Growth_Rate_Wing_0.64_Growth_Rate_Domain_0.7.stl",
+                "wake_stl_file_name" : "/media/inigo/10740FB2740F9A1C/3d_results/mdpas/wake_Case_0_AOA_5.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.032_Growth_Rate_Wing_0.64_Growth_Rate_Domain_0.64.stl",
                 "epsilon"         : 1e-12
             }
         },{
