@@ -31,7 +31,7 @@
                         "skin_output"         : false,
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["TE_ELEMENT_COUNTER","LOWER_SURFACE","UPPER_SURFACE","PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
-                        "nodal_results"       : ["PSI","VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL","DISTANCE"],
+                        "nodal_results"       : ["PSI","VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL","LAGRANGE_MULTIPLIER_0"],
                         "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","WING_TIP_ELEMENT"]
                     },
                     "point_data_configuration"  : []
@@ -47,8 +47,10 @@
             "input_type"     : "mdpa",
             "input_filename" : ""
         },
-        "maximum_iterations"     : 5,
+        "maximum_iterations"     : 10,
         "echo_level"             : 1,
+        "relative_tolerance": 1e-14,
+        "absolute_tolerance": 1e-14,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
         "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1","Middle_Airfoil","Trefft_Plane_Cut","Section_100","Section_150","Section_180"],
@@ -76,7 +78,8 @@
                 "angle_of_attack" : 0.0,
                 "mach_infinity"   : 0.03,
                 "speed_of_sound"  : 340.0,
-                "initialize_flow_field": true
+                "initialize_flow_field": true,
+                "inlet_potential": 0.0
             }
         },{
             "python_module" : "define_wake_process_3d",

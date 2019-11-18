@@ -87,8 +87,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.mdpa_path = 'TBD'
         self.gid_output_path = 'TBD'
 
-        #self.cl_error_results_directory_name = 'TBD'
-        #self.cl_error_results_h_file_name = 'TBD'
         self.cl_results_directory_name = 'TBD'
         self.cd_results_directory_name = 'TBD'
         self.cm_results_directory_name = 'TBD'
@@ -103,12 +101,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cp_100_results_directory_name = self.input_dir_path + '/plots/cp_section_100/data/cp'
         self.cp_150_results_directory_name = self.input_dir_path + '/plots/cp_section_150/data/cp'
         self.cp_180_results_directory_name = self.input_dir_path + '/plots/cp_section_180/data/cp'
-        # self.cl_reference_h_file_name = 'TBD'
-
-        # self.aoa_results_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa'
-        # self.aoa_results_file_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/aoa/data/cl_aoa.dat'
-
-        # self.cl_error_results_domain_directory_name = '/media/inigo/10740FB2740F9A1C/3d_results/plots/cl_error_domain_size/data'
+        self.newton_convergence_directory_name = self.input_dir_path + '/plots/newton_convergence/data/convergence'
 
     def ExecuteBeforeAOALoop(self):
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
@@ -118,34 +111,27 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.cd_aoa_results_directory_name, self.cd_aoa_results_directory_name + 'oa')
         shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
 
-        # for _ in range(self.Number_Of_AOAS):
-        #     shutil.rmtree(self.cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA), ignore_errors=True)
-        #     shutil.copytree(self.cl_error_results_domain_directory_name + '/domain', self.cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA))
-        #     loads_output.write_figures_domain_cl_error(self.cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA), self.AOA, self.input_dir_path)
-        #     self.AOA += self.AOA_Increment
-
-        # self.merger_all_cp = PdfFileMerger()
-        # loads_output.write_header_all_cases(self.input_dir_path)
-
     def ExecuteBeforeDomainRefinementLoop(self):
         self.AOA = round(self.AOA, 1)
         self.Growth_Rate_Domain = self.Initial_Growth_Rate_Domain
         shutil.rmtree(self.gid_output_path + '/AOA_' + str(self.AOA), ignore_errors=True)
-        os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA))
+        if not os.path.exists(self.gid_output_path + '/AOA_' + str(self.AOA)):
+            os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA))
 
-        #self.cl_error_data_directory_name = 'data/cl_error_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA)
         self.cl_data_directory_name = 'data/cl_AOA_' + str(self.AOA)
         self.cd_data_directory_name = 'data/cd_AOA_' + str(self.AOA)
         self.cm_data_directory_name = 'data/cm_AOA_' + str(self.AOA)
         self.cl_error_data_directory_name = 'data/cl_error_AOA_' + str(self.AOA)
         self.cd_error_data_directory_name = 'data/cd_error_AOA_' + str(self.AOA)
         self.cm_error_data_directory_name = 'data/cm_error_AOA_' + str(self.AOA)
+
         shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
         shutil.copytree(self.cd_results_directory_name, self.input_dir_path + '/plots/cd/' + self.cd_data_directory_name)
         shutil.copytree(self.cm_results_directory_name, self.input_dir_path + '/plots/cm/' + self.cm_data_directory_name)
         shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
         shutil.copytree(self.cd_error_results_directory_name, self.input_dir_path + '/plots/cd_error/' + self.cd_error_data_directory_name)
         shutil.copytree(self.cm_error_results_directory_name, self.input_dir_path + '/plots/cm_error/' + self.cm_error_data_directory_name)
+
         self.Growth_Rate_Domain_Counter = 0
 
         self.merger_local_jump = PdfFileMerger()
@@ -374,6 +360,11 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
         shutil.copyfile('main_cp_180.pdf',cp_180_file_name)
         self.merger_local_cp_180.append(PdfFileReader(cp_180_file_name), 'case_' + str(self.case))
+
+        self.newton_convergence_data_directory_name = 'data/AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        shutil.copytree(self.newton_convergence_directory_name, self.input_dir_path + '/plots/newton_convergence/' + self.newton_convergence_data_directory_name)
+        loads_output.write_figures_newton_convergence(self.newton_convergence_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
 
         super(PotentialFlowAnalysisRefinement,self).Finalize()
         self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
