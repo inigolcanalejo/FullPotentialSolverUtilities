@@ -47,7 +47,7 @@
             "input_type"     : "mdpa",
             "input_filename" : "/media/inigo/10740FB2740F9A1C/3d_results/mdpas/wing_Case_0_AOA_5.0_Wing_Span_4.0_Airfoil_Mesh_Size_0.032_Growth_Rate_Wing_0.64_Growth_Rate_Domain_0.64"
         },
-        "maximum_iterations"     : 2,
+        "maximum_iterations"     : 30,
         "echo_level"             : 1,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
@@ -76,7 +76,7 @@
                 "angle_of_attack" : 0.0,
                 "mach_infinity"   : 0.03,
                 "speed_of_sound"  : 340.0,
-                "initialize_flow_field": false
+                "initialize_flow_field": true
             }
         },{
             "python_module" : "define_wake_process_3d",
