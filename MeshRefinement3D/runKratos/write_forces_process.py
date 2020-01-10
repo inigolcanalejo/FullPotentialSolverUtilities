@@ -94,6 +94,8 @@ class WriteForcesProcess(ComputeLiftProcess):
                 self.section_180_model_part = self.fluid_model_part.CreateSubModelPart(section_180_model_part_name)
             else: self.section_180_model_part = self.fluid_model_part.GetSubModelPart(section_180_model_part_name)
 
+        self.moment_coefficient = KratosMultiphysics.Vector(3, 0.0)
+
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
 
