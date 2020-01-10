@@ -5,7 +5,8 @@ export LD_LIBRARY_PATH=""
 #Setting paths
 source /home/inigo/Documents/paths/salomeConverter.sh
 #source /home/inigo/Documents/paths/kratosMaster3.sh
-source /home/inigo/Documents/paths/kratosMaster.sh
+#source /home/inigo/Documents/paths/kratosMaster.sh
+source /home/inigo/Documents/paths/kratosMaster4.sh
 #source /home/inigo/Documents/paths/kratosMerge.sh
 #source /home/inigo/intel/mkl/bin/mklvars.sh intel64 lp64
 
