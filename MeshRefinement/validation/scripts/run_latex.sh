@@ -1,9 +1,5 @@
-#Removing files
-rm cp*
-#rm main*
-rm validation.post.lst
-
 #Running Latex
+
 cd $input_dir_path/plots/cl
 #pdflatex -interaction=batchmode main_cl.tex > main_cl_out.txt
 pdflatex -interaction=batchmode main_cl_h.tex > main_cl_h_out.txt

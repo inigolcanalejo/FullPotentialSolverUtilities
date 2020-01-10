@@ -1,4 +1,4 @@
-Compute_Lift_Process=$PWD/compute_lift_process_2d_refinement.py
+Compute_Lift_Process=$PWD/runKratos/compute_lift_process_2d_refinement.py
 
 declare -A paths
 

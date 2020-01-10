@@ -5,8 +5,8 @@ Generate_Mesh_Membrane_File_Path=$PWD/generate_mdpas/membraneAirfoil_separating4
 Salome_Converter_File_Path=$PWD/generate_mdpas/use_converter.py
 Salome_Converter_Membrane_File_Path=$PWD/generate_mdpas/use_converter_membrane.py
 Mesh_Refinement_File_Path=$PWD/MeshRefinement.py
-Mesh_Domain_Refinement_File_Path=$PWD/MeshDomainRefinement.py
-Potential_Flow_Analysis_File_Path=$PWD/potential_flow_analysis_refinement.py
+Mesh_Domain_Refinement_File_Path=$PWD/runKratos/MeshDomainRefinement.py
+Potential_Flow_Analysis_File_Path=$PWD/runKratos/potential_flow_analysis_refinement.py
 
 source settings/set_paths.sh
 
