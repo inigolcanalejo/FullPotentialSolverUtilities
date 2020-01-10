@@ -43,7 +43,7 @@ for k in range(Number_Of_Domains_Size):
         for i in range(Number_Of_Refinements):
             #round(Airfoil_MeshSize, 1)
             Airfoil_MeshSize = round_to_1(Airfoil_MeshSize)
-            print('Domain_Size = ', Domain_Length, 'AOA = ', AOA, 'FarField_MeshSize = ', FarField_MeshSize, 'Airfoil_MeshSize', Airfoil_MeshSize) 
+            print('Domain_Size = ', Domain_Length, 'AOA = ', AOA, 'FarField_MeshSize = ', FarField_MeshSize, 'Airfoil_MeshSize', Airfoil_MeshSize)
             model = kratos_utils.MainModelPart() # Main mesh object to which we will add the submeshes (Kratos Name: ModelPart)
 
             # Specifying the names of the submeshes (Kratos Name: SubModelPart)
@@ -78,7 +78,7 @@ for k in range(Number_Of_Domains_Size):
 
             # Here we specify which Kratos-entities will be created from the general geometric entities
             mesh_dict_fluid         = {'write_smp': 1,
-                                   'entity_creation': {203: {'Element': {'Element2D3N': '1'}}}}
+                                   'entity_creation': {203: {'Element': {'Element2D3N': '0'}}}}
             mesh_dict_far_field     = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
             #mesh_dict_upper_surface = {'write_smp': 1,
