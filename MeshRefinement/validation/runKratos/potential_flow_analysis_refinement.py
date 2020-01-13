@@ -108,7 +108,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Domain_Width = int(self.Domain_Width)
         self.FarField_MeshSize = int(self.Domain_Length / 50.0)
         self.AOA = self.Initial_AOA
-        shutil.rmtree(self.gid_output_path + '/DS_' + str(self.Domain_Length), ignore_errors=True)
+        if not os.path.exists(self.gid_output_path):
+            os.makedirs(self.gid_output_path)
+        if os.path.exists(self.gid_output_path + '/DS_' + str(self.Domain_Length)):
+            shutil.rmtree(self.gid_output_path + '/DS_' + str(self.Domain_Length), ignore_errors=True)
         os.mkdir(self.gid_output_path + '/DS_' + str(self.Domain_Length))
 
         shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
