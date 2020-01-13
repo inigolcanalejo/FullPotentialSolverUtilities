@@ -212,7 +212,7 @@ def write_cp_tex(work_dir):
                         '\\usepackage{graphicx}\n\n' +
                         '\\begin{document}\n' +
                         '\\scrollmode\n' +
-                        '\t\input{' + work_dir + '/plots/cp/figures.tex}\n' +
+                        '\\input{' + work_dir + '/plots/cp/figures.tex}\n' +
                         '\\batchmode\n' +
                         '\\end{document}\n'
                        )
