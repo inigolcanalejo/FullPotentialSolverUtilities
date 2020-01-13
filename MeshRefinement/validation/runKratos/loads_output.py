@@ -200,6 +200,24 @@ def write_cl(cl,work_dir):
     cl_aoa_file.write('{0:15f}\n'.format(cl))
     cl_aoa_file.flush()
 
+def write_cp_tex(work_dir):
+    tex_file = open(work_dir + '/plots/cp/cp.tex', 'w')
+    with open(work_dir + '/plots/cp/cp.tex', 'w') as tex_file:
+        tex_file.write('\\documentclass{article}\n' +
+                        '\\usepackage{tikz}\n' +
+                        '\\usepackage{pgfplots}\n' +
+                        '\\pgfplotsset{compat=1.13}\n' +
+                        '\\usepackage[]{units}\n' +
+                        '\\usepackage{gensymb}\n' +
+                        '\\usepackage{graphicx}\n\n' +
+                        '\\begin{document}\n' +
+                        '\\scrollmode\n' +
+                        '\t\input{' + work_dir + '/plots/cp/figures.tex}\n' +
+                        '\\batchmode\n' +
+                        '\\end{document}\n'
+                       )
+        tex_file.flush()
+
 def write_cp_figures(cp_data_directory_name, AOA, case, Airfoil_MeshSize,  FarField_MeshSize, work_dir):
     figures_file = open(work_dir + '/plots/cp/figures.tex', 'w')
     figures_file.write('\n\pgfplotsset{table/search path={' + cp_data_directory_name + '},}\n\n' +
