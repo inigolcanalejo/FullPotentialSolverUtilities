@@ -30,6 +30,8 @@ Growth_Rate = 0.05
 
 path = os.getcwd()
 salome_output_path = 'TBD'
+if not os.path.exists(salome_output_path):
+    os.makedirs(salome_output_path)
 
 case = 0
 Domain_Length = Initial_Domain_Size
