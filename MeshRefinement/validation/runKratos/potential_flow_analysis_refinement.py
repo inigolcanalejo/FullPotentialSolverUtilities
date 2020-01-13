@@ -87,6 +87,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.cm_results_directory_name = 'TBD'
         self.cm_results_h_file_name = 'TBD'
+        self.cm_reference_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_reference_h.dat'
         self.cm_error_results_directory_name = 'TBD'
         self.cm_error_results_h_file_name = 'TBD'
 
@@ -206,6 +207,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         os.remove(self.cl_error_results_h_file_name)
         os.remove(self.cm_results_h_file_name)
+        os.remove(self.cm_reference_h_file_name)
         os.remove(self.cm_error_results_h_file_name)
         os.remove(self.cl_results_h_file_name)
         os.remove(self.cl_reference_h_file_name)

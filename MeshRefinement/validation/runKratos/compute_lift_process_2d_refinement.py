@@ -173,8 +173,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         self.cm_reference = self.read_cm_reference(self.AOA)
 
-        cm_results_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_reference_h.dat'
-        with open(cm_results_h_file_name,'a') as cm_file:
+        cm_reference_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_reference_h.dat'
+        with open(cm_reference_h_file_name,'a') as cm_file:
             cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cm_reference))
             cm_file.flush()
 
