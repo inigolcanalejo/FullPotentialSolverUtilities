@@ -1,0 +1,24 @@
+\begin{tikzpicture}
+\begin{axis}[
+    title={Pressure coefficient distribution},
+    xlabel={$x/c$},
+    ylabel={$c_p[\unit{-}$]},
+    xmin=-0.01, xmax=1.01,
+    y dir=reverse,
+    xtick={0,0.2,0.4,0.6,0.8,1},
+    xticklabels={0,0.2,0.4,0.6,0.8,1},
+    ymajorgrids=true,
+    xmajorgrids=true,
+    grid style=dashed,
+    width=12cm
+]
+
+\addplot[
+    only marks,
+    color=blue,
+    mark=*,
+    ]
+    table {cp_results.dat};  
+
+\end{axis}
+\end{tikzpicture}

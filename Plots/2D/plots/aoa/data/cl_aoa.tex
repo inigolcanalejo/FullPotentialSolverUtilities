@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.13}
+\usepackage[]{units}
+\usepackage{gensymb}
+\usepackage{graphicx}
+
+
+\begin{document}
+\scrollmode
+
+\pgfplotsset{table/search path={/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/plots/aoa/data},}
+
+\begin{figure}
+	\centering
+	\input{/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/plots/aoa/data/cl_aoa.tikz}
+	\caption{cl vs $\alpha$}
+	\label{fig:cl_AOA}
+\end{figure}
+
+\batchmode
+\end{document}

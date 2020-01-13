@@ -239,7 +239,7 @@ isDone = Mesh_Domain.Compute()
 exe_time = time.time() - start_time
 NumberOfNodes = Mesh_Domain.NbNodes()
 NumberOfElements = Mesh_Domain.NbTetras()
-print(' Mesh execution tool ', str(round(exe_time, 2)), ' sec')
+print(' Mesh execution tool ', str(round(exe_time/60, 2)), ' min')
 print(' Information about volume mesh:')
 print(' Number of nodes       :', NumberOfNodes)
 print(' Number of elements    :', NumberOfElements)

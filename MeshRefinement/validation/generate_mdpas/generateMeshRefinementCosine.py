@@ -30,6 +30,8 @@ Growth_Rate = 0.05
 
 path = os.getcwd()
 salome_output_path = 'TBD'
+if not os.path.exists(salome_output_path):
+    os.makedirs(salome_output_path)
 
 case = 0
 Domain_Length = Initial_Domain_Size
@@ -240,6 +242,10 @@ for k in range(Number_Of_Domains_Size):
                 pass
             except:
                 print 'ExportPartToDAT() failed. Invalid file name?'
+
+            # Saving file to open from salome's gui
+            file_name = "/home/inigo/simulations/naca0012/07_salome/00_Model/createdSalome/generate_cosine.hdf"
+            salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
 
             '''
             if(case % 2 == 0):
