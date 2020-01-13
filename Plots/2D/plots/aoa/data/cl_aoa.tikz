@@ -1,0 +1,69 @@
+\begin{tikzpicture}
+\begin{axis}[
+    scaled ticks=false, 
+    tick label style={/pgf/number format/fixed},
+    title={Lift coefficient vs. angle of attack},
+    xlabel={$\alpha\ [\degree]$},
+    ylabel={$c_l\ [-]$},
+    %xmin=1900, xmax=200000,
+    %ymin=-0.0005, ymax=0.0265,
+    %xtick={2000,5000,10000,20000,50000,100000,200000},%xtick={0,2000,4000,6000,8000,10000,12000,14000,16000,18000},
+    %xticklabels={2000,5000,$10^4$,$2\cdot10^4$,$5\cdot10^4$,$10^5$,$2\cdot10^5$},
+    %ytick={0.0,0.005,0.01,0.015,0.02,0.025},
+    %yticklabels={0.0,0.005,0.01,0.015,0.02,0.025},
+    legend pos=south east,
+    legend cell align=left,
+    ymajorgrids=true,
+    xmajorgrids=true,
+    grid style=dashed,
+    legend style={at={(0.5,-0.2)},anchor=north},
+    width=11cm,
+    %domain=0:840
+    %scaled ticks=false,
+    %tick label style={/pgf/number format/fixed},
+]
+ 
+\addplot[
+         color=black,
+         dotted,
+         mark=triangle*,
+         mark options={solid},
+         smooth
+         ]
+    table {cl_aoa_wind_tunnel_fsi.dat};
+    \addlegendentry{Wind tunnel}
+    
+\addplot[
+         color=brown,
+         dashed,
+         mark=square*,
+         mark options={solid},
+         smooth
+         ]
+    table {cl_aoa_tau_fsi.dat};
+    \addlegendentry{TAU FSI}
+    
+\addplot[
+         color=blue,
+         solid,
+         mark=oplus*,
+         mark options={solid},
+         smooth
+         ]
+    table {cl_aoa.dat};
+    \addlegendentry{Full-Potential Solver CFD}
+    
+\addplot[
+         color=red,
+         solid,
+         mark=oplus*,
+         mark options={solid},
+         smooth
+         ]
+    table {cl_aoa_tau_cfd.dat};
+    \addlegendentry{TAU CFD}
+
+%\addplot [domain = 1:200000, samples=2, thick, solid] {0};
+ 
+\end{axis}
+\end{tikzpicture}
