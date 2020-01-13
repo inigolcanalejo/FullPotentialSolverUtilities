@@ -26,6 +26,8 @@ Domain_Size_Factor = TBD
 
 salome_output_path = 'TBD'
 mdpa_path = 'TBD'
+if not os.path.exists(mdpa_path):
+    os.makedirs(mdpa_path)
 
 case = 0
 Domain_Length = Initial_Domain_Size
