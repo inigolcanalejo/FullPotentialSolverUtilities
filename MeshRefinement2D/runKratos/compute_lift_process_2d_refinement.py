@@ -53,6 +53,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         y = self.moment_reference_point[1] * math.cos(aoa_rad) - self.moment_reference_point[0] * math.sin(aoa_rad)
         self.moment_reference_point[0] = x
         self.moment_reference_point[1] = y
+        self.reference_case_name = 'XFOIL'
 
     def ExecuteFinalizeSolutionStep(self):
 
@@ -125,7 +126,10 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 cl_error_file.flush()
 
         cp_tikz_file_name = 'TBD'
-        output_file_name = 'cp_tau_aoa_' + str(int(self.AOA)) + '.dat'
+        if self.reference_case_name == 'TAU':
+            output_file_name = 'cp_tau_aoa_' + str(int(self.AOA)) + '.dat'
+        else:
+            output_file_name = 'references/xfoil/cp_xfoil_aoa_' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
@@ -146,17 +150,17 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    only marks,\n' +
             '    color=blue,\n' +
             '    mark=*,\n' +
+            '    mark size=1,\n' +
             '    ]\n' +
             '    table {cp_results.dat};  \n' +
             '    \\addlegendentry{Kratos}\n\n' +
             '\\addplot[\n' +
-            '    only marks,\n' +
-            '    color=red,\n' +
-            '    mark=square*,\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
             '    mark options={solid},\n' +
             '    ]\n' +
             '    table {' + output_file_name + '};  \n' +
-            '    \\addlegendentry{TAU}\n\n' +
+            '    \\addlegendentry{' + self.reference_case_name + '}\n\n' +
             '\end{axis}\n' +
             '\end{tikzpicture}')
             cp_tikz_file.flush()

@@ -1,4 +1,5 @@
 import os
+import shutil
 
 def write_header(work_dir):
     refinement_file = open(work_dir + "mesh_refinement_loads.dat",'w')
@@ -311,11 +312,17 @@ def create_cp_plots_directory_tree(work_dir):
                        )
         tex_file.flush()
 
+    references_input_directory_name = os.getcwd() + '/references'
+    references_output_directory_name = data_directory_name + '/references'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name, references_output_directory_name)
+
 def create_plots_directory_tree(work_dir):
     create_cp_plots_directory_tree(work_dir)
 
 def read_cl_reference(AOA):
-    #values computed with the panel method from xfoil
+    # values computed with the panel method from xfoil for naca0012
     if(abs(AOA - 0.0) < 1e-3):
         return 0.0
     elif(abs(AOA - 1.0) < 1e-3):
