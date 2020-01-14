@@ -33,13 +33,13 @@
     table {cl_results_h.dat};
     \addlegendentry{Integral}
     
-%\addplot[
-%    color=black,
-%    mark=square,
-%    ]
-%    table {cl_reference_h.dat};
-%    \addlegendentry{XFOIL}
-%    
+\addplot[
+    color=black,
+    mark=square,
+    ]
+    table {cl_reference_h.dat};
+    \addlegendentry{XFOIL}
+    
 %\addplot[
 %    color=blue,
 %    mark=square,

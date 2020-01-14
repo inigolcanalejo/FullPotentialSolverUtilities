@@ -295,7 +295,6 @@ def create_cp_plots_directory_tree(work_dir):
     if not os.path.exists(plots_directory_name):
         os.makedirs(plots_directory_name)
 
-    tex_file = open(work_dir + '/plots/cp/cp.tex', 'w')
     with open(work_dir + '/plots/cp/cp.tex', 'w') as tex_file:
         tex_file.write('\\documentclass{article}\n' +
                         '\\usepackage{tikz}\n' +
@@ -318,8 +317,60 @@ def create_cp_plots_directory_tree(work_dir):
         shutil.rmtree(references_output_directory_name)
     shutil.copytree(references_input_directory_name, references_output_directory_name)
 
+def create_cl_plots_directory_tree(work_dir):
+    with open(work_dir + '/plots/cl/main_cl_h.tex', 'w') as tex_file:
+        tex_file.write('\\documentclass{article}\n' +
+                        '\\usepackage{tikz}\n' +
+                        '\\usepackage{pgfplots}\n' +
+                        '\\pgfplotsset{compat=1.13}\n' +
+                        '\\usepackage[]{units}\n' +
+                        '\\usepackage{gensymb}\n' +
+                        '\\usepackage{graphicx}\n\n' +
+                        '\\begin{document}\n' +
+                        '\\scrollmode\n' +
+                        '\\input{figures_cl_h.tex}\n' +
+                        '\\batchmode\n' +
+                        '\\end{document}\n')
+        tex_file.flush()
+
+    with open(work_dir + '/plots/cl/data/cl/clh.tikz', 'w') as cl_tikz_file:
+        cl_tikz_file.write('\\begin{tikzpicture}\n' +
+            '\\begin{semilogxaxis}[\n' +
+            '    title={Mesh refinement study},\n' +
+            '    xlabel={h},\n' +
+            '    ylabel={$c_l[\\unit{-}]$},\n' +
+            '    ymajorgrids=true,\n' +
+            '    xmajorgrids=true,\n' +
+            '    y tick label style={\n' +
+            '       \t/pgf/number format/.cd,\n' +
+            '       \tfixed,\n' +
+            '       \tfixed zerofill,\n' +
+            '       \tprecision=4,\n' +
+            '       \t/tikz/.cd \n' +
+            '    },\n' +
+            '    grid style=dashed,\n' +
+            '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+            '    width=12cm\n' +
+            ']\n\n' +
+            '\\addplot[\n' +
+            '    color=blue,\n' +
+            '    mark=square,\n' +
+            '    ]\n' +
+            '    table {cl_results_h.dat};  \n' +
+            '    \\addlegendentry{Kratos Integral}\n\n' +
+            '\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    ]\n' +
+            '    table {cl_reference_h.dat};  \n' +
+            '    \\addlegendentry{XFOIL}\n\n' +
+            '\end{semilogxaxis}\n' +
+            '\end{tikzpicture}')
+        cl_tikz_file.flush()
+
 def create_plots_directory_tree(work_dir):
     create_cp_plots_directory_tree(work_dir)
+    create_cl_plots_directory_tree(work_dir)
 
 def read_cl_reference(AOA):
     # values computed with the panel method from xfoil for naca0012
