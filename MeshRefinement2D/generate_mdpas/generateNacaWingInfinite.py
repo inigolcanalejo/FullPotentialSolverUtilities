@@ -26,7 +26,8 @@ theStudy = salome.myStudy
 
 import salome_notebook
 notebook = salome_notebook.NoteBook(theStudy)
-sys.path.insert( 0, r'/home/inigo/simulations/wing/models/00_salome')
+path = os.getcwd()
+sys.path.insert( 0, r'/'+path)
 
 ###
 ### GEOM component

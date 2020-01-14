@@ -92,6 +92,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cm_error_results_h_file_name = 'TBD'
 
     def ExecuteBeforeDomainLoop(self):
+        loads_output.create_plots_directory_tree(self.input_dir_path)
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
         self.latex_output.flush()
         self.AOA = self.Initial_AOA
@@ -102,8 +103,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.AOA += self.AOA_Increment
 
         self.merger_all_cp = PdfFileMerger()
-        loads_output.write_header_all_cases(self.input_dir_path)
-        loads_output.write_cp_tex(self.input_dir_path)
 
     def ExecuteBeforeAOALoop(self):
         self.Domain_Length = int(self.Domain_Length)
@@ -116,7 +115,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             shutil.rmtree(self.gid_output_path + '/DS_' + str(self.Domain_Length), ignore_errors=True)
         os.mkdir(self.gid_output_path + '/DS_' + str(self.Domain_Length))
 
-        shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
+        if os.path.exists(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length)):
+            shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length))
 
         with open(self.aoa_results_file_name,'w') as cl_aoa_file:
             cl_aoa_file.flush()
