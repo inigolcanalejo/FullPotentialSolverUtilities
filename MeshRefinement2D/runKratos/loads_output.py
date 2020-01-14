@@ -1,3 +1,5 @@
+import os
+
 def write_header(work_dir):
     refinement_file = open(work_dir + "mesh_refinement_loads.dat",'w')
     refinement_file.write("FULL POTENTIAL APPLICATION LOADS FILE\n\n")
@@ -200,24 +202,6 @@ def write_cl(cl,work_dir):
     cl_aoa_file.write('{0:15f}\n'.format(cl))
     cl_aoa_file.flush()
 
-def write_cp_tex(work_dir):
-    tex_file = open(work_dir + '/plots/cp/cp.tex', 'w')
-    with open(work_dir + '/plots/cp/cp.tex', 'w') as tex_file:
-        tex_file.write('\\documentclass{article}\n' +
-                        '\\usepackage{tikz}\n' +
-                        '\\usepackage{pgfplots}\n' +
-                        '\\pgfplotsset{compat=1.13}\n' +
-                        '\\usepackage[]{units}\n' +
-                        '\\usepackage{gensymb}\n' +
-                        '\\usepackage{graphicx}\n\n' +
-                        '\\begin{document}\n' +
-                        '\\scrollmode\n' +
-                        '\\input{' + work_dir + '/plots/cp/figures.tex}\n' +
-                        '\\batchmode\n' +
-                        '\\end{document}\n'
-                       )
-        tex_file.flush()
-
 def write_cp_figures(cp_data_directory_name, AOA, case, Airfoil_MeshSize,  FarField_MeshSize, work_dir):
     figures_file = open(work_dir + '/plots/cp/figures.tex', 'w')
     figures_file.write('\n\pgfplotsset{table/search path={' + cp_data_directory_name + '},}\n\n' +
@@ -296,6 +280,39 @@ def write_figures_far_field(far_field_data_directory_name, AOA, case, Airfoil_Me
                            '\end{figure}\n'
                            )
         figures_file_y.flush()
+
+def create_cp_plots_directory_tree(work_dir):
+    cp_plots_directory_name = work_dir + '/plots/cp'
+    if not os.path.exists(cp_plots_directory_name):
+        os.makedirs(cp_plots_directory_name)
+
+    data_directory_name = work_dir + '/plots/cp/data/0_original'
+    if not os.path.exists(data_directory_name):
+        os.makedirs(data_directory_name)
+
+    plots_directory_name = work_dir + '/plots/cp/plots'
+    if not os.path.exists(plots_directory_name):
+        os.makedirs(plots_directory_name)
+
+    tex_file = open(work_dir + '/plots/cp/cp.tex', 'w')
+    with open(work_dir + '/plots/cp/cp.tex', 'w') as tex_file:
+        tex_file.write('\\documentclass{article}\n' +
+                        '\\usepackage{tikz}\n' +
+                        '\\usepackage{pgfplots}\n' +
+                        '\\pgfplotsset{compat=1.13}\n' +
+                        '\\usepackage[]{units}\n' +
+                        '\\usepackage{gensymb}\n' +
+                        '\\usepackage{graphicx}\n\n' +
+                        '\\begin{document}\n' +
+                        '\\scrollmode\n' +
+                        '\\input{' + work_dir + '/plots/cp/figures.tex}\n' +
+                        '\\batchmode\n' +
+                        '\\end{document}\n'
+                       )
+        tex_file.flush()
+
+def create_plots_directory_tree(work_dir):
+    create_cp_plots_directory_tree(work_dir)
 
 def read_cl_reference(AOA):
     #values computed with the panel method from xfoil

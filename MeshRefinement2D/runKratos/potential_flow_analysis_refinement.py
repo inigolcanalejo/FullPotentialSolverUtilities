@@ -103,7 +103,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.merger_all_cp = PdfFileMerger()
         loads_output.write_header_all_cases(self.input_dir_path)
-        loads_output.write_cp_tex(self.input_dir_path)
+        loads_output.create_plots_directory_tree(self.input_dir_path)
 
     def ExecuteBeforeAOALoop(self):
         self.Domain_Length = int(self.Domain_Length)
