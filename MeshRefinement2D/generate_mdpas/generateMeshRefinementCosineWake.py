@@ -244,7 +244,7 @@ for k in range(Number_Of_Domains_Size):
                 print 'ExportPartToDAT() failed. Invalid file name?'
 
             # Saving file to open from salome's gui
-            file_name = "/home/inigo/simulations/naca0012/07_salome/00_Model/createdSalome/generate_cosine2.hdf"
+            file_name = salome_output_path + "/generate_cosine2.hdf"
             salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
 
             '''

@@ -25,7 +25,7 @@ Domain_Length = 100.0
 Domain_Width = 50.0
 
 path = os.getcwd()
-output_path = '/home/inigo/simulations/naca0012/07_salome/05_MeshRefinement/output_salome'
+salome_output_path = 'TBD'
 
 case = 0
 AOA = Initial_AOA
