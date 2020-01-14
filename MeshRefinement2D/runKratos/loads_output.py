@@ -297,6 +297,10 @@ def write_figures_far_field(far_field_data_directory_name, AOA, case, Airfoil_Me
                              )
         figures_file_y.flush()
 
+def create_plot_directory_tree(data_directory_name):
+    if not os.path.exists(data_directory_name):
+        os.makedirs(data_directory_name)
+
 def create_main_tex_file(file_name, figures_file_name):
     with open(file_name, 'w') as tex_file:
         tex_file.write('\\documentclass{article}\n' +
@@ -378,35 +382,21 @@ def create_tikz_error_plot_file(file_name, title, xlabel, ylabel, dat_name, jump
                         '\end{tikzpicture}')
         tikz_file.flush()
 
-
 def create_cp_plots_directory_tree(work_dir):
-    cp_plots_directory_name = work_dir + '/plots/cp'
-    if not os.path.exists(cp_plots_directory_name):
-        os.makedirs(cp_plots_directory_name)
+    create_plot_directory_tree(work_dir + '/plots/cp/data/0_original')
+    create_plot_directory_tree(work_dir + '/plots/cp/plots')
 
-    data_directory_name = work_dir + '/plots/cp/data/0_original'
-    if not os.path.exists(data_directory_name):
-        os.makedirs(data_directory_name)
-
-    plots_directory_name = work_dir + '/plots/cp/plots'
-    if not os.path.exists(plots_directory_name):
-        os.makedirs(plots_directory_name)
-
-    create_main_tex_file(work_dir + '/plots/cp/cp.tex',
-                         work_dir + '/plots/cp/figures.tex')
+    create_main_tex_file(work_dir + '/plots/cp/cp.tex',work_dir + '/plots/cp/figures.tex')
 
     references_input_directory_name = os.getcwd() + '/references'
-    references_output_directory_name = data_directory_name + '/references'
+    references_output_directory_name = work_dir + '/plots/cp/data/0_original/references'
     if os.path.exists(references_output_directory_name):
         shutil.rmtree(references_output_directory_name)
     shutil.copytree(references_input_directory_name,
                     references_output_directory_name)
 
-
 def create_cl_plots_directory_tree(work_dir):
-    data_directory_name = work_dir + '/plots/cl/data/cl'
-    if not os.path.exists(data_directory_name):
-        os.makedirs(data_directory_name)
+    create_plot_directory_tree(work_dir + '/plots/cl/data/cl')
 
     create_main_tex_file(work_dir + '/plots/cl/main_cl_h.tex', 'figures_cl_h.tex')
 
@@ -416,9 +406,7 @@ def create_cl_plots_directory_tree(work_dir):
                                         'cl_reference_h.dat')                 # reference_dat_name
 
 def create_cl_error_plots_directory_tree(work_dir):
-    data_directory_name = work_dir + '/plots/cl_error/data/cl'
-    if not os.path.exists(data_directory_name):
-        os.makedirs(data_directory_name)
+    create_plot_directory_tree(work_dir + '/plots/cl_error/data/cl')
 
     create_main_tex_file(work_dir + '/plots/cl_error/main_cl_error_h.tex', 'figures_cl_error_h.tex')
 
@@ -431,9 +419,7 @@ def create_cl_error_plots_directory_tree(work_dir):
 
 
 def create_cl_error_domain_size_directory_tree(work_dir):
-    data_directory_name = work_dir + '/plots/cl_error_domain_size/data/domain'
-    if not os.path.exists(data_directory_name):
-        os.makedirs(data_directory_name)
+    create_plot_directory_tree(work_dir + '/plots/cl_error_domain_size/data/domain')
 
     create_main_tex_file(work_dir + '/plots/cl_error_domain_size/cl_domain.tex', 'figures_cl_domain.tex')
 
@@ -445,9 +431,7 @@ def create_cl_error_domain_size_directory_tree(work_dir):
                                 'cl_jump_error_results.dat')                                                # jump_dat_name
 
 def create_cm_plots_directory_tree(work_dir):
-    data_directory_name = work_dir + '/plots/cm/data/cm'
-    if not os.path.exists(data_directory_name):
-        os.makedirs(data_directory_name)
+    create_plot_directory_tree(work_dir + '/plots/cm/data/cm')
 
     create_main_tex_file(work_dir + '/plots/cm/main_cm_h.tex', 'figures_cm_h.tex')
 
@@ -457,9 +441,7 @@ def create_cm_plots_directory_tree(work_dir):
                                         'cm_reference_h.dat')                   # reference_dat_name
 
 def create_cm_error_plots_directory_tree(work_dir):
-    data_directory_name = work_dir + '/plots/cm_error/data/cm_error'
-    if not os.path.exists(data_directory_name):
-        os.makedirs(data_directory_name)
+    create_plot_directory_tree( work_dir + '/plots/cm_error/data/cm_error')
 
     create_main_tex_file(work_dir + '/plots/cm_error/main_cm_error_h.tex', 'figures_cm_error_h.tex')
 
