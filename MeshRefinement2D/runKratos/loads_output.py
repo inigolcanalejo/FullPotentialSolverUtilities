@@ -318,6 +318,10 @@ def create_cp_plots_directory_tree(work_dir):
     shutil.copytree(references_input_directory_name, references_output_directory_name)
 
 def create_cl_plots_directory_tree(work_dir):
+    data_directory_name = work_dir + '/plots/cl/data/cl'
+    if not os.path.exists(data_directory_name):
+        os.makedirs(data_directory_name)
+
     with open(work_dir + '/plots/cl/main_cl_h.tex', 'w') as tex_file:
         tex_file.write('\\documentclass{article}\n' +
                         '\\usepackage{tikz}\n' +
