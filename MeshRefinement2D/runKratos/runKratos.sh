@@ -9,6 +9,7 @@ FILE=${input_dir_path}/plots/output_terminal.txt
 NAME=${FILE%.*}
 EXT=${FILE#*.}
 NEWFILE=${NAME}_${DATE}_${GITBRANCH}.${EXT}
+mkdir -p ${input_dir_path}/plots
 
 # Run Kratos
 unbuffer python3 MeshDomainRefinement.py 2>&1 | tee $NEWFILE

@@ -11,11 +11,12 @@ def write_header(work_dir):
 
 
 def write_header_all_cases(work_dir):
-    aoa_file = open(work_dir + "/plots/results/all_cases.dat", 'w')
-    aoa_file.write("FULL POTENTIAL APPLICATION ALL CASES LOADS FILE\n\n")
-    aoa_file.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s\n\n' %
+    create_plot_directory_tree(work_dir + '/plots/results')
+    all_cases = open(work_dir + "/plots/results/all_cases.dat", 'w')
+    all_cases.write("FULL POTENTIAL APPLICATION ALL CASES LOADS FILE\n\n")
+    all_cases.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s\n\n' %
                    ("Case", "AOA", "FF_MS", "A_MS", "# Nodes", "Cl", "Cl_jump", "Cl_ref", "Cd"))
-    aoa_file.flush()
+    all_cases.flush()
 
 
 def write_case(case, AOA, FarField_MeshSize, Airfoil_MeshSize, work_dir):
@@ -508,6 +509,7 @@ def create_aoa_plots_directory_tree(work_dir):
                     references_output_directory_name)
 
 def create_plots_directory_tree(work_dir):
+    write_header_all_cases(work_dir)
     create_cp_plots_directory_tree(work_dir)
     create_cl_plots_directory_tree(work_dir)
     create_cl_error_plots_directory_tree(work_dir)
