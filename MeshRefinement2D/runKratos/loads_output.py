@@ -464,6 +464,7 @@ def create_cm_error_plots_directory_tree(work_dir):
                                 'cm_error_jump_results_h.dat')                              # jump_dat_name
 
 def create_aoa_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/aoa/data')
     write_figures_aoa(work_dir + '/plots/aoa/data')
     create_main_tex_file(work_dir + '/plots/aoa/data/cl_aoa.tex', 'figures_aoa.tex')
 
