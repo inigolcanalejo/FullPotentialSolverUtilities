@@ -297,6 +297,17 @@ def write_figures_far_field(far_field_data_directory_name, AOA, case, Airfoil_Me
                              )
         figures_file_y.flush()
 
+def write_figures_aoa(aoa_data_directory_name):
+    with open(aoa_data_directory_name + '/figures_aoa.tex', 'w') as aoa_figures_file:
+        aoa_figures_file.write('\n\pgfplotsset{table/search path={' + aoa_data_directory_name + '},}\n\n' +
+                              '\\begin{figure}\n' +
+                              '\t\centering\n' +
+                              '\t\input{' + aoa_data_directory_name + '/cl_aoa.tikz}\n' +
+                              '\t\caption{cl vs $\\alpha$}\n' +
+                              '\end{figure}\n'
+                              )
+        aoa_figures_file.flush()
+
 def create_plot_directory_tree(data_directory_name):
     if not os.path.exists(data_directory_name):
         os.makedirs(data_directory_name)
@@ -388,7 +399,7 @@ def create_cp_plots_directory_tree(work_dir):
 
     create_main_tex_file(work_dir + '/plots/cp/cp.tex',work_dir + '/plots/cp/figures.tex')
 
-    references_input_directory_name = os.getcwd() + '/references'
+    references_input_directory_name = os.getcwd() + '/references/cp'
     references_output_directory_name = work_dir + '/plots/cp/data/0_original/references'
     if os.path.exists(references_output_directory_name):
         shutil.rmtree(references_output_directory_name)
@@ -452,6 +463,49 @@ def create_cm_error_plots_directory_tree(work_dir):
                                 'cm_error_results_h.dat',                                   # dat_name
                                 'cm_error_jump_results_h.dat')                              # jump_dat_name
 
+def create_aoa_plots_directory_tree(work_dir):
+    write_figures_aoa(work_dir + '/plots/aoa/data')
+    create_main_tex_file(work_dir + '/plots/aoa/data/cl_aoa.tex', 'figures_aoa.tex')
+
+    with open(work_dir + '/plots/aoa/data/cl_aoa.tikz', 'w') as tikz_file:
+        tikz_file.write('\\begin{tikzpicture}\n' +
+                            '\\begin{axis}[\n' +
+                            '    scaled ticks=false,\n' +
+                            '    tick label style={/pgf/number format/fixed},\n' +
+                            '    title={Lift coefficient vs. angle of attack},\n' +
+                            '    xlabel={$\\alpha\\ [\\degree]$},\n' +
+                            '    ylabel={$c_l\\ [-]$},\n' +
+                            '    ymajorgrids=true,\n' +
+                            '    xmajorgrids=true,\n' +
+                            '    grid style=dashed,\n' +
+                            '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                            '    width=12cm\n' +
+                            ']\n\n' +
+                            '\\addplot[\n' +
+                            '    color=blue,\n' +
+                            '    mark=oplus*,\n' +
+                            '    mark options={solid},\n' +
+                            '    smooth\n' +
+                            '    ]\n' +
+                            '    table {cl_aoa.dat};  \n' +
+                            '    \\addlegendentry{Kratos Integral}\n\n' +
+                            '\\addplot[\n' +
+                            '    color=black,\n' +
+                            '    mark=none,\n' +
+                            '    ]\n' +
+                            '    table {references/xfoil/cl_aoa.dat};  \n' +
+                            '    \\addlegendentry{XFOIL}\n\n' +
+                            '\end{axis}\n' +
+                            '\end{tikzpicture}')
+        tikz_file.flush()
+
+    references_input_directory_name = os.getcwd() + '/references/aoa'
+    references_output_directory_name = work_dir + '/plots/aoa/data/references'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
 def create_plots_directory_tree(work_dir):
     create_cp_plots_directory_tree(work_dir)
     create_cl_plots_directory_tree(work_dir)
@@ -459,6 +513,7 @@ def create_plots_directory_tree(work_dir):
     create_cl_error_domain_size_directory_tree(work_dir)
     create_cm_plots_directory_tree(work_dir)
     create_cm_error_plots_directory_tree(work_dir)
+    create_aoa_plots_directory_tree(work_dir)
 
 
 def read_cl_reference(AOA):

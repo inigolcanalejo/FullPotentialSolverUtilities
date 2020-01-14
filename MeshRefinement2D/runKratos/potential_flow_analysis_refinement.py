@@ -117,7 +117,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             shutil.rmtree(self.gid_output_path + '/DS_' + str(self.Domain_Length), ignore_errors=True)
         os.mkdir(self.gid_output_path + '/DS_' + str(self.Domain_Length))
 
-        shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length), ignore_errors=True)
+        if os.path.exists(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length)):
+            shutil.rmtree(self.aoa_results_directory_name + '/DS_' + str(self.Domain_Length))
 
         with open(self.aoa_results_file_name,'w') as cl_aoa_file:
             cl_aoa_file.flush()
