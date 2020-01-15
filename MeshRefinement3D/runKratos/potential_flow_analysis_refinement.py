@@ -116,7 +116,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Growth_Rate_Domain = self.Initial_Growth_Rate_Domain
         shutil.rmtree(self.gid_output_path + '/AOA_' + str(self.AOA), ignore_errors=True)
         if not os.path.exists(self.gid_output_path + '/AOA_' + str(self.AOA)):
-            os.mkdir(self.gid_output_path + '/AOA_' + str(self.AOA))
+            os.makedirs(self.gid_output_path + '/AOA_' + str(self.AOA))
 
         self.cl_data_directory_name = 'data/cl_AOA_' + str(self.AOA)
         self.cd_data_directory_name = 'data/cd_AOA_' + str(self.AOA)
