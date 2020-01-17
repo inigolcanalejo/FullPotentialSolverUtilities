@@ -1,0 +1,52 @@
+\begin{tikzpicture}
+\begin{axis}[
+    title={Drag coefficient vs. angle of attack},
+    xlabel={$\alpha\ [\degree]$},
+    ylabel={$c_d\ [-]$},
+    %axis x line=center,
+    %enlarge x limits,
+    %xmin=1000, xmax=100000,
+    %ymin=0.39, ymax=0.8,
+    %xtick={2000,5000,10000,20000,50000,100000,200000,500000,1000000,2000000,5000000},%xtick={0,2000,4000,6000,8000,10000,12000,14000,16000,18000},
+    %xticklabels={$2\cdot10^3$,$5\cdot10^3$,$10^4$,$2\cdot10^4$,$5\cdot10^4$,$10^5$,$2\cdot10^5$,$5\cdot10^5$,$10^6$,$2\cdot10^6$,$5\cdot10^6$},
+    %ytick={0.4,0.45,0.5,0.55,0.6,0.65,0.7,0.75,0.8},
+    ymajorgrids=true,
+    xmajorgrids=true,
+    y tick label style={ 
+	        /pgf/number format/.cd, 
+	            fixed,
+	            fixed zerofill,
+	            precision=4,
+	        /tikz/.cd 
+    },
+    grid style=dashed,
+    legend style={at={(0.5,-0.2)},anchor=north},
+    width=11cm
+    %scaled ticks=false,
+    %tick label style={/pgf/number format/fixed},
+]
+
+
+\addplot[
+         color=blue,
+         solid,
+         mark=oplus*,
+         mark options={solid},
+         smooth
+         ]
+    table {cd_aoa.dat};
+    \addlegendentry{Full-Potential Solver CFD}
+    
+\addplot[
+         color=black,
+         solid,
+         mark=oplus*,
+         mark options={solid},
+         smooth
+         ]
+    table {cd_aoa_ref.dat};
+    \addlegendentry{XFLR5}
+ 
+
+\end{axis}
+\end{tikzpicture}

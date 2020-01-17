@@ -1,0 +1,47 @@
+\begin{tikzpicture}
+\begin{semilogyaxis}[
+    title={Nonlinear Convergence Analysis},
+    xlabel={Number of iterations},
+    ylabel={Residual absolute norm $\nicefrac{|{\bf R}|}{n_{dof}$},
+    %xmin=0, xmax=8,
+    %ymin=0.0000001, ymax=1,
+    %xtick={2000,5000,10000,20000,50000,100000,200000},%xtick={0,2000,4000,6000,8000,10000,12000,14000,16000,18000},
+    %xticklabels={2000,5000,$10^4$,$2\cdot10^4$,$5\cdot10^4$,$10^5$,$2\cdot10^5$},
+    %ytick={0.0000001,0.000001,0.00001,0.0001,0.001,0.01,0.1,1},
+    %yticklabels={$10^{-7}$,$10^{-6}$,$10^{-5}$,$10^{-4}$,$10^{-3}$,$10^{-2}$,$10^{-1}$,1},
+    %legend pos = outer north east,
+    %transpose legend,
+    %legend columns=2,
+    legend style={at={(0.5,-0.2)},anchor=north},
+    ymajorgrids=true,
+    xmajorgrids=true,
+    grid style=dashed,
+    width=11cm
+    %scaled ticks=false,
+    %tick label style={/pgf/number format/fixed},
+]
+
+\addplot[
+        color=red,
+        mark=square,
+        ]
+        table{convergence_results.dat}
+        %\addlegendentry{Error}
+
+%\addplot[color=blue] table[ y={create col/linear regression={y=1}}]{convergence_results.dat}
+%    coordinate [pos=0.75] (A) % save two points on the regression line for drawing the slope triangle
+%    coordinate [pos=0.9] (B);
+%    \addlegendentry{%
+%        $\pgfmathprintnumber{\pgfplotstableregressiona} \cdot x
+%        \pgfmathprintnumber[print sign]{\pgfplotstableregressionb}$ lin. Regression}
+%
+%    \xdef\slope{\pgfplotstableregressiona} % save the slope parameter
+%     \draw (A) -| (B)  % draw the opposite and adjacent sides of the triangle
+%        node [pos=0.25, anchor=north] {1} % label the horizontal line
+%        node [pos=0.75,anchor=west] {\pgfmathprintnumber{\slope}} %label the vertical line
+%     ;
+
+%\addplot [domain = 0:8, samples=2, thick, solid] {0.00001};\addlegendentry{Tolerance = $10^{-5}$}
+
+\end{semilogyaxis}
+\end{tikzpicture}
