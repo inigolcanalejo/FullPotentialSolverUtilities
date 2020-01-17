@@ -1,3 +1,6 @@
+import os
+import shutil
+
 def write_header(work_dir):
     refinement_file = open(work_dir + "mesh_refinement_loads.dat",'w')
     refinement_file.write("FULL POTENTIAL APPLICATION LOADS FILE\n\n")
@@ -404,5 +407,57 @@ def close_cm_error_tikz(input_dir_path, cm_error_data_directory_name):
         cm_error_tikz_file.write('\end{axis}\n' +
             '\end{tikzpicture}')
         cm_error_tikz_file.flush()
+
+def create_plot_directory_tree(data_directory_name):
+    if not os.path.exists(data_directory_name):
+        os.makedirs(data_directory_name)
+
+def create_main_tex_file(file_name, figures_file_name):
+    with open(file_name, 'w') as tex_file:
+        tex_file.write('\\documentclass{article}\n' +
+                       '\\usepackage{tikz}\n' +
+                       '\\usepackage{pgfplots}\n' +
+                       '\\pgfplotsset{compat=1.13}\n' +
+                       '\\usepackage[]{units}\n' +
+                       '\\usepackage{gensymb}\n' +
+                       '\\usepackage{graphicx}\n\n' +
+                       '\\begin{document}\n' +
+                       '\\scrollmode\n\n' +
+                       '\\input{' + figures_file_name + '}\n\n' +
+                       '\\batchmode\n' +
+                       '\\end{document}\n')
+        tex_file.flush()
+
+def start_tikz_refinement_plot_file(file_name, title, ylabel):
+        with open(file_name, 'w') as tikz_file:
+            tikz_file.write('\\begin{tikzpicture}\n' +
+                               '\\begin{semilogxaxis}[\n' +
+                               '    title={' + title + '},\n' +
+                               '    xlabel={ndof},\n' +
+                               '    ylabel={' + ylabel + '},\n' +
+                               '    ymajorgrids=true,\n' +
+                               '    xmajorgrids=true,\n' +
+                               '    y tick label style={\n' +
+                               '       \t/pgf/number format/.cd,\n' +
+                               '       \tfixed,\n' +
+                               '       \tfixed zerofill,\n' +
+                               '       \tprecision=4,\n' +
+                               '       \t/tikz/.cd \n' +
+                               '    },\n' +
+                               '    grid style=dashed,\n' +
+                               '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                               '    width=12cm\n' +
+                               ']\n\n')
+            tikz_file.flush()
+
+def create_cd_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cd/data/cd')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cd/data/cd/cd.tikz', 'Mesh refinement study', '$c_d[\\unit{-}]$')
+    create_main_tex_file(work_dir + '/plots/cd/main_cd.tex', 'figures_cd.tex')
+
+
+def create_plots_directory_tree(work_dir):
+    create_cd_plots_directory_tree(work_dir)
+
 
 

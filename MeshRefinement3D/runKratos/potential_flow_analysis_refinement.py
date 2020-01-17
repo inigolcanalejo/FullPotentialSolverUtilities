@@ -104,6 +104,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.newton_convergence_directory_name = self.input_dir_path + '/plots/newton_convergence/data/convergence'
 
     def ExecuteBeforeAOALoop(self):
+        loads_output.create_cd_plots_directory_tree(self.input_dir_path)
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
         self.latex_output.flush()
         self.AOA = self.Initial_AOA
