@@ -455,9 +455,39 @@ def create_cd_plots_directory_tree(work_dir):
     start_tikz_refinement_plot_file(work_dir + '/plots/cd/data/cd/cd.tikz', 'Mesh refinement study', '$c_d[\\unit{-}]$')
     create_main_tex_file(work_dir + '/plots/cd/main_cd.tex', 'figures_cd.tex')
 
+def create_cd_error_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cd_error/data/cd_error')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cd_error/data/cd_error/cd_error.tikz', 'Induced drag coefficient relative error', '$\\frac{|c_d - c_{dref}|}{|c_{dref}|}\\cdot100$')
+    create_main_tex_file(work_dir + '/plots/cd_error/main_cd_error.tex', 'figures_cd_error.tex')
+
+def create_cl_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cl/data/cl')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cl/data/cl/cl.tikz', 'Mesh refinement study', '$c_l[\\unit{-}]$')
+    create_main_tex_file(work_dir + '/plots/cl/main_cl.tex', 'figures_cl.tex')
+
+def create_cl_error_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cl_error/data/cl_error')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cl_error/data/cl_error/cl_error.tikz', 'Lift coefficient relative error', '$\\frac{|c_l - c_{lref}|}{|c_{lref}|}\\cdot100$')
+    create_main_tex_file(work_dir + '/plots/cl_error/main_cl_error.tex', 'figures_cl_error.tex')
+
+def create_cm_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cm/data/cm')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cm/data/cm/cm.tikz', 'Mesh refinement study', '$c_m[\\unit{-}]$')
+    create_main_tex_file(work_dir + '/plots/cm/main_cm.tex', 'figures_cm.tex')
+
+def create_cm_error_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cm_error/data/cm_error')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cm_error/data/cm_error/cm_error.tikz', 'Moment coefficient relative error', '$\\frac{|c_m - c_{mref}|}{|c_{mref}|}\\cdot100$')
+    create_main_tex_file(work_dir + '/plots/cm_error/main_cm_error.tex', 'figures_cm_error.tex')
+
 
 def create_plots_directory_tree(work_dir):
     create_cd_plots_directory_tree(work_dir)
+    create_cd_error_plots_directory_tree(work_dir)
+    create_cl_plots_directory_tree(work_dir)
+    create_cl_error_plots_directory_tree(work_dir)
+    create_cm_plots_directory_tree(work_dir)
+    create_cm_error_plots_directory_tree(work_dir)
 
 
 
