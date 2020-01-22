@@ -147,6 +147,39 @@ def write_jump_figures(jump_data_directory_name, AOA, case, Growth_Rate_Domain, 
                            )
         jump_figures_file.flush()
 
+def write_figures_cd_aoa(aoa_data_directory_name):
+    with open(aoa_data_directory_name + '/figures_cd_aoa.tex', 'w') as aoa_figures_file:
+        aoa_figures_file.write('\n\pgfplotsset{table/search path={' + aoa_data_directory_name + '/data/cd_aoa},}\n\n' +
+                              '\\begin{figure}\n' +
+                              '\t\centering\n' +
+                              '\t\input{' + aoa_data_directory_name + '/data/cd_aoa/cd_aoa.tikz}\n' +
+                              '\t\caption{cd vs $\\alpha$}\n' +
+                              '\end{figure}\n'
+                              )
+        aoa_figures_file.flush()
+
+def write_figures_cl_aoa(aoa_data_directory_name):
+    with open(aoa_data_directory_name + '/figures_cl_aoa.tex', 'w') as aoa_figures_file:
+        aoa_figures_file.write('\n\pgfplotsset{table/search path={' + aoa_data_directory_name + '/data/cl_aoa},}\n\n' +
+                              '\\begin{figure}\n' +
+                              '\t\centering\n' +
+                              '\t\input{' + aoa_data_directory_name + '/data/cl_aoa/cl_aoa.tikz}\n' +
+                              '\t\caption{cl vs $\\alpha$}\n' +
+                              '\end{figure}\n'
+                              )
+        aoa_figures_file.flush()
+
+def write_figures_cm_aoa(aoa_data_directory_name):
+    with open(aoa_data_directory_name + '/figures_cm_aoa.tex', 'w') as aoa_figures_file:
+        aoa_figures_file.write('\n\pgfplotsset{table/search path={' + aoa_data_directory_name + '/data/cm_aoa},}\n\n' +
+                              '\\begin{figure}\n' +
+                              '\t\centering\n' +
+                              '\t\input{' + aoa_data_directory_name + '/data/cm_aoa/cm_aoa.tikz}\n' +
+                              '\t\caption{cm vs $\\alpha$}\n' +
+                              '\end{figure}\n'
+                              )
+        aoa_figures_file.flush()
+
 
 
 def read_cl_reference(AOA):
@@ -450,6 +483,46 @@ def start_tikz_refinement_plot_file(file_name, title, ylabel):
                                ']\n\n')
             tikz_file.flush()
 
+def create_aoa_tikz_plot_file(file_name, title, ylabel, dat_name, reference_dat_name):
+    with open(file_name, 'w') as tikz_file:
+        tikz_file.write('\\begin{tikzpicture}\n' +
+                           '\\begin{axis}[\n' +
+                           '    title={' + title + '},\n' +
+                           '    xlabel={$\\alpha\\ [\\degree]$},\n' +
+                           '    ylabel={' + ylabel + '},\n' +
+                           '    ymajorgrids=true,\n' +
+                           '    xmajorgrids=true,\n' +
+                           '    y tick label style={\n' +
+                           '       \t/pgf/number format/.cd,\n' +
+                           '       \tfixed,\n' +
+                           '       \tfixed zerofill,\n' +
+                           '       \tprecision=4,\n' +
+                           '       \t/tikz/.cd \n' +
+                           '    },\n' +
+                           '    grid style=dashed,\n' +
+                           '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                           '    width=12cm\n' +
+                           ']\n\n' +
+                           '\\addplot[\n' +
+                           '    color=blue,\n' +
+                           '    solid,\n' +
+                           '    mark=oplus*,\n' +
+                           '    mark options={solid},\n' +
+                           '    ]\n' +
+                           '    table {' + dat_name + '};  \n' +
+                           '    \\addlegendentry{Kratos Integral}\n\n' +
+                           '\\addplot[\n' +
+                           '    color=black,\n' +
+                           '    solid,\n' +
+                           '    mark=oplus*,\n' +
+                           '    mark options={solid},\n' +
+                           '    ]\n' +
+                           '    table {' + reference_dat_name + '};  \n' +
+                           '    \\addlegendentry{XFLR5}\n\n' +
+                           '\end{axis}\n' +
+                           '\end{tikzpicture}')
+        tikz_file.flush()
+
 def create_cd_plots_directory_tree(work_dir):
     create_plot_directory_tree(work_dir + '/plots/cd/data/cd')
     start_tikz_refinement_plot_file(work_dir + '/plots/cd/data/cd/cd.tikz', 'Mesh refinement study', '$c_d[\\unit{-}]$')
@@ -480,6 +553,39 @@ def create_cm_error_plots_directory_tree(work_dir):
     start_tikz_refinement_plot_file(work_dir + '/plots/cm_error/data/cm_error/cm_error.tikz', 'Moment coefficient relative error', '$\\frac{|c_m - c_{mref}|}{|c_{mref}|}\\cdot100$')
     create_main_tex_file(work_dir + '/plots/cm_error/main_cm_error.tex', 'figures_cm_error.tex')
 
+def create_cd_aoa_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cd_aoa/data/cd_a')
+    create_aoa_tikz_plot_file(work_dir + '/plots/cd_aoa/data/cd_a/cd_aoa.tikz',  # file_name
+                                        'Drag coefficient vs. angle of attack', # title
+                                        '$c_d[\\unit{-}]$',                     # ylabel
+                                        'cd_aoa.dat',                     # dat_name
+                                        'cd_aoa_ref.dat')                   # reference_dat_name
+
+    write_figures_cd_aoa(work_dir + '/plots/cd_aoa')
+    create_main_tex_file(work_dir + '/plots/cd_aoa/main_cd_aoa.tex', 'figures_cd_aoa.tex')
+
+def create_cl_aoa_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cl_aoa/data/cl_a')
+    create_aoa_tikz_plot_file(work_dir + '/plots/cl_aoa/data/cl_a/cl_aoa.tikz',  # file_name
+                                        'Lift vs. angle of attack', # title
+                                        '$c_l[\\unit{-}]$',                     # ylabel
+                                        'cl_aoa.dat',                     # dat_name
+                                        'cl_aoa_ref.dat')                   # reference_dat_name
+
+    write_figures_cl_aoa(work_dir + '/plots/cl_aoa')
+    create_main_tex_file(work_dir + '/plots/cl_aoa/main_cl_aoa.tex', 'figures_cl_aoa.tex')
+
+def create_cm_aoa_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cm_aoa/data/cm_a')
+    create_aoa_tikz_plot_file(work_dir + '/plots/cm_aoa/data/cm_a/cm_aoa.tikz',  # file_name
+                                        'Moment vs. angle of attack', # title
+                                        '$c_m[\\unit{-}]$',                     # ylabel
+                                        'cm_aoa.dat',                     # dat_name
+                                        'cm_aoa_ref.dat')                   # reference_dat_name
+
+    write_figures_cm_aoa(work_dir + '/plots/cm_aoa')
+    create_main_tex_file(work_dir + '/plots/cm_aoa/main_cm_aoa.tex', 'figures_cm_aoa.tex')
+
 
 def create_plots_directory_tree(work_dir):
     create_cd_plots_directory_tree(work_dir)
@@ -488,6 +594,9 @@ def create_plots_directory_tree(work_dir):
     create_cl_error_plots_directory_tree(work_dir)
     create_cm_plots_directory_tree(work_dir)
     create_cm_error_plots_directory_tree(work_dir)
+    create_cd_aoa_plots_directory_tree(work_dir)
+    create_cl_aoa_plots_directory_tree(work_dir)
+    create_cm_aoa_plots_directory_tree(work_dir)
 
 
 
