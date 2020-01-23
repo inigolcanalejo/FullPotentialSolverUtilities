@@ -674,6 +674,32 @@ def create_potential_jump_plots_directory_tree(work_dir):
 
     create_main_tex_file(work_dir + '/plots/potential_jump/main_potential_jump.tex', work_dir + '/plots/potential_jump/figures_jump.tex')
 
+def create_newton_convergence_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/newton_convergence/data/convergence')
+
+    with open(work_dir + '/plots/newton_convergence/data/convergence/convergence.tikz', 'w') as tikz_file:
+        tikz_file.write('\\begin{tikzpicture}\n' +
+                           '\\begin{semilogyaxis}[\n' +
+                           '    title={Nonlinear Convergence Analysis},\n' +
+                           '    xlabel={Number of iterations},\n' +
+                           '    ylabel={Residual absolute norm $\\nicefrac{|{\\bf R}|}{n_{dof}}$},\n' +
+                           '    ymajorgrids=true,\n' +
+                           '    xmajorgrids=true,\n' +
+                           '    grid style=dashed,\n' +
+                           '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                           '    width=12cm\n' +
+                           ']\n\n' +
+                           '\\addplot[\n' +
+                           '    color=red,\n' +
+                           '    mark=square,\n' +
+                           '    ]\n' +
+                           '    table {convergence_results.dat};  \n' +
+                           '\end{semilogyaxis}\n' +
+                           '\end{tikzpicture}')
+        tikz_file.flush()
+
+    create_main_tex_file(work_dir + '/plots/newton_convergence/main_convergence.tex', work_dir + '/plots/newton_convergence/figures_newton_convergence.tex')
+
 
 def create_plots_directory_tree(work_dir):
     create_cd_plots_directory_tree(work_dir)
@@ -690,6 +716,7 @@ def create_plots_directory_tree(work_dir):
     create_cp_150_plots_directory_tree(work_dir)
     create_cp_180_plots_directory_tree(work_dir)
     create_potential_jump_plots_directory_tree(work_dir)
+    create_newton_convergence_plots_directory_tree(work_dir)
 
 
 
