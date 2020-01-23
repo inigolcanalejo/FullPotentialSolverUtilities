@@ -638,6 +638,42 @@ def create_cp_180_plots_directory_tree(work_dir):
 
     create_main_tex_file(work_dir + '/plots/cp_section_180/main_cp_180.tex', work_dir + '/plots/cp_section_180/figures_cp.tex')
 
+def create_potential_jump_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/potential_jump/plots')
+    create_plot_directory_tree(work_dir + '/plots/potential_jump/data/potential_jump')
+
+    with open(work_dir + '/plots/potential_jump/data/potential_jump/jump.tikz', 'w') as tikz_file:
+        tikz_file.write('\\begin{tikzpicture}\n' +
+                           '\\begin{axis}[\n' +
+                           '    title={Potential jump},\n' +
+                           '    xlabel={$y$},\n' +
+                           '    ylabel={Potential jump($y$)},\n' +
+                           '    ymajorgrids=true,\n' +
+                           '    xmajorgrids=true,\n' +
+                           '    grid style=dashed,\n' +
+                           '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                           '    width=12cm\n' +
+                           ']\n\n' +
+                           '\\addplot[\n' +
+                           '    color=blue,\n' +
+                           '    only marks,\n' +
+                           '    mark=*,\n' +
+                           '    ]\n' +
+                           '    table {potential_jump_results.dat};  \n' +
+                           '    \\addlegendentry{Trailing edge}\n\n' +
+                           '\\addplot[\n' +
+                           '    color=red,\n' +
+                           '    only marks,\n' +
+                           '    mark=*,\n' +
+                           '    ]\n' +
+                           '    table {potential_jump_trefftz_results.dat};  \n' +
+                           '    \\addlegendentry{Trefftz plane outlet cut}\n\n' +
+                           '\end{axis}\n' +
+                           '\end{tikzpicture}')
+        tikz_file.flush()
+
+    create_main_tex_file(work_dir + '/plots/potential_jump/main_potential_jump.tex', work_dir + '/plots/potential_jump/figures_jump.tex')
+
 
 def create_plots_directory_tree(work_dir):
     create_cd_plots_directory_tree(work_dir)
@@ -653,6 +689,7 @@ def create_plots_directory_tree(work_dir):
     create_cp_100_plots_directory_tree(work_dir)
     create_cp_150_plots_directory_tree(work_dir)
     create_cp_180_plots_directory_tree(work_dir)
+    create_potential_jump_plots_directory_tree(work_dir)
 
 
 
