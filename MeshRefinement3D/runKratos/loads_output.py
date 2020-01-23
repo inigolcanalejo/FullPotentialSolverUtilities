@@ -586,6 +586,58 @@ def create_cm_aoa_plots_directory_tree(work_dir):
     write_figures_cm_aoa(work_dir + '/plots/cm_aoa')
     create_main_tex_file(work_dir + '/plots/cm_aoa/main_cm_aoa.tex', 'figures_cm_aoa.tex')
 
+def create_cp_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp/main_cp.tex', work_dir + '/plots/cp/figures_cp.tex')
+
+def create_cp_100_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp_section_100/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp_section_100/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp_section_100/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp_section_100/main_cp_100.tex', work_dir + '/plots/cp_section_100/figures_cp.tex')
+
+def create_cp_150_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp_section_150/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp_section_150/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp_section_150/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp_section_150/main_cp_150.tex', work_dir + '/plots/cp_section_150/figures_cp.tex')
+
+def create_cp_180_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp_section_180/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp_section_180/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp_section_180/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp_section_180/main_cp_180.tex', work_dir + '/plots/cp_section_180/figures_cp.tex')
+
 
 def create_plots_directory_tree(work_dir):
     create_cd_plots_directory_tree(work_dir)
@@ -597,6 +649,10 @@ def create_plots_directory_tree(work_dir):
     create_cd_aoa_plots_directory_tree(work_dir)
     create_cl_aoa_plots_directory_tree(work_dir)
     create_cm_aoa_plots_directory_tree(work_dir)
+    create_cp_plots_directory_tree(work_dir)
+    create_cp_100_plots_directory_tree(work_dir)
+    create_cp_150_plots_directory_tree(work_dir)
+    create_cp_180_plots_directory_tree(work_dir)
 
 
 
