@@ -5,7 +5,7 @@ export LD_LIBRARY_PATH=""
 # Setting paths
 source /path/to/salomeConverter.sh
 source /path/to/kratosMaster.sh
-#source /home/inigo/intel/mkl/bin/mklvars.sh intel64 lp64
+#source /path/to/intel/mkl/bin/mklvars.sh intel64 lp64
 
 echo "PYTHONPATH = $PYTHONPATH"
 echo "LD_LIBRARY_PATH = $LD_LIBRARY_PATH"
