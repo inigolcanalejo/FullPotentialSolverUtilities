@@ -123,7 +123,7 @@ for k in range(Number_Of_AOAS):
 
             # Here we specify which Kratos-entities will be created from the general geometric entities
             mesh_dict_fluid         = {'write_smp': 1,
-                                   'entity_creation': {304: {'Element': {'Element3D4N': '1'}}}}
+                                   'entity_creation': {304: {'Element': {'Element3D4N': '0'}}}}
             mesh_dict_far_field     = {'write_smp': 1,
                                    'entity_creation': {203: {'Condition': {'SurfaceCondition3D3N': '0'}}}}
             mesh_dict_body_surface = {'write_smp': 1,

@@ -292,7 +292,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_dir_name + '/cp.tikz'
-        output_file_name = cp_dir_name + '/aoa' + str(int(self.AOA)) + '.dat'
+        output_file_name = cp_dir_name + '/xflr5/section_0/aoa' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
@@ -344,7 +344,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_100_dir_name + '/cp.tikz'
-        output_file_name = cp_100_dir_name + '/aoa' + str(int(self.AOA)) + '.dat'
+        output_file_name = cp_100_dir_name + '/xflr5/section_100/aoa' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
@@ -396,7 +396,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_150_dir_name + '/cp.tikz'
-        output_file_name = cp_150_dir_name + '/aoa' + str(int(self.AOA)) + '.dat'
+        output_file_name = cp_150_dir_name + '/xflr5/section_150/aoa' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
@@ -448,7 +448,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_180_dir_name + '/cp.tikz'
-        output_file_name = cp_180_dir_name + '/aoa' + str(int(self.AOA)) + '.dat'
+        output_file_name = cp_180_dir_name + '/xflr5/section_180/aoa' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +

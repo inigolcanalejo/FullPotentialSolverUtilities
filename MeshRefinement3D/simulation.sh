@@ -1,9 +1,9 @@
 #!/bin/bash
 #
-#run this file using the command:
+# run this file using the command:
 # bash simulation.sh
 
-#Going to the current directory
+# Going to the current directory
 echo "The previous current working directory: $PWD"
 
 SCRIPT=`realpath $0`
@@ -12,32 +12,26 @@ cd $SCRIPTPATH
 
 echo "The current working directory:          $PWD"
 
-#Setting paths
+# Setting paths
 source scripts/preamble.sh
 
-#Setting the parameters
+# Setting the parameters
 source settings/parameters.sh
 source settings/set_parameters.sh
 cd generate_mdpas/
 
-# # Run salome: generate geometry and mesh
-# rm $input_dir_path/output_salome/*
-# rm $input_dir_path/mdpas/wa*
-# python3 runSalome.py
-# /bin/bash salome -t python generate_finite_wing_middle.py
-# python3 runSalome.py &> $FILESALOME
-# unbuffer python3 runSalome.py &> $FILESALOME
-# unbuffer python3 runSalome.py 2>&1 | tee $FILESALOME
-# unbuffer python3 runSalome.py | tee $FILESALOME
+# Run salome: generate geometry and mesh
+rm $input_dir_path/output_salome/*
+rm $input_dir_path/mdpas/wa*
+python3 runSalome.py
 
-# # # Convert salomes mesh into mdpa
-# rm $input_dir_path/mdpas/wi*
-# rm $input_dir_path/plots/output_terminal_converter*
-# # #python3 use_converter.py
-# unbuffer python3 use_converter.py 2>&1 | tee $FILECONVERTER
-# # rm $input_dir_path/output_salome/*
+# Convert salomes mesh into mdpa
+rm $input_dir_path/mdpas/wi*
+rm $input_dir_path/plots/output_terminal_converter*
+# python3 use_converter.py
+unbuffer python3 use_converter.py 2>&1 | tee $FILECONVERTER
 
-# # Save mdpas file in a copy
+# Save mdpas file in a copy
 # source save_mdpas.sh
 
 cd ..
@@ -45,8 +39,8 @@ cd ..
 source runKratos/runKratos.sh
 # Run Latex
 source scripts/run_latex.sh
-# # Copy results
-#source scripts/copy_results.sh
+# Copy results
+# source scripts/copy_results.sh
 
 source settings/unset_parameters.sh
 

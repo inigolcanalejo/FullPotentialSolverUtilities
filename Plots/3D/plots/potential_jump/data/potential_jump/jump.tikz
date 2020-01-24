@@ -1,0 +1,26 @@
+\begin{tikzpicture}
+\begin{axis}[
+	    title={Potential jump(x)},
+	    xlabel={$y$},
+	    ylabel={Potential Jump(y)},
+	    ymajorgrids=true,
+	    xmajorgrids=true,
+	    grid style=dashed,
+	    width=12cm
+]
+
+\addplot[
+	    only marks,
+	    color=black,
+	    mark=*,
+	    ]
+	    table {potential_jump_results.dat};
+	    
+\addplot[
+	    only marks,
+	    color=red,
+	    mark=*,
+	    ]
+	    table {potential_jump_trefftz_results.dat};
+\end{axis}
+\end{tikzpicture}

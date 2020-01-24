@@ -3,6 +3,7 @@
 ###
 ### This file is generated automatically by SALOME v8.4.0 with dump python functionality
 ###
+import os
 
 # Parameters:
 Wing_span = TBD
@@ -46,6 +47,10 @@ Growth_Rate_Domain_Refinement_Factor = TBD
 
 salome_output_path = 'TBD'
 mdpa_path = 'TBD'
+if not os.path.exists(salome_output_path):
+    os.makedirs(salome_output_path)
+if not os.path.exists(mdpa_path):
+    os.makedirs(mdpa_path)
 
 case = 0
 AOA = Initial_AOA

@@ -1,3 +1,6 @@
+import os
+import shutil
+
 def write_header(work_dir):
     refinement_file = open(work_dir + "mesh_refinement_loads.dat",'w')
     refinement_file.write("FULL POTENTIAL APPLICATION LOADS FILE\n\n")
@@ -143,6 +146,39 @@ def write_jump_figures(jump_data_directory_name, AOA, case, Growth_Rate_Domain, 
                            '\end{figure}\n'
                            )
         jump_figures_file.flush()
+
+def write_figures_cd_aoa(aoa_data_directory_name):
+    with open(aoa_data_directory_name + '/figures_cd_aoa.tex', 'w') as aoa_figures_file:
+        aoa_figures_file.write('\n\pgfplotsset{table/search path={' + aoa_data_directory_name + '/data/cd_aoa},}\n\n' +
+                              '\\begin{figure}\n' +
+                              '\t\centering\n' +
+                              '\t\input{' + aoa_data_directory_name + '/data/cd_aoa/cd_aoa.tikz}\n' +
+                              '\t\caption{cd vs $\\alpha$}\n' +
+                              '\end{figure}\n'
+                              )
+        aoa_figures_file.flush()
+
+def write_figures_cl_aoa(aoa_data_directory_name):
+    with open(aoa_data_directory_name + '/figures_cl_aoa.tex', 'w') as aoa_figures_file:
+        aoa_figures_file.write('\n\pgfplotsset{table/search path={' + aoa_data_directory_name + '/data/cl_aoa},}\n\n' +
+                              '\\begin{figure}\n' +
+                              '\t\centering\n' +
+                              '\t\input{' + aoa_data_directory_name + '/data/cl_aoa/cl_aoa.tikz}\n' +
+                              '\t\caption{cl vs $\\alpha$}\n' +
+                              '\end{figure}\n'
+                              )
+        aoa_figures_file.flush()
+
+def write_figures_cm_aoa(aoa_data_directory_name):
+    with open(aoa_data_directory_name + '/figures_cm_aoa.tex', 'w') as aoa_figures_file:
+        aoa_figures_file.write('\n\pgfplotsset{table/search path={' + aoa_data_directory_name + '/data/cm_aoa},}\n\n' +
+                              '\\begin{figure}\n' +
+                              '\t\centering\n' +
+                              '\t\input{' + aoa_data_directory_name + '/data/cm_aoa/cm_aoa.tikz}\n' +
+                              '\t\caption{cm vs $\\alpha$}\n' +
+                              '\end{figure}\n'
+                              )
+        aoa_figures_file.flush()
 
 
 
@@ -404,5 +440,283 @@ def close_cm_error_tikz(input_dir_path, cm_error_data_directory_name):
         cm_error_tikz_file.write('\end{axis}\n' +
             '\end{tikzpicture}')
         cm_error_tikz_file.flush()
+
+def create_plot_directory_tree(data_directory_name):
+    if not os.path.exists(data_directory_name):
+        os.makedirs(data_directory_name)
+
+def create_main_tex_file(file_name, figures_file_name):
+    with open(file_name, 'w') as tex_file:
+        tex_file.write('\\documentclass{article}\n' +
+                       '\\usepackage{tikz}\n' +
+                       '\\usepackage{pgfplots}\n' +
+                       '\\pgfplotsset{compat=1.13}\n' +
+                       '\\usepackage[]{units}\n' +
+                       '\\usepackage{gensymb}\n' +
+                       '\\usepackage{graphicx}\n\n' +
+                       '\\begin{document}\n' +
+                       '\\scrollmode\n\n' +
+                       '\\input{' + figures_file_name + '}\n\n' +
+                       '\\batchmode\n' +
+                       '\\end{document}\n')
+        tex_file.flush()
+
+def start_tikz_refinement_plot_file(file_name, title, ylabel):
+        with open(file_name, 'w') as tikz_file:
+            tikz_file.write('\\begin{tikzpicture}\n' +
+                               '\\begin{semilogxaxis}[\n' +
+                               '    title={' + title + '},\n' +
+                               '    xlabel={ndof},\n' +
+                               '    ylabel={' + ylabel + '},\n' +
+                               '    ymajorgrids=true,\n' +
+                               '    xmajorgrids=true,\n' +
+                               '    y tick label style={\n' +
+                               '       \t/pgf/number format/.cd,\n' +
+                               '       \tfixed,\n' +
+                               '       \tfixed zerofill,\n' +
+                               '       \tprecision=4,\n' +
+                               '       \t/tikz/.cd \n' +
+                               '    },\n' +
+                               '    grid style=dashed,\n' +
+                               '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                               '    width=12cm\n' +
+                               ']\n\n')
+            tikz_file.flush()
+
+def create_aoa_tikz_plot_file(file_name, title, ylabel, dat_name, reference_dat_name):
+    with open(file_name, 'w') as tikz_file:
+        tikz_file.write('\\begin{tikzpicture}\n' +
+                           '\\begin{axis}[\n' +
+                           '    title={' + title + '},\n' +
+                           '    xlabel={$\\alpha\\ [\\degree]$},\n' +
+                           '    ylabel={' + ylabel + '},\n' +
+                           '    ymajorgrids=true,\n' +
+                           '    xmajorgrids=true,\n' +
+                           '    y tick label style={\n' +
+                           '       \t/pgf/number format/.cd,\n' +
+                           '       \tfixed,\n' +
+                           '       \tfixed zerofill,\n' +
+                           '       \tprecision=4,\n' +
+                           '       \t/tikz/.cd \n' +
+                           '    },\n' +
+                           '    grid style=dashed,\n' +
+                           '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                           '    width=12cm\n' +
+                           ']\n\n' +
+                           '\\addplot[\n' +
+                           '    color=blue,\n' +
+                           '    solid,\n' +
+                           '    mark=oplus*,\n' +
+                           '    mark options={solid},\n' +
+                           '    ]\n' +
+                           '    table {' + dat_name + '};  \n' +
+                           '    \\addlegendentry{Kratos Integral}\n\n' +
+                           '\\addplot[\n' +
+                           '    color=black,\n' +
+                           '    solid,\n' +
+                           '    mark=oplus*,\n' +
+                           '    mark options={solid},\n' +
+                           '    ]\n' +
+                           '    table {' + reference_dat_name + '};  \n' +
+                           '    \\addlegendentry{XFLR5}\n\n' +
+                           '\end{axis}\n' +
+                           '\end{tikzpicture}')
+        tikz_file.flush()
+
+def create_cd_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cd/data/cd')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cd/data/cd/cd.tikz', 'Mesh refinement study', '$c_d[\\unit{-}]$')
+    create_main_tex_file(work_dir + '/plots/cd/main_cd.tex', 'figures_cd.tex')
+
+def create_cd_error_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cd_error/data/cd_error')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cd_error/data/cd_error/cd_error.tikz', 'Induced drag coefficient relative error', '$\\frac{|c_d - c_{dref}|}{|c_{dref}|}\\cdot100$')
+    create_main_tex_file(work_dir + '/plots/cd_error/main_cd_error.tex', 'figures_cd_error.tex')
+
+def create_cl_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cl/data/cl')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cl/data/cl/cl.tikz', 'Mesh refinement study', '$c_l[\\unit{-}]$')
+    create_main_tex_file(work_dir + '/plots/cl/main_cl.tex', 'figures_cl.tex')
+
+def create_cl_error_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cl_error/data/cl_error')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cl_error/data/cl_error/cl_error.tikz', 'Lift coefficient relative error', '$\\frac{|c_l - c_{lref}|}{|c_{lref}|}\\cdot100$')
+    create_main_tex_file(work_dir + '/plots/cl_error/main_cl_error.tex', 'figures_cl_error.tex')
+
+def create_cm_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cm/data/cm')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cm/data/cm/cm.tikz', 'Mesh refinement study', '$c_m[\\unit{-}]$')
+    create_main_tex_file(work_dir + '/plots/cm/main_cm.tex', 'figures_cm.tex')
+
+def create_cm_error_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cm_error/data/cm_error')
+    start_tikz_refinement_plot_file(work_dir + '/plots/cm_error/data/cm_error/cm_error.tikz', 'Moment coefficient relative error', '$\\frac{|c_m - c_{mref}|}{|c_{mref}|}\\cdot100$')
+    create_main_tex_file(work_dir + '/plots/cm_error/main_cm_error.tex', 'figures_cm_error.tex')
+
+def create_cd_aoa_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cd_aoa/data/cd_a')
+    create_aoa_tikz_plot_file(work_dir + '/plots/cd_aoa/data/cd_a/cd_aoa.tikz',  # file_name
+                                        'Drag coefficient vs. angle of attack', # title
+                                        '$c_d[\\unit{-}]$',                     # ylabel
+                                        'cd_aoa.dat',                     # dat_name
+                                        'cd_aoa_ref.dat')                   # reference_dat_name
+
+    write_figures_cd_aoa(work_dir + '/plots/cd_aoa')
+    create_main_tex_file(work_dir + '/plots/cd_aoa/main_cd_aoa.tex', 'figures_cd_aoa.tex')
+
+def create_cl_aoa_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cl_aoa/data/cl_a')
+    create_aoa_tikz_plot_file(work_dir + '/plots/cl_aoa/data/cl_a/cl_aoa.tikz',  # file_name
+                                        'Lift vs. angle of attack', # title
+                                        '$c_l[\\unit{-}]$',                     # ylabel
+                                        'cl_aoa.dat',                     # dat_name
+                                        'cl_aoa_ref.dat')                   # reference_dat_name
+
+    write_figures_cl_aoa(work_dir + '/plots/cl_aoa')
+    create_main_tex_file(work_dir + '/plots/cl_aoa/main_cl_aoa.tex', 'figures_cl_aoa.tex')
+
+def create_cm_aoa_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cm_aoa/data/cm_a')
+    create_aoa_tikz_plot_file(work_dir + '/plots/cm_aoa/data/cm_a/cm_aoa.tikz',  # file_name
+                                        'Moment vs. angle of attack', # title
+                                        '$c_m[\\unit{-}]$',                     # ylabel
+                                        'cm_aoa.dat',                     # dat_name
+                                        'cm_aoa_ref.dat')                   # reference_dat_name
+
+    write_figures_cm_aoa(work_dir + '/plots/cm_aoa')
+    create_main_tex_file(work_dir + '/plots/cm_aoa/main_cm_aoa.tex', 'figures_cm_aoa.tex')
+
+def create_cp_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp/main_cp.tex', work_dir + '/plots/cp/figures_cp.tex')
+
+def create_cp_100_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp_section_100/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp_section_100/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp_section_100/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp_section_100/main_cp_100.tex', work_dir + '/plots/cp_section_100/figures_cp.tex')
+
+def create_cp_150_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp_section_150/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp_section_150/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp_section_150/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp_section_150/main_cp_150.tex', work_dir + '/plots/cp_section_150/figures_cp.tex')
+
+def create_cp_180_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/cp_section_180/plots')
+    create_plot_directory_tree(work_dir + '/plots/cp_section_180/data/cp')
+
+    references_input_directory_name = os.getcwd() + '/references/cp'
+    references_output_directory_name = work_dir + '/plots/cp_section_180/data/cp'
+    if os.path.exists(references_output_directory_name):
+        shutil.rmtree(references_output_directory_name)
+    shutil.copytree(references_input_directory_name,
+                    references_output_directory_name)
+
+    create_main_tex_file(work_dir + '/plots/cp_section_180/main_cp_180.tex', work_dir + '/plots/cp_section_180/figures_cp.tex')
+
+def create_potential_jump_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/potential_jump/plots')
+    create_plot_directory_tree(work_dir + '/plots/potential_jump/data/potential_jump')
+
+    with open(work_dir + '/plots/potential_jump/data/potential_jump/jump.tikz', 'w') as tikz_file:
+        tikz_file.write('\\begin{tikzpicture}\n' +
+                           '\\begin{axis}[\n' +
+                           '    title={Potential jump},\n' +
+                           '    xlabel={$y$},\n' +
+                           '    ylabel={Potential jump($y$)},\n' +
+                           '    ymajorgrids=true,\n' +
+                           '    xmajorgrids=true,\n' +
+                           '    grid style=dashed,\n' +
+                           '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                           '    width=12cm\n' +
+                           ']\n\n' +
+                           '\\addplot[\n' +
+                           '    color=blue,\n' +
+                           '    only marks,\n' +
+                           '    mark=*,\n' +
+                           '    ]\n' +
+                           '    table {potential_jump_results.dat};  \n' +
+                           '    \\addlegendentry{Trailing edge}\n\n' +
+                           '\\addplot[\n' +
+                           '    color=red,\n' +
+                           '    only marks,\n' +
+                           '    mark=*,\n' +
+                           '    ]\n' +
+                           '    table {potential_jump_trefftz_results.dat};  \n' +
+                           '    \\addlegendentry{Trefftz plane outlet cut}\n\n' +
+                           '\end{axis}\n' +
+                           '\end{tikzpicture}')
+        tikz_file.flush()
+
+    create_main_tex_file(work_dir + '/plots/potential_jump/main_potential_jump.tex', work_dir + '/plots/potential_jump/figures_jump.tex')
+
+def create_newton_convergence_plots_directory_tree(work_dir):
+    create_plot_directory_tree(work_dir + '/plots/newton_convergence/data/convergence')
+
+    with open(work_dir + '/plots/newton_convergence/data/convergence/convergence.tikz', 'w') as tikz_file:
+        tikz_file.write('\\begin{tikzpicture}\n' +
+                           '\\begin{semilogyaxis}[\n' +
+                           '    title={Nonlinear Convergence Analysis},\n' +
+                           '    xlabel={Number of iterations},\n' +
+                           '    ylabel={Residual absolute norm $\\nicefrac{|{\\bf R}|}{n_{dof}}$},\n' +
+                           '    ymajorgrids=true,\n' +
+                           '    xmajorgrids=true,\n' +
+                           '    grid style=dashed,\n' +
+                           '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                           '    width=12cm\n' +
+                           ']\n\n' +
+                           '\\addplot[\n' +
+                           '    color=red,\n' +
+                           '    mark=square,\n' +
+                           '    ]\n' +
+                           '    table {convergence_results.dat};  \n' +
+                           '\end{semilogyaxis}\n' +
+                           '\end{tikzpicture}')
+        tikz_file.flush()
+
+    create_main_tex_file(work_dir + '/plots/newton_convergence/main_convergence.tex', work_dir + '/plots/newton_convergence/figures_newton_convergence.tex')
+
+
+def create_plots_directory_tree(work_dir):
+    create_cd_plots_directory_tree(work_dir)
+    create_cd_error_plots_directory_tree(work_dir)
+    create_cl_plots_directory_tree(work_dir)
+    create_cl_error_plots_directory_tree(work_dir)
+    create_cm_plots_directory_tree(work_dir)
+    create_cm_error_plots_directory_tree(work_dir)
+    create_cd_aoa_plots_directory_tree(work_dir)
+    create_cl_aoa_plots_directory_tree(work_dir)
+    create_cm_aoa_plots_directory_tree(work_dir)
+    create_cp_plots_directory_tree(work_dir)
+    create_cp_100_plots_directory_tree(work_dir)
+    create_cp_150_plots_directory_tree(work_dir)
+    create_cp_180_plots_directory_tree(work_dir)
+    create_potential_jump_plots_directory_tree(work_dir)
+    create_newton_convergence_plots_directory_tree(work_dir)
+
 
 
