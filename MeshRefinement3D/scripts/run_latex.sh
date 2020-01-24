@@ -38,5 +38,5 @@ cd $input_dir_path/plots/newton_convergence
 pdflatex main_convergence.tex > main_convergence.txt
 #pdflatex -interaction=batchmode main_convergence.tex > main_convergence.txt
 
-cd /home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D
-
+# Going back to the man script directory
+cd $SCRIPTPATH
