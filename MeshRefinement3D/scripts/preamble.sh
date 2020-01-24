@@ -3,7 +3,7 @@ export PYTHONPATH=""
 export LD_LIBRARY_PATH=""
 
 # Setting paths
-source /path/to/salomeConverter.sh
+#source /paths/to/salomeConverter.sh
 source /path/to/kratosMaster.sh
 #source /path/to/intel/mkl/bin/mklvars.sh intel64 lp64
 
