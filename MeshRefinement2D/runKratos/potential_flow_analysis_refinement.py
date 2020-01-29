@@ -92,7 +92,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cm_error_results_h_file_name = 'TBD'
 
     def ExecuteBeforeDomainLoop(self):
-        loads_output.create_plots_directory_tree(self.input_dir_path)
+        self.reference_case_name = self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["reference_case_name"].GetString()
+        loads_output.create_plots_directory_tree(self.input_dir_path, self.reference_case_name)
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
         self.latex_output.flush()
         self.AOA = self.Initial_AOA

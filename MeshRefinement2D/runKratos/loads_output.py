@@ -329,7 +329,7 @@ def create_main_tex_file(file_name, figures_file_name):
                        '\\end{document}\n')
         tex_file.flush()
 
-def create_tikz_refinement_plot_file(file_name, ylabel, dat_name, reference_dat_name):
+def create_tikz_refinement_plot_file(file_name, ylabel, dat_name, reference_dat_name, reference_case_name):
     with open(file_name, 'w') as tikz_file:
         tikz_file.write('\\begin{tikzpicture}\n' +
                            '\\begin{semilogxaxis}[\n' +
@@ -360,7 +360,7 @@ def create_tikz_refinement_plot_file(file_name, ylabel, dat_name, reference_dat_
                            '    mark=none,\n' +
                            '    ]\n' +
                            '    table {' + reference_dat_name + '};  \n' +
-                           '    \\addlegendentry{XFOIL}\n\n' +
+                           '    \\addlegendentry{' + reference_case_name + '}\n\n' +
                            '\end{semilogxaxis}\n' +
                            '\end{tikzpicture}')
         tikz_file.flush()
@@ -407,7 +407,7 @@ def create_cp_plots_directory_tree(work_dir):
     shutil.copytree(references_input_directory_name,
                     references_output_directory_name)
 
-def create_cl_plots_directory_tree(work_dir):
+def create_cl_plots_directory_tree(work_dir, reference_case_name):
     create_plot_directory_tree(work_dir + '/plots/cl/data/cl')
 
     create_main_tex_file(work_dir + '/plots/cl/main_cl_h.tex', 'figures_cl_h.tex')
@@ -415,7 +415,8 @@ def create_cl_plots_directory_tree(work_dir):
     create_tikz_refinement_plot_file(work_dir + '/plots/cl/data/cl/clh.tikz', # file_name
                                         '$c_l[\\unit{-}]$',                   # ylabel
                                         'cl_results_h.dat',                   # dat_name
-                                        'cl_reference_h.dat')                 # reference_dat_name
+                                        'cl_reference_h.dat',                 # reference_dat_name
+                                        reference_case_name)
 
 def create_cl_error_plots_directory_tree(work_dir):
     create_plot_directory_tree(work_dir + '/plots/cl_error/data/cl')
@@ -442,7 +443,7 @@ def create_cl_error_domain_size_directory_tree(work_dir):
                                 'cl_error_results_domain.dat',                                              # dat_name
                                 'cl_jump_error_results.dat')                                                # jump_dat_name
 
-def create_cm_plots_directory_tree(work_dir):
+def create_cm_plots_directory_tree(work_dir, reference_case_name):
     create_plot_directory_tree(work_dir + '/plots/cm/data/cm')
 
     create_main_tex_file(work_dir + '/plots/cm/main_cm_h.tex', 'figures_cm_h.tex')
@@ -450,7 +451,8 @@ def create_cm_plots_directory_tree(work_dir):
     create_tikz_refinement_plot_file(work_dir + '/plots/cm/data/cm/cm_h.tikz',  # file_name
                                         '$c_m[\\unit{-}]$',                     # ylabel
                                         'cm_results_h.dat',                     # dat_name
-                                        'cm_reference_h.dat')                   # reference_dat_name
+                                        'cm_reference_h.dat',                 # reference_dat_name
+                                        reference_case_name)
 
 def create_cm_error_plots_directory_tree(work_dir):
     create_plot_directory_tree( work_dir + '/plots/cm_error/data/cm_error')
@@ -508,13 +510,13 @@ def create_aoa_plots_directory_tree(work_dir):
     shutil.copytree(references_input_directory_name,
                     references_output_directory_name)
 
-def create_plots_directory_tree(work_dir):
+def create_plots_directory_tree(work_dir, reference_case_name):
     write_header_all_cases(work_dir)
     create_cp_plots_directory_tree(work_dir)
-    create_cl_plots_directory_tree(work_dir)
+    create_cl_plots_directory_tree(work_dir, reference_case_name)
     create_cl_error_plots_directory_tree(work_dir)
     create_cl_error_domain_size_directory_tree(work_dir)
-    create_cm_plots_directory_tree(work_dir)
+    create_cm_plots_directory_tree(work_dir, reference_case_name)
     create_cm_error_plots_directory_tree(work_dir)
     create_aoa_plots_directory_tree(work_dir)
 
