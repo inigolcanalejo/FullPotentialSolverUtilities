@@ -1,5 +1,6 @@
 import KratosMultiphysics
 from KratosMultiphysics.CompressiblePotentialFlowApplication.compute_lift_process import ComputeLiftProcess
+import KratosMultiphysics.CompressiblePotentialFlowApplication as CPFApp
 import loads_output
 import math
 
@@ -39,8 +40,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.create_output_file = settings["create_output_file"].GetBool()
 
         self.AOA = settings["angle_of_attack"].GetDouble()
-        self.cl_reference = self.read_cl_reference(self.AOA)
-        #self.cl_reference = self.read_cl_reference_membrane(self.AOA)
         self.mesh_size = settings["airfoil_meshsize"].GetDouble()
         self.minimum_airfoil_meshsize = settings["minimum_airfoil_meshsize"].GetDouble()
         self.domain_size = settings["domain_size"].GetDouble()
@@ -57,6 +56,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.reference_case_name = settings["reference_case_name"].GetString()
         if self.reference_case_name == "":
             raise Exception("Please enter a reference case name (XFOIL, Lock or TAU)")
+
+        self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
 
     def ExecuteFinalizeSolutionStep(self):
 
@@ -95,6 +96,17 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 cp_file.write('{0:15f} {1:15f}\n'.format(x, cp))
 
         cp_file.flush()
+
+
+        if self.reference_case_name == 'TAU':
+            self.cl_reference = self.read_cl_reference_membrane(self.AOA)
+            self.cm_reference = 0.0
+        elif self.reference_case_name == 'Lock':
+            self.cl_reference = self.read_cl_reference_lock(self.AOA, self.free_stream_mach)
+            self.cm_reference = 0.0
+        else:
+            self.cl_reference = self.read_cl_reference(self.AOA)
+            self.cm_reference = self.read_cm_reference(self.AOA)
 
         if(abs(self.cl_reference) < 1e-6):
             self.cl_relative_error = abs(self.lift_coefficient)*100.0
@@ -180,8 +192,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         with open(cm_results_h_file_name,'a') as cm_file:
             cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.moment_coefficient[2]))
             cm_file.flush()
-
-        self.cm_reference = self.read_cm_reference(self.AOA)
 
         cm_reference_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_reference_h.dat'
         with open(cm_reference_h_file_name,'a') as cm_file:
@@ -297,5 +307,15 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             return -0.4244
         elif(abs(AOA - 15.0) < 1e-3):
             return -0.4520
+        else:
+            return 0.0
+
+    def read_cl_reference_lock(self,AOA, free_stream_mach):
+        # Values from "Lock RC. Test cases for numerical methods in two dimensional transonic flows.
+        # AGARD Report 575, 1970."
+        if(abs(AOA - 0.0) < 1e-3):
+            return 0.0
+        elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.63) < 1e-3):
+            return 0.335
         else:
             return 0.0
