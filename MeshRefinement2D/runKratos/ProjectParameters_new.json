@@ -41,7 +41,8 @@
         },
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition2D_Far_field_Auto1","Body2D_BodySurface"],
-        "no_skin_parts"          : []
+        "no_skin_parts"          : [],
+        "reference_chord": 1.0
     },
     "processes" : {
         "initial_conditions_process_list"  : [],
@@ -52,9 +53,9 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.06,
-                "free_stream_density"  : 1.0,
-                "speed_of_sound": 340,
+                "mach_infinity": 0.03,
+                "free_stream_density"  : 1.225,
+                "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 1.0,
                 "initialize_flow_field": true
@@ -74,13 +75,13 @@
             "Parameters"    : {
                 "model_part_name" : "MainModelPart.Body2D_BodySurface",
                 "far_field_model_part_name" : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
-                "reference_area": 1.0,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
                 "airfoil_meshsize": 1.0,
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
-                "domain_size": 1.0
+                "domain_size": 1.0,
+                "reference_case_name": "Xfoil"
             }
         }],
         "auxiliar_process_list" :[]
