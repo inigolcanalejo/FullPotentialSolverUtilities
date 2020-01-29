@@ -17,7 +17,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             {
                 "model_part_name":"PLEASE_CHOOSE_MODEL_PART_NAME",
                 "far_field_model_part_name" : "",
-                "reference_area": 1,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
                 "airfoil_meshsize": 1.0,
@@ -36,7 +35,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         if far_field_model_part_name != "":
             self.far_field_model_part = Model[far_field_model_part_name]
             self.compute_far_field_forces = True
-        self.reference_area =  settings["reference_area"].GetDouble()
+        self.reference_area =  self.fluid_model_part.ProcessInfo.GetValue(CPFApp.REFERENCE_CHORD)
         self.create_output_file = settings["create_output_file"].GetBool()
 
         self.AOA = settings["angle_of_attack"].GetDouble()
@@ -58,6 +57,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             raise Exception("Please enter a reference case name (XFOIL, Lock or TAU)")
 
         self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
+        self.hcr = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.HEAT_CAPACITY_RATIO)
+        self.critical_cp = (math.pow((1+(self.hcr-1)*self.free_stream_mach**2/2)/(
+            1+(self.hcr-1)/2), self.hcr/(self.hcr-1)) - 1) * 2 / (self.hcr * self.free_stream_mach**2)
 
     def ExecuteFinalizeSolutionStep(self):
 
@@ -70,7 +72,10 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             if(node.X > max_x_coordinate):
                 max_x_coordinate = node.X
 
-        plot_reference_chord_projected = max_x_coordinate - min_x_coordinate
+        if self.reference_case_name == 'Lock':
+            plot_reference_chord_projected = 1.0
+        else:
+            plot_reference_chord_projected = max_x_coordinate - min_x_coordinate
         print ('reference_area = ', self.reference_area)
         print ('plot_reference_chord_projected = ', plot_reference_chord_projected)
 
@@ -141,16 +146,18 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 cl_error_file.flush()
 
         cp_tikz_file_name = 'TBD'
+        cp_critical_reference_file_name = 'default.dat'
         if self.reference_case_name == 'TAU':
             output_file_name = 'cp_tau_aoa_' + str(int(self.AOA)) + '.dat'
         elif self.reference_case_name == 'Lock':
             output_file_name = 'references/lock/cp_lock_aoa_' + str(int(self.AOA)) + '.dat'
+            cp_critical_reference_file_name = 'references/lock/cp_critical_lock_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
         else:
             output_file_name = 'references/xfoil/cp_xfoil_aoa_' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
-            '    title={ $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            '    title={ $M_\infty$ = ' + "{:.2f}".format(self.free_stream_mach) + ' $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
             '    xlabel={$x/c$},\n' +
             '    ylabel={$c_p[\\unit{-}$]},\n' +
             '    %xmin=-0.01, xmax=1.01,\n' +
@@ -178,6 +185,14 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    ]\n' +
             '    table {' + output_file_name + '};  \n' +
             '    \\addlegendentry{' + self.reference_case_name + '}\n\n' +
+            '\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    mark options={dashed},\n' +
+            '    dashed,\n' +
+            '    ]\n' +
+            '    table {' + cp_critical_reference_file_name + '};  \n' +
+            '    \\addlegendentry{$c_p^*$ = ' + "{:.4f}".format(self.critical_cp) + '}\n\n' +
             '\end{axis}\n' +
             '\end{tikzpicture}')
             cp_tikz_file.flush()
