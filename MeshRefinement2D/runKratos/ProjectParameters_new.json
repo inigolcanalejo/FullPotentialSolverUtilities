@@ -21,7 +21,7 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "incompressible"
+            "element_type": "compressible"
         },
         "maximum_iterations"     : 100,
         "echo_level"             : 1,
@@ -52,9 +52,9 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.06,
-                "free_stream_density"  : 1.0,
-                "speed_of_sound": 340,
+                "mach_infinity": 0.63,
+                "free_stream_density"  : 1.225,
+                "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 1.0,
                 "initialize_flow_field": true
@@ -80,7 +80,8 @@
                 "airfoil_meshsize": 1.0,
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
-                "domain_size": 1.0
+                "domain_size": 1.0,
+                "reference_case_name": "Lock"
             }
         }],
         "auxiliar_process_list" :[]

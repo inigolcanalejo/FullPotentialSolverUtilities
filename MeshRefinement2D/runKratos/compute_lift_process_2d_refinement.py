@@ -23,6 +23,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 "minimum_airfoil_meshsize": 1.0,
                 "domain_size": 1.0,
                 "moment_reference_point" : [0.0,0.0,0.0],
+                "reference_case_name": "",
                 "is_infinite_wing": false
             }  """)
 
@@ -53,7 +54,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         y = self.moment_reference_point[1] * math.cos(aoa_rad) - self.moment_reference_point[0] * math.sin(aoa_rad)
         self.moment_reference_point[0] = x
         self.moment_reference_point[1] = y
-        self.reference_case_name = 'XFOIL'
+        self.reference_case_name = settings["reference_case_name"].GetString()
+        if self.reference_case_name == "":
+            raise Exception("Please enter a reference case name (XFOIL, Lock or TAU)")
 
     def ExecuteFinalizeSolutionStep(self):
 
@@ -128,6 +131,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         cp_tikz_file_name = 'TBD'
         if self.reference_case_name == 'TAU':
             output_file_name = 'cp_tau_aoa_' + str(int(self.AOA)) + '.dat'
+        elif self.reference_case_name == 'Lock':
+            output_file_name = 'references/lock/cp_lock_aoa_' + str(int(self.AOA)) + '.dat'
         else:
             output_file_name = 'references/xfoil/cp_xfoil_aoa_' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
@@ -149,7 +154,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '\\addplot[\n' +
             '    only marks,\n' +
             '    color=blue,\n' +
-            '    mark=*,\n' +
+            '    mark=+,\n' +
             '    mark size=1,\n' +
             '    ]\n' +
             '    table {cp_results.dat};  \n' +
