@@ -41,7 +41,8 @@
         },
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition2D_Far_field_Auto1","Body2D_BodySurface"],
-        "no_skin_parts"          : []
+        "no_skin_parts"          : [],
+        "reference_chord": 1.0
     },
     "processes" : {
         "initial_conditions_process_list"  : [],
@@ -74,7 +75,6 @@
             "Parameters"    : {
                 "model_part_name" : "MainModelPart.Body2D_BodySurface",
                 "far_field_model_part_name" : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
-                "reference_area": 1.0,
                 "create_output_file": false,
                 "angle_of_attack": 0.0,
                 "airfoil_meshsize": 1.0,
