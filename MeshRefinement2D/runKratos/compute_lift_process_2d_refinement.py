@@ -1,4 +1,5 @@
 import KratosMultiphysics
+import KratosMultiphysics.FluidDynamicsApplication as KratosCFD
 from KratosMultiphysics.CompressiblePotentialFlowApplication.compute_lift_process import ComputeLiftProcess
 import KratosMultiphysics.CompressiblePotentialFlowApplication as CPFApp
 import loads_output
@@ -57,7 +58,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             raise Exception("Please enter a reference case name (XFOIL, Lock or TAU)")
 
         self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
-        self.hcr = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.HEAT_CAPACITY_RATIO)
+        self.hcr = self.fluid_model_part.ProcessInfo.GetValue(KratosCFD.HEAT_CAPACITY_RATIO)
         self.critical_cp = (math.pow((1+(self.hcr-1)*self.free_stream_mach**2/2)/(
             1+(self.hcr-1)/2), self.hcr/(self.hcr-1)) - 1) * 2 / (self.hcr * self.free_stream_mach**2)
 
