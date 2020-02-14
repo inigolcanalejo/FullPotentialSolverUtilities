@@ -23,7 +23,7 @@
         "formulation": {
             "element_type": "incompressible"
         },
-        "maximum_iterations"     : 100,
+        "maximum_iterations"     : 10,
         "echo_level"             : 1,
         "relative_tolerance": 1e-12,
         "absolute_tolerance": 1e-12,
@@ -58,7 +58,8 @@
                 "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 1.0,
-                "initialize_flow_field": true
+                "mach_number_limit": 0.99,
+                "initialize_flow_field": false
             }
         },{
             "python_module" : "define_wake_process_2d",
@@ -110,9 +111,9 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["WING_TIP","POTENTIAL_JUMP","TRAILING_EDGE","WAKE","ZERO_VELOCITY_CONDITION"],
+                        "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","TRAILING_EDGE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["ZERO_VELOCITY_CONDITION","PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA"],
+                        "gauss_point_results" : ["PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA","MACH","SOUND_VELOCITY"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
                     },
                     "point_data_configuration"  : []
