@@ -111,7 +111,7 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["WING_TIP","POTENTIAL_JUMP","TRAILING_EDGE","WAKE","ZERO_VELOCITY_CONDITION"],
+                        "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","TRAILING_EDGE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
                         "gauss_point_results" : ["MACH","PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
