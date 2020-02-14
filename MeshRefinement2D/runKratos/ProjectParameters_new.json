@@ -23,7 +23,7 @@
         "formulation": {
             "element_type": "incompressible"
         },
-        "maximum_iterations"     : 100,
+        "maximum_iterations"     : 10,
         "echo_level"             : 1,
         "relative_tolerance": 1e-12,
         "absolute_tolerance": 1e-12,
@@ -58,7 +58,8 @@
                 "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 1.0,
-                "initialize_flow_field": true
+                "mach_number_limit": 0.99,
+                "initialize_flow_field": false
             }
         },{
             "python_module" : "define_wake_process_2d",
