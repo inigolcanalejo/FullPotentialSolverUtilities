@@ -77,16 +77,16 @@ for k in range(Number_Of_Domains_Size):
             OZ = geompy.MakeVectorDXDYDZ(0, 0, 1)
 
             #Create naca0012 with center in origin and trailing edge at x = 0.5
-            Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
-            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
+            # Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
+            # Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
+            # Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
+            # Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
 
-            # #Create original naca0012
-            # Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
-            # Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0.5, 1.008930411365, 999, GEOM.Interpolation, True)
-            # Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0.5, 1.008930411365, 999, GEOM.Interpolation, True)
-            # Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
+            #Create original naca0012
+            Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
+            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0.5, 1.008930411365, 999, GEOM.Interpolation, True)
+            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0.5, 1.008930411365, 999, GEOM.Interpolation, True)
+            Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
 
             geompy.ChangeOrientationShell(Curve_UpperSurface_TE)
             geompy.ChangeOrientationShell(Curve_LowerSurface_TE)

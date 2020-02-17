@@ -21,7 +21,7 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "incompressible"
+            "element_type": "compressible"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,
@@ -42,7 +42,7 @@
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition2D_Far_field_Auto1","Body2D_BodySurface"],
         "no_skin_parts"          : [],
-        "reference_chord": 1.0
+        "reference_chord": 1.0089
     },
     "processes" : {
         "initial_conditions_process_list"  : [],
@@ -82,7 +82,7 @@
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "Xfoil"
+                "reference_case_name": "Lock"
             }
         }],
         "auxiliar_process_list" :[]
