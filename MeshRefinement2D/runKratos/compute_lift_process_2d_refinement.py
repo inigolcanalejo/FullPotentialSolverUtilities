@@ -55,7 +55,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.moment_reference_point[1] = y
         self.reference_case_name = settings["reference_case_name"].GetString()
         if self.reference_case_name == "":
-            raise Exception("Please enter a reference case name (XFOIL, Lock or TAU)")
+            raise Exception("Please enter a reference case name (XFOIL, AGARD, Lock or TAU)")
 
         self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
         self.hcr = self.fluid_model_part.ProcessInfo.GetValue(KratosCFD.HEAT_CAPACITY_RATIO)
@@ -110,6 +110,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         elif self.reference_case_name == 'Lock':
             self.cl_reference = self.read_cl_reference_lock(self.AOA, self.free_stream_mach)
             self.cm_reference = 0.0
+        elif self.reference_case_name == 'AGARD':
+            self.cl_reference = self.read_cl_reference_agard(self.AOA, self.free_stream_mach)
+            self.cm_reference = self.read_cm_reference_agard(self.AOA, self.free_stream_mach)
         else:
             self.cl_reference = self.read_cl_reference(self.AOA)
             self.cm_reference = self.read_cm_reference(self.AOA)
@@ -153,6 +156,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         elif self.reference_case_name == 'Lock':
             output_file_name = 'references/lock/cp_lock_aoa_' + str(int(self.AOA)) + '.dat'
             cp_critical_reference_file_name = 'references/lock/cp_critical_lock_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
+        elif self.reference_case_name == 'AGARD':
+            output_file_name = 'references/agard/cp_agard_aoa_' + str(self.AOA) + '.dat'
         else:
             output_file_name = 'references/xfoil/cp_xfoil_aoa_' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
@@ -333,5 +338,27 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             return 0.0
         elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.63) < 1e-3):
             return 0.335
+        else:
+            return 0.0
+
+    def read_cl_reference_agard(self,AOA, free_stream_mach):
+        # Values from "H. Viviand. Test cases for inviscid flow field methods.
+        # NATO / Advisory Group for Aerospace Research and Development: AGARD advisory report ; 211
+        # Neuilly-sur-Seine, France, 1985."
+        if(abs(AOA - 1.25) < 1e-3 and abs(free_stream_mach - 0.8) < 1e-3):
+            return 0.3632
+        elif( abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.85) < 1e-3):
+            return 0.3584
+        else:
+            return 0.0
+
+    def read_cm_reference_agard(self,AOA, free_stream_mach):
+        # Values from "H. Viviand. Test cases for inviscid flow field methods.
+        # NATO / Advisory Group for Aerospace Research and Development: AGARD advisory report ; 211
+        # Neuilly-sur-Seine, France, 1985."
+        if(abs(AOA - 1.25) < 1e-3 and abs(free_stream_mach - 0.8) < 1e-3):
+            return -0.0397
+        elif( abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.85) < 1e-3):
+            return -0.1228
         else:
             return 0.0
