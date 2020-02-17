@@ -23,14 +23,14 @@ for free_stream_mach_number in np.arange(0.9, 1.3, 0.1):
 
     v2 = velocity**2
 
-    term = 1 + (hcr - 1) / 2 * Mi2 * (1 - v2 / vi2)
+    square_brackets_term = 1 + (hcr - 1) / 2 * Mi2 * (1 - v2 / vi2)
 
     print('\n free_sream_mach_number     = ', round(free_stream_mach_number,1))
     print(' free_stream_velocity       = ', round(free_stream_velocity,1))
 
-    plt.plot(velocity, term, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
+    plt.plot(velocity, square_brackets_term, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
 
 plt.legend(loc="lower left")
 plt.xlabel('velocity')
-plt.ylabel('term')
+plt.ylabel('square brackets term')
 plt.show()
