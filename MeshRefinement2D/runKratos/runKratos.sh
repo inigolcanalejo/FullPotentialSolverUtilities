@@ -1,6 +1,11 @@
 # Removing plots
 source scripts/removing_before_kratos_run.sh
 
+# Save mdpas files in a copy
+# cd generate_mdpas/
+# source save_mdpas.sh
+# cd ..
+
 cd runKratos/
 
 GITBRANCH=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
