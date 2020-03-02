@@ -19,6 +19,9 @@ mkdir -p ${input_dir_path}/plots
 # Run Kratos
 unbuffer python3 MeshDomainRefinement.py 2>&1 | tee $NEWFILE
 
+cp $PWD/ProjectParameters_new.json $input_dir_path
+cp ../settings/parameters.sh $input_dir_path
+
 # Removing files
 rm cp*
 rm runKratos.post.lst
