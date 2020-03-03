@@ -37,7 +37,7 @@ for free_stream_mach_number in np.arange(0.8, 0.85, 0.3):
 
     plt.plot(velocity, local_speed_of_sound, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
 
-plt.legend(loc="upper left")
+plt.legend(loc="lower left")
 plt.xlabel('velocity')
 plt.ylabel('a')
 plt.grid()
