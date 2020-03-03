@@ -21,7 +21,7 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "incompressible"
+            "element_type": "perturbation_transonic"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,
@@ -42,7 +42,7 @@
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition2D_Far_field_Auto1","Body2D_BodySurface"],
         "no_skin_parts"          : [],
-        "reference_chord": 1.0
+        "reference_chord": 1.008930411365
     },
     "processes" : {
         "initial_conditions_process_list"  : [],
@@ -53,7 +53,7 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.03,
+                "mach_infinity": 0.63,
                 "free_stream_density"  : 1.225,
                 "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
@@ -82,7 +82,7 @@
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "Xfoil"
+                "reference_case_name": "Lock"
             }
         }],
         "auxiliar_process_list" :[]
@@ -113,7 +113,7 @@
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","TRAILING_EDGE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA","MACH","SOUND_VELOCITY"],
+                        "gauss_point_results" : ["UPSTREAM_ELEMENT_POSITION_VECTOR","INLET_ELEMENT","PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA","MACH","SOUND_VELOCITY"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
                     },
                     "point_data_configuration"  : []
