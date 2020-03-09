@@ -65,3 +65,20 @@ plt.xlabel('local mach')
 plt.ylabel('dM2/dq2')
 plt.grid()
 plt.show()
+
+# Computing squares and shortening names
+free_stream_mach_number = 0.6
+free_stream_velocity = free_stream_mach_number * free_stream_speed_of_sound
+Mi2 = free_stream_mach_number**2
+vi2 = free_stream_velocity**2
+
+v2 = 107929.0
+square_brackets_term = 1 + (hcr - 1) / 2.0 * Mi2 * (1 - v2 / vi2)
+local_mach2 = Mi2 * v2 / (vi2 * square_brackets_term)
+local_mach = np.sqrt(local_mach2)
+dM2_dq2 = local_mach2 * (1/v2 + (hcr - 1) * Mi2 / (2.0 * vi2 * square_brackets_term))
+dM2_dq2_2 = Mi2 / vi2 * (1 + (hcr - 1) / 2.0 * Mi2) / square_brackets_term**2
+print('square_brackets_term = ',square_brackets_term )
+print('dM2_dq2 = ',dM2_dq2 )
+print('dM2_dq2_2 = ', dM2_dq2_2)
+
