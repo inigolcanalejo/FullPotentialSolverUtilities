@@ -6,7 +6,7 @@ Number_Of_AOAS=1
 Initial_Domain_Size=1e2
 Domain_Size_Factor=10
 
-Initial_AOA=2.0
+Initial_AOA=1.25
 AOA_Increment=1.0
 
 Initial_Airfoil_MeshSize=1e-3
