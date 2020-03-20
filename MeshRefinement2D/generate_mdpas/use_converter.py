@@ -36,7 +36,7 @@ Domain_Width = Initial_Domain_Size
 for k in range(Number_Of_Domains_Size):
     Domain_Length = int(Domain_Length)
     Domain_Width = int(Domain_Width)
-    FarField_MeshSize = int(Domain_Length / 50.0)
+    FarField_MeshSize = int(Domain_Length / 100.0)
     AOA = Initial_AOA
     for j in range(Number_Of_AOAS):
         print('Writing mdpa...')
