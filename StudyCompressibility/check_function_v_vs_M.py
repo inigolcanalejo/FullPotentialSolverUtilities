@@ -6,8 +6,8 @@ mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text command
 
 # Input
-free_stream_mach_number = 0.8
-free_stream_speed_of_sound = 340.0
+free_stream_mach_number = 0.6
+free_stream_speed_of_sound = 340.3
 heat_capacity_ratio = 1.4
 
 free_stream_velocity = free_stream_mach_number * free_stream_speed_of_sound
@@ -20,7 +20,7 @@ print(' free_stream_velocity       = ', round(free_stream_velocity,1))
 Mi2 = free_stream_mach_number**2
 vi2 = free_stream_velocity**2
 
-velocity = 808.0
+velocity = 482.0331938777661
 print('\n velocity       = ', round(velocity,1))
 
 v2 = velocity**2
@@ -38,4 +38,28 @@ v2 = vi2 * numerator / denominator
 velocity = math.sqrt(v2)
 
 print('\n velocity       = ', velocity)
+
+local_mach2 = 3.0
+#local_mach = math.sqrt(local_mach2)
+print('\n local_mach2       = ', local_mach2)
+#print('\n local_mach       = ', local_mach)
+
+numerator = local_mach2 * ( 1.0 + (hcr - 1.0) / 2.0 * Mi2)
+denominator = Mi2 * ( 1 + (hcr -1) / 2.0 * local_mach2)
+v2 = vi2 * numerator / denominator
+velocity = math.sqrt(v2)
+
+print('\n vi2       = ', vi2)
+print('\n numerator       = ', numerator)
+print('\n denominator       = ', denominator)
+print('\n velocity       = ', velocity)
+print('\n v2       = ', v2)
+print('\n local_mach2       = ', local_mach2)
+
+# term1 = (hcr - 1.0) * Mi2 / 2.0
+
+# print('\n term1       = ', term1)
+# print('\n term1       = ', term1)
+
+
 

@@ -6,7 +6,7 @@ mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text command
 
 # Input
-free_stream_speed_of_sound = 340.0
+free_stream_speed_of_sound = 340.3
 heat_capacity_ratio = 1.4
 
 hcr = heat_capacity_ratio
@@ -20,7 +20,7 @@ for free_stream_mach_number in np.arange(0.8, 0.85, 0.3):
     Mi2 = free_stream_mach_number**2
     vi2 = free_stream_velocity**2
 
-    velocity = np.arange(0.0, 2000.0, 1.0)
+    velocity = np.arange(10.0, 500.0, 1.0)
 
     v2 = velocity**2
 

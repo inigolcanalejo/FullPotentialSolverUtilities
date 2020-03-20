@@ -7,7 +7,7 @@ mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text comma
 
 def ComputeUpwindingFactor(mach_number):
     m2 = mach_number * mach_number
-    upwinding_factor = 1 - 0.99**2 / m2
+    upwinding_factor = 1 - 0.90**2 / m2
     for i in range(upwinding_factor.size):
         if upwinding_factor[i] < 0.0:
             upwinding_factor[i] = 0.0
@@ -55,8 +55,8 @@ for free_stream_mach_number in np.arange(0.8, 0.85, 1):
     # Compute nonlinear term modified
     Dmu_DM2 = np.zeros(density.size)
     for i in range(density.size):
-        if local_mach[i] > 0.99:
-            Dmu_DM2[i] = 0.99**2 / local_mach[i]**4
+        if local_mach[i] > 0.90:
+            Dmu_DM2[i] = 0.90**2 / local_mach[i]**4
 
     dM2_dv2 = local_mach2 * (1/v2 + (hcr - 1) * Mi2 / (2.0 * vi2 * square_brackets_term))
     term_2_mod = abs(2 * v2 * (Ddensity_Dv2 * (1 - upwinding_factor) - Dmu_DM2 * dM2_dv2 * (density - density_mod)))
