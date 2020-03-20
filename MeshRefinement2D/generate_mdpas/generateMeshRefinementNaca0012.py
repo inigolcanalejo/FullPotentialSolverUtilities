@@ -97,61 +97,78 @@ for k in range(Number_Of_Domains_Size):
             #Rotate around center to AOA
             geompy.Rotate(Face_Airfoil, OZ, -AOA*math.pi/180.0)
 
+            #Create refinement box
+            Face_Refinement_Box = geompy.MakeFaceHW(5, 5, 1)
+
+            #Cut the airfoil from the refinement box
+            Cut_Refinement_Box = geompy.MakeCutList(Face_Refinement_Box, [Face_Airfoil], True)
+
             #Create domain
             Face_Domain = geompy.MakeFaceHW(Domain_Length, Domain_Width, 1)
 
-            #Cut the airfoil from the domain
-            Cut_Domain = geompy.MakeCutList(Face_Domain, [Face_Airfoil], True)
+            #Cut the Face_Refinement_Box from the domain
+            Cut_Domain = geompy.MakeCutList(Face_Domain, [Face_Refinement_Box], True)
+
+            # Make partition
+            Partition_Domain = geompy.MakePartition([Cut_Refinement_Box, Cut_Domain], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
+
+            # Explode faces
+            [Outer_Box,Inner_Box] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
 
             #Explode edges
-            [Edge_1,Edge_2,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
-
-            [Auto_group_for_Sub_mesh_1,Auto_group_for_Sub_mesh_1_1] = geompy.ExtractShapes(Edge_LowerSurface_TE, geompy.ShapeType["VERTEX"], True)
-
-            #LowerSurface
-            Auto_group_for_Sub_mesh_1 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_1, [Edge_LowerSurface_LE, Edge_LowerSurface_TE])
-
-            #LowerSurface2
-            Auto_group_for_Sub_mesh_1_1 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_1_1, [Edge_LowerSurface_LE, Edge_LowerSurface_TE])
-
-            #UpperSurface
-            Auto_group_for_Sub_mesh_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_2, [Edge_UpperSurface_LE, Edge_UpperSurface_TE])
+            #[Inlet_1,Top_1,Box_Inlet_1,Box_Top_1,Box_Bottom_1,Box_Outlet_1,Bottom_1,Outlet_1] = geompy.ExtractShapes(Face_1, geompy.ShapeType["EDGE"], True)
+            #[Box_Inlet_2,Edge_UpperSurface_LE_1,Edge_LowerSurface_LE_1,Box_Top_2,Edge_UpperSurface_TE_1,Box_Bottom_2,Edge_LowerSurface_TE_1,Outlet_2] = geompy.ExtractShapes(Face_2, geompy.ShapeType["EDGE"], True)
+            [Inlet,Bottom,Box_Inlet,Edge_UpperSurface_LE,Edge_LowerSurface_LE,Box_Top,Edge_LowerSurface_TE,Box_Bottom,Edge_UpperSurface_TE,Box_Outlet,Top,Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["EDGE"], True)
 
             #Body
-            Body_Sub_mesh = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
+            Body_Sub_mesh = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface_LE, Edge_LowerSurface_TE, Edge_UpperSurface_LE, Edge_UpperSurface_TE])
 
             #FarField
-            Auto_group_for_Sub_mesh_1_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_1_2, [Edge_1, Edge_2, Edge_7, Edge_8])
+            Far_Field_Sub_Mesh = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Far_Field_Sub_Mesh, [Inlet, Bottom, Top, Outlet])
+
+            # Refinement box
+            Refinement_Box_Sub_Mesh = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Refinement_Box_Sub_Mesh, [Box_Inlet, Box_Bottom, Box_Top, Box_Outlet])
 
             #Add to study
             geompy.addToStudy( O, 'O' )
             geompy.addToStudy( OX, 'OX' )
             geompy.addToStudy( OY, 'OY' )
             geompy.addToStudy( OZ, 'OZ' )
+
             geompy.addToStudy( Curve_UpperSurface_LE, 'Curve_UpperSurface_LE' )
             geompy.addToStudy( Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_2, 'Edge_2' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_1, 'Edge_1' )
-            geompy.addToStudy( Face_Domain, 'Face_Domain' )
+
             geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_LowerSurface_LE, 'Edge_LowerSurface_LE' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_UpperSurface_LE, 'Edge_UpperSurface_LE' )
+            geompy.addToStudy( Cut_Refinement_Box, 'Cut_Refinement_Box' )
+
+            geompy.addToStudy( Face_Domain, 'Face_Domain' )
             geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_LowerSurface_TE, 'Edge_LowerSurface_TE' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_UpperSurface_TE, 'Edge_UpperSurface_TE' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_7, 'Edge_7' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_8, 'Edge_8' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_1, 'Auto_group_for_Sub-mesh_1' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_1_1, 'Auto_group_for_Sub-mesh_1' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_2, 'Auto_group_for_Sub-mesh_2' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_1_2, 'Auto_group_for_Sub-mesh_1' )
+            geompy.addToStudy( Partition_Domain, 'Partition_Domain' )
+
+            geompy.addToStudyInFather( Partition_Domain, Outer_Box, 'Outer_Box' )
+            geompy.addToStudyInFather( Partition_Domain, Inner_Box, 'Inner_Box' )
+
+            geompy.addToStudyInFather( Partition_Domain, Inlet, 'Inlet' )
+            geompy.addToStudyInFather( Partition_Domain, Bottom, 'Bottom' )
+            geompy.addToStudyInFather( Partition_Domain, Box_Inlet, 'Box_Inlet' )
+            geompy.addToStudyInFather( Partition_Domain, Edge_LowerSurface_LE, 'Edge_LowerSurface_LE' )
+            geompy.addToStudyInFather( Partition_Domain, Edge_UpperSurface_LE, 'Edge_UpperSurface_LE' )
+            geompy.addToStudyInFather( Partition_Domain, Box_Bottom, 'Box_Bottom' )
+            geompy.addToStudyInFather( Partition_Domain, Edge_LowerSurface_TE, 'Edge_LowerSurface_TE' )
+            geompy.addToStudyInFather( Partition_Domain, Box_Top, 'Box_Top' )
+            geompy.addToStudyInFather( Partition_Domain, Edge_UpperSurface_TE, 'Edge_UpperSurface_TE' )
+            geompy.addToStudyInFather( Partition_Domain, Box_Outlet, 'Box_Outlet' )
+            geompy.addToStudyInFather( Partition_Domain, Top, 'Top' )
+            geompy.addToStudyInFather( Partition_Domain, Outlet, 'Outlet' )
+
+            geompy.addToStudyInFather( Partition_Domain, Body_Sub_mesh, 'Body_Sub_mesh' )
+            geompy.addToStudyInFather( Partition_Domain, Far_Field_Sub_Mesh, 'Far_Field_Sub_Mesh' )
+            geompy.addToStudyInFather( Partition_Domain, Refinement_Box_Sub_Mesh, 'Refinement_Box_Sub_Mesh' )
 
             ###
             ### SMESH component
@@ -163,71 +180,75 @@ for k in range(Number_Of_Domains_Size):
             smesh = smeshBuilder.New(theStudy)
 
             #Set NETGEN
-            NETGEN_1D_2D = smesh.CreateHypothesis('NETGEN_2D', 'NETGENEngine')
-            NETGEN_2D_Parameters_1 = smesh.CreateHypothesis('NETGEN_Parameters_2D', 'NETGENEngine')
-            NETGEN_2D_Parameters_1.SetMaxSize( FarField_MeshSize )
-            NETGEN_2D_Parameters_1.SetSecondOrder( 0 )
-            NETGEN_2D_Parameters_1.SetOptimize( 1 )
-            NETGEN_2D_Parameters_1.SetFineness( 5 )
-            NETGEN_2D_Parameters_1.SetGrowthRate( Growth_Rate )
-            NETGEN_2D_Parameters_1.SetNbSegPerEdge( 3 )
-            NETGEN_2D_Parameters_1.SetNbSegPerRadius( 5 )
-            NETGEN_2D_Parameters_1.SetUseSurfaceCurvature( 1 )
-            NETGEN_2D_Parameters_1.SetFuseEdges( 1 )
-            NETGEN_2D_Parameters_1.SetQuadAllowed( 0 )
-            Fluid = smesh.Mesh(Cut_Domain)
-            status = Fluid.AddHypothesis(NETGEN_2D_Parameters_1)
-            status = Fluid.AddHypothesis(NETGEN_1D_2D)
-            NETGEN_2D_Parameters_1.SetMinSize( 1e-15 )
+            NETGEN_2D_Fluid = smesh.CreateHypothesis('NETGEN_2D', 'NETGENEngine')
+            NETGEN_2D_Parameters_Fluid = smesh.CreateHypothesis('NETGEN_Parameters_2D', 'NETGENEngine')
+            NETGEN_2D_Parameters_Fluid.SetMaxSize( FarField_MeshSize )
+            NETGEN_2D_Parameters_Fluid.SetSecondOrder( 0 )
+            NETGEN_2D_Parameters_Fluid.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Fluid.SetFineness( 5 )
+            NETGEN_2D_Parameters_Fluid.SetGrowthRate( Growth_Rate )
+            NETGEN_2D_Parameters_Fluid.SetNbSegPerEdge( 3 )
+            NETGEN_2D_Parameters_Fluid.SetNbSegPerRadius( 5 )
+            NETGEN_2D_Parameters_Fluid.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Fluid.SetFuseEdges( 1 )
+            NETGEN_2D_Parameters_Fluid.SetQuadAllowed( 0 )
+            Fluid = smesh.Mesh(Partition_Domain)
+            status = Fluid.AddHypothesis(NETGEN_2D_Parameters_Fluid)
+            status = Fluid.AddHypothesis(NETGEN_2D_Fluid)
+            NETGEN_2D_Parameters_Fluid.SetMinSize( 1e-15 )
 
             #Set submeshes
-            #Body
-            Regular_1D = Fluid.Segment(geom=Body_Sub_mesh)
-            Geometric_Progression_1 = Regular_1D.GeometricProgression(0.001,1.01,[])
+            # Body
+            Regular_1D_Body = Fluid.Segment(geom=Body_Sub_mesh)
+            Local_Length_Body = Regular_1D_Body.LocalLength(0.01,None,1e-07)
 
-            #UpperSurface
-            #Regular_1D_1 = Fluid.Segment(geom=Auto_group_for_Sub_mesh_2)
-            #status = Fluid.AddHypothesis(Geometric_Progression_1,Auto_group_for_Sub_mesh_2)
-
-            #Set geometric mesh
-            Geometric_Progression_1.SetStartLength( Airfoil_MeshSize )
-            Geometric_Progression_1.SetCommonRatio( Ratio )
-            Geometric_Progression_1.SetReversedEdges( [] )
-            Geometric_Progression_1.SetObjectEntry( "0:1:1:14" )
+            # Refinement box edges
+            Regular_1D_Box = Fluid.Segment(geom=Refinement_Box_Sub_Mesh)
+            Local_Length_Box = Regular_1D_Box.LocalLength(0.1,None,1e-07)
 
             #Set farfield mesh
-            Regular_1D_2 = Fluid.Segment(geom=Auto_group_for_Sub_mesh_1_2)
-            Local_Length_1 = Regular_1D_2.LocalLength(FarField_MeshSize,None,1e-07)
+            Regular_1D_Far_Field = Fluid.Segment(geom=Far_Field_Sub_Mesh)
+            Local_Length_Far_Field = Regular_1D_Far_Field.LocalLength(FarField_MeshSize,None,1e-07)
+
+            NETGEN_2D_Refinement_Box = Fluid.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Inner_Box)
+            NETGEN_2D_Parameters_Box = NETGEN_2D_Refinement_Box.Parameters()
+            NETGEN_2D_Parameters_Box.SetMaxSize( 0.1 )
+            NETGEN_2D_Parameters_Box.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Box.SetFineness( 5 )
+            NETGEN_2D_Parameters_Box.SetMinSize( 0.01 )
+            NETGEN_2D_Parameters_Box.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Box.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Box.SetSecondOrder( 0 )
+            NETGEN_2D_Parameters_Box.SetFuseEdges( 1 )
 
             #Mesh
             isDone = Fluid.Compute()
-            Body = Regular_1D.GetSubMesh()
-            #UpperSurface = Regular_1D_1.GetSubMesh()
-            FarField = Regular_1D_2.GetSubMesh()
-
+            Body = Regular_1D_Body.GetSubMesh()
+            FarField = Regular_1D_Far_Field.GetSubMesh()
+            Sub_mesh_Box_Edges = Regular_1D_Box.GetSubMesh()
+            Sub_mesh_Refinement_Box = NETGEN_2D_Refinement_Box.GetSubMesh()
 
             ## Set names of Mesh objects
-            smesh.SetName(NETGEN_1D_2D, 'NETGEN 1D-2D')
-            smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
-            smesh.SetName(Geometric_Progression_1, 'Geometric Progression_1')
-            smesh.SetName(NETGEN_2D_Parameters_1, 'NETGEN 2D Parameters_1')
-            smesh.SetName(FarField, 'FarField')
-            smesh.SetName(Local_Length_1, 'Local Length_1')
-            smesh.SetName(Body, 'Body')
-            #smesh.SetName(UpperSurface, 'UpperSurface')
             smesh.SetName(Fluid.GetMesh(), 'Fluid')
+            smesh.SetName(NETGEN_2D_Fluid, 'NETGEN_2D_Fluid')
+            smesh.SetName(NETGEN_2D_Parameters_Fluid, 'NETGEN_2D_Parameters_Fluid')
+
+            smesh.SetName(Body, 'Body')
+            smesh.SetName(Local_Length_Body, 'Local_Length_Body')
+            smesh.SetName(Sub_mesh_Box_Edges, 'Sub_mesh_Box_Edges')
+            smesh.SetName(Local_Length_Box, 'Local_Length_Box')
+            smesh.SetName(FarField, 'FarField')
+            smesh.SetName(Local_Length_Far_Field, 'Local_Length_Far_Field')
+
+            smesh.SetName(Sub_mesh_Refinement_Box, 'Sub_mesh_Refinement_Box')
+            smesh.SetName(NETGEN_2D_Refinement_Box, 'NETGEN_2D_Refinement_Box')
+            smesh.SetName(NETGEN_2D_Parameters_Box, 'NETGEN_2D_Parameters_Box')
 
             fluid_path = salome_output_path + '/Parts_Parts_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
             far_field_path = salome_output_path + '/PotentialWallCondition2D_Far_field_Auto1_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-
-            #upper_surface_path = salome_output_path + '/Body2D_UpperSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-            #    AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
-
-            #lower_surface_path = salome_output_path + '/Body2D_LowerSurface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
-            #    AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
 
             body_surface_path = salome_output_path + '/Body2D_Surface_Case_' + str(case) + '_DS_' + str(Domain_Length) + '_AOA_' + str(
                 AOA) + '_Far_Field_Mesh_Size_' + str(FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(Airfoil_MeshSize) + '.dat'
@@ -249,7 +270,7 @@ for k in range(Number_Of_Domains_Size):
                 print 'ExportPartToDAT() failed. Invalid file name?'
 
             # Saving file to open from salome's gui
-            file_name = salome_output_path + "/generate_cosine.hdf"
+            file_name = salome_output_path + "/generate_naca0012_with_refinement_box.hdf"
             salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
 
             '''
