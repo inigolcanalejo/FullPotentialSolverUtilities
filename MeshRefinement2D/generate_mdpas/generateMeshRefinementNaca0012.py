@@ -195,16 +195,16 @@ for k in range(Number_Of_Domains_Size):
             Fluid = smesh.Mesh(Partition_Domain)
             status = Fluid.AddHypothesis(NETGEN_2D_Parameters_Fluid)
             status = Fluid.AddHypothesis(NETGEN_2D_Fluid)
-            NETGEN_2D_Parameters_Fluid.SetMinSize( 1e-15 )
+            NETGEN_2D_Parameters_Fluid.SetMinSize( Airfoil_MeshSize )
 
             #Set submeshes
             # Body
             Regular_1D_Body = Fluid.Segment(geom=Body_Sub_mesh)
-            Local_Length_Body = Regular_1D_Body.LocalLength(0.01,None,1e-07)
+            Local_Length_Body = Regular_1D_Body.LocalLength(Airfoil_MeshSize,None,1e-07)
 
             # Refinement box edges
             Regular_1D_Box = Fluid.Segment(geom=Refinement_Box_Sub_Mesh)
-            Local_Length_Box = Regular_1D_Box.LocalLength(0.1,None,1e-07)
+            Local_Length_Box = Regular_1D_Box.LocalLength(0.01,None,1e-07)
 
             #Set farfield mesh
             Regular_1D_Far_Field = Fluid.Segment(geom=Far_Field_Sub_Mesh)
@@ -212,10 +212,11 @@ for k in range(Number_Of_Domains_Size):
 
             NETGEN_2D_Refinement_Box = Fluid.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Inner_Box)
             NETGEN_2D_Parameters_Box = NETGEN_2D_Refinement_Box.Parameters()
-            NETGEN_2D_Parameters_Box.SetMaxSize( 0.1 )
+            NETGEN_2D_Parameters_Box.SetMaxSize( 0.01 )
             NETGEN_2D_Parameters_Box.SetOptimize( 1 )
             NETGEN_2D_Parameters_Box.SetFineness( 5 )
-            NETGEN_2D_Parameters_Box.SetMinSize( 0.01 )
+            NETGEN_2D_Parameters_Fluid.SetGrowthRate( Growth_Rate )
+            NETGEN_2D_Parameters_Box.SetMinSize( Airfoil_MeshSize )
             NETGEN_2D_Parameters_Box.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_Box.SetQuadAllowed( 0 )
             NETGEN_2D_Parameters_Box.SetSecondOrder( 0 )
@@ -227,6 +228,10 @@ for k in range(Number_Of_Domains_Size):
             FarField = Regular_1D_Far_Field.GetSubMesh()
             Sub_mesh_Box_Edges = Regular_1D_Box.GetSubMesh()
             Sub_mesh_Refinement_Box = NETGEN_2D_Refinement_Box.GetSubMesh()
+
+            NumberOfNodes = Fluid.NbNodes()
+            print(' Information about surface mesh:')
+            print(' Number of nodes       :', NumberOfNodes)
 
             ## Set names of Mesh objects
             smesh.SetName(Fluid.GetMesh(), 'Fluid')
