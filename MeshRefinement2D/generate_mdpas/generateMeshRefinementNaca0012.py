@@ -28,7 +28,6 @@ Domain_Size_Factor = TBD
 Ratio = 1.001
 Growth_Rate = 0.1
 Growth_Rate_Refinement_Box = 0.1
-#Initial_Airfoil_MeshSize = 0.01
 chord = 1.1
 factor = 2.0
 Refinement_Box_Mesh_Size = Initial_Airfoil_MeshSize
