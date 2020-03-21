@@ -29,9 +29,11 @@ Ratio = 1.001
 Growth_Rate = 0.1
 Growth_Rate_Refinement_Box = 0.1
 #Initial_Airfoil_MeshSize = 0.01
-Refinement_Box_Size_Length = 1.05
-Refinement_Box_Size_Width = 0.2
-Refinement_Box_Mesh_Size = 0.002
+# Refinement_Box_Size_Length = 1.05
+# Refinement_Box_Size_Width = 0.2
+Ellipse_Major_Axis = 0.6
+Ellipse_Minor_Axis = 0.1
+Refinement_Box_Mesh_Size = 0.001
 
 path = os.getcwd()
 salome_output_path = 'TBD'
@@ -103,17 +105,20 @@ for k in range(Number_Of_Domains_Size):
             #Rotate around center to AOA
             geompy.Rotate(Face_Airfoil, OZ, -AOA*math.pi/180.0)
 
-            #Create refinement box
-            Face_Refinement_Box = geompy.MakeFaceHW(Refinement_Box_Size_Length, Refinement_Box_Size_Width, 1)
+            Ellipse = geompy.MakeEllipse(None, None, Ellipse_Major_Axis, Ellipse_Minor_Axis)
+            Face_Elipse = geompy.MakeFaceWires([Ellipse], 1)
+
+            #Rotate around center to AOA
+            geompy.Rotate(Face_Elipse, OZ, -AOA*math.pi/180.0)
 
             #Cut the airfoil from the refinement box
-            Cut_Refinement_Box = geompy.MakeCutList(Face_Refinement_Box, [Face_Airfoil], True)
+            Cut_Refinement_Box = geompy.MakeCutList(Face_Elipse, [Face_Airfoil], True)
 
             #Create domain
             Face_Domain = geompy.MakeFaceHW(Domain_Length, Domain_Width, 1)
 
             #Cut the Face_Refinement_Box from the domain
-            Cut_Domain = geompy.MakeCutList(Face_Domain, [Face_Refinement_Box], True)
+            Cut_Domain = geompy.MakeCutList(Face_Domain, [Face_Elipse], True)
 
             # Make partition
             Partition_Domain = geompy.MakePartition([Cut_Refinement_Box, Cut_Domain], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
@@ -122,13 +127,7 @@ for k in range(Number_Of_Domains_Size):
             [Outer_Box,Inner_Box] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["FACE"], True)
 
             #Explode edges
-            #[Inlet,Top,Box_Inlet,Box_Top,Box_Bottom,Box_Outlet,Bottom,Outlet] = geompy.ExtractShapes(Outer_Box, geompy.ShapeType["EDGE"], True)
-            #[Box_Inlet_2,Edge_UpperSurface_LE,Edge_LowerSurface_LE,Box_Top_2,Edge_UpperSurface_TE,Box_Bottom_2,Edge_LowerSurface_TE,Outlet_2] = geompy.ExtractShapes(Inner_Box, geompy.ShapeType["EDGE"], True)
-            if Refinement_Box_Size_Length > 4.5:
-                [Inlet,Bottom,Box_Inlet,Edge_UpperSurface_LE,Edge_LowerSurface_LE,Box_Top,Edge_LowerSurface_TE,Box_Bottom,Edge_UpperSurface_TE,Box_Outlet,Top,Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["EDGE"], True)
-            else:
-                [Inlet,Bottom,Box_Inlet,Edge_UpperSurface_LE,Edge_LowerSurface_LE,Box_Top,Box_Bottom,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Box_Outlet,Top,Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["EDGE"], True)
-
+            [Inlet,Bottom,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Ellipse_1,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Top,Outlet] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["EDGE"], True)
 
             #Body
             Body_Sub_mesh = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
@@ -138,9 +137,9 @@ for k in range(Number_Of_Domains_Size):
             Far_Field_Sub_Mesh = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Far_Field_Sub_Mesh, [Inlet, Bottom, Top, Outlet])
 
-            # Refinement box
-            Refinement_Box_Sub_Mesh = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Refinement_Box_Sub_Mesh, [Box_Inlet, Box_Bottom, Box_Top, Box_Outlet])
+            # # Refinement box
+            # Refinement_Box_Sub_Mesh = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            # geompy.UnionList(Refinement_Box_Sub_Mesh, [Box_Inlet, Box_Bottom, Box_Top, Box_Outlet])
 
             #Add to study
             geompy.addToStudy( O, 'O' )
@@ -152,8 +151,10 @@ for k in range(Number_Of_Domains_Size):
             geompy.addToStudy( Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
-
             geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
+
+            geompy.addToStudy( Ellipse, 'Ellipse' )
+            geompy.addToStudy( Face_Elipse, 'Face_Elipse' )
             geompy.addToStudy( Cut_Refinement_Box, 'Cut_Refinement_Box' )
 
             geompy.addToStudy( Face_Domain, 'Face_Domain' )
@@ -165,20 +166,17 @@ for k in range(Number_Of_Domains_Size):
 
             geompy.addToStudyInFather( Partition_Domain, Inlet, 'Inlet' )
             geompy.addToStudyInFather( Partition_Domain, Bottom, 'Bottom' )
-            geompy.addToStudyInFather( Partition_Domain, Box_Inlet, 'Box_Inlet' )
             geompy.addToStudyInFather( Partition_Domain, Edge_LowerSurface_LE, 'Edge_LowerSurface_LE' )
             geompy.addToStudyInFather( Partition_Domain, Edge_UpperSurface_LE, 'Edge_UpperSurface_LE' )
-            geompy.addToStudyInFather( Partition_Domain, Box_Bottom, 'Box_Bottom' )
+            geompy.addToStudyInFather( Partition_Domain, Ellipse_1, 'Ellipse_1' )
             geompy.addToStudyInFather( Partition_Domain, Edge_LowerSurface_TE, 'Edge_LowerSurface_TE' )
-            geompy.addToStudyInFather( Partition_Domain, Box_Top, 'Box_Top' )
             geompy.addToStudyInFather( Partition_Domain, Edge_UpperSurface_TE, 'Edge_UpperSurface_TE' )
-            geompy.addToStudyInFather( Partition_Domain, Box_Outlet, 'Box_Outlet' )
             geompy.addToStudyInFather( Partition_Domain, Top, 'Top' )
             geompy.addToStudyInFather( Partition_Domain, Outlet, 'Outlet' )
 
             geompy.addToStudyInFather( Partition_Domain, Body_Sub_mesh, 'Body_Sub_mesh' )
             geompy.addToStudyInFather( Partition_Domain, Far_Field_Sub_Mesh, 'Far_Field_Sub_Mesh' )
-            geompy.addToStudyInFather( Partition_Domain, Refinement_Box_Sub_Mesh, 'Refinement_Box_Sub_Mesh' )
+            # geompy.addToStudyInFather( Partition_Domain, Refinement_Box_Sub_Mesh, 'Refinement_Box_Sub_Mesh' )
 
             ###
             ### SMESH component
@@ -222,7 +220,7 @@ for k in range(Number_Of_Domains_Size):
             # Geometric_Progression_1.SetObjectEntry( "0:1:1:14" )
 
             # Refinement box edges
-            Regular_1D_Box = Fluid.Segment(geom=Refinement_Box_Sub_Mesh)
+            Regular_1D_Box = Fluid.Segment(geom=Ellipse_1)
             Local_Length_Box = Regular_1D_Box.LocalLength(Refinement_Box_Mesh_Size,None,1e-07)
 
             #Set farfield mesh
