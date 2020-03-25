@@ -94,6 +94,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     def ExecuteBeforeDomainLoop(self):
         self.reference_case_name = self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["reference_case_name"].GetString()
         loads_output.create_plots_directory_tree(self.input_dir_path, self.reference_case_name)
+        loads_output.write_header_convergence(self.input_dir_path)
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
         self.latex_output.flush()
         self.AOA = self.Initial_AOA

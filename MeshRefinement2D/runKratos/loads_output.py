@@ -9,6 +9,13 @@ def write_header(work_dir):
                           ("Case", "AOA", "FF_MS", "A_MS", "Con Numb", "# Nodes", "Cl_u", "Cl_l", "Cl_jump", "Cl_ref", "Cd_u", "Cd_l", "Rz"))
     refinement_file.flush()
 
+def write_header_convergence(work_dir):
+    refinement_file = open(work_dir + "/plots/convergence_results.dat", 'w')
+    refinement_file.write("CONVERGENCE INFORMATION\n\n")
+    refinement_file.write('%6s %7s %15s %15s %15s \n\n' %
+                          ("STEP", "MACH", "RESIDUAL", "DISPLACEMENT", "# ITERATIONS"))
+    refinement_file.flush()
+
 
 def write_header_all_cases(work_dir):
     create_plot_directory_tree(work_dir + '/plots/results')
