@@ -6,14 +6,14 @@ mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text command
 
 # Input
-free_stream_speed_of_sound = 340.0
+free_stream_speed_of_sound = 340.3
 heat_capacity_ratio = 1.4
 
 hcr = heat_capacity_ratio
 ai2 = free_stream_speed_of_sound * free_stream_speed_of_sound
 print(' free_stream_speed_of_sound = ', free_stream_speed_of_sound)
 
-for free_stream_mach_number in np.arange(0.8, 0.85, 0.3):
+for free_stream_mach_number in np.arange(0.8, 0.85, 0.9):
     free_stream_velocity = free_stream_mach_number * free_stream_speed_of_sound
 
     # Computing squares and shortening names
@@ -35,7 +35,10 @@ for free_stream_mach_number in np.arange(0.8, 0.85, 0.3):
     print('\n free_sream_mach_number     = ', round(free_stream_mach_number,1))
     print(' free_stream_velocity       = ', round(free_stream_velocity,1))
 
-    plt.plot(velocity, local_speed_of_sound, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
+    # plt.plot(velocity, local_speed_of_sound, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
+    # plt.plot(local_mach, local_speed_of_sound, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
+    # plt.plot(velocity, local_mach, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
+    plt.plot(velocity, local_speed_of_sound2, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
 
 plt.legend(loc="lower left")
 plt.xlabel('velocity')
