@@ -27,5 +27,5 @@ rm cp*
 rm runKratos.post.lst
 cd ..
 
-OUTPUTNAME=incompressible2D
+OUTPUTNAME=naca0012_2D
 
