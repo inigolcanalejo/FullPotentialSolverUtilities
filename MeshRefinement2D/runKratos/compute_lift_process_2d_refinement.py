@@ -59,6 +59,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
     def ExecuteFinalizeSolutionStep(self):
         self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
+        self.upwinding_factor_constant = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.UPWINDING_FACTOR_CONSTANT)
+        self.critical_mach_number = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.MACH_LIMIT)
         self.hcr = self.fluid_model_part.ProcessInfo.GetValue(KratosCFD.HEAT_CAPACITY_RATIO)
         self.critical_cp = (math.pow((1+(self.hcr-1)*self.free_stream_mach**2/2)/(
             1+(self.hcr-1)/2), self.hcr/(self.hcr-1)) - 1) * 2 / (self.hcr * self.free_stream_mach**2)
@@ -103,6 +105,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         cp_file.flush()
 
 
+        self.cd_reference = 0.0
         if self.reference_case_name == 'TAU':
             self.cl_reference = self.read_cl_reference_membrane(self.AOA)
             self.cm_reference = 0.0
@@ -114,6 +117,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             self.cm_reference = self.read_cm_reference_agard(self.AOA, self.free_stream_mach)
         elif self.reference_case_name == 'FLO36':
             self.cl_reference = self.read_cl_reference_flo36(self.AOA, self.free_stream_mach)
+            self.cd_reference = self.read_cd_reference_flo36(self.AOA, self.free_stream_mach)
             self.cm_reference = self.read_cm_reference_flo36(self.AOA, self.free_stream_mach)
         else:
             self.cl_reference = self.read_cl_reference(self.AOA)
@@ -173,7 +177,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
-            '    title={ $M_\infty$ = ' + "{:.2f}".format(self.free_stream_mach) + ' $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            '    title={ $M_\infty$ = ' + "{:.2f}".format(self.free_stream_mach) +
+                ' $M_c$ = ' + "{:.2f}".format(self.critical_mach_number) +
+                ' $\mu_c$ = ' + "{:.2f}".format(self.upwinding_factor_constant) + '},\n' +
             '    xlabel={$x/c$},\n' +
             '    ylabel={$c_p[\\unit{-}$]},\n' +
             '    %xmin=-0.01, xmax=1.01,\n' +
@@ -183,6 +189,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    ymajorgrids=true,\n' +
             '    xmajorgrids=true,\n' +
             '    grid style=dashed,\n' +
+            '    legend cell align={left},\n' +
             '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
             '    width=12cm\n' +
             ']\n\n' +
@@ -193,7 +200,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    mark size=1.5,\n' +
             '    ]\n' +
             '    table {cp_results.dat};  \n' +
-            '    \\addlegendentry{Kratos}\n\n' +
+            '    \\addlegendentry{Kratos (' +
+                ' $c_l$ = ' + "{:.4f}".format(self.lift_coefficient) +
+                ' $c_d$ = ' + "{:.4f}".format(self.drag_coefficient) + ')}\n\n' +
             '\\addplot[\n' +
             '    only marks,\n' +
             '    color=red,\n' +
@@ -202,7 +211,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    mark options={solid},\n' +
             '    ]\n' +
             '    table {' + output_file_name + '};  \n' +
-            '    \\addlegendentry{' + self.reference_case_name + '}\n\n' +
+            '    \\addlegendentry{' + self.reference_case_name + ' (' +
+                ' $c_l$ = ' + "{:.4f}".format(self.cl_reference) +
+                ' $c_d$ = ' + "{:.4f}".format(self.cd_reference) + ')}\n\n' +
             '\\addplot[\n' +
             '    color=black,\n' +
             '    mark=none,\n' +
@@ -376,6 +387,21 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             return 0.2366
         elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
             return 0.5130
+        else:
+            return 0.0
+
+    def read_cd_reference_flo36(self,AOA, free_stream_mach):
+        # Values from "Volpe, G., and Jameson, A., “Transonic Potential Flow Calculations
+        # by Two Articial Density Methods,” AIAA Journal, Vol. 26, No. 4,
+        # April 1988, pp. 425–429. doi:10.2514/3.9910"
+        if(abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.72) < 1e-3):
+            return 0.0002
+        elif( abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.73) < 1e-3):
+            return 0.0006
+        elif( abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.0026
+        elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.0158
         else:
             return 0.0
 
