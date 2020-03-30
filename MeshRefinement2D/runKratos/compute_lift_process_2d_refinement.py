@@ -164,6 +164,12 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             cp_critical_reference_file_name = 'references/lock/cp_critical_lock_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
         elif self.reference_case_name == 'AGARD':
             output_file_name = 'references/agard/cp_agard_aoa_' + str(self.AOA) + '.dat'
+            cp_critical_reference_file_name = 'references/agard/cp_critical_agard_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
+            cp_crit_total_name = self.input_dir_path + '/plots/cp/data/0_original/' + cp_critical_reference_file_name
+            with open(cp_crit_total_name,'w') as cp_crit_file:
+                cp_crit_file.write('{0:16.2e} {1:15f}\n'.format(0, self.critical_cp))
+                cp_crit_file.write('{0:16.2e} {1:15f}\n'.format(1.0, self.critical_cp))
+                cp_crit_file.flush()
         elif self.reference_case_name == 'FLO36':
             output_file_name = 'references/flo36/cp_flo36_aoa_' + str(int(self.AOA)) + '_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
             cp_critical_reference_file_name = 'references/flo36/cp_critical_flo36_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
