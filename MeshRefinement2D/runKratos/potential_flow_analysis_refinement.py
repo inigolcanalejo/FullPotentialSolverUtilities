@@ -30,14 +30,12 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
                 self.ExecuteBeforeRefinementLoop()
                 # Loop over Refinements
                 for _ in range(self.Number_Of_Refinements):
-                    self.MakeCpDir()
                     self.SetParametersBeforeInitialize()
 
                     self.Initialize()
                     self.RunSolutionLoop()
                     self.Finalize()
 
-                    self.OutputCp()
                     self.Airfoil_MeshSize *= self.Airfoil_Refinement_Factor
                     #self.FarField_MeshSize /= FarField_Refinement_Factor
 
@@ -146,20 +144,25 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.merger_refinement_cp = PdfFileMerger()
 
-    def MakeCpDir(self):
+    def InitializeSolutionStep(self):
+        super(PotentialFlowAnalysisRefinement, self).InitializeSolutionStep()
         self.cp_results_directory_name = self.input_dir_path + '/plots/cp/data/0_original'
+        self.step = self._GetSolver().GetComputingModelPart().ProcessInfo[KratosMultiphysics.STEP]
         self.cp_data_directory_name = self.cp_data_directory_start + '/Case_' + str(self.case) + '_DS_' + str(self.Domain_Length) + '_AOA_' + str(
-                self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize)
+            self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize) + '_Step_' + str(self.step)
 
-    def OutputCp(self):
+    def FinalizeSolutionStep(self):
+        super(PotentialFlowAnalysisRefinement, self).FinalizeSolutionStep()
         loads_output.write_cp_figures(self.cp_data_directory_name, self.AOA, self.case, self.Airfoil_MeshSize, self.FarField_MeshSize, self.input_dir_path)
         shutil.copytree(self.cp_results_directory_name, self.cp_data_directory_name)
 
         latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp/cp.tex'], stdout=self.latex_output)
         latex.communicate()
 
+        self.step = self._GetSolver().GetComputingModelPart().ProcessInfo[KratosMultiphysics.STEP]
+
         cp_file_name = self.input_dir_path + '/plots/cp/plots/cp_Case_' + str(self.case) + '_DS_' + str(self.Domain_Length) + '_AOA_' + str(
-                    self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize) + '.pdf'
+                self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize) + '_Step_' + str(self.step) + '.pdf'
         shutil.copyfile('cp.pdf',cp_file_name)
         self.merger_refinement_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
         self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
