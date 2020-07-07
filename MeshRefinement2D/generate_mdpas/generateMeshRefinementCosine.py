@@ -205,6 +205,10 @@ for k in range(Number_Of_Domains_Size):
             #UpperSurface = Regular_1D_1.GetSubMesh()
             FarField = Regular_1D_2.GetSubMesh()
 
+            NumberOfNodes = Fluid.NbNodes()
+            print(' Information about surface mesh:')
+            print(' Number of nodes       :', NumberOfNodes)
+
 
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_1D_2D, 'NETGEN 1D-2D')
