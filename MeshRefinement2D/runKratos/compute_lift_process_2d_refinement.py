@@ -218,11 +218,14 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 ' $c_l$ = ' + "{:.4f}".format(self.lift_coefficient) +
                 ' $c_d$ = ' + "{:.4f}".format(self.drag_coefficient) + ')}\n\n' +
             '\\addplot[\n' +
+            #'    color=red,\n' +
+            #'    mark=none,\n' +
             '    only marks,\n' +
             '    color=red,\n' +
             '    mark=triangle*,\n' +
             '    mark size=1.5,\n' +
             '    mark options={solid},\n' +
+            '    densely dotted,\n' +
             '    ]\n' +
             '    table {' + output_file_name + '};  \n' +
             '    \\addlegendentry{' + self.reference_case_name + ' (' +

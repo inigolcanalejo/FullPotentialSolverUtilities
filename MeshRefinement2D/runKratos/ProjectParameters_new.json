@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 1
+        "end_time"        : 9
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -59,7 +59,7 @@
                 "inlet_potential": 0.0,
                 "mach_number_limit": 0.99,
                 "initialize_flow_field": false,
-                "critical_mach": 0.98,
+                "critical_mach": 0.90,
                 "perturbation_field": true
             }
         },{
