@@ -25,7 +25,7 @@ FarField_Refinement_Factor = TBD
 Initial_Domain_Size = TBD
 Domain_Size_Factor = TBD
 
-Ratio = 1.001
+Ratio = 1.1
 Growth_Rate = 0.05
 
 path = os.getcwd()
