@@ -55,7 +55,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         self.moment_reference_point[1] = y
         self.reference_case_name = settings["reference_case_name"].GetString()
         if self.reference_case_name == "":
-            raise Exception("Please enter a reference case name (XFOIL, AGARD, Lock or TAU)")
+            raise Exception("Please enter a reference case name (XFOIL, AGARD, Lock, FLO36, KORN or TAU)")
 
     def ExecuteFinalizeSolutionStep(self):
         self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
@@ -119,6 +119,10 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             self.cl_reference = self.read_cl_reference_flo36(self.AOA, self.free_stream_mach)
             self.cd_reference = self.read_cd_reference_flo36(self.AOA, self.free_stream_mach)
             self.cm_reference = self.read_cm_reference_flo36(self.AOA, self.free_stream_mach)
+        elif self.reference_case_name == 'KORN':
+            self.cl_reference = self.read_cl_reference_korn(self.AOA, self.free_stream_mach)
+            self.cd_reference = self.read_cd_reference_korn(self.AOA, self.free_stream_mach)
+            self.cm_reference = self.read_cm_reference_korn(self.AOA, self.free_stream_mach)
         else:
             self.cl_reference = self.read_cl_reference(self.AOA)
             self.cm_reference = self.read_cm_reference(self.AOA)
@@ -173,6 +177,14 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         elif self.reference_case_name == 'FLO36':
             output_file_name = 'references/flo36/cp_flo36_aoa_' + str(int(self.AOA)) + '_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
             cp_critical_reference_file_name = 'references/flo36/cp_critical_flo36_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
+            cp_crit_total_name = self.input_dir_path + '/plots/cp/data/0_original/' + cp_critical_reference_file_name
+            with open(cp_crit_total_name,'w') as cp_crit_file:
+                cp_crit_file.write('{0:16.2e} {1:15f}\n'.format(0, self.critical_cp))
+                cp_crit_file.write('{0:16.2e} {1:15f}\n'.format(1.0, self.critical_cp))
+                cp_crit_file.flush()
+        elif self.reference_case_name == 'KORN':
+            output_file_name = 'references/flo36/cp_korn_aoa_' + str(int(self.AOA)) + '_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
+            cp_critical_reference_file_name = 'references/flo36/cp_critical_korn_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
             cp_crit_total_name = self.input_dir_path + '/plots/cp/data/0_original/' + cp_critical_reference_file_name
             with open(cp_crit_total_name,'w') as cp_crit_file:
                 cp_crit_file.write('{0:16.2e} {1:15f}\n'.format(0, self.critical_cp))
@@ -411,6 +423,63 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             return 0.0026
         elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
             return 0.0158
+        else:
+            return 0.0
+
+    def read_cl_reference_korn(self,AOA, free_stream_mach):
+        # Values from "Volpe, G., and Jameson, A., “Transonic Potential Flow Calculations
+        # by Two Articial Density Methods,” AIAA Journal, Vol. 26, No. 4,
+        # April 1988, pp. 425–429. doi:10.2514/3.9910"
+        if(abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.70) < 1e-3):
+            return 0.6986
+        elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.70) < 1e-3):
+            return 0.9337
+        elif( abs(AOA - 0.0) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.6213
+        elif( abs(AOA - 0.2) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.6512
+        elif( abs(AOA - 0.7) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.8279
+        elif( abs(AOA - 0.9) < 1e-3 and abs(free_stream_mach - 0.78) < 1e-3):
+            return 1.3084
+        else:
+            return 0.0
+
+    def read_cd_reference_korn(self,AOA, free_stream_mach):
+        # Values from "Volpe, G., and Jameson, A., “Transonic Potential Flow Calculations
+        # by Two Articial Density Methods,” AIAA Journal, Vol. 26, No. 4,
+        # April 1988, pp. 425–429. doi:10.2514/3.9910"
+        if(abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.70) < 1e-3):
+            return 0.0012
+        elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.70) < 1e-3):
+            return 0.0062
+        elif( abs(AOA - 0.0) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.0001
+        elif( abs(AOA - 0.2) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.0003
+        elif( abs(AOA - 0.7) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return 0.0072
+        elif( abs(AOA - 0.9) < 1e-3 and abs(free_stream_mach - 0.78) < 1e-3):
+            return 0.0941
+        else:
+            return 0.0
+
+    def read_cm_reference_korn(self,AOA, free_stream_mach):
+        # Values from "Volpe, G., and Jameson, A., “Transonic Potential Flow Calculations
+        # by Two Articial Density Methods,” AIAA Journal, Vol. 26, No. 4,
+        # April 1988, pp. 425–429. doi:10.2514/3.9910"
+        if(abs(AOA - 1.0) < 1e-3 and abs(free_stream_mach - 0.70) < 1e-3):
+            return -0.1300
+        elif( abs(AOA - 2.0) < 1e-3 and abs(free_stream_mach - 0.70) < 1e-3):
+            return -0.1292
+        elif( abs(AOA - 0.0) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return -0.1451
+        elif( abs(AOA - 0.2) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return -0.1474
+        elif( abs(AOA - 0.7) < 1e-3 and abs(free_stream_mach - 0.75) < 1e-3):
+            return -0.1712
+        elif( abs(AOA - 0.9) < 1e-3 and abs(free_stream_mach - 0.78) < 1e-3):
+            return -0.4388
         else:
             return 0.0
 
