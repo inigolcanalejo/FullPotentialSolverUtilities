@@ -183,7 +183,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 cp_crit_file.write('{0:16.2e} {1:15f}\n'.format(1.0, self.critical_cp))
                 cp_crit_file.flush()
         elif self.reference_case_name == 'KORN':
-            output_file_name = 'references/flo36/cp_korn_aoa_' + str(int(self.AOA)) + '_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
+            output_file_name = 'references/flo36/cp_korn_aoa_' + str(round(self.AOA,1)) + '_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
             cp_critical_reference_file_name = 'references/flo36/cp_critical_korn_mach_' + str(int(self.free_stream_mach*100)) + '.dat'
             cp_crit_total_name = self.input_dir_path + '/plots/cp/data/0_original/' + cp_critical_reference_file_name
             with open(cp_crit_total_name,'w') as cp_crit_file:
