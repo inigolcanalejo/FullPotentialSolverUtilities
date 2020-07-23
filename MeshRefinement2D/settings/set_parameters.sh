@@ -1,4 +1,4 @@
-Generate_Mesh_File_Path=$PWD/generate_mdpas/generateMeshRefinement.py
+Generate_Mesh_File_Path=$PWD/generate_mdpas/generateMeshfromAirfoilCoordinates.py
 Generate_Mesh_Cosine_File_Path=$PWD/generate_mdpas/generateMeshRefinementCosine.py
 Generate_Mesh_Cosine_Wake_File_Path=$PWD/generate_mdpas/generateMeshRefinementCosineWake.py
 Generate_Mesh_Membrane_File_Path=$PWD/generate_mdpas/membraneAirfoil_separating4.py

@@ -25,7 +25,7 @@ FarField_Refinement_Factor = TBD
 Initial_Domain_Size = TBD
 Domain_Size_Factor = TBD
 
-Ratio = 1.1 # 1.001
+Ratio = 1.1
 Growth_Rate = 0.05
 
 path = os.getcwd()
@@ -56,7 +56,7 @@ for k in range(Number_Of_Domains_Size):
 
             import salome_notebook
             notebook = salome_notebook.NoteBook(theStudy)
-            sys.path.insert( 0, r'/'+path)
+            #sys.path.insert( 0, r'/home/inigo/simulations/naca0012/07_salome/00_Model/tests')
 
             ###
             ### GEOM component
@@ -70,29 +70,67 @@ for k in range(Number_Of_Domains_Size):
 
             geompy = geomBuilder.New(theStudy)
 
-            #Create origin and axis
             O = geompy.MakeVertex(0, 0, 0)
             OX = geompy.MakeVectorDXDYDZ(1, 0, 0)
             OY = geompy.MakeVectorDXDYDZ(0, 1, 0)
             OZ = geompy.MakeVectorDXDYDZ(0, 0, 1)
 
-            #Create naca0012 with center in origin and trailing edge at x = 0.5
-            # Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
-            # Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
-            # Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
-            # Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
+            coordinates_file_name = 'airfoilCoordinates/k1.dat'
 
-            #Create original naca0012
-            Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
-            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0.5, 1.008930411365, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0.5, 1.008930411365, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
+            upper_points = []
+            lower_points = []
 
-            geompy.ChangeOrientationShell(Curve_UpperSurface_TE)
-            geompy.ChangeOrientationShell(Curve_LowerSurface_TE)
+            with open(coordinates_file_name, 'r') as coordinates_file:
+                airfoil_name = coordinates_file.readline()
+                coordinates_number = coordinates_file.readline()
+                upper_surface_coord_number = int(coordinates_number.split()[0])
+                lower_surface_coord_number = int(coordinates_number.split()[1])
+                print('Airfoil: ', airfoil_name)
+                print('Number of upper points: ',  upper_surface_coord_number)
+                print('Number of lower points: ', lower_surface_coord_number)
+                vertex_id = 0
+                lower_surface = False
+                empty_line = coordinates_file.readline()
+                line = coordinates_file.readline()
+                while line:
+                    if '0.' in line:
+                        x = float(line.split()[0])
+                        y = float(line.split()[1])
+                        vertex = geompy.MakeVertex(x, y, 0)
+
+                        # geompy.addToStudy( vertex, 'vertex_'+str(vertex_id) )
+                        vertex_id += 1
+                        if lower_surface:
+                            lower_points.append(vertex)
+                        else:
+                            upper_points.append(vertex)
+                    # Lower surface starts when empty line is reached
+                    if not line.strip():
+                        lower_surface = True
+                    line = coordinates_file.readline()
+
+            if len(upper_points) != upper_surface_coord_number or len(lower_points) != lower_surface_coord_number:
+                print('Warning: number of points different than prescribed in input file:')
+                print('Number of upper points (input): ',  upper_surface_coord_number)
+                print('Number of upper points: ',  len(upper_points))
+                print('Number of lower points (input): ', lower_surface_coord_number)
+                print('Number of lower points: ', len(lower_points))
+
+            Upper_Airfoil = geompy.MakeInterpol(upper_points, False, False)
+            Lower_Airfoil = geompy.MakeInterpol(lower_points, False, False)
+
+            Upper_Airfoil_Divided = geompy.DivideEdge(Upper_Airfoil, -1, 0.5, 1)
+            Lower_Airfoil_Divided = geompy.DivideEdge(Lower_Airfoil, -1, 0.5, 1)
+
+            [Curve_UpperSurface_LE,Curve_UpperSurface_TE0] = geompy.ExtractShapes(Upper_Airfoil_Divided, geompy.ShapeType["EDGE"], True)
+            [Curve_LowerSurface_LE,Curve_LowerSurface_TE0] = geompy.ExtractShapes(Lower_Airfoil_Divided, geompy.ShapeType["EDGE"], True)
+
+            Curve_UpperSurface_TE = geompy.ChangeOrientationShellCopy(Curve_UpperSurface_TE0)
+            Curve_LowerSurface_TE = geompy.ChangeOrientationShellCopy(Curve_LowerSurface_TE0)
 
             #Create face
-            Face_Airfoil = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE], 1)
+            Face_Airfoil_Before = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE], 1)
+            Face_Airfoil = geompy.MakeTranslation(Face_Airfoil_Before, -0.5, 0, 0)
 
             #Rotate around center to AOA
             geompy.Rotate(Face_Airfoil, OZ, -AOA*math.pi/180.0)
@@ -128,22 +166,23 @@ for k in range(Number_Of_Domains_Size):
             Auto_group_for_Sub_mesh_1_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_1_2, [Edge_1, Edge_2, Edge_7, Edge_8])
 
-            #Add to study
             geompy.addToStudy( O, 'O' )
             geompy.addToStudy( OX, 'OX' )
             geompy.addToStudy( OY, 'OY' )
             geompy.addToStudy( OZ, 'OZ' )
-            geompy.addToStudy( Curve_UpperSurface_LE, 'Curve_UpperSurface_LE' )
-            geompy.addToStudy( Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
-            geompy.addToStudy( Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
-            geompy.addToStudy( Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_2, 'Edge_2' )
-            geompy.addToStudyInFather( Cut_Domain, Edge_1, 'Edge_1' )
-            geompy.addToStudy( Face_Domain, 'Face_Domain' )
+            geompy.addToStudy( Upper_Airfoil, 'Upper_Airfoil' )
+            geompy.addToStudy( Lower_Airfoil, 'Lower_Airfoil' )
+            geompy.addToStudy( Upper_Airfoil_Divided, 'Upper_Airfoil_Divided' )
+            geompy.addToStudy( Lower_Airfoil_Divided, 'Lower_Airfoil_Divided' )
+            geompy.addToStudyInFather( Upper_Airfoil_Divided, Curve_UpperSurface_LE, 'Curve_UpperSurface_LE' )
+            geompy.addToStudyInFather( Upper_Airfoil_Divided, Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
+            geompy.addToStudyInFather( Lower_Airfoil_Divided, Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
+            geompy.addToStudyInFather( Lower_Airfoil_Divided, Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
             geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
+            geompy.addToStudy( Face_Domain, 'Face_Domain' )
+            geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
             geompy.addToStudyInFather( Cut_Domain, Edge_LowerSurface_LE, 'Edge_LowerSurface_LE' )
             geompy.addToStudyInFather( Cut_Domain, Edge_UpperSurface_LE, 'Edge_UpperSurface_LE' )
-            geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
             geompy.addToStudyInFather( Cut_Domain, Edge_LowerSurface_TE, 'Edge_LowerSurface_TE' )
             geompy.addToStudyInFather( Cut_Domain, Edge_UpperSurface_TE, 'Edge_UpperSurface_TE' )
             geompy.addToStudyInFather( Cut_Domain, Edge_7, 'Edge_7' )
@@ -268,6 +307,10 @@ for k in range(Number_Of_Domains_Size):
         AOA += AOA_Increment
     Domain_Length *= Domain_Size_Factor
     Domain_Width *= Domain_Size_Factor
+
+            # salome.myStudyManager.SaveAs("/home/inigo/simulations/naca0012/07_salome/00_model_read_points/readPoints.hdf", salome.myStudy, 0)
+
+
 
 
 if salome.sg.hasDesktop():

@@ -25,8 +25,8 @@
         },
         "maximum_iterations"     : 25,
         "echo_level"             : 1,
-        "relative_tolerance": 1e-12,
-        "absolute_tolerance": 1e-12,
+        "relative_tolerance": 1e-14,
+        "absolute_tolerance": 1e-14,
         "linear_solver_settings"  : {
                 "solver_type"             : "EigenSolversApplication.sparse_lu",
                 "max_iteration": 1000,
@@ -47,9 +47,8 @@
     "processes" : {
         "initial_conditions_process_list"  : [],
         "boundary_conditions_process_list" : [{
-            "python_module" : "apply_far_field_process",
-            "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
-            "process_name"  : "FarFieldProcess",
+            "python_module" : "apply_far_field_process_refinement",
+            "process_name"  : "FarFieldProcessRefinement",
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
@@ -85,7 +84,7 @@
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "AGARD"
+                "reference_case_name": "KORN"
             }
         }],
         "auxiliar_process_list" :[]
