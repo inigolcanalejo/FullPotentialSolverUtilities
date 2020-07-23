@@ -181,7 +181,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
-            '    title={ $M_\infty$ = ' + "{:.2f}".format(self.free_stream_mach) + ' $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            # '    title={ $M_\infty$ = ' + "{:.2f}".format(self.free_stream_mach) + ' $c_l$ = ' + "{:.6f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.6f}".format(self.drag_coefficient) + '},\n' +
+            '    title={ $M_\infty$ = ' + "{:.2f}".format(self.free_stream_mach) + '},\n' +
             '    xlabel={$x/c$},\n' +
             '    ylabel={$c_p[\\unit{-}$]},\n' +
             '    %xmin=-0.01, xmax=1.01,\n' +
@@ -197,19 +198,28 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             ']\n\n' +
             '\\addplot[\n' +
             '    only marks,\n' +
-            '    color=blue,\n' +
-            '    mark=+,\n' +
-            '    mark size=1,\n' +
-            '    ]\n' +
-            '    table {cp_results.dat};  \n' +
-            '    \\addlegendentry{Kratos}\n\n' +
-            '\\addplot[\n' +
-            '    color=black,\n' +
-            '    mark=none,\n' +
-            '    mark options={solid},\n' +
+            '    color=red,\n' +
+            '    mark=triangle*,\n' +
+            # '    mark options={solid},\n' +
             '    ]\n' +
             '    table {' + output_file_name + '};  \n' +
-            '    \\addlegendentry{' + self.reference_case_name + '}\n\n' +
+            '    \\addlegendentry{' + self.reference_case_name + ' ($c_l$ = ' + "{:.4f}".format(self.cl_reference) + ' $c_d$ = ' + "{:.4f}".format(self.cd_reference) + ')' + ' }\n\n' +
+            '\\addplot[\n' +
+            '    only marks,\n' +
+            '    color=blue,\n' +
+            '    mark=+,\n' +
+            '    mark size=3,\n' +
+            '    ]\n' +
+            '    table {cp_results.dat};  \n' +
+            '    \\addlegendentry{' + 'Kratos ($c_l$ = ' + "{:.4f}".format(self.lift_coefficient) + ' $c_d$ = ' + "{:.4f}".format(self.drag_coefficient) + ')' + ' }\n\n' +
+            # '\\addplot[\n' +
+            # '    only marks,\n' +
+            # '    color=red,\n' +
+            # '    mark=triangle*,\n' +
+            # # '    mark options={solid},\n' +
+            # '    ]\n' +
+            # '    table {' + output_file_name + '};  \n' +
+            # '    \\addlegendentry{' + self.reference_case_name + ' ($c_l$ = ' + "{:.4f}".format(self.cl_reference) + ' $c_d$ = ' + "{:.4f}".format(self.cd_reference) + ')' + ' }\n\n' +
             '\\addplot[\n' +
             '    color=black,\n' +
             '    mark=none,\n' +
@@ -218,14 +228,14 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    ]\n' +
             '    table {' + cp_critical_reference_file_name + '};  \n' +
             '    \\addlegendentry{$c_p^*$ = ' + "{:.4f}".format(self.critical_cp) + '}\n\n' +
-            '\\addplot[\n' +
-            '    color=black,\n' +
-            '    mark=none,\n' +
-            '    mark options={dashed},\n' +
-            '    dashed,\n' +
-            '    ]\n' +
-            '    table {' + cp_critical_reference_file_name + '};  \n' +
-            '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
+            # '\\addplot[\n' +
+            # '    color=black,\n' +
+            # '    mark=none,\n' +
+            # '    mark options={dashed},\n' +
+            # '    dashed,\n' +
+            # '    ]\n' +
+            # '    table {' + cp_critical_reference_file_name + '};  \n' +
+            # '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
             '\end{axis}\n' +
             '\end{tikzpicture}')
             cp_tikz_file.flush()

@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 1
+        "end_time"        : 12.0
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -21,14 +21,14 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "compressible"
+            "element_type": "perturbation_transonic"
         },
-        "maximum_iterations"     : 10,
+        "maximum_iterations"     : 25,
         "echo_level"             : 1,
         "relative_tolerance": 1e-12,
         "absolute_tolerance": 1e-12,
         "linear_solver_settings"  : {
-                "solver_type"             : "EigenSolversApplication.pardiso_lu",
+                "solver_type"             : "EigenSolversApplication.sparse_lu",
                 "max_iteration": 1000,
                 "gmres_krylov_space_dimension": 100,
                 "smoother_type":"ilu0",
@@ -53,12 +53,15 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.03,
+                "mach_infinity": 0.69,
                 "free_stream_density"  : 1.225,
                 "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 1.0,
-                "mach_number_limit": 0.99,
+                "mach_number_limit": 0.94,
+                "critical_mach": 0.8,
+                "upwind_factor_constant": 2.5,
+                "mach_number_squared_limit":3.0,
                 "initialize_flow_field": false
             }
         },{
@@ -77,12 +80,12 @@
                 "model_part_name" : "MainModelPart.Body2D_BodySurface",
                 "far_field_model_part_name" : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "create_output_file": false,
-                "angle_of_attack": 0.0,
+                "angle_of_attack": 1.25,
                 "airfoil_meshsize": 1.0,
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "Lock"
+                "reference_case_name": "AGARD"
             }
         }],
         "auxiliar_process_list" :[]
@@ -113,7 +116,7 @@
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["POTENTIAL_JUMP","TRAILING_EDGE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA","MACH","SOUND_VELOCITY"],
+                        "gauss_point_results" : ["PRESSURE_COEFFICIENT","VELOCITY","WAKE","KUTTA","MACH","SOUND_VELOCITY","VECTOR_TO_UPWIND_ELEMENT"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
                     },
                     "point_data_configuration"  : []
