@@ -193,6 +193,11 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         else:
             output_file_name = 'references/xfoil/cp_xfoil_aoa_' + str(int(self.AOA)) + '.dat'
         with open(cp_tikz_file_name,'w') as cp_tikz_file:
+            # y axis limits:
+            ymin = -1.3
+            ymax = 1.2
+            if self.critical_cp < ymin:
+                cp_critical_reference_file_name += 'not_use'
             cp_tikz_file.write('\\begin{tikzpicture}\n' +
             '\\begin{axis}[\n' +
             '    title={ $M_\infty$ = ' + "{:.2f}".format(self.free_stream_mach) +
@@ -201,6 +206,8 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    xlabel={$x/c$},\n' +
             '    ylabel={$c_p[\\unit{-}$]},\n' +
             '    %xmin=-0.01, xmax=1.01,\n' +
+            '    ymin=' + "{:.2f}".format(ymin) + ',\n' +
+            '    ymax=' + "{:.2f}".format(ymax) + ',\n' +
             '    y dir=reverse,\n' +
             '    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
             '    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
@@ -212,14 +219,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    width=12cm\n' +
             ']\n\n' +
             '\\addplot[\n' +
-            '    color=black,\n' +
-            '    mark=none,\n' +
-            '    mark options={dashed},\n' +
-            '    dashed,\n' +
-            '    ]\n' +
-            '    table {' + cp_critical_reference_file_name + '};  \n' +
-            '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
-            '\\addplot[\n' +
             '    only marks,\n' +
             '    color=blue,\n' +
             '    mark=+,\n' +
@@ -229,6 +228,14 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                         '    \\addlegendentry{Kratos  (' +
                 ' $c_l$ = ' + "{:.4f}".format(self.lift_coefficient) +
                 ' $c_d$ = ' + "{:.4f}".format(self.drag_coefficient) + ')}\n\n' +
+            '\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    mark options={dashed},\n' +
+            '    dashed,\n' +
+            '    ]\n' +
+            '    table {' + cp_critical_reference_file_name + '};  \n' +
+            '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
             '\\addplot[\n' +
             #'    color=red,\n' +
             #'    mark=none,\n' +
