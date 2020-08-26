@@ -13,10 +13,34 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
     def ExecuteInitializeSolutionStep(self):
         self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
 
-        if self.step > 13:
+        # For M > 0.75 we need to increase and decrease the viscosity
+        if self.free_stream_mach > 0.759:
+            if not self.increase_viscotiy:
+                # Decreasing viscosity
+                self.critical_mach += 0.01
+                self.upwind_factor_constant -= 0.1
+            elif abs(self.critical_mach - 0.75) < 1e-4:
+                # When reached, increase the mach number and then decrease the viscosity
+                self.free_stream_mach += 0.005
+                self.increase_viscotiy = False
+            elif self.increase_viscotiy:
+                # Increasing viscosity
+                self.critical_mach -= 0.01
+                self.upwind_factor_constant += 0.1
+
+            if abs(self.critical_mach - 0.90) < 1e-4:
+                # When reaching, start increasing the viscosity again
+                self.increase_viscotiy = True
+
+        elif self.step > 10:
+            self.increase_viscotiy = True
+            self.free_stream_mach += 0.005
+        elif self.step > 7:
+            self.increase_viscotiy = True
             self.free_stream_mach += 0.01
         elif self.step > 1:
-            self.free_stream_mach += 0.05
+            self.increase_viscotiy = True
+            self.free_stream_mach += 0.10
 
         self.u_inf = round(self.free_stream_mach,2) * self.free_stream_speed_of_sound
         self.free_stream_velocity = KratosMultiphysics.Vector(3)

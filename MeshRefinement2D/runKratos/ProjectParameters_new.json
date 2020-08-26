@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 24
+        "end_time"        : 206
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -52,14 +52,14 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.05,
+                "mach_infinity": 0.10,
                 "free_stream_density"  : 1.225,
                 "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
                 "mach_number_limit": 0.99,
                 "critical_mach": 0.90,
-                "upwind_factor_constant": 1.0,
+                "upwind_factor_constant": 1.5,
                 "initialize_flow_field": false,
                 "perturbation_field": true
             }
@@ -84,7 +84,7 @@
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "KORN"
+                "reference_case_name": "AGARD"
             }
         }],
         "auxiliar_process_list" :[]
@@ -108,7 +108,7 @@
                         },
                         "file_label"          : "step",
                         "output_control_type" : "step",
-                        "output_frequency"    : 1,
+                        "output_interval"    : 1,
                         "body_output"         : true,
                         "node_output"         : false,
                         "skin_output"         : false,

@@ -14,7 +14,7 @@ hcr = heat_capacity_ratio
 ai2 = free_stream_speed_of_sound * free_stream_speed_of_sound
 print(' free_stream_speed_of_sound = ', free_stream_speed_of_sound)
 
-for free_stream_mach_number in np.arange(0.8, 0.85, 1):
+for free_stream_mach_number in np.arange(0.6, 0.85, 10):
     free_stream_velocity = free_stream_mach_number * free_stream_speed_of_sound
 
     # Computing squares and shortening names

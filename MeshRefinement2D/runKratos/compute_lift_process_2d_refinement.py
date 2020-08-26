@@ -235,21 +235,21 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    dashed,\n' +
             '    ]\n' +
             '    table {' + cp_critical_reference_file_name + '};  \n' +
-            '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
-            '\\addplot[\n' +
-            #'    color=red,\n' +
-            #'    mark=none,\n' +
-            '    only marks,\n' +
-            '    color=red,\n' +
-            '    mark=triangle*,\n' +
-            '    mark size=1.5,\n' +
-            '    mark options={solid},\n' +
-            '    densely dotted,\n' +
-            '    ]\n' +
-            '    table {' + output_file_name + '};  \n' +
-            '    \\addlegendentry{' + self.reference_case_name + ' (' +
-                ' $c_l$ = ' + "{:.4f}".format(self.cl_reference) +
-                ' $c_d$ = ' + "{:.4f}".format(self.cd_reference) + ')}\n\n' +
+            # '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
+            # '\\addplot[\n' +
+            # #'    color=red,\n' +
+            # #'    mark=none,\n' +
+            # '    only marks,\n' +
+            # '    color=red,\n' +
+            # '    mark=triangle*,\n' +
+            # '    mark size=1.5,\n' +
+            # '    mark options={solid},\n' +
+            # '    densely dotted,\n' +
+            # '    ]\n' +
+            # '    table {' + output_file_name + '};  \n' +
+            # '    \\addlegendentry{' + self.reference_case_name + ' (' +
+            #     ' $c_l$ = ' + "{:.4f}".format(self.cl_reference) +
+            #     ' $c_d$ = ' + "{:.4f}".format(self.cd_reference) + ')}\n\n' +
             '\end{axis}\n' +
             '\end{tikzpicture}')
             cp_tikz_file.flush()
