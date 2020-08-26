@@ -25,7 +25,7 @@
                         },
                         "file_label"          : "step",
                         "output_control_type" : "step",
-                        "output_frequency"    : 1,
+                        "output_interval"    : 1,
                         "body_output"         : true,
                         "node_output"         : false,
                         "skin_output"         : false,
@@ -46,6 +46,9 @@
         "model_import_settings"  : {
             "input_type"     : "mdpa",
             "input_filename" : ""
+        },
+        "formulation": {
+            "element_type": "perturbation_incompressible"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,
@@ -78,7 +81,8 @@
                 "angle_of_attack" : 0.0,
                 "mach_infinity"   : 0.03,
                 "speed_of_sound"  : 340.0,
-                "initialize_flow_field": true,
+                "initialize_flow_field": false,
+                "perturbation_field": true,
                 "inlet_potential": 0.0
             }
         },{
