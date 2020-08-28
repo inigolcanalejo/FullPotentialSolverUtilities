@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 24
+        "end_time"        : 1
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -21,7 +21,7 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "perturbation_transonic"
+            "element_type": "perturbation_compressible"
         },
         "maximum_iterations"     : 20,
         "echo_level"             : 1,
@@ -84,7 +84,7 @@
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "KORN"
+                "reference_case_name": "XFOIL"
             }
         }],
         "auxiliar_process_list" :[]
