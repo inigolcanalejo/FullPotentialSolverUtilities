@@ -11,8 +11,8 @@ Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
 
-Outlet_Min_Mesh_Size = 0.5
-Outlet_Max_Mesh_Size = 1.0
+Outlet_Min_Mesh_Size = 0.05
+Outlet_Max_Mesh_Size = 0.1
 Growth_Rate_Wake = 0.7
 
 Smallest_Airfoil_Mesh_Size = TBD
