@@ -767,7 +767,7 @@ for k in range(Number_Of_AOAS):
             #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
             Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
             Smallest_Airfoil_Mesh_Size /= 2.0
-            Biggest_Airfoil_Mesh_Size /= 2.0
+            # Biggest_Airfoil_Mesh_Size /= 2.0
             case +=1
         Growth_Rate_Domain /= Growth_Rate_Domain_Refinement_Factor
     AOA += AOA_Increment
