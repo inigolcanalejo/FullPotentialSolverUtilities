@@ -112,7 +112,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                     auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
                     velocity = node.GetValue(KratosMultiphysics.VELOCITY)
                     velocity_normal_component = _DotProduct(self.wake_normal,velocity)
-                    potential_jump = auxiliary_potential - potential
+                    potential_jump = potential - auxiliary_potential
                     potential_integral += 0.5 * length * potential_jump
                     drag_integral -= 0.5 * length * potential_jump * velocity_normal_component
 
@@ -273,7 +273,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             for node in self.trefft_plane_cut_model_part.Nodes:
                 potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
                 auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
-                potential_jump = auxiliary_potential - potential
+                potential_jump = potential - auxiliary_potential
 
                 jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
 
