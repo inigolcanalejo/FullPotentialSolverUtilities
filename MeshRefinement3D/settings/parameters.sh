@@ -9,8 +9,8 @@ AOA_Increment=1.0
 Initial_Growth_Rate_Domain=0.64
 Growth_Rate_Domain_Refinement_Factor=2.0
 
-Initial_Growth_Rate_Wing=0.1
-Growth_Rate_Wing_Refinement_Factor=1.0
+Initial_Growth_Rate_Wing=0.016
+Growth_Rate_Wing_Refinement_Factor=2.0
 
 Smallest_Airfoil_Mesh_Size=0.016
 Biggest_Airfoil_Mesh_Size=0.016
