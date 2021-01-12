@@ -4,8 +4,11 @@ declare -A paths
 
 paths[cl_error_results_directory_name]=$input_dir_path/plots/cl_error/data/cl
 paths[cl_error_results_h_file_name]=${paths[cl_error_results_directory_name]}/cl_error_results_h.dat
+paths[cl_jump_error_results_h_file_name]=${paths[cl_error_results_directory_name]}/cl_jump_error_results_h.dat
+paths[cl_far_field_error_results_h_file_name]=${paths[cl_error_results_directory_name]}/cl_far_field_error_results_h.dat
 paths[cl_results_directory_name]=$input_dir_path/plots/cl/data/cl
 paths[cl_results_h_file_name]=${paths[cl_results_directory_name]}/cl_results_h.dat
+paths[cl_jump_results_h_file_name]=${paths[cl_results_directory_name]}/cl_jump_results_h.dat
 paths[cl_reference_h_file_name]=${paths[cl_results_directory_name]}/cl_reference_h.dat
 paths[cm_results_directory_name]=$input_dir_path/plots/cm/data/cm
 paths[cm_results_h_file_name]=${paths[cm_results_directory_name]}/cm_results_h.dat

@@ -365,7 +365,7 @@ def create_tikz_refinement_plot_file(file_name, ylabel, dat_name, reference_dat_
                            '\end{tikzpicture}')
         tikz_file.flush()
 
-def create_tikz_error_plot_file(file_name, title, xlabel, ylabel, dat_name, jump_dat_name):
+def create_tikz_error_plot_file(file_name, title, xlabel, ylabel, dat_name, jump_dat_name, far_field_dat_name):
     with open(file_name, 'w') as tikz_file:
         tikz_file.write('\\begin{tikzpicture}\n' +
                         '\\begin{semilogxaxis}[\n' +
@@ -376,6 +376,7 @@ def create_tikz_error_plot_file(file_name, title, xlabel, ylabel, dat_name, jump
                         '    xmajorgrids=true,\n' +
                         '    grid style=dashed,\n' +
                         '    legend style={at={(0.5,-0.2)},anchor=north},\n' +
+                        '    legend cell align={left},,\n' +
                         '    width=12cm\n' +
                         ']\n\n' +
                         '\\addplot[\n' +
@@ -383,13 +384,19 @@ def create_tikz_error_plot_file(file_name, title, xlabel, ylabel, dat_name, jump
                         '    mark=square,\n' +
                         '    ]\n' +
                         '    table {' + dat_name + '};  \n' +
-                        '    \\addlegendentry{Integral}\n\n' +
+                        '    \\addlegendentry{$c_p$ integral}\n\n' +
                         '\\addplot[\n' +
                         '    color=red,\n' +
-                        '    mark=square,\n' +
+                        '    mark=o,\n' +
                         '    ]\n' +
                         '    table {' + jump_dat_name + '};  \n' +
-                        '    \\addlegendentry{Jump}\n\n' +
+                        '    \\addlegendentry{Potential jump}\n\n' +
+                        '\\addplot[\n' +
+                        '    color=black,\n' +
+                        '    mark=triangle,\n' +
+                        '    ]\n' +
+                        '    table {' + far_field_dat_name + '};  \n' +
+                        '    \\addlegendentry{Far field momentum integral}\n\n' +
                         '\end{semilogxaxis}\n' +
                         '\end{tikzpicture}')
         tikz_file.flush()
@@ -428,7 +435,8 @@ def create_cl_error_plots_directory_tree(work_dir):
                                 'h',                                                    # xlabel
                                 '$\\frac{|c_l - c_{lref}|}{|c_{lref}|}\\cdot100$',      # ylabel
                                 'cl_error_results_h.dat',                               # dat_name
-                                'cl_jump_error_results_h.dat')                          # jump_dat_name
+                                'cl_jump_error_results_h.dat',                          # jump_dat_name
+                                'cl_far_field_error_results_h.dat')
 
 
 def create_cl_error_domain_size_directory_tree(work_dir):
@@ -441,7 +449,8 @@ def create_cl_error_domain_size_directory_tree(work_dir):
                                 'Domain\'s size',                                                           # xlabel
                                 '$\\frac{|c_l - c_{lref}|}{|c_{lref}|}\\cdot100$',                          # ylabel
                                 'cl_error_results_domain.dat',                                              # dat_name
-                                'cl_jump_error_results.dat')                                                # jump_dat_name
+                                'cl_jump_error_results.dat',                                                # jump_dat_name
+                                'cl_far_field_error_results_domain.dat')
 
 def create_cm_plots_directory_tree(work_dir, reference_case_name):
     create_plot_directory_tree(work_dir + '/plots/cm/data/cm')
@@ -464,7 +473,8 @@ def create_cm_error_plots_directory_tree(work_dir):
                                 'h',                                                        # xlabel
                                 '$\\frac{|c_m - c_{mref}|}{|c_{mref}|}\\cdot100$',          # ylabel
                                 'cm_error_results_h.dat',                                   # dat_name
-                                'cm_error_jump_results_h.dat')                              # jump_dat_name
+                                'cm_error_jump_results_h.dat',
+                                'cm_far_field_error_results_h.dat')                              # jump_dat_name
 
 def create_aoa_plots_directory_tree(work_dir):
     create_plot_directory_tree(work_dir + '/plots/aoa/data')

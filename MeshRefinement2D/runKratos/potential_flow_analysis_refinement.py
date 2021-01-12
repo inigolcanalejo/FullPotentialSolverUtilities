@@ -74,8 +74,11 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         self.cl_error_results_directory_name = 'TBD'
         self.cl_error_results_h_file_name = 'TBD'
+        self.cl_jump_error_results_h_file_name = 'TBD'
+        self.cl_far_field_error_results_h_file_name = 'TBD'
         self.cl_results_directory_name = 'TBD'
         self.cl_results_h_file_name = 'TBD'
+        self.cl_jump_results_h_file_name = 'TBD'
         self.cl_reference_h_file_name = 'TBD'
 
         self.aoa_results_directory_name = 'TBD'
@@ -129,7 +132,13 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         with open(self.cl_error_results_h_file_name,'w') as cl_error_file:
             cl_error_file.flush()
+        with open(self.cl_jump_error_results_h_file_name,'w') as cl_error_file:
+            cl_error_file.flush()
+        with open(self.cl_far_field_error_results_h_file_name,'w') as cl_error_file:
+            cl_error_file.flush()
         with open(self.cl_results_h_file_name,'w') as cl_file:
+            cl_file.flush()
+        with open(self.cl_jump_results_h_file_name,'w') as cl_file:
             cl_file.flush()
         with open(self.cl_reference_h_file_name,'w') as cl_file:
             cl_file.flush()
@@ -210,7 +219,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.cm_error_results_directory_name, self.input_dir_path + '/plots/cm_error/' + self.cm_error_data_directory_name)
 
         os.remove(self.cl_error_results_h_file_name)
+        os.remove(self.cl_jump_error_results_h_file_name)
+        os.remove(self.cl_far_field_error_results_h_file_name)
         os.remove(self.cm_results_h_file_name)
+        os.remove(self.cl_jump_results_h_file_name)
         os.remove(self.cm_reference_h_file_name)
         os.remove(self.cm_error_results_h_file_name)
         os.remove(self.cl_results_h_file_name)

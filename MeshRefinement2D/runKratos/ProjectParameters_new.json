@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 24
+        "end_time"        : 1
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -21,14 +21,14 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "perturbation_transonic"
+            "element_type": "perturbation_incompressible"
         },
         "maximum_iterations"     : 20,
         "echo_level"             : 1,
         "relative_tolerance": 1e-14,
         "absolute_tolerance": 1e-14,
         "linear_solver_settings"  : {
-                "solver_type"             : "EigenSolversApplication.pardiso_lu",
+                "solver_type"             : "LinearSolversApplication.pardiso_lu",
                 "max_iteration": 1000,
                 "gmres_krylov_space_dimension": 100,
                 "smoother_type":"ilu0",
@@ -84,7 +84,7 @@
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.5,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "KORN"
+                "reference_case_name": "XFOIL"
             }
         }],
         "auxiliar_process_list" :[]
@@ -108,7 +108,7 @@
                         },
                         "file_label"          : "step",
                         "output_control_type" : "step",
-                        "output_frequency"    : 1,
+                        "output_interval"    : 1,
                         "body_output"         : true,
                         "node_output"         : false,
                         "skin_output"         : false,

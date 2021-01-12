@@ -129,17 +129,36 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         if(abs(self.cl_reference) < 1e-6):
             self.cl_relative_error = abs(self.lift_coefficient)*100.0
+            self.cl_jump_relative_error = abs(self.lift_coefficient_jump)*100.0
+            self.cl_far_field_relative_error = abs(self.lift_coefficient_far_field)*100.0
         else:
             self.cl_relative_error = abs(self.lift_coefficient - self.cl_reference)/abs(self.cl_reference)*100.0
+            self.cl_jump_relative_error = abs(self.lift_coefficient_jump - self.cl_reference)/abs(self.cl_reference)*100.0
+            self.cl_far_field_relative_error = abs(self.lift_coefficient_far_field - self.cl_reference)/abs(self.cl_reference)*100.0
 
         cl_error_results_h_file_name = 'TBD'
         with open(cl_error_results_h_file_name,'a') as cl_error_file:
             cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_relative_error))
             cl_error_file.flush()
 
+        cl_jump_error_results_h_file_name = 'TBD'
+        with open(cl_jump_error_results_h_file_name,'a') as cl_error_file:
+            cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_jump_relative_error))
+            cl_error_file.flush()
+
+        cl_far_field_error_results_h_file_name = 'TBD'
+        with open(cl_far_field_error_results_h_file_name,'a') as cl_error_file:
+            cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_far_field_relative_error))
+            cl_error_file.flush()
+
         cl_results_h_file_name = 'TBD'
         with open(cl_results_h_file_name,'a') as cl_file:
             cl_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.lift_coefficient))
+            cl_file.flush()
+
+        cl_jump_results_h_file_name = 'TBD'
+        with open(cl_jump_results_h_file_name,'a') as cl_file:
+            cl_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.lift_coefficient_jump))
             cl_file.flush()
 
         cl_reference_h_file_name = 'TBD'
@@ -205,9 +224,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             ' $\mu_c$ = ' + "{:.2f}".format(self.upwind_factor_constant) + '},\n' +
             '    xlabel={$x/c$},\n' +
             '    ylabel={$c_p[\\unit{-}$]},\n' +
-            '    %xmin=-0.01, xmax=1.01,\n' +
-            '    ymin=' + "{:.2f}".format(ymin) + ',\n' +
-            '    ymax=' + "{:.2f}".format(ymax) + ',\n' +
+            '    xmin=-0.01, xmax=1.01,\n' +
+            # '    ymin=' + "{:.2f}".format(ymin) + ',\n' +
+            # '    ymax=' + "{:.2f}".format(ymax) + ',\n' +
             '    y dir=reverse,\n' +
             '    %xtick={0,0.2,0.4,0.6,0.8,1},\n' +
             '    %xticklabels={0,0.2,0.4,0.6,0.8,1},\n' +
@@ -228,23 +247,24 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                         '    \\addlegendentry{Kratos  (' +
                 ' $c_l$ = ' + "{:.4f}".format(self.lift_coefficient) +
                 ' $c_d$ = ' + "{:.4f}".format(self.drag_coefficient) + ')}\n\n' +
+            # '\\addplot[\n' +
+            # '    color=black,\n' +
+            # '    mark=none,\n' +
+            # '    mark options={dashed},\n' +
+            # '    dashed,\n' +
+            # '    ]\n' +
+            # '    table {' + cp_critical_reference_file_name + '};  \n' +
+            # '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
             '\\addplot[\n' +
             '    color=black,\n' +
             '    mark=none,\n' +
             '    mark options={dashed},\n' +
-            '    dashed,\n' +
-            '    ]\n' +
-            '    table {' + cp_critical_reference_file_name + '};  \n' +
-            '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
-            '\\addplot[\n' +
-            #'    color=red,\n' +
-            #'    mark=none,\n' +
-            '    only marks,\n' +
-            '    color=red,\n' +
-            '    mark=triangle*,\n' +
-            '    mark size=1.5,\n' +
-            '    mark options={solid},\n' +
-            '    densely dotted,\n' +
+            # '    only marks,\n' +
+            # '    color=red,\n' +
+            # '    mark=triangle*,\n' +
+            # '    mark size=1.5,\n' +
+            # '    mark options={solid},\n' +
+            # '    densely dotted,\n' +
             '    ]\n' +
             '    table {' + output_file_name + '};  \n' +
             '    \\addlegendentry{' + self.reference_case_name + ' (' +
