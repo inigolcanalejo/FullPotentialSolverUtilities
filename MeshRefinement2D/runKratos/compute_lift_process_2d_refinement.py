@@ -345,6 +345,16 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             return 1.6746
         elif(abs(AOA - 15.0) < 1e-3):
             return 1.7916
+        elif(abs(AOA - 16.0) < 1e-3):
+            return 1.9080
+        elif(abs(AOA - 17.0) < 1e-3):
+            return 2.0239
+        elif(abs(AOA - 18.0) < 1e-3):
+            return 2.1391
+        elif(abs(AOA - 19.0) < 1e-3):
+            return 2.2537
+        elif(abs(AOA - 20.0) < 1e-3):
+            return 2.3676
         else:
             return 0.0
 
