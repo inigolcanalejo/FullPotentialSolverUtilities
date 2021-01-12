@@ -449,7 +449,7 @@ def create_cl_error_domain_size_directory_tree(work_dir):
                                 'Domain\'s size',                                                           # xlabel
                                 '$\\frac{|c_l - c_{lref}|}{|c_{lref}|}\\cdot100$',                          # ylabel
                                 'cl_error_results_domain.dat',                                              # dat_name
-                                'cl_jump_error_results.dat',                                                # jump_dat_name
+                                'cl_jump_error_results_domain.dat',                                         # jump_dat_name
                                 'cl_far_field_error_results_domain.dat')
 
 def create_cm_plots_directory_tree(work_dir, reference_case_name):

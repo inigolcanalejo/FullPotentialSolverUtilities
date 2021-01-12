@@ -178,6 +178,16 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.cl_relative_error))
                 cl_error_file.flush()
 
+            cl_jump_error_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_jump_error_results_domain.dat'
+            with open(cl_jump_error_results_domain_file_name,'a') as cl_error_file:
+                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.cl_jump_relative_error))
+                cl_error_file.flush()
+
+            cl_far_field_error_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_far_field_error_results_domain.dat'
+            with open(cl_far_field_error_results_domain_file_name,'a') as cl_error_file:
+                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.cl_far_field_relative_error))
+                cl_error_file.flush()
+
         cp_tikz_file_name = 'TBD'
         cp_critical_reference_file_name = 'default.dat'
         if self.reference_case_name == 'TAU':
