@@ -257,14 +257,14 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                         '    \\addlegendentry{Kratos  (' +
                 ' $c_l$ = ' + "{:.4f}".format(self.lift_coefficient) +
                 ' $c_d$ = ' + "{:.4f}".format(self.drag_coefficient) + ')}\n\n' +
-            # '\\addplot[\n' +
-            # '    color=black,\n' +
-            # '    mark=none,\n' +
-            # '    mark options={dashed},\n' +
-            # '    dashed,\n' +
-            # '    ]\n' +
-            # '    table {' + cp_critical_reference_file_name + '};  \n' +
-            # '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
+            '\\addplot[\n' +
+            '    color=black,\n' +
+            '    mark=none,\n' +
+            '    mark options={dashed},\n' +
+            '    dashed,\n' +
+            '    ]\n' +
+            '    table {' + cp_critical_reference_file_name + '};  \n' +
+            '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
             '\\addplot[\n' +
             '    color=black,\n' +
             '    mark=none,\n' +
