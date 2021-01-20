@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 1
+        "end_time"        : 2
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -25,8 +25,8 @@
         },
         "maximum_iterations"     : 20,
         "echo_level"             : 1,
-        "relative_tolerance": 1e-14,
-        "absolute_tolerance": 1e-14,
+        "relative_tolerance": 1e-12,
+        "absolute_tolerance": 1e-12,
         "linear_solver_settings"  : {
                 "solver_type"             : "LinearSolversApplication.pardiso_lu",
                 "max_iteration": 1000,
@@ -52,13 +52,13 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.63,
+                "mach_infinity": 0.67,
                 "free_stream_density"  : 1.225,
                 "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
                 "mach_number_limit": 0.99,
-                "critical_mach": 0.90,
+                "critical_mach": 0.99,
                 "upwind_factor_constant": 1.0,
                 "initialize_flow_field": false,
                 "perturbation_field": true
