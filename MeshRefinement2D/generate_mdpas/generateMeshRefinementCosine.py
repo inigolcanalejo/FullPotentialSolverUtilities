@@ -25,7 +25,7 @@ FarField_Refinement_Factor = TBD
 Initial_Domain_Size = TBD
 Domain_Size_Factor = TBD
 
-Ratio = 1.1
+Ratio = 1.001
 Growth_Rate = 0.05
 
 path = os.getcwd()
@@ -35,12 +35,12 @@ if not os.path.exists(salome_output_path):
 
 case = 0
 Domain_Length = Initial_Domain_Size
-Domain_Width = Initial_Domain_Size
+Domain_Width = Initial_Domain_Size*0.5
 
 for k in range(Number_Of_Domains_Size):
     Domain_Length = int(Domain_Length)
     Domain_Width = int(Domain_Width)
-    FarField_MeshSize = int(Domain_Length / 50.0)
+    FarField_MeshSize = 0.25# int(Domain_Length / 50.0)
     AOA = Initial_AOA
     for j in range(Number_Of_AOAS):
         Airfoil_MeshSize = Initial_Airfoil_MeshSize
