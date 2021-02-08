@@ -104,7 +104,7 @@ for k in range(Number_Of_Domains_Size):
             Cut_Domain = geompy.MakeCutList(Face_Domain, [Face_Airfoil], True)
 
             #Explode edges
-            [Edge_1,Edge_2,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
+            [Edge_1,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Edge_2,Edge_7,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
 
             [Auto_group_for_Sub_mesh_1,Auto_group_for_Sub_mesh_1_1] = geompy.ExtractShapes(Edge_LowerSurface_TE, geompy.ShapeType["VERTEX"], True)
 
