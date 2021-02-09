@@ -3,7 +3,7 @@ Number_Of_Domains_Size=1
 Number_Of_Refinements=1
 Number_Of_AOAS=1
 
-Initial_Domain_Size=6
+Initial_Domain_Size=50
 Domain_Size_Factor=10
 
 Initial_AOA=5.0

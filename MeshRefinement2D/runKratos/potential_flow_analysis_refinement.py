@@ -109,7 +109,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     def ExecuteBeforeAOALoop(self):
         self.Domain_Length = int(self.Domain_Length)
         self.Domain_Width = int(self.Domain_Width)
-        self.FarField_MeshSize = 0.25#int(self.Domain_Length / 50.0)
+        self.FarField_MeshSize = 2.0#int(self.Domain_Length / 50.0)
         self.AOA = self.Initial_AOA
         if not os.path.exists(self.gid_output_path):
             os.makedirs(self.gid_output_path)
