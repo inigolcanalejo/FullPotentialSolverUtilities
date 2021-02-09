@@ -63,7 +63,7 @@ for k in range(Number_Of_AOAS):
             smp_dict_body_surface   = {"smp_name": "Body3D_Body_Auto1"}
             smp_dict_trailing_edge   = {"smp_name": "Wake3D_Wake_Auto1"}
             smp_dict_middle_airfoil   = {"smp_name": "Middle_Airfoil"}
-            smp_dict_trefft_plane_cut   = {"smp_name": "Trefft_Plane_Cut"}
+            # smp_dict_trefft_plane_cut   = {"smp_name": "Trefft_Plane_Cut"}
             smp_dict_section_100   = {"smp_name": "Section_100"}
             smp_dict_section_150   = {"smp_name": "Section_150"}
             smp_dict_section_180   = {"smp_name": "Section_180"}
@@ -88,9 +88,9 @@ for k in range(Number_Of_AOAS):
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
-            file_name_trefft_plane_cut = salome_output_path + '/Sub_mesh_Trefft_Plane_Cut_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+            # file_name_trefft_plane_cut = salome_output_path + '/Sub_mesh_Trefft_Plane_Cut_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+            #   Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+            #     Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
             file_name_section_100 = salome_output_path + '/Sub_mesh_Section_100_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
@@ -116,7 +116,7 @@ for k in range(Number_Of_AOAS):
             valid_file_body_surface,    nodes_body_surface,     geom_entities_body_surface  = ReadDatFile(file_name_body_surface)
             valid_file_trailing_edge,   nodes_trailing_edge,     geom_entities_trailing_edge  = ReadDatFile(file_name_trailing_edge)
             valid_file_middle_airfoil,  nodes_middle_airfoil,     geom_entities_middle_airfoil  = ReadDatFile(file_name_middle_airfoil)
-            valid_file_trefft_plane_cut,  nodes_trefft_plane_cut,     geom_entities_trefft_plane_cut  = ReadDatFile(file_name_trefft_plane_cut)
+            # valid_file_trefft_plane_cut,  nodes_trefft_plane_cut,     geom_entities_trefft_plane_cut  = ReadDatFile(file_name_trefft_plane_cut)
             valid_file_section_100,  nodes_section_100,     geom_entities_section_100  = ReadDatFile(file_name_section_100)
             valid_file_section_150,  nodes_section_150,     geom_entities_section_150  = ReadDatFile(file_name_section_150)
             valid_file_section_180,  nodes_section_180,     geom_entities_section_180  = ReadDatFile(file_name_section_180)
@@ -132,8 +132,8 @@ for k in range(Number_Of_AOAS):
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
             mesh_dict_middle_airfoil = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
-            mesh_dict_trefft_plane_cut = {'write_smp': 1,
-                                   'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
+            # mesh_dict_trefft_plane_cut = {'write_smp': 1,
+            #                        'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
 
             mesh_dict_section_100 = {'write_smp': 1,
                                    'entity_creation': {102: {'Condition': {'LineCondition2D2N': '0'}}}}
@@ -148,8 +148,8 @@ for k in range(Number_Of_AOAS):
             model.AddMesh(smp_dict_trailing_edge,   mesh_dict_trailing_edge,    nodes_trailing_edge,    geom_entities_trailing_edge)
             if valid_file_middle_airfoil:
                 model.AddMesh(smp_dict_middle_airfoil,   mesh_dict_middle_airfoil,    nodes_middle_airfoil,    geom_entities_middle_airfoil)
-            if valid_file_trefft_plane_cut:
-                model.AddMesh(smp_dict_trefft_plane_cut,   mesh_dict_trefft_plane_cut,    nodes_trefft_plane_cut,    geom_entities_trefft_plane_cut)
+            # if valid_file_trefft_plane_cut:
+            #     model.AddMesh(smp_dict_trefft_plane_cut,   mesh_dict_trefft_plane_cut,    nodes_trefft_plane_cut,    geom_entities_trefft_plane_cut)
             if valid_file_section_100:
                 model.AddMesh(smp_dict_section_100,   mesh_dict_section_100,    nodes_section_100,    geom_entities_section_100)
             if valid_file_section_150:
