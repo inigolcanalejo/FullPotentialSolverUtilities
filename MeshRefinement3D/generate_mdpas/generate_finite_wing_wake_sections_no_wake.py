@@ -12,8 +12,8 @@ Domain_Height = Domain_Length
 Domain_Width = 100
 
 Outlet_Min_Mesh_Size = 0.05
-Outlet_Max_Mesh_Size = 0.1
-Growth_Rate_Wake = 0.7
+# Outlet_Max_Mesh_Size = 0.1
+# Growth_Rate_Wake = 0.7
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
@@ -28,8 +28,8 @@ print 'Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 print 'Far_Field_Mesh_Size = ', Far_Field_Mesh_Size
 
 print '\nOutlet_Min_Mesh_Size = ', Outlet_Min_Mesh_Size
-print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size
-print 'Growth_Rate_Wake = ', Growth_Rate_Wake
+# print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size
+# print 'Growth_Rate_Wake = ', Growth_Rate_Wake
 
 
 Number_Of_AOAS = TBD
@@ -143,15 +143,13 @@ for k in range(Number_Of_AOAS):
             # Cut wing from the domain
             Cut_Domain = geompy.MakeCutList(Extrusion_Domain, [Partition_Wing_3], True)
 
-            # # Generate stl wake
-            # Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
-            # Translation_1 = geompy.MakeTranslation(Edge_TE_1, 0, 0, 0)
-            # Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
-            # Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
-            # Extrusion_Wake_stl = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
+            # Generate stl wake
+            Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
+            Translation_1 = geompy.MakeTranslation(Edge_TE_1, 0, 0, 0)
+            Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
+            Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
+            Extrusion_Wake_stl = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
 
-
-            '''
             # Explode
             [Face_Inlet,Face_Left_Wall,Face_Lower_LE_Left,Face_Upper_LE_Left,Face_Left_Wing,\
               Face_Lower_LE_Right_0,Face_Upper_LE_Right_0,\
@@ -164,13 +162,13 @@ for k in range(Number_Of_AOAS):
               Face_Lower_TE_Right_1,Face_Upper_TE_Right_1,\
               Face_Lower_TE_Right_2,Face_Upper_TE_Right_2,\
               Face_Lower_TE_Right_3,Face_Upper_TE_Right_3,\
-              Face_Right_Wall,Face_Wake,Face_Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["FACE"], True)
+              Face_Right_Wall,Face_Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["FACE"], True)
 
             # Exploding far field
             [Edge_1,Edge_2,Edge_3,Edge_4] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
             [Obj1,Edge_6,Edge_7,Obj2] = geompy.ExtractShapes(Face_Left_Wall, geompy.ShapeType["EDGE"], True)
             [Obj1,Edge_8,Edge_9,Obj2] = geompy.ExtractShapes(Face_Right_Wall, geompy.ShapeType["EDGE"], True)
-            [Edge_5,Edge_10,Edge_Wake_Outlet,Edge_11,Edge_12] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
+            [Edge_5,Edge_10,Edge_11,Edge_12] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
 
             # Exploding wing
             [Edge_LE_Left,    Edge_Left_LowerLE,Edge_Middle_LowerLE,      Edge_Left_Lower_Middle]     = geompy.ExtractShapes(Face_Lower_LE_Left, geompy.ShapeType["EDGE"], True)
@@ -201,70 +199,70 @@ for k in range(Number_Of_AOAS):
             [Obj1 , Obj2              , Edge_Right_LowerTE,       Edge_TE_Right_3] = geompy.ExtractShapes(Face_Lower_TE_Right_3, geompy.ShapeType["EDGE"], True)
             [Obj1 , Obj2              , Edge_Right_UpperTE,       Obj3]            = geompy.ExtractShapes(Face_Upper_TE_Right_3, geompy.ShapeType["EDGE"], True)
 
-            # Exploding wake
-            [Obj1,Obj2,Obj3,Obj4,Obj5,Edge_Wake_Left,Edge_Wake_Right,Obj6] = geompy.ExtractShapes(Face_Wake, geompy.ShapeType["EDGE"], True)
+            # # Exploding wake
+            # [Obj1,Obj2,Obj3,Obj4,Obj5,Edge_Wake_Left,Edge_Wake_Right,Obj6] = geompy.ExtractShapes(Face_Wake, geompy.ShapeType["EDGE"], True)
 
-            # Exploding Edge_Wake_Outlet
-            [Vertex_1,Vertex_2] = geompy.ExtractShapes(Edge_Wake_Outlet, geompy.ShapeType["VERTEX"], True)
+            # # Exploding Edge_Wake_Outlet
+            # [Vertex_1,Vertex_2] = geompy.ExtractShapes(Edge_Wake_Outlet, geompy.ShapeType["VERTEX"], True)
 
             # Making groups for submeshes
-            # Vertex
-            Auto_group_for_Sub_mesh_Wake_Vertex = geompy.CreateGroup(Partition_2, geompy.ShapeType["VERTEX"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Vertex, [Vertex_1, Vertex_2])
+            # # Vertex
+            # Auto_group_for_Sub_mesh_Wake_Vertex = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["VERTEX"])
+            # geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Vertex, [Vertex_1, Vertex_2])
 
             #Edges
-            # Wake edges
-            Auto_group_for_Sub_mesh_Wake_Edges = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Edges, [Edge_Wake_Left, Edge_Wake_Right])
+            # # Wake edges
+            # Auto_group_for_Sub_mesh_Wake_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
+            # geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Edges, [Edge_Wake_Left, Edge_Wake_Right])
 
             # Far field edges
-            Auto_group_for_Sub_mesh_Far_Field_Edges = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_Far_Field_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Edges, [Edge_1, Edge_2, Edge_3, Edge_4, Edge_6, Edge_7, Edge_8, Edge_9, Edge_5, Edge_10, Edge_11, Edge_12])
 
             # TE Airfoil edges
-            Auto_group_for_Sub_mesh_LE_Airfoils = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_LE_Airfoils = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_LE_Airfoils, [Edge_Left_LowerLE, Edge_Left_UpperLE, Edge_Right_LowerLE, Edge_Right_UpperLE])
 
             # LE Airfoil edges
-            Auto_group_for_Sub_mesh_TE_Airfoils = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_TE_Airfoils = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_TE_Airfoils, [Edge_Left_Lower_TE, Edge_Left_Upper_TE, Edge_Right_LowerTE, Edge_Right_UpperTE])
 
             # LE edges
-            Auto_group_for_Sub_mesh_LE_Edges = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_LE_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_LE_Edges, [Edge_LE_Left, Edge_LE_Right_0, Edge_LE_Right_1, Edge_LE_Right_2, Edge_LE_Right_3])
 
             # TE edges
-            Auto_group_for_Sub_mesh_TE_Edges = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_TE_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_TE_Edges, [Edge_TE_Left, Edge_TE_Right_0, Edge_TE_Right_1, Edge_TE_Right_2, Edge_TE_Right_3])
 
             # Middle
-            Auto_group_for_Sub_mesh_Middle = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_Middle = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Middle, [Edge_Left_Lower_Middle, Edge_Left_Upper_Middle, Edge_Right_Lower_Middle_0, Edge_Right_Lower_Middle_1, \
               Edge_Right_Lower_Middle_2, Edge_Right_Lower_Middle_3, Edge_Right_Upper_Middle_0, Edge_Right_Upper_Middle_1, Edge_Right_Upper_Middle_2, Edge_Right_Upper_Middle_3])
 
             # Middle section edges
-            Auto_group_for_Sub_mesh_Middle_Airfoils = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_Middle_Airfoils = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Middle_Airfoils, [Edge_Middle_LowerLE, Edge_Middle_UpperLE, Edge_Middle_LowerTE, Edge_Middle_UpperTE])
 
             # Section 100 edges
-            Auto_group_for_Sub_mesh_Section_100 = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_Section_100 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Section_100, [Edge_LowerLE_Section_100, Edge_UpperLE_Section_100, Edge_LowerTE_Section_100, Edge_UpperTE_Section_100])
 
             # Section 150 edges
-            Auto_group_for_Sub_mesh_Section_150 = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_Section_150 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Section_150, [Edge_LowerLE_Section_150, Edge_UpperLE_Section_150, Edge_LowerTE_Section_150, Edge_UpperTE_Section_150])
 
             # Section 180 edges
-            Auto_group_for_Sub_mesh_Section_180 = geompy.CreateGroup(Partition_2, geompy.ShapeType["EDGE"])
+            Auto_group_for_Sub_mesh_Section_180 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Section_180, [Edge_LowerLE_Section_180, Edge_UpperLE_Section_180, Edge_LowerTE_Section_180, Edge_UpperTE_Section_180])
 
             #Surfaces
             # Far field surface
-            Auto_group_for_Sub_mesh_Far_Field_Surface = geompy.CreateGroup(Partition_2, geompy.ShapeType["FACE"])
+            Auto_group_for_Sub_mesh_Far_Field_Surface = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["FACE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Surface, [Face_Inlet, Face_Left_Wall, Face_Down_Wall, Face_Top_Wall, Face_Right_Wall, Face_Outlet])
 
             # Wing surface
-            Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Partition_2, geompy.ShapeType["FACE"])
+            Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["FACE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Left_Wing, Face_Lower_LE_Left, Face_Upper_LE_Left, \
               Face_Lower_LE_Right_0,Face_Upper_LE_Right_0,\
               Face_Lower_LE_Right_1,Face_Upper_LE_Right_1,\
@@ -275,7 +273,6 @@ for k in range(Number_Of_AOAS):
               Face_Lower_TE_Right_1,Face_Upper_TE_Right_1,\
               Face_Lower_TE_Right_2,Face_Upper_TE_Right_2,\
               Face_Lower_TE_Right_3,Face_Upper_TE_Right_3])
-            '''
 
             # Adding to study
             geompy.addToStudy( O, 'O' )
@@ -311,39 +308,37 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudy( Extrusion_Domain, 'Extrusion_Domain' )
             geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
 
-            #geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
+            geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
 
 
-            '''
-            geompy.addToStudyInFather( Partition_2, Face_Inlet, 'Face_Inlet' )
-            geompy.addToStudyInFather( Partition_2, Face_Left_Wall, 'Face_Left_Wall' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_LE_Left, 'Face_Lower_LE_Left' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_LE_Left, 'Face_Upper_LE_Left' )
-            geompy.addToStudyInFather( Partition_2, Face_Left_Wing, 'Face_Left_Wing' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_LE_Right_0, 'Face_Lower_LE_Right_0' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_LE_Right_0, 'Face_Upper_LE_Right_0' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_LE_Right_1, 'Face_Lower_LE_Right_1' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_LE_Right_1, 'Face_Upper_LE_Right_1' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_LE_Right_2, 'Face_Lower_LE_Right_2' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_LE_Right_2, 'Face_Upper_LE_Right_2' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_LE_Right_3, 'Face_Lower_LE_Right_3' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_LE_Right_3, 'Face_Upper_LE_Right_3' )
-            geompy.addToStudyInFather( Partition_2, Face_Down_Wall, 'Face_Down_Wall' )
-            geompy.addToStudyInFather( Partition_2, Face_Top_Wall, 'Face_Top_Wall' )
-            geompy.addToStudyInFather( Partition_2, Face_Right_Wing, 'Face_Right_Wing' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_TE_Left, 'Face_Lower_TE_Left' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_TE_Left, 'Face_Upper_TE_Left' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_TE_Right_0, 'Face_Lower_TE_Right_0' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_TE_Right_0, 'Face_Upper_TE_Right_0' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_TE_Right_1, 'Face_Lower_TE_Right_1' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_TE_Right_1, 'Face_Upper_TE_Right_1' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_TE_Right_2, 'Face_Lower_TE_Right_2' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_TE_Right_2, 'Face_Upper_TE_Right_2' )
-            geompy.addToStudyInFather( Partition_2, Face_Lower_TE_Right_3, 'Face_Lower_TE_Right_3' )
-            geompy.addToStudyInFather( Partition_2, Face_Upper_TE_Right_3, 'Face_Upper_TE_Right_3' )
-            geompy.addToStudyInFather( Partition_2, Face_Right_Wall, 'Face_Right_Wall' )
-            geompy.addToStudyInFather( Partition_2, Face_Wake, 'Face_Wake' )
-            geompy.addToStudyInFather( Partition_2, Face_Outlet, 'Face_Outlet' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Inlet, 'Face_Inlet' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Left_Wall, 'Face_Left_Wall' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_LE_Left, 'Face_Lower_LE_Left' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_LE_Left, 'Face_Upper_LE_Left' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Left_Wing, 'Face_Left_Wing' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_LE_Right_0, 'Face_Lower_LE_Right_0' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_LE_Right_0, 'Face_Upper_LE_Right_0' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_LE_Right_1, 'Face_Lower_LE_Right_1' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_LE_Right_1, 'Face_Upper_LE_Right_1' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_LE_Right_2, 'Face_Lower_LE_Right_2' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_LE_Right_2, 'Face_Upper_LE_Right_2' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_LE_Right_3, 'Face_Lower_LE_Right_3' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_LE_Right_3, 'Face_Upper_LE_Right_3' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Down_Wall, 'Face_Down_Wall' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Top_Wall, 'Face_Top_Wall' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Right_Wing, 'Face_Right_Wing' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_TE_Left, 'Face_Lower_TE_Left' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_TE_Left, 'Face_Upper_TE_Left' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_TE_Right_0, 'Face_Lower_TE_Right_0' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_TE_Right_0, 'Face_Upper_TE_Right_0' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_TE_Right_1, 'Face_Lower_TE_Right_1' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_TE_Right_1, 'Face_Upper_TE_Right_1' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_TE_Right_2, 'Face_Lower_TE_Right_2' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_TE_Right_2, 'Face_Upper_TE_Right_2' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Lower_TE_Right_3, 'Face_Lower_TE_Right_3' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Upper_TE_Right_3, 'Face_Upper_TE_Right_3' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Right_Wall, 'Face_Right_Wall' )
+            geompy.addToStudyInFather( Cut_Domain, Face_Outlet, 'Face_Outlet' )
 
             geompy.addToStudyInFather( Face_Inlet, Edge_1, 'Edge_1' )
             geompy.addToStudyInFather( Face_Inlet, Edge_2, 'Edge_2' )
@@ -360,7 +355,6 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Face_Outlet, Edge_10, 'Edge_10' )
             geompy.addToStudyInFather( Face_Outlet, Edge_11, 'Edge_11' )
             geompy.addToStudyInFather( Face_Outlet, Edge_12, 'Edge_12' )
-            geompy.addToStudyInFather( Face_Outlet, Edge_Wake_Outlet, 'Edge_Wake_Outlet' )
 
             geompy.addToStudyInFather( Face_Lower_LE_Left, Edge_LE_Left,           'Edge_LE_Left' )
             geompy.addToStudyInFather( Face_Lower_LE_Left, Edge_Left_LowerLE,      'Edge_Left_LowerLE' )
@@ -426,26 +420,26 @@ for k in range(Number_Of_AOAS):
 
             geompy.addToStudyInFather( Face_Upper_TE_Right_3, Edge_Right_UpperTE,     'Edge_Right_UpperTE' )
 
-            geompy.addToStudyInFather( Face_Wake, Edge_Wake_Left, 'Edge_Wake_Left' )
-            geompy.addToStudyInFather( Face_Wake, Edge_Wake_Right, 'Edge_Wake_Right' )
+            # geompy.addToStudyInFather( Face_Wake, Edge_Wake_Left, 'Edge_Wake_Left' )
+            # geompy.addToStudyInFather( Face_Wake, Edge_Wake_Right, 'Edge_Wake_Right' )
 
-            geompy.addToStudyInFather( Edge_Wake_Outlet, Vertex_1, 'Vertex_1' )
-            geompy.addToStudyInFather( Edge_Wake_Outlet, Vertex_2, 'Vertex_2' )
+            # geompy.addToStudyInFather( Edge_Wake_Outlet, Vertex_1, 'Vertex_1' )
+            # geompy.addToStudyInFather( Edge_Wake_Outlet, Vertex_2, 'Vertex_2' )
 
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Far_Field_Surface, 'Auto_group_for_Sub-mesh_Far_Field_Surface' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Wing_Surface, 'Auto_group_for_Sub-mesh_Wing_Surface' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Far_Field_Edges, 'Auto_group_for_Sub-mesh_Far_Field_Edges' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_LE_Airfoils, 'Auto_group_for_Sub-mesh_LE_Airfoils' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_TE_Airfoils, 'Auto_group_for_Sub-mesh_TE_Airfoils' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_LE_Edges, 'Auto_group_for_Sub_mesh_LE_Edges' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_TE_Edges, 'Auto_group_for_Sub_mesh_TE_Edges' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Middle, 'Auto_group_for_Sub-mesh_Middle' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Wake_Vertex, 'Auto_group_for_Sub-mesh_Wake_Vertex' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Wake_Edges, 'Auto_group_for_Sub-mesh_Wake_Edges' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Middle_Airfoils, 'Auto_group_for_Sub_mesh_Middle_Airfoils' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Section_100, 'Auto_group_for_Sub_mesh_Section_100' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Section_150, 'Auto_group_for_Sub_mesh_Section_150' )
-            geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Section_180, 'Auto_group_for_Sub_mesh_Section_180' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Far_Field_Surface, 'Auto_group_for_Sub-mesh_Far_Field_Surface' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Wing_Surface, 'Auto_group_for_Sub-mesh_Wing_Surface' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Far_Field_Edges, 'Auto_group_for_Sub-mesh_Far_Field_Edges' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_LE_Airfoils, 'Auto_group_for_Sub-mesh_LE_Airfoils' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_TE_Airfoils, 'Auto_group_for_Sub-mesh_TE_Airfoils' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_LE_Edges, 'Auto_group_for_Sub_mesh_LE_Edges' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_TE_Edges, 'Auto_group_for_Sub_mesh_TE_Edges' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Middle, 'Auto_group_for_Sub-mesh_Middle' )
+            # geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Wake_Vertex, 'Auto_group_for_Sub-mesh_Wake_Vertex' )
+            # geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Wake_Edges, 'Auto_group_for_Sub-mesh_Wake_Edges' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Middle_Airfoils, 'Auto_group_for_Sub_mesh_Middle_Airfoils' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Section_100, 'Auto_group_for_Sub_mesh_Section_100' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Section_150, 'Auto_group_for_Sub_mesh_Section_150' )
+            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Section_180, 'Auto_group_for_Sub_mesh_Section_180' )
 
 
             ###
@@ -458,7 +452,7 @@ for k in range(Number_Of_AOAS):
             smesh = smeshBuilder.New(theStudy)
 
             # Set NETGEN 3D
-            Mesh_Domain = smesh.Mesh(Partition_2)
+            Mesh_Domain = smesh.Mesh(Cut_Domain)
             NETGEN_3D = Mesh_Domain.Tetrahedron()
             NETGEN_3D_Parameters_1 = NETGEN_3D.Parameters()
             NETGEN_3D_Parameters_1.SetMaxSize( Far_Field_Mesh_Size )
@@ -503,38 +497,38 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Wing.SetSecondOrder( 106 )
             NETGEN_2D_Parameters_Wing.SetFuseEdges( 80 )
 
-            # Wake surface
-            NETGEN_2D_2 = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_Wake)
-            Sub_mesh_Wake_Surface = NETGEN_2D_2.GetSubMesh()
-            NETGEN_2D_Parameters_Wake = NETGEN_2D_2.Parameters()
-            NETGEN_2D_Parameters_Wake.SetMaxSize( Outlet_Max_Mesh_Size )
-            NETGEN_2D_Parameters_Wake.SetOptimize( 1 )
-            NETGEN_2D_Parameters_Wake.SetFineness( 5 )
-            NETGEN_2D_Parameters_Wake.SetGrowthRate( Growth_Rate_Wake )
-            NETGEN_2D_Parameters_Wake.SetMinSize( Smallest_Airfoil_Mesh_Size )
-            NETGEN_2D_Parameters_Wake.SetUseSurfaceCurvature( 1 )
-            NETGEN_2D_Parameters_Wake.SetQuadAllowed( 0 )
-            NETGEN_2D_Parameters_Wake.SetSecondOrder( 106 )
-            NETGEN_2D_Parameters_Wake.SetFuseEdges( 80 )
+            # # Wake surface
+            # NETGEN_2D_2 = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_Wake)
+            # Sub_mesh_Wake_Surface = NETGEN_2D_2.GetSubMesh()
+            # NETGEN_2D_Parameters_Wake = NETGEN_2D_2.Parameters()
+            # NETGEN_2D_Parameters_Wake.SetMaxSize( Outlet_Max_Mesh_Size )
+            # NETGEN_2D_Parameters_Wake.SetOptimize( 1 )
+            # NETGEN_2D_Parameters_Wake.SetFineness( 5 )
+            # NETGEN_2D_Parameters_Wake.SetGrowthRate( Growth_Rate_Wake )
+            # NETGEN_2D_Parameters_Wake.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            # NETGEN_2D_Parameters_Wake.SetUseSurfaceCurvature( 1 )
+            # NETGEN_2D_Parameters_Wake.SetQuadAllowed( 0 )
+            # NETGEN_2D_Parameters_Wake.SetSecondOrder( 106 )
+            # NETGEN_2D_Parameters_Wake.SetFuseEdges( 80 )
 
-            # Vertex
-            Length_Near_Vertex_Wake = smesh.CreateHypothesis('SegmentLengthAroundVertex')
-            Length_Near_Vertex_Wake.SetLength( Outlet_Min_Mesh_Size )
-            SegmentAroundVertex_0D = smesh.CreateHypothesis('SegmentAroundVertex_0D')
-            status = Mesh_Domain.AddHypothesis(SegmentAroundVertex_0D,Auto_group_for_Sub_mesh_Wake_Vertex)
-            status = Mesh_Domain.AddHypothesis(Length_Near_Vertex_Wake,Auto_group_for_Sub_mesh_Wake_Vertex)
-            Sub_mesh_Wake_Vertex = Mesh_Domain.GetSubMesh( Auto_group_for_Sub_mesh_Wake_Vertex, 'Sub-mesh_Wake_Vertex' )
+            # # Vertex
+            # Length_Near_Vertex_Wake = smesh.CreateHypothesis('SegmentLengthAroundVertex')
+            # Length_Near_Vertex_Wake.SetLength( Outlet_Min_Mesh_Size )
+            # SegmentAroundVertex_0D = smesh.CreateHypothesis('SegmentAroundVertex_0D')
+            # status = Mesh_Domain.AddHypothesis(SegmentAroundVertex_0D,Auto_group_for_Sub_mesh_Wake_Vertex)
+            # status = Mesh_Domain.AddHypothesis(Length_Near_Vertex_Wake,Auto_group_for_Sub_mesh_Wake_Vertex)
+            # Sub_mesh_Wake_Vertex = Mesh_Domain.GetSubMesh( Auto_group_for_Sub_mesh_Wake_Vertex, 'Sub-mesh_Wake_Vertex' )
 
-            # Wake edges
-            Regular_1D_17 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Wake_Edges)
-            Start_and_End_Length_Wake = Regular_1D_17.StartEndLength(Smallest_Airfoil_Mesh_Size,Outlet_Min_Mesh_Size,[])
-            Start_and_End_Length_Wake.SetObjectEntry( 'Partition_2' )
-            Sub_mesh_Wake_Edges = Regular_1D_17.GetSubMesh()
+            # # Wake edges
+            # Regular_1D_17 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Wake_Edges)
+            # Start_and_End_Length_Wake = Regular_1D_17.StartEndLength(Smallest_Airfoil_Mesh_Size,Outlet_Min_Mesh_Size,[])
+            # Start_and_End_Length_Wake.SetObjectEntry( 'Cut_Domain' )
+            # Sub_mesh_Wake_Edges = Regular_1D_17.GetSubMesh()
 
-            # Wake outlet edge
-            Regular_1D_6 = Mesh_Domain.Segment(geom=Edge_Wake_Outlet)
-            Local_Length_Wake_Outlet_Edge = Regular_1D_6.LocalLength(Outlet_Max_Mesh_Size,None,1e-07)
-            Sub_mesh_Wake_Outlet_Edge = Regular_1D_6.GetSubMesh()
+            # # Wake outlet edge
+            # Regular_1D_6 = Mesh_Domain.Segment(geom=Edge_Wake_Outlet)
+            # Local_Length_Wake_Outlet_Edge = Regular_1D_6.LocalLength(Outlet_Max_Mesh_Size,None,1e-07)
+            # Sub_mesh_Wake_Outlet_Edge = Regular_1D_6.GetSubMesh()
 
             # Far field edges
             Regular_1D = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Far_Field_Edges)
@@ -544,13 +538,13 @@ for k in range(Number_Of_AOAS):
             # LE Airfoils
             Regular_1D_1 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Airfoils)
             Start_and_End_Length_LE = Regular_1D_1.StartEndLength(Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[])
-            Start_and_End_Length_LE.SetObjectEntry( 'Partition_2' )
+            Start_and_End_Length_LE.SetObjectEntry( 'Cut_Domain' )
             Sub_mesh_LE_Airfoils = Regular_1D_1.GetSubMesh()
 
             # TE Airfoils
             Regular_1D_2 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Airfoils)
             Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size,[])
-            Start_and_End_Length_TE.SetObjectEntry( 'Partition_2' )
+            Start_and_End_Length_TE.SetObjectEntry( 'Cut_Domain' )
             Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
 
             # TE
@@ -568,28 +562,31 @@ for k in range(Number_Of_AOAS):
             Local_Length_Middle = Regular_1D_5.LocalLength(Biggest_Airfoil_Mesh_Size,None,1e-07)
             Sub_mesh_Middle = Regular_1D_5.GetSubMesh()
 
+
             # Middle Airfoils
             Regular_1D_7 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Middle_Airfoils)
-            Start_and_End_Length_Middle = Regular_1D_7.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 47, 56 ])
-            Start_and_End_Length_Middle.SetObjectEntry( 'Partition_2' )
+            Start_and_End_Length_Middle = Regular_1D_7.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 50, 41 ])
+            Start_and_End_Length_Middle.SetObjectEntry( 'Cut_Domain' )
             Sub_mesh_Middle_Airfoils = Regular_1D_7.GetSubMesh()
+
 
             # Section 100
             Regular_1D_8 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_100)
-            Start_and_End_Length_Section_100 = Regular_1D_8.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 66, 81 ])
-            Start_and_End_Length_Section_100.SetObjectEntry( 'Partition_2' )
+            Start_and_End_Length_Section_100 = Regular_1D_8.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 72, 57 ])
+            Start_and_End_Length_Section_100.SetObjectEntry( 'Cut_Domain' )
             Sub_mesh_Section_100 = Regular_1D_8.GetSubMesh()
+
 
             # Section 150
             Regular_1D_9 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_150)
-            Start_and_End_Length_Section_150 = Regular_1D_9.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 86, 101 ])
-            Start_and_End_Length_Section_150.SetObjectEntry( 'Partition_2' )
+            Start_and_End_Length_Section_150 = Regular_1D_9.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 92, 82 ])
+            Start_and_End_Length_Section_150.SetObjectEntry( 'Cut_Domain' )
             Sub_mesh_Section_150 = Regular_1D_9.GetSubMesh()
 
             # Section 180
             Regular_1D_10 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_180)
-            Start_and_End_Length_Section_180 = Regular_1D_10.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 106, 121 ])
-            Start_and_End_Length_Section_180.SetObjectEntry( 'Partition_2' )
+            Start_and_End_Length_Section_180 = Regular_1D_10.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 112, 102 ])
+            Start_and_End_Length_Section_180.SetObjectEntry( 'Cut_Domain' )
             Sub_mesh_Section_180 = Regular_1D_10.GetSubMesh()
 
             import time as time
@@ -623,10 +620,6 @@ for k in range(Number_Of_AOAS):
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
             middle_airfoil = salome_output_path + '/Sub_mesh_Middle_Airfoil_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
-
-            trefftz_plane_cut_path = salome_output_path + '/Sub_mesh_Trefft_Plane_Cut_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
@@ -669,11 +662,6 @@ for k in range(Number_Of_AOAS):
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
             try:
-              Mesh_Domain.ExportDAT( r'/' + trefftz_plane_cut_path, Sub_mesh_Wake_Outlet_Edge )
-              pass
-            except:
-              print 'ExportPartToDAT() failed. Invalid file name?'
-            try:
               Mesh_Domain.ExportDAT( r'/' + section_100, Sub_mesh_Section_100 )
               pass
             except:
@@ -707,21 +695,36 @@ for k in range(Number_Of_AOAS):
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
             smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
+            smesh.SetName(Regular_1D_1.GetAlgorithm(), 'Regular_1D_1')
+            smesh.SetName(Regular_1D_2.GetAlgorithm(), 'Regular_1D_2')
+            smesh.SetName(Regular_1D_3.GetAlgorithm(), 'Regular_1D_3')
+            smesh.SetName(Regular_1D_4.GetAlgorithm(), 'Regular_1D_4')
+            smesh.SetName(Regular_1D_5.GetAlgorithm(), 'Regular_1D_5')
+            # smesh.SetName(Regular_1D_6.GetAlgorithm(), 'Regular_1D_6')
+            smesh.SetName(Regular_1D_7.GetAlgorithm(), 'Regular_1D_7')
+            smesh.SetName(Regular_1D_8.GetAlgorithm(), 'Regular_1D_8')
+            smesh.SetName(Regular_1D_9.GetAlgorithm(), 'Regular_1D_9')
+            smesh.SetName(Regular_1D_10.GetAlgorithm(), 'Regular_1D_10')
+            # smesh.SetName(Regular_1D_17.GetAlgorithm(), 'Regular_1D_17')
+
             smesh.SetName(NETGEN_2D.GetAlgorithm(), 'NETGEN 2D')
             smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN 2D Parameters_FarField')
             smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
-            smesh.SetName(NETGEN_2D_Parameters_Wake, 'NETGEN_2D_Parameters_Wake')
+            # smesh.SetName(NETGEN_2D_Parameters_Wake, 'NETGEN_2D_Parameters_Wake')
             smesh.SetName(NETGEN_3D_Parameters_1, 'NETGEN 3D Parameters_1')
             smesh.SetName(Start_and_End_Length_TE, 'Start and End Length_TE')
             smesh.SetName(Local_Length_TE, 'Local Length_TE')
             smesh.SetName(Local_Length_Far_Field, 'Local Length_Far_Field')
             smesh.SetName(Start_and_End_Length_LE, 'Start and End Length_LE')
             smesh.SetName(Local_Length_Middle, 'Local Length_Middle')
-            smesh.SetName(Start_and_End_Length_Wake, 'Start_and_End_Length_Wake')
-            smesh.SetName(SegmentAroundVertex_0D, 'SegmentAroundVertex_0D')
-            smesh.SetName(Length_Near_Vertex_Wake, 'Length_Near_Vertex_Wake')
-            smesh.SetName(Local_Length_Wake_Outlet_Edge, 'Local_Length_Wake_Outlet_Edge')
+            # smesh.SetName(Start_and_End_Length_Wake, 'Start_and_End_Length_Wake')
+            # smesh.SetName(SegmentAroundVertex_0D, 'SegmentAroundVertex_0D')
+            # smesh.SetName(Length_Near_Vertex_Wake, 'Length_Near_Vertex_Wake')
+            # smesh.SetName(Local_Length_Wake_Outlet_Edge, 'Local_Length_Wake_Outlet_Edge')
             smesh.SetName(Start_and_End_Length_Middle, 'Start_and_End_Length_Middle')
+            smesh.SetName(Start_and_End_Length_Section_100, 'Start_and_End_Length_Section_100')
+            smesh.SetName(Start_and_End_Length_Section_150, 'Start_and_End_Length_Section_150')
+            smesh.SetName(Start_and_End_Length_Section_180, 'Start_and_End_Length_Section_180')
 
             smesh.SetName(Mesh_Domain.GetMesh(), 'Mesh_Domain')
             smesh.SetName(Sub_mesh_Far_Field_Edges, 'Sub-mesh_Far_Field_Edges')
@@ -733,12 +736,14 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Sub_mesh_TE_Airfoils, 'Sub-mesh_TE_Airfoils')
             smesh.SetName(Sub_mesh_LE_Airfoils, 'Sub-mesh_LE_Airfoils')
             smesh.SetName(Mesh_Wake_Surface, 'Mesh_Wake_Surface')
-            smesh.SetName(Sub_mesh_Wake_Edges, 'Sub_mesh_Wake_Edges')
-            smesh.SetName(Sub_mesh_Wake_Surface, 'Sub_mesh_Wake_Surface')
-            smesh.SetName(Sub_mesh_Wake_Vertex, 'Sub-mesh_Wake_Vertex')
-            smesh.SetName(Sub_mesh_Wake_Outlet_Edge, 'Sub_mesh_Wake_Outlet_Edge')
+            # smesh.SetName(Sub_mesh_Wake_Edges, 'Sub_mesh_Wake_Edges')
+            # smesh.SetName(Sub_mesh_Wake_Surface, 'Sub_mesh_Wake_Surface')
+            # smesh.SetName(Sub_mesh_Wake_Vertex, 'Sub-mesh_Wake_Vertex')
+            # smesh.SetName(Sub_mesh_Wake_Outlet_Edge, 'Sub_mesh_Wake_Outlet_Edge')
             smesh.SetName(Sub_mesh_Middle_Airfoils, 'Sub_mesh_Middle_Airfoils')
-            '''
+            smesh.SetName(Sub_mesh_Section_100, 'Sub_mesh_Section_100')
+            smesh.SetName(Sub_mesh_Section_150, 'Sub_mesh_Section_150')
+            smesh.SetName(Sub_mesh_Section_180, 'Sub_mesh_Section_180')
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_finite_wing_sections_no_wake.hdf"

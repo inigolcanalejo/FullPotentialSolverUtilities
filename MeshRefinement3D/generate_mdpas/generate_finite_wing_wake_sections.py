@@ -711,6 +711,18 @@ for k in range(Number_Of_AOAS):
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
             smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
+            smesh.SetName(Regular_1D_1.GetAlgorithm(), 'Regular_1D_1')
+            smesh.SetName(Regular_1D_2.GetAlgorithm(), 'Regular_1D_2')
+            smesh.SetName(Regular_1D_3.GetAlgorithm(), 'Regular_1D_3')
+            smesh.SetName(Regular_1D_4.GetAlgorithm(), 'Regular_1D_4')
+            smesh.SetName(Regular_1D_5.GetAlgorithm(), 'Regular_1D_5')
+            smesh.SetName(Regular_1D_6.GetAlgorithm(), 'Regular_1D_6')
+            smesh.SetName(Regular_1D_7.GetAlgorithm(), 'Regular_1D_7')
+            smesh.SetName(Regular_1D_8.GetAlgorithm(), 'Regular_1D_8')
+            smesh.SetName(Regular_1D_9.GetAlgorithm(), 'Regular_1D_9')
+            smesh.SetName(Regular_1D_10.GetAlgorithm(), 'Regular_1D_10')
+            smesh.SetName(Regular_1D_17.GetAlgorithm(), 'Regular_1D_17')
+
             smesh.SetName(NETGEN_2D.GetAlgorithm(), 'NETGEN 2D')
             smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN 2D Parameters_FarField')
             smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
@@ -718,6 +730,7 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(NETGEN_3D_Parameters_1, 'NETGEN 3D Parameters_1')
             smesh.SetName(Start_and_End_Length_TE, 'Start and End Length_TE')
             smesh.SetName(Local_Length_TE, 'Local Length_TE')
+            smesh.SetName(Local_Length_LE, 'Local Length_LE')
             smesh.SetName(Local_Length_Far_Field, 'Local Length_Far_Field')
             smesh.SetName(Start_and_End_Length_LE, 'Start and End Length_LE')
             smesh.SetName(Local_Length_Middle, 'Local Length_Middle')
@@ -726,6 +739,9 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Length_Near_Vertex_Wake, 'Length_Near_Vertex_Wake')
             smesh.SetName(Local_Length_Wake_Outlet_Edge, 'Local_Length_Wake_Outlet_Edge')
             smesh.SetName(Start_and_End_Length_Middle, 'Start_and_End_Length_Middle')
+            smesh.SetName(Start_and_End_Length_Section_100, 'Start_and_End_Length_Section_100')
+            smesh.SetName(Start_and_End_Length_Section_150, 'Start_and_End_Length_Section_150')
+            smesh.SetName(Start_and_End_Length_Section_180, 'Start_and_End_Length_Section_180')
 
             smesh.SetName(Mesh_Domain.GetMesh(), 'Mesh_Domain')
             smesh.SetName(Sub_mesh_Far_Field_Edges, 'Sub-mesh_Far_Field_Edges')
@@ -742,10 +758,32 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Sub_mesh_Wake_Vertex, 'Sub-mesh_Wake_Vertex')
             smesh.SetName(Sub_mesh_Wake_Outlet_Edge, 'Sub_mesh_Wake_Outlet_Edge')
             smesh.SetName(Sub_mesh_Middle_Airfoils, 'Sub_mesh_Middle_Airfoils')
+            smesh.SetName(Sub_mesh_Section_100, 'Sub_mesh_Section_100')
+            smesh.SetName(Sub_mesh_Section_150, 'Sub_mesh_Section_150')
+            smesh.SetName(Sub_mesh_Section_180, 'Sub_mesh_Section_180')
 
-            # # Saving file to open from salome's gui
-            # file_name = "/salome_files/generate_finite_wing_middle.hdf"
-            # salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
+
+            # Section 100
+            Regular_1D_8 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_100)
+            Start_and_End_Length_Section_100 = Regular_1D_8.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 66, 81 ])
+            Start_and_End_Length_Section_100.SetObjectEntry( 'Partition_2' )
+            Sub_mesh_Section_100 = Regular_1D_8.GetSubMesh()
+
+            # Section 150
+            Regular_1D_9 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_150)
+            Start_and_End_Length_Section_150 = Regular_1D_9.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 86, 101 ])
+            Start_and_End_Length_Section_150.SetObjectEntry( 'Partition_2' )
+            Sub_mesh_Section_150 = Regular_1D_9.GetSubMesh()
+
+            # Section 180
+            Regular_1D_10 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_180)
+            Start_and_End_Length_Section_180 = Regular_1D_10.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 106, 121 ])
+            Start_and_End_Length_Section_180.SetObjectEntry( 'Partition_2' )
+            Sub_mesh_Section_180 = Regular_1D_10.GetSubMesh()
+
+            # Saving file to open from salome's gui
+            file_name = salome_output_path + "/generate_finite_wing_sections.hdf"
+            salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
 
             # with open('case/results_3d_finite_wing.dat', 'a+') as file:
             #   file.write('\n{0:5.0f} {1:5.0f} {2:10.0f} {3:10.4f} {4:10.3f} {5:10.0f} {6:10.2f} {7:10.2f} {8:15.1e} {9:15.1e} {10:10.1f}'.format(
