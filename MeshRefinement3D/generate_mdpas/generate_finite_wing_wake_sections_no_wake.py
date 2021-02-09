@@ -741,8 +741,8 @@ for k in range(Number_Of_AOAS):
             '''
 
             # Saving file to open from salome's gui
-            file_name = "/salome_files/generate_finite_wing_sections_no_wake.hdf"
-            salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
+            file_name = salome_output_path + "/generate_finite_wing_sections_no_wake.hdf"
+            salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
 
             # with open('case/results_3d_finite_wing.dat', 'a+') as file:
             #   file.write('\n{0:5.0f} {1:5.0f} {2:10.0f} {3:10.4f} {4:10.3f} {5:10.0f} {6:10.2f} {7:10.2f} {8:15.1e} {9:15.1e} {10:10.1f}'.format(
