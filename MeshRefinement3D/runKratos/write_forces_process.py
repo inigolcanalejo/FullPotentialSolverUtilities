@@ -50,6 +50,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.is_infinite_wing = settings["is_infinite_wing"].GetBool()
 
         trefft_plane_cut_model_part_name = settings["trefft_plane_cut_model_part_name"].GetString()
+        self.compute_trefft_plane_forces = False
         if trefft_plane_cut_model_part_name != "":
             self.compute_trefft_plane_forces = True
             if not self.fluid_model_part.HasSubModelPart(trefft_plane_cut_model_part_name):
@@ -269,13 +270,14 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         potential_jump_file_name = potential_jump_dir_name + '/potential_jump_trefftz_results.dat'
 
-        with open(potential_jump_file_name, 'w') as jump_file:
-            for node in self.trefft_plane_cut_model_part.Nodes:
-                potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
-                auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
-                potential_jump = potential - auxiliary_potential
+        if self.compute_trefft_plane_forces:
+            with open(potential_jump_file_name, 'w') as jump_file:
+                for node in self.trefft_plane_cut_model_part.Nodes:
+                    potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
+                    auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
+                    potential_jump = potential - auxiliary_potential
 
-                jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
+                    jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
 
         cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
