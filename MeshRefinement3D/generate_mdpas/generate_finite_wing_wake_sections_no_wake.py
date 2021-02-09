@@ -143,20 +143,15 @@ for k in range(Number_Of_AOAS):
             # Cut wing from the domain
             Cut_Domain = geompy.MakeCutList(Extrusion_Domain, [Partition_Wing_3], True)
 
-            # Generate wake
-            Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
-            Extrusion_Wake = geompy.MakePrismVecH(Edge_TE_1, Vector_Wake_Direction, Domain_Length*0.5)
+            # # Generate stl wake
+            # Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
+            # Translation_1 = geompy.MakeTranslation(Edge_TE_1, 0, 0, 0)
+            # Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
+            # Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
+            # Extrusion_Wake_stl = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
 
-            # Generate wake
-            Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
-            Translation_1 = geompy.MakeTranslation(Edge_TE_1, 0, 0, 0)
-            Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
-            Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
-            Extrusion_Wake_stl = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
 
-            # Partition
-            Partition_2 = geompy.MakePartition([Cut_Domain], [Extrusion_Wake], [], [], geompy.ShapeType["SOLID"], 0, [], 1)
-
+            '''
             # Explode
             [Face_Inlet,Face_Left_Wall,Face_Lower_LE_Left,Face_Upper_LE_Left,Face_Left_Wing,\
               Face_Lower_LE_Right_0,Face_Upper_LE_Right_0,\
@@ -169,7 +164,7 @@ for k in range(Number_Of_AOAS):
               Face_Lower_TE_Right_1,Face_Upper_TE_Right_1,\
               Face_Lower_TE_Right_2,Face_Upper_TE_Right_2,\
               Face_Lower_TE_Right_3,Face_Upper_TE_Right_3,\
-              Face_Right_Wall,Face_Wake,Face_Outlet] = geompy.ExtractShapes(Partition_2, geompy.ShapeType["FACE"], True)
+              Face_Right_Wall,Face_Wake,Face_Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["FACE"], True)
 
             # Exploding far field
             [Edge_1,Edge_2,Edge_3,Edge_4] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
@@ -280,6 +275,7 @@ for k in range(Number_Of_AOAS):
               Face_Lower_TE_Right_1,Face_Upper_TE_Right_1,\
               Face_Lower_TE_Right_2,Face_Upper_TE_Right_2,\
               Face_Lower_TE_Right_3,Face_Upper_TE_Right_3])
+            '''
 
             # Adding to study
             geompy.addToStudy( O, 'O' )
@@ -315,11 +311,10 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudy( Extrusion_Domain, 'Extrusion_Domain' )
             geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
 
-            geompy.addToStudy( Extrusion_Wake, 'Extrusion_Wake' )
-            geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
+            #geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
 
-            geompy.addToStudy( Partition_2, 'Partition_2' )
 
+            '''
             geompy.addToStudyInFather( Partition_2, Face_Inlet, 'Face_Inlet' )
             geompy.addToStudyInFather( Partition_2, Face_Left_Wall, 'Face_Left_Wall' )
             geompy.addToStudyInFather( Partition_2, Face_Lower_LE_Left, 'Face_Lower_LE_Left' )
@@ -451,6 +446,7 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Section_100, 'Auto_group_for_Sub_mesh_Section_100' )
             geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Section_150, 'Auto_group_for_Sub_mesh_Section_150' )
             geompy.addToStudyInFather( Partition_2, Auto_group_for_Sub_mesh_Section_180, 'Auto_group_for_Sub_mesh_Section_180' )
+
 
             ###
             ### SMESH component
@@ -742,10 +738,11 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Sub_mesh_Wake_Vertex, 'Sub-mesh_Wake_Vertex')
             smesh.SetName(Sub_mesh_Wake_Outlet_Edge, 'Sub_mesh_Wake_Outlet_Edge')
             smesh.SetName(Sub_mesh_Middle_Airfoils, 'Sub_mesh_Middle_Airfoils')
+            '''
 
-            # # Saving file to open from salome's gui
-            # file_name = "/salome_files/generate_finite_wing_middle.hdf"
-            # salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
+            # Saving file to open from salome's gui
+            file_name = "/salome_files/generate_finite_wing_sections_no_wake.hdf"
+            salome.myStudyManager.SaveAs(script_path + file_name, salome.myStudy, 0)
 
             # with open('case/results_3d_finite_wing.dat', 'a+') as file:
             #   file.write('\n{0:5.0f} {1:5.0f} {2:10.0f} {3:10.4f} {4:10.3f} {5:10.0f} {6:10.2f} {7:10.2f} {8:15.1e} {9:15.1e} {10:10.1f}'.format(
