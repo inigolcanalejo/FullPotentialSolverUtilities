@@ -11,8 +11,8 @@ Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
 
-Outlet_Min_Mesh_Size = 0.05
-Outlet_Max_Mesh_Size = 0.1
+Outlet_Min_Mesh_Size_List = [0.1, 0.1, 0.1, 0.1, 0.1]
+Outlet_Max_Mesh_Size_List = [0.30, 0.25, 0.20, 0.15, 0.10]
 Growth_Rate_Wake = 0.7
 
 Smallest_Airfoil_Mesh_Size = TBD
@@ -27,8 +27,8 @@ print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
 print 'Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 print 'Far_Field_Mesh_Size = ', Far_Field_Mesh_Size
 
-print '\nOutlet_Min_Mesh_Size = ', Outlet_Min_Mesh_Size
-print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size
+# print '\nOutlet_Min_Mesh_Size = ', Outlet_Min_Mesh_Size
+# print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size
 print 'Growth_Rate_Wake = ', Growth_Rate_Wake
 
 
@@ -51,7 +51,6 @@ if not os.path.exists(salome_output_path):
     os.makedirs(salome_output_path)
 if not os.path.exists(mdpa_path):
     os.makedirs(mdpa_path)
-
 case = 0
 AOA = Initial_AOA
 
@@ -69,9 +68,14 @@ for k in range(Number_Of_AOAS):
         for i in range(Number_Of_Wing_Refinements):
             Growth_Rate_Wing = round(Growth_Rate_Wing, 2)
             Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 3)
+            Real_Smallest_Airfoil_Mesh_Size = 0.001
+            Real_Growth_Rate_Wing = 0.04
+            Outlet_Max_Mesh_Size = Outlet_Max_Mesh_Size_List[i]
+            Outlet_Min_Mesh_Size = Outlet_Min_Mesh_Size_List[i]
             Biggest_Airfoil_Mesh_Size = round(Biggest_Airfoil_Mesh_Size, 3)
-            print '\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
-            print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size, ' Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
+            print '\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Real_Growth_Rate_Wing
+            print 'Smallest_Airfoil_Mesh_Size = ', Real_Smallest_Airfoil_Mesh_Size, ' Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
+            print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size, ' Outlet_Min_Mesh_Size = ', Outlet_Min_Mesh_Size
 
             import sys
             import salome
@@ -471,7 +475,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_3D_Parameters_1.SetGrowthRate( Growth_Rate_Domain )
             NETGEN_3D_Parameters_1.SetNbSegPerEdge( 3 )
             NETGEN_3D_Parameters_1.SetNbSegPerRadius( 5 )
-            NETGEN_3D_Parameters_1.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_3D_Parameters_1.SetMinSize( Real_Smallest_Airfoil_Mesh_Size )
             NETGEN_3D_Parameters_1.SetUseSurfaceCurvature( 0 )
             NETGEN_3D_Parameters_1.SetSecondOrder( 106 )
             NETGEN_3D_Parameters_1.SetFuseEdges( 80 )
@@ -498,10 +502,10 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Wing.SetMaxSize( Biggest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Wing.SetOptimize( 1 )
             NETGEN_2D_Parameters_Wing.SetFineness( 5 )
-            NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wing )
+            NETGEN_2D_Parameters_Wing.SetGrowthRate( Real_Growth_Rate_Wing )
             NETGEN_2D_Parameters_Wing.SetNbSegPerEdge( 6.92154e-310 )
             NETGEN_2D_Parameters_Wing.SetNbSegPerRadius( 5.32336e-317 )
-            NETGEN_2D_Parameters_Wing.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing.SetMinSize( Real_Smallest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Wing.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_Wing.SetQuadAllowed( 0 )
             NETGEN_2D_Parameters_Wing.SetSecondOrder( 106 )
@@ -515,7 +519,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Wake.SetOptimize( 1 )
             NETGEN_2D_Parameters_Wake.SetFineness( 5 )
             NETGEN_2D_Parameters_Wake.SetGrowthRate( Growth_Rate_Wake )
-            NETGEN_2D_Parameters_Wake.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wake.SetMinSize( Real_Smallest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Wake.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_Wake.SetQuadAllowed( 0 )
             NETGEN_2D_Parameters_Wake.SetSecondOrder( 106 )
@@ -531,7 +535,7 @@ for k in range(Number_Of_AOAS):
 
             # Wake edges
             Regular_1D_17 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Wake_Edges)
-            Start_and_End_Length_Wake = Regular_1D_17.StartEndLength(Smallest_Airfoil_Mesh_Size,Outlet_Min_Mesh_Size,[])
+            Start_and_End_Length_Wake = Regular_1D_17.StartEndLength(Real_Smallest_Airfoil_Mesh_Size,Outlet_Min_Mesh_Size,[])
             Start_and_End_Length_Wake.SetObjectEntry( 'Partition_2' )
             Sub_mesh_Wake_Edges = Regular_1D_17.GetSubMesh()
 
@@ -547,25 +551,25 @@ for k in range(Number_Of_AOAS):
 
             # LE Airfoils
             Regular_1D_1 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Airfoils)
-            Start_and_End_Length_LE = Regular_1D_1.StartEndLength(Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[])
+            Start_and_End_Length_LE = Regular_1D_1.StartEndLength(Real_Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[])
             Start_and_End_Length_LE.SetObjectEntry( 'Partition_2' )
             Sub_mesh_LE_Airfoils = Regular_1D_1.GetSubMesh()
 
             # TE Airfoils
             Regular_1D_2 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Airfoils)
-            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size,[])
+            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Real_Smallest_Airfoil_Mesh_Size,[])
             Start_and_End_Length_TE.SetObjectEntry( 'Partition_2' )
             Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
 
             # TE
             Regular_1D_3 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Edges)
             Sub_mesh_TE = Regular_1D_3.GetSubMesh()
-            Local_Length_TE = Regular_1D_3.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
+            Local_Length_TE = Regular_1D_3.LocalLength(Real_Smallest_Airfoil_Mesh_Size,None,1e-07)
 
             # LE
             Regular_1D_4 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Edges)
             Sub_mesh_LE = Regular_1D_4.GetSubMesh()
-            Local_Length_LE = Regular_1D_4.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
+            Local_Length_LE = Regular_1D_4.LocalLength(Real_Smallest_Airfoil_Mesh_Size,None,1e-07)
 
             # Middle
             Regular_1D_5 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Middle)
@@ -574,25 +578,25 @@ for k in range(Number_Of_AOAS):
 
             # Middle Airfoils
             Regular_1D_7 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Middle_Airfoils)
-            Start_and_End_Length_Middle = Regular_1D_7.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 47, 56 ])
+            Start_and_End_Length_Middle = Regular_1D_7.StartEndLength(Real_Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 47, 56 ])
             Start_and_End_Length_Middle.SetObjectEntry( 'Partition_2' )
             Sub_mesh_Middle_Airfoils = Regular_1D_7.GetSubMesh()
 
             # Section 100
             Regular_1D_8 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_100)
-            Start_and_End_Length_Section_100 = Regular_1D_8.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 66, 81 ])
+            Start_and_End_Length_Section_100 = Regular_1D_8.StartEndLength(Real_Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 66, 81 ])
             Start_and_End_Length_Section_100.SetObjectEntry( 'Partition_2' )
             Sub_mesh_Section_100 = Regular_1D_8.GetSubMesh()
 
             # Section 150
             Regular_1D_9 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_150)
-            Start_and_End_Length_Section_150 = Regular_1D_9.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 86, 101 ])
+            Start_and_End_Length_Section_150 = Regular_1D_9.StartEndLength(Real_Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 86, 101 ])
             Start_and_End_Length_Section_150.SetObjectEntry( 'Partition_2' )
             Sub_mesh_Section_150 = Regular_1D_9.GetSubMesh()
 
             # Section 180
             Regular_1D_10 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_180)
-            Start_and_End_Length_Section_180 = Regular_1D_10.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 106, 121 ])
+            Start_and_End_Length_Section_180 = Regular_1D_10.StartEndLength(Real_Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 106, 121 ])
             Start_and_End_Length_Section_180.SetObjectEntry( 'Partition_2' )
             Sub_mesh_Section_180 = Regular_1D_10.GetSubMesh()
 
@@ -762,25 +766,6 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Sub_mesh_Section_150, 'Sub_mesh_Section_150')
             smesh.SetName(Sub_mesh_Section_180, 'Sub_mesh_Section_180')
 
-
-            # Section 100
-            Regular_1D_8 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_100)
-            Start_and_End_Length_Section_100 = Regular_1D_8.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 66, 81 ])
-            Start_and_End_Length_Section_100.SetObjectEntry( 'Partition_2' )
-            Sub_mesh_Section_100 = Regular_1D_8.GetSubMesh()
-
-            # Section 150
-            Regular_1D_9 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_150)
-            Start_and_End_Length_Section_150 = Regular_1D_9.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 86, 101 ])
-            Start_and_End_Length_Section_150.SetObjectEntry( 'Partition_2' )
-            Sub_mesh_Section_150 = Regular_1D_9.GetSubMesh()
-
-            # Section 180
-            Regular_1D_10 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Section_180)
-            Start_and_End_Length_Section_180 = Regular_1D_10.StartEndLength(Smallest_Airfoil_Mesh_Size, Biggest_Airfoil_Mesh_Size,[ 106, 121 ])
-            Start_and_End_Length_Section_180.SetObjectEntry( 'Partition_2' )
-            Sub_mesh_Section_180 = Regular_1D_10.GetSubMesh()
-
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_finite_wing_sections.hdf"
             salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
@@ -805,6 +790,8 @@ for k in range(Number_Of_AOAS):
             #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
             Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
             Smallest_Airfoil_Mesh_Size /= 2.0
+            Outlet_Max_Mesh_Size /= 2.0
+            Outlet_Min_Mesh_Size /= 4.0
             # Biggest_Airfoil_Mesh_Size /= 2.0
             case +=1
         Growth_Rate_Domain /= Growth_Rate_Domain_Refinement_Factor
