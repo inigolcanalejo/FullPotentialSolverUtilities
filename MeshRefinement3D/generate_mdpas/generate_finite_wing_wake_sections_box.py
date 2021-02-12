@@ -16,8 +16,8 @@ separating_domains = True
 # Outlet_Min_Mesh_Size = 0.05
 # Outlet_Max_Mesh_Size = 0.1
 # Growth_Rate_Wake = 0.7
-Refinement_Box_Face_Min_Mesh_Size = 0.2
-Refinement_Box_Face_Max_Mesh_Size = 0.5
+Refinement_Box_Face_Min_Mesh_Size = 0.15
+Refinement_Box_Face_Max_Mesh_Size = 0.2
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD

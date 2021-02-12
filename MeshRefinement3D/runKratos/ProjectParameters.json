@@ -30,9 +30,9 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["LOWER_SURFACE","UPPER_SURFACE","PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
+                        "nodal_nonhistorical_results" : ["PRESSURE_COEFFICIENT","VELOCITY"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","NORMAL_ELEMENT"]
+                        "gauss_point_results" : ["VELOCITY","WAKE","PRESSURE_COEFFICIENT"]
                     },
                     "point_data_configuration"  : []
                 }
