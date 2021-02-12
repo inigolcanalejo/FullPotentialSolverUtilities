@@ -7,7 +7,7 @@ import os
 import killSalome
 
 # Parameters:
-Wing_span = 4.0
+Wing_span = TBD
 Domain_Length = 100
 Domain_Height = Domain_Length
 Domain_Width = 100
@@ -16,8 +16,8 @@ separating_domains = True
 # Outlet_Min_Mesh_Size = 0.05
 # Outlet_Max_Mesh_Size = 0.1
 # Growth_Rate_Wake = 0.7
-Refinement_Box_Face_Min_Mesh_Size = 0.15
-Refinement_Box_Face_Max_Mesh_Size = 0.2
+Refinement_Box_Face_Min_Mesh_Size = 0.2
+Refinement_Box_Face_Max_Mesh_Size = 0.5
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
