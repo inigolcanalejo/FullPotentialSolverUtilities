@@ -8,16 +8,16 @@ import killSalome
 
 # Parameters:
 Wing_span = TBD
-Domain_Length = 100
+Domain_Length = 25
 Domain_Height = Domain_Length
-Domain_Width = 100
+Domain_Width = 25
 separating_domains = True
 
 # Outlet_Min_Mesh_Size = 0.05
 # Outlet_Max_Mesh_Size = 0.1
 # Growth_Rate_Wake = 0.7
-Refinement_Box_Face_Min_Mesh_Size = 0.15
-Refinement_Box_Face_Max_Mesh_Size = 0.2
+Refinement_Box_Face_Min_Mesh_Size = 0.091
+Refinement_Box_Face_Max_Mesh_Size = 0.091
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
@@ -75,7 +75,7 @@ for k in range(Number_Of_AOAS):
         Biggest_Airfoil_Mesh_Size = Initial_Biggest_Airfoil_Mesh_Size
         for i in range(Number_Of_Wing_Refinements):
             Growth_Rate_Wing = round(Growth_Rate_Wing, 2)
-            Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 3)
+            Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 4)
             Biggest_Airfoil_Mesh_Size = round(Biggest_Airfoil_Mesh_Size, 3)
             print '\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
             print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size, ' Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size

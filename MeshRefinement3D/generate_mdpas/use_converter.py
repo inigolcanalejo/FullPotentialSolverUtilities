@@ -51,7 +51,7 @@ for k in range(Number_Of_AOAS):
             #round(Airfoil_MeshSize, 1)
             #Airfoil_MeshSize = round_to_1(Airfoil_MeshSize)
             Growth_Rate_Wing = round(Growth_Rate_Wing, 2)
-            Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 3)
+            Smallest_Airfoil_Mesh_Size = round(Smallest_Airfoil_Mesh_Size, 4)
             print('Writing mdpa...')
             print('\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing)
             print('Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size)
