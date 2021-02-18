@@ -16,8 +16,8 @@ separating_domains = True
 # Outlet_Min_Mesh_Size = 0.05
 # Outlet_Max_Mesh_Size = 0.1
 # Growth_Rate_Wake = 0.7
-Refinement_Box_Face_Min_Mesh_Size = 0.091
-Refinement_Box_Face_Max_Mesh_Size = 0.091
+Refinement_Box_Face_Min_Mesh_Size = 0.1
+Refinement_Box_Face_Max_Mesh_Size = 0.1
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
@@ -101,6 +101,9 @@ for k in range(Number_Of_AOAS):
             import math
             import SALOMEDS
 
+            import time as time
+            print(' Starting geometry ')
+            start_time = time.time()
 
             geompy = geomBuilder.New(theStudy)
 
@@ -266,8 +269,8 @@ for k in range(Number_Of_AOAS):
             geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Edges, [Edge_1, Edge_2, Edge_3, Edge_4, Edge_6, Edge_7, Edge_8, Edge_9, Edge_5, Edge_10, Edge_11, Edge_12])
 
             # Refinemenet box inlet edges
-            Auto_group_for_Sub_mesh_Refinement_Box_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Edges, [Edge_Ref_In_Left, Edge_Ref_In_Bottom, Edge_Ref_In_Top, Edge_Ref_In_Right])
+            Auto_group_for_Sub_mesh_Refinement_Box_Edges_Inlet = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Edges_Inlet, [Edge_Ref_In_Left, Edge_Ref_In_Bottom, Edge_Ref_In_Top, Edge_Ref_In_Right])
 
             # Refinemenet box side edges
             Auto_group_for_Sub_mesh_Refinement_Box_Side_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
@@ -317,13 +320,13 @@ for k in range(Number_Of_AOAS):
             #Surfaces
             # Far field surface
             Auto_group_for_Sub_mesh_Far_Field_Surface = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Surface, [Face_Inlet, Face_Left_Wall, Face_Down_Wall, Face_Top_Wall, Face_Right_Wall, Face_Outlet])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Surface, [Face_Inlet, Face_Left_Wall, Face_Down_Wall, Face_Top_Wall, Face_Right_Wall, Face_Outlet, Face_Refinementbox_Outlet_1])
 
             # Refinement box faces
             Auto_group_for_Sub_mesh_Refinement_Box_Faces_Sides = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Faces_Sides, [Face_Refinementbox_Inlet_1])
             Auto_group_for_Sub_mesh_Refinement_Box_Faces_Coarse = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Faces_Coarse, [Face_Refinementbox_Down_1, Face_Refinementbox_Top_1, Face_Refinementbox_Outlet_1, Face_Refinementbox_Left_1, Face_Refinementbox_Right_1])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Faces_Coarse, [Face_Refinementbox_Down_1, Face_Refinementbox_Top_1, Face_Refinementbox_Left_1, Face_Refinementbox_Right_1])
 
             # Wing surface
             Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
@@ -337,6 +340,10 @@ for k in range(Number_Of_AOAS):
               Face_Lower_TE_Right_1,Face_Upper_TE_Right_1,\
               Face_Lower_TE_Right_2,Face_Upper_TE_Right_2,\
               Face_Lower_TE_Right_3,Face_Upper_TE_Right_3])
+
+            exe_time = time.time() - start_time
+            print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
+            print(' Geometry execution took ' + str(round(exe_time/60, 2)) + ' min')
 
             # Adding to study
             geompy.addToStudy( O, 'O' )
@@ -571,7 +578,7 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Section_100, 'Auto_group_for_Sub_mesh_Section_100' )
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Section_150, 'Auto_group_for_Sub_mesh_Section_150' )
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Section_180, 'Auto_group_for_Sub_mesh_Section_180' )
-            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Edges, 'Auto_group_for_Sub-mesh_Refinement_Box_Edges' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Edges_Inlet, 'Auto_group_for_Sub-mesh_Refinement_Box_Edges' )
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Side_Edges, 'Auto_group_for_Sub_mesh_Refinement_Box_Side_Edges' )
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Outlet_Edges, 'Auto_group_for_Sub-mesh_Refinement_Box_Outlet_Edges' )
             # geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Wake_Vertex, 'Auto_group_for_Sub-mesh_Wake_Vertex' )
@@ -639,10 +646,26 @@ for k in range(Number_Of_AOAS):
                 NETGEN_3D_Parameters_Refinement_Box.SetFuseEdges( 208 )
                 NETGEN_3D_Parameters_Refinement_Box.SetQuadAllowed( 127 )
 
+            # Refinement box outlet surface
+            NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_Refinementbox_Outlet_1)
+            Sub_mesh_Refinement_Box_Outlet_Surface = NETGEN_2D.GetSubMesh()
+            NETGEN_2D_Parameters_Refinement_Box_Outlet = NETGEN_2D.Parameters()
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetMaxSize( Refinement_Box_Face_Max_Mesh_Size )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetFineness( 5 )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetGrowthRate( Growth_Rate_Refinement_Box )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetNbSegPerEdge( 6.92922e-310 )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetNbSegPerRadius( 4.47651e-317 )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetMinSize( Refinement_Box_Face_Min_Mesh_Size )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetSecondOrder( 106 )
+            NETGEN_2D_Parameters_Refinement_Box_Outlet.SetFuseEdges( 80 )
+
             # Far field surface
-            NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Far_Field_Surface)
-            Sub_mesh_Far_Field_Surface = NETGEN_2D.GetSubMesh()
-            NETGEN_2D_Parameters_FarField = NETGEN_2D.Parameters()
+            NETGEN_2D_Far_Field = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Far_Field_Surface)
+            Sub_mesh_Far_Field_Surface = NETGEN_2D_Far_Field.GetSubMesh()
+            NETGEN_2D_Parameters_FarField = NETGEN_2D_Far_Field.Parameters()
             NETGEN_2D_Parameters_FarField.SetMaxSize( Far_Field_Mesh_Size )
             NETGEN_2D_Parameters_FarField.SetOptimize( 1 )
             NETGEN_2D_Parameters_FarField.SetFineness( 1 )
@@ -713,8 +736,8 @@ for k in range(Number_Of_AOAS):
             Local_Length_Far_Field = Regular_1D.LocalLength(Far_Field_Mesh_Size,None,1e-07)
             Sub_mesh_Far_Field_Edges = Regular_1D.GetSubMesh()
 
-            # Refinement box edges fine
-            Regular_1D_23 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Refinement_Box_Edges)
+            # Refinement box edges inlet
+            Regular_1D_23 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Refinement_Box_Edges_Inlet)
             Sub_mesh_Refinement_Box_Edges = Regular_1D_23.GetSubMesh()
             Local_Length_Refinement_Box_Edges = Regular_1D_23.LocalLength(Refinement_Box_Face_Min_Mesh_Size,None,1e-07)
 
@@ -790,6 +813,7 @@ for k in range(Number_Of_AOAS):
             isDone = Mesh_Domain.Compute()
             exe_time = time.time() - start_time
             print(' Mesh execution took ', str(round(exe_time, 2)), ' sec')
+            print(' Mesh execution took ' + str(round(exe_time/60, 2)) + ' min')
 
             NumberOfNodes = Mesh_Domain.NbNodes()
             NumberOfElements = Mesh_Domain.NbTetras()
@@ -916,8 +940,10 @@ for k in range(Number_Of_AOAS):
             # smesh.SetName(Length_Near_Vertex_Wake, 'Length_Near_Vertex_Wake')
             # smesh.SetName(Sub_mesh_Wake_Vertex, 'Sub-mesh_Wake_Vertex')
 
+            smesh.SetName(NETGEN_2D_Parameters_Refinement_Box_Outlet, 'NETGEN 2D Parameters_Refinement_Box_Outlet')
             smesh.SetName(NETGEN_2D_Parameters_Refinement_Box_Sides, 'NETGEN 2D Parameters_Refinement_Box_Sides')
             smesh.SetName(NETGEN_2D_Parameters_Refinement_Box_Coarse, 'NETGEN 2D Parameters_Refinement_Box_Coarse')
+            smesh.SetName(Sub_mesh_Refinement_Box_Outlet_Surface, 'Sub_mesh_Refinement_Box_Outlet_Surface')
             smesh.SetName(Sub_mesh_Refinement_Box_Faces_Sides, 'Sub-mesh_Refinement_Box_Faces_Sides')
             smesh.SetName(Sub_mesh_Refinement_Box_Faces_Coarse, 'Sub-mesh_Refinement_Box_Faces_Coarse')
 
