@@ -148,9 +148,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             self.cl_p_relative_error = abs(self.lift_coefficient - self.cl_reference)/abs(self.cl_reference)*100.0
 
         if(abs(self.cd_reference) < 1e-6):
-            self.cd_p_relative_error = abs(self.drag_coefficient - self.cd_reference)
+            self.cd_p_relative_error = abs(self.drag_coefficient_far_field - self.cd_reference)
         else:
-            self.cd_p_relative_error = abs(self.drag_coefficient - self.cd_reference)/abs(self.cd_reference)*100.0
+            self.cd_p_relative_error = abs(self.drag_coefficient_far_field - self.cd_reference)/abs(self.cd_reference)*100.0
 
         if(abs(self.cm_reference) < 1e-6):
             self.cm_p_relative_error = abs(self.moment_coefficient[1] - self.cm_reference)

@@ -80,6 +80,7 @@ for k in range(Number_Of_AOAS):
             print '\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing
             print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size, ' Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 
+            #'''
             import sys
             import salome
 
@@ -596,7 +597,7 @@ for k in range(Number_Of_AOAS):
 
             # Set NETGEN 3D
             Mesh_Domain = smesh.Mesh(Partition_Domain)
-            #'''
+
             NETGEN_3D = Mesh_Domain.Tetrahedron()
             NETGEN_3D_Parameters = NETGEN_3D.Parameters()
             NETGEN_3D_Parameters.SetMaxSize( Far_Field_Mesh_Size )
@@ -610,7 +611,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_3D_Parameters.SetSecondOrder( 106 )
             NETGEN_3D_Parameters.SetFuseEdges( 80 )
             NETGEN_3D_Parameters.SetQuadAllowed( 127 )
-            #'''
+
 
             if separating_domains:
                 print ('Meshing two domains separately')
@@ -1007,6 +1008,7 @@ for k in range(Number_Of_AOAS):
             #     NumberOfElements/1000.0, # 9
             #     exe_time/60.0)) # 10
             #   file.flush()
+            #'''
 
             #Airfoil_MeshSize *= Airfoil_Refinement_Factor
             #FarField_MeshSize /= FarField_Refinement_Factor
