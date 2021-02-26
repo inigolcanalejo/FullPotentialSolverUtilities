@@ -16,7 +16,7 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
         if self.step > 13:
             self.free_stream_mach += 0.01
         elif self.step > 1:
-            self.free_stream_mach += 0.05
+            self.free_stream_mach += 0.01
 
         self.u_inf = round(self.free_stream_mach,2) * self.free_stream_speed_of_sound
         self.free_stream_velocity = KratosMultiphysics.Vector(3)
