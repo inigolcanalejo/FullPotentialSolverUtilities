@@ -58,7 +58,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Initial_Domain_Size = TBD
         self.Domain_Size_Factor = TBD
 
-        self.case = 0
+        self.case = 1
         self.Domain_Length = self.Initial_Domain_Size
         self.Domain_Width = self.Initial_Domain_Size
 
