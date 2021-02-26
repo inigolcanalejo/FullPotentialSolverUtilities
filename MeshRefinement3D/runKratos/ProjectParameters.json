@@ -48,7 +48,7 @@
             "input_filename" : ""
         },
         "formulation": {
-            "element_type": "perturbation_incompressible"
+            "element_type": "perturbation_compressible"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,
