@@ -74,16 +74,21 @@
     },
     "processes"        : {
         "boundary_conditions_process_list" : [{
-            "python_module" : "apply_far_field_process",
-            "kratos_module" : "KratosMultiphysics.CompressiblePotentialFlowApplication",
+            "python_module" : "apply_far_field_process_refinement",
+            "process_name"  : "FarFieldProcessRefinement",
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "angle_of_attack" : 0.0,
-                "mach_infinity"   : 0.03,
+                "mach_infinity"   : 0.6,
                 "speed_of_sound"  : 340.0,
+                "heat_capacity_ratio": 1.4,
+                "inlet_potential": 0.0,
+                "mach_number_limit": 0.94,
+                "mach_number_squared_limit": 0.8836,
+                "critical_mach": 0.90,
+                "upwind_factor_constant": 1.0,
                 "initialize_flow_field": false,
-                "perturbation_field": true,
-                "inlet_potential": 0.0
+                "perturbation_field": true
             }
         },{
             "python_module" : "define_wake_process_3d",
