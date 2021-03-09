@@ -20,7 +20,7 @@ for free_stream_mach_number in np.arange(0.8, 0.85, 0.3):
     Mi2 = free_stream_mach_number**2
     vi2 = free_stream_velocity**2
 
-    velocity = np.arange(0.0, 2000.0, 1.0)
+    velocity = np.arange(0.0, 1500.0, 1.0)
 
     v2 = velocity**2
 
@@ -28,14 +28,22 @@ for free_stream_mach_number in np.arange(0.8, 0.85, 0.3):
 
     local_mach2 = Mi2 * v2 / (vi2 * square_brackets_term)
     local_mach = np.sqrt(local_mach2)
+    speed_of_sound_squared = vi2 * square_brackets_term / Mi2
+
+    vacuum_speed = np.sqrt(vi2 * (1 + 2 / ((hcr - 1)*Mi2)))
 
     print('\n free_sream_mach_number     = ', round(free_stream_mach_number,1))
     print(' free_stream_velocity       = ', round(free_stream_velocity,1))
+    print(' vacuum_speed       = ', round(vacuum_speed,1))
 
-    plt.plot(velocity, local_mach, label='$M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
+    #plt.plot(velocity, local_mach, label='$M$')
+    #plt.plot(velocity, local_mach2, label='$M^2$')
+    plt.plot(velocity, v2, label='$v^2$')
+    #plt.plot(velocity, speed_of_sound_squared, label='$a^2$')
 
 plt.legend(loc="upper left")
-plt.xlabel('velocity')
-plt.ylabel('loacl mach')
+plt.xlabel('velocity magnitude [m/s]')
+plt.ylabel('velocity magnitude squared [$m^2/s^2$]')
+plt.xlim([0, 1600])
 plt.grid()
 plt.show()
