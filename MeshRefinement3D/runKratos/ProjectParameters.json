@@ -32,7 +32,7 @@
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["LOWER_SURFACE","UPPER_SURFACE","PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT"]
+                        "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH"]
                     },
                     "point_data_configuration"  : []
                 }
@@ -79,7 +79,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "angle_of_attack" : 0.0,
-                "mach_infinity"   : 0.6,
+                "mach_infinity"   : 0.8,
                 "speed_of_sound"  : 340.0,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
