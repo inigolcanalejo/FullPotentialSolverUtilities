@@ -54,7 +54,7 @@ Growth_Rate_Refinement_Box = 0.1
 
 salome_output_path = 'TBD'
 mdpa_path = 'TBD'
-geometry_path = "/home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D/generate_mdpas/onera_m6_geometry/AileM6_with_sharp_TE_gid.igs"
+geometry_path = "/home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D/generate_mdpas/onera_m6_geometry/AileM6_with_sharp_TE_gid_divided.igs"
 if not os.path.exists(salome_output_path):
     os.makedirs(salome_output_path)
 if not os.path.exists(mdpa_path):
@@ -156,15 +156,19 @@ for k in range(Number_Of_AOAS):
 
             # Exploding refinement box faces
             [Edge_Ref_In_Left,Edge_Ref_In_Bottom,Edge_Ref_In_Top,Edge_Ref_In_Right] = geompy.ExtractShapes(Face_Refinementbox_Inlet_1, geompy.ShapeType["EDGE"], True)
-            [Obj1,Obj2,Obj3,Edge_Ref_Left_Bottom,Edge_Ref_Left_Top,Obj4] = geompy.ExtractShapes(Face_Refinementbox_Left_1, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Obj3,Obj4,Obj5,Edge_Ref_Left_Bottom,Edge_Ref_Left_Top,Obj8] = geompy.ExtractShapes(Face_Refinementbox_Left_1, geompy.ShapeType["EDGE"], True)
             [Obj1,Edge_Ref_Right_Bottom,Edge_Ref_Right_Top,Obj2] = geompy.ExtractShapes(Face_Refinementbox_Right_1, geompy.ShapeType["EDGE"], True)
             [Edge_Ref_Out_Left,Edge_Ref_Out_Bottom,Edge_Ref_Out_Top,Edge_Ref_Out_Right] = geompy.ExtractShapes(Face_Refinementbox_Outlet_1, geompy.ShapeType["EDGE"], True)
 
             # Exploding wing
-            [Edge_Wing_Left_Lower, Edge_LE, Edge_Wing_Right_Lower_LE, Edge_TE, Edge_Wing_Right_Lower_Middle, Edge_Wing_Right_Lower_TE] = geompy.ExtractShapes(Face_Wing_Lower, geompy.ShapeType["EDGE"], True)
-            [Edge_Wing_Left_Upper, Edge_LE, Edge_Wing_Right_Upper_LE, Edge_TE, Edge_Wing_Right_Upper_Middle, Edge_Wing_Right_Upper_TE] = geompy.ExtractShapes(Face_Wing_Upper, geompy.ShapeType["EDGE"], True)
-            [Edge_Wing_Right_Upper_LE, Edge_Wing_LE_Right, Edge_Wing_Right_Upper_Middle, Edge_Wing_Tip,Edge_Wing_Right_Upper_TE, Edge_Wing_Tip_TE] = geompy.ExtractShapes(Face_Wing_Tip_Upper, geompy.ShapeType["EDGE"], True)
-            [Edge_Wing_Right_Lower_LE, Edge_Wing_LE_Right, Edge_Wing_Right_Lower_Middle, Edge_Wing_Tip,Edge_Wing_Right_Lower_TE, Edge_Wing_Tip_TE] = geompy.ExtractShapes(Face_Wing_Tip_Lower, geompy.ShapeType["EDGE"], True)
+            [Edge_Wing_Left_Lower_LE, Edge_LE, Edge_Wing_Left_Lower_TE, Edge_Wing_Right_Lower_LE1, Edge_Wing_Right_Lower_LE2, Edge_TE, Edge_Wing_Right_Lower_TE2, Edge_Wing_Right_Lower_TE1] = geompy.ExtractShapes(Face_Wing_Lower, geompy.ShapeType["EDGE"], True)
+
+            [Edge_Wing_Left_Upper_LE, Edge_LE, Edge_Wing_Left_Upper_TE, Edge_Wing_Right_Upper_LE1, Edge_Wing_Right_Upper_LE2, Edge_TE, Edge_Wing_Right_Upper_TE2, Edge_Wing_Right_Upper_TE1] = geompy.ExtractShapes(Face_Wing_Upper, geompy.ShapeType["EDGE"], True)
+
+            [Edge_Wing_Right_Upper_LE1, Edge_Wing_Tip_LE1, Edge_Wing_Right_Upper_LE2, Edge_Wing_Tip_LE2,Edge_Wing_Right_Upper_TE2, Edge_Wing_Tip_TE2, Edge_Wing_Right_Upper_TE1, Edge_Wing_Tip_TE1] = geompy.ExtractShapes(Face_Wing_Tip_Upper, geompy.ShapeType["EDGE"], True)
+
+            [Edge_Wing_Right_Lower_LE1, Edge_Wing_Tip_LE1, Edge_Wing_Right_Lower_LE2, Edge_Wing_Tip_LE2,Edge_Wing_Right_Lower_TE2, Edge_Wing_Tip_TE2, Edge_Wing_Right_Lower_TE1, Edge_Wing_Tip_TE1] = geompy.ExtractShapes(Face_Wing_Tip_Lower, geompy.ShapeType["EDGE"], True)
+            '''
 
             # Making groups for submeshes
             # Far field edges
@@ -212,11 +216,13 @@ for k in range(Number_Of_AOAS):
             geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Wing_Lower, Face_Wing_Upper, Face_Wing_Tip_Upper, \
               Face_Wing_Tip_Lower])
 
+            '''
             geompy.addToStudy( O, 'O' )
             geompy.addToStudy( OX, 'OX' )
             geompy.addToStudy( OY, 'OY' )
             geompy.addToStudy( OZ, 'OZ' )
             geompy.addToStudy( AileM6_with_sharp_TE_igs_1, 'AileM6_with_sharp_TE.igs_1' )
+
             geompy.addToStudy( Cut_Refinement_Box, 'Cut_Refinement_Box' )
             geompy.addToStudy( Face_Domain, 'Face_Domain' )
             geompy.addToStudy( Extrusion_Domain, 'Extrusion_Domain' )
@@ -277,21 +283,28 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Face_Refinementbox_Outlet_1, Edge_Ref_Out_Top, 'Edge_Ref_Out_Top' )
             geompy.addToStudyInFather( Face_Refinementbox_Outlet_1, Edge_Ref_Out_Right, 'Edge_Ref_Out_Right' )
 
-            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Left_Lower, 'Edge_Wing_Left_Lower' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Left_Lower_LE, 'Edge_Wing_Left_Lower_LE' )
             geompy.addToStudyInFather( Face_Wing_Lower, Edge_LE, 'Edge_LE' )
-            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_LE, 'Edge_Wing_Right_Lower_LE' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Left_Lower_TE, 'Edge_Wing_Left_Lower_TE' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_LE1, 'Edge_Wing_Right_Lower_LE1' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_LE2, 'Edge_Wing_Right_Lower_LE2' )
             geompy.addToStudyInFather( Face_Wing_Lower, Edge_TE, 'Edge_TE' )
-            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_Middle, 'Edge_Wing_Right_Lower_Middle' )
-            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_TE, 'Edge_Wing_Right_Lower_TE' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_TE2, 'Edge_Wing_Right_Lower_TE2' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_TE1, 'Edge_Wing_Right_Lower_TE1' )
 
-            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Left_Upper, 'Edge_Wing_Left_Upper' )
-            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_LE, 'Edge_Wing_Right_Upper_LE' )
-            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_Middle, 'Edge_Wing_Right_Upper_Middle' )
-            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_TE, 'Edge_Wing_Right_Upper_TE' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Left_Upper_LE, 'Edge_Wing_Left_Upper_LE' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Left_Upper_TE, 'Edge_Wing_Left_Upper_TE' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_LE1, 'Edge_Wing_Right_Upper_LE1' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_LE2, 'Edge_Wing_Right_Upper_LE2' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_TE2, 'Edge_Wing_Right_Upper_TE2' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_TE1, 'Edge_Wing_Right_Upper_TE1' )
 
-            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_LE_Right, 'Edge_Wing_LE_Right' )
-            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip, 'Edge_Wing_Tip' )
-            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_TE, 'Edge_Wing_Tip_TE' )
+            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_LE1, 'Edge_Wing_Tip_LE1' )
+            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_LE2, 'Edge_Wing_Tip_LE2' )
+            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_TE2, 'Edge_Wing_Tip_TE2' )
+            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_TE1, 'Edge_Wing_Tip_TE1' )
+
+            '''
 
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Far_Field_Surface, 'Auto_group_for_Sub-mesh_Far_Field_Surface' )
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Wing_Surface, 'Auto_group_for_Sub-mesh_Wing_Surface' )
@@ -363,6 +376,7 @@ for k in range(Number_Of_AOAS):
             # smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
             # smesh.SetName(Local_Length_Far_Field, 'Local_Length_Far_Field')
             # smesh.SetName(Sub_mesh_Far_Field_Edges, 'Sub_mesh_Far_Field_Edges')
+            '''
 
 
 
