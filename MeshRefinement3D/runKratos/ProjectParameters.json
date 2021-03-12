@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 1
+        "end_time"      : 5
     },
     "output_processes" : {
         "gid_output" : [{
@@ -32,7 +32,7 @@
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["LOWER_SURFACE","UPPER_SURFACE","PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH"]
+                        "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","VECTOR_TO_UPWIND_ELEMENT"]
                     },
                     "point_data_configuration"  : []
                 }
@@ -48,7 +48,7 @@
             "input_filename" : ""
         },
         "formulation": {
-            "element_type": "perturbation_compressible"
+            "element_type": "perturbation_transonic"
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,
@@ -84,8 +84,8 @@
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
                 "mach_number_limit": 0.94,
-                "mach_number_squared_limit": 0.8836,
-                "critical_mach": 0.90,
+                "mach_number_squared_limit": 3.0,
+                "critical_mach": 0.99,
                 "upwind_factor_constant": 1.0,
                 "initialize_flow_field": false,
                 "perturbation_field": true
