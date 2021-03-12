@@ -183,6 +183,14 @@ for k in range(Number_Of_AOAS):
             Auto_group_for_Sub_mesh_Refinement_Box_Outlet_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Outlet_Edges, [Edge_Ref_Out_Bottom, Edge_Ref_Out_Top, Edge_Ref_Out_Left, Edge_Ref_Out_Right])
 
+            # TE edges
+            Auto_group_for_Sub_mesh_LE_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Edges, [Edge_LE, Edge_Wing_LE_Right])
+
+            # TE edges
+            Auto_group_for_Sub_mesh_TE_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Edges, [Edge_TE, Edge_Wing_Tip_TE])
+
             #Surfaces
             # Far field surface
             Auto_group_for_Sub_mesh_Far_Field_Surface = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
@@ -293,6 +301,68 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Outlet_Edges, 'Auto_group_for_Sub-mesh_Refinement_Box_Outlet_Edges' )
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Faces_Sides, 'Auto_group_for_Sub-mesh_Refinement_Box_Faces_Sides' )
             geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Faces_Coarse, 'Auto_group_for_Sub-mesh_Refinement_Box_Faces_Coarse' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_LE_Edges, 'Auto_group_for_Sub_mesh_LE_Edges' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_TE_Edges, 'Auto_group_for_Sub_mesh_TE_Edges' )
+
+            ###
+            ### SMESH component
+            ###
+
+            import  SMESH, SALOMEDS
+            from salome.smesh import smeshBuilder
+
+            smesh = smeshBuilder.New(theStudy)
+
+            # Set NETGEN 3D
+            Mesh_Domain = smesh.Mesh(Partition_Domain)
+
+            NETGEN_3D = Mesh_Domain.Tetrahedron()
+            NETGEN_3D_Parameters = NETGEN_3D.Parameters()
+            NETGEN_3D_Parameters.SetMaxSize( Far_Field_Mesh_Size )
+            NETGEN_3D_Parameters.SetOptimize( 1 )
+            NETGEN_3D_Parameters.SetFineness( 5 )
+            NETGEN_3D_Parameters.SetGrowthRate( Growth_Rate_Domain )
+            NETGEN_3D_Parameters.SetNbSegPerEdge( 3 )
+            NETGEN_3D_Parameters.SetNbSegPerRadius( 5 )
+            NETGEN_3D_Parameters.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_3D_Parameters.SetUseSurfaceCurvature( 0 )
+            NETGEN_3D_Parameters.SetSecondOrder( 106 )
+            NETGEN_3D_Parameters.SetFuseEdges( 80 )
+            NETGEN_3D_Parameters.SetQuadAllowed( 127 )
+
+            # LE
+            Regular_1D_4 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Edges)
+            Sub_mesh_LE = Regular_1D_4.GetSubMesh()
+            Local_Length_LE = Regular_1D_4.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
+
+            # TE
+            Regular_1D_3 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Edges)
+            Sub_mesh_TE = Regular_1D_3.GetSubMesh()
+            Local_Length_TE = Regular_1D_3.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
+
+            # # Far field edges
+            # Regular_1D = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Far_Field_Edges)
+            # Local_Length_Far_Field = Regular_1D.LocalLength(Far_Field_Mesh_Size,None,1e-07)
+            # Sub_mesh_Far_Field_Edges = Regular_1D.GetSubMesh()
+
+            isDone = Mesh_Domain.Compute()
+
+            ## Set names of Mesh objects
+            smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
+            smesh.SetName(NETGEN_3D_Parameters, 'NETGEN_3D_Parameters')
+            smesh.SetName(Mesh_Domain.GetMesh(), 'Mesh_Domain')
+
+            smesh.SetName(Regular_1D_4.GetAlgorithm(), 'Regular_1D_4')
+            smesh.SetName(Local_Length_LE, 'Local_Length_LE')
+            smesh.SetName(Sub_mesh_LE, 'Sub_mesh_LE')
+
+            smesh.SetName(Regular_1D_3.GetAlgorithm(), 'Regular_1D_3')
+            smesh.SetName(Local_Length_TE, 'Local_Length_TE')
+            smesh.SetName(Sub_mesh_TE, 'Sub_mesh_TE')
+
+            # smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
+            # smesh.SetName(Local_Length_Far_Field, 'Local_Length_Far_Field')
+            # smesh.SetName(Sub_mesh_Far_Field_Edges, 'Sub_mesh_Far_Field_Edges')
 
 
 
