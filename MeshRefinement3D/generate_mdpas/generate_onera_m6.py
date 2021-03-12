@@ -54,7 +54,7 @@ Growth_Rate_Refinement_Box = 0.1
 
 salome_output_path = 'TBD'
 mdpa_path = 'TBD'
-geometry_path = "/home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D/generate_mdpas/onera_m6_geometry/AileM6_with_sharp_TE.igs"
+geometry_path = "/home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D/generate_mdpas/onera_m6_geometry/AileM6_with_sharp_TE_gid.igs"
 if not os.path.exists(salome_output_path):
     os.makedirs(salome_output_path)
 if not os.path.exists(mdpa_path):
@@ -116,11 +116,33 @@ for k in range(Number_Of_AOAS):
             OZ = geompy.MakeVectorDXDYDZ(0, 0, 1)
 
             AileM6_with_sharp_TE_igs_1 = geompy.ImportIGES(geometry_path)
+
+            # Refinement Box
+            Refinement_Box_Height = 0.5
+            Gap = 0.2
+            Extrusion_Box_Length = Domain_Width/2.0 + Gap
+            Face_Refinement_Box = geompy.MakeFaceHW(Refinement_Box_Height, Extrusion_Box_Length, 3)
+            geompy.TranslateDXDYDZ(Face_Refinement_Box, (Domain_Width-Extrusion_Box_Length)/2.0, 0, 0)
+            Extrusion_Refinement_Box = geompy.MakePrismVecH(Face_Refinement_Box, OY, Wing_span + Gap)
+            Cut_Refinement_Box = geompy.MakeCutList(Extrusion_Refinement_Box, [AileM6_with_sharp_TE_igs_1], True)
+
+            # Making Domain
+            Face_Domain = geompy.MakeFaceHW(Domain_Length, Domain_Height, 3)
+            Extrusion_Domain = geompy.MakePrismVecH(Face_Domain, OY,  Domain_Width/2.0)
+            Cut_Domain = geompy.MakeCutList(Extrusion_Domain, [Extrusion_Refinement_Box], True)
+            Partition_Domain = geompy.MakePartition([Cut_Refinement_Box, Cut_Domain], [], [], [], geompy.ShapeType["SOLID"], 0, [], 0)
+
+
             geompy.addToStudy( O, 'O' )
             geompy.addToStudy( OX, 'OX' )
             geompy.addToStudy( OY, 'OY' )
             geompy.addToStudy( OZ, 'OZ' )
             geompy.addToStudy( AileM6_with_sharp_TE_igs_1, 'AileM6_with_sharp_TE.igs_1' )
+            geompy.addToStudy( Cut_Refinement_Box, 'Cut_Refinement_Box' )
+            geompy.addToStudy( Face_Domain, 'Face_Domain' )
+            geompy.addToStudy( Extrusion_Domain, 'Extrusion_Domain' )
+            geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
+            geompy.addToStudy( Partition_Domain, 'Partition_Domain' )
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_onera_m6.hdf"
