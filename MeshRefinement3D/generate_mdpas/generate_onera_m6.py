@@ -132,6 +132,77 @@ for k in range(Number_Of_AOAS):
             Cut_Domain = geompy.MakeCutList(Extrusion_Domain, [Extrusion_Refinement_Box], True)
             Partition_Domain = geompy.MakePartition([Cut_Refinement_Box, Cut_Domain], [], [], [], geompy.ShapeType["SOLID"], 0, [], 0)
 
+            # Explode Partition
+            [Solid_Domain,Solid_Refinement_Box] = geompy.ExtractShapes(Partition_Domain, geompy.ShapeType["SOLID"], True)
+
+            # Explode Domain
+            [Face_Inlet,Face_Refinementbox_Inlet,Face_Left_Wall,Face_Down_Wall,\
+                Face_Top_Wall,Face_Right_Wall,\
+                Obj1,Obj2,\
+                Obj3,\
+                Face_Outlet] = geompy.ExtractShapes(Solid_Domain, geompy.ShapeType["FACE"], True)
+
+            # Explode Refinement Box
+            [Face_Refinementbox_Inlet_1,Face_Wing_Lower,Face_Wing_Upper,Face_Wing_Tip_Upper,\
+                    Face_Wing_Tip_Lower,Face_Refinementbox_Left_1,\
+                    Face_Refinementbox_Down_1,Face_Refinementbox_Top_1,\
+                    Face_Refinementbox_Right_1,Face_Refinementbox_Outlet_1] = geompy.ExtractShapes(Solid_Refinement_Box, geompy.ShapeType["FACE"], True)
+
+            # Exploding far field
+            [Edge_1,Edge_2,Edge_3,Edge_4] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Edge_6,Edge_7,Obj3,Obj4,Obj5,Obj6] = geompy.ExtractShapes(Face_Left_Wall, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_8,Edge_9,Obj2] = geompy.ExtractShapes(Face_Right_Wall, geompy.ShapeType["EDGE"], True)
+            [Edge_17,Edge_18,Obj2,Obj3,Obj4,Edge_10,Edge_11,Edge_12] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
+
+            # Exploding refinement box faces
+            [Edge_Ref_In_Left,Edge_Ref_In_Bottom,Edge_Ref_In_Top,Edge_Ref_In_Right] = geompy.ExtractShapes(Face_Refinementbox_Inlet_1, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Obj3,Edge_Ref_Left_Bottom,Edge_Ref_Left_Top,Obj4] = geompy.ExtractShapes(Face_Refinementbox_Left_1, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_Ref_Right_Bottom,Edge_Ref_Right_Top,Obj2] = geompy.ExtractShapes(Face_Refinementbox_Right_1, geompy.ShapeType["EDGE"], True)
+            [Edge_Ref_Out_Left,Edge_Ref_Out_Bottom,Edge_Ref_Out_Top,Edge_Ref_Out_Right] = geompy.ExtractShapes(Face_Refinementbox_Outlet_1, geompy.ShapeType["EDGE"], True)
+
+            # Exploding wing
+            [Edge_Wing_Left_Lower, Edge_LE, Edge_Wing_Right_Lower_LE, Edge_TE, Edge_Wing_Right_Lower_Middle, Edge_Wing_Right_Lower_TE] = geompy.ExtractShapes(Face_Wing_Lower, geompy.ShapeType["EDGE"], True)
+            [Edge_Wing_Left_Upper, Edge_LE, Edge_Wing_Right_Upper_LE, Edge_TE, Edge_Wing_Right_Upper_Middle, Edge_Wing_Right_Upper_TE] = geompy.ExtractShapes(Face_Wing_Upper, geompy.ShapeType["EDGE"], True)
+            [Edge_Wing_Right_Upper_LE, Edge_Wing_LE_Right, Edge_Wing_Right_Upper_Middle, Edge_Wing_Tip,Edge_Wing_Right_Upper_TE, Edge_Wing_Tip_TE] = geompy.ExtractShapes(Face_Wing_Tip_Upper, geompy.ShapeType["EDGE"], True)
+            [Edge_Wing_Right_Lower_LE, Edge_Wing_LE_Right, Edge_Wing_Right_Lower_Middle, Edge_Wing_Tip,Edge_Wing_Right_Lower_TE, Edge_Wing_Tip_TE] = geompy.ExtractShapes(Face_Wing_Tip_Lower, geompy.ShapeType["EDGE"], True)
+
+            # Making groups for submeshes
+            # Far field edges
+            Auto_group_for_Sub_mesh_Far_Field_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Edges, [Edge_1, Edge_2, Edge_3, Edge_4, Edge_6, Edge_7, Edge_8, Edge_9, Edge_10, Edge_11, Edge_12])
+
+            # Refinemenet box inlet edges
+            Auto_group_for_Sub_mesh_Refinement_Box_Edges_Inlet = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Edges_Inlet, [Edge_Ref_In_Left, Edge_Ref_In_Bottom, Edge_Ref_In_Top, Edge_Ref_In_Right])
+
+            # Refinemenet box side edges
+            Auto_group_for_Sub_mesh_Refinement_Box_Side_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Side_Edges, [Edge_Ref_Left_Bottom, Edge_Ref_Left_Top, Edge_Ref_Right_Bottom, Edge_Ref_Right_Top])
+
+            # Refinement box outlet edges
+            Auto_group_for_Sub_mesh_Refinement_Box_Outlet_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Outlet_Edges, [Edge_Ref_Out_Bottom, Edge_Ref_Out_Top, Edge_Ref_Out_Left, Edge_Ref_Out_Right])
+
+            #Surfaces
+            # Far field surface
+            Auto_group_for_Sub_mesh_Far_Field_Surface = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Surface, [Face_Inlet, Face_Left_Wall, Face_Down_Wall, Face_Top_Wall, Face_Right_Wall, Face_Outlet, Face_Refinementbox_Outlet_1])
+
+            # Refinement box faces
+            Auto_group_for_Sub_mesh_Refinement_Box_Faces_Sides = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Faces_Sides, [Face_Refinementbox_Inlet_1])
+            Auto_group_for_Sub_mesh_Refinement_Box_Faces_Coarse = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Refinement_Box_Faces_Coarse, [Face_Refinementbox_Down_1, Face_Refinementbox_Top_1, Face_Refinementbox_Left_1, Face_Refinementbox_Right_1])
+
+            [Face_Refinementbox_Inlet_1,Face_Wing_Lower,Face_Wing_Upper,Face_Wing_Tip_Upper,\
+                    Face_Wing_Tip_Lower,Face_Refinementbox_Left_1,\
+                    Face_Refinementbox_Down_1,Face_Refinementbox_Top_1,\
+                    Face_Refinementbox_Right_1,Face_Refinementbox_Outlet_1] = geompy.ExtractShapes(Solid_Refinement_Box, geompy.ShapeType["FACE"], True)
+
+            # Wing surface
+            Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Wing_Lower, Face_Wing_Upper, Face_Wing_Tip_Upper, \
+              Face_Wing_Tip_Lower])
 
             geompy.addToStudy( O, 'O' )
             geompy.addToStudy( OX, 'OX' )
@@ -143,6 +214,87 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudy( Extrusion_Domain, 'Extrusion_Domain' )
             geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
             geompy.addToStudy( Partition_Domain, 'Partition_Domain' )
+
+            geompy.addToStudyInFather( Partition_Domain, Solid_Domain, 'Solid_Domain' )
+            geompy.addToStudyInFather( Partition_Domain, Solid_Refinement_Box, 'Solid_Refinement_Box' )
+
+            geompy.addToStudyInFather( Solid_Domain, Face_Inlet, 'Face_Inlet' )
+            geompy.addToStudyInFather( Solid_Domain, Face_Left_Wall, 'Face_Left_Wall' )
+            geompy.addToStudyInFather( Solid_Domain, Face_Down_Wall, 'Face_Down_Wall' )
+            geompy.addToStudyInFather( Solid_Domain, Face_Top_Wall, 'Face_Top_Wall' )
+            geompy.addToStudyInFather( Solid_Domain, Face_Right_Wall, 'Face_Right_Wall' )
+            geompy.addToStudyInFather( Solid_Domain, Face_Outlet, 'Face_Outlet' )
+
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Inlet_1, 'Face_Refinementbox_Inlet_1' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Wing_Lower, 'Face_Wing_Lower' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Wing_Upper, 'Face_Wing_Upper' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Wing_Tip_Upper, 'Face_Wing_Tip_Upper' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Wing_Tip_Lower, 'Face_Wing_Tip_Lower' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Left_1, 'Face_Refinementbox_Left_1' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Down_1, 'Face_Refinementbox_Down_1' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Top_1, 'Face_Refinementbox_Top_1' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Right_1, 'Face_Refinementbox_Right_1' )
+            geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Outlet_1, 'Face_Refinementbox_Outlet_1' )
+
+            geompy.addToStudyInFather( Face_Inlet, Edge_1, 'Edge_1' )
+            geompy.addToStudyInFather( Face_Inlet, Edge_2, 'Edge_2' )
+            geompy.addToStudyInFather( Face_Inlet, Edge_3, 'Edge_3' )
+            geompy.addToStudyInFather( Face_Inlet, Edge_4, 'Edge_4' )
+
+            geompy.addToStudyInFather( Face_Left_Wall, Edge_6, 'Edge_6' )
+            geompy.addToStudyInFather( Face_Left_Wall, Edge_7, 'Edge_7' )
+
+            geompy.addToStudyInFather( Face_Right_Wall, Edge_8, 'Edge_8' )
+            geompy.addToStudyInFather( Face_Right_Wall, Edge_9, 'Edge_9' )
+
+            geompy.addToStudyInFather( Face_Outlet, Edge_17, 'Edge_17' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_18, 'Edge_18' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_10, 'Edge_10' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_11, 'Edge_11' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_12, 'Edge_12' )
+
+            geompy.addToStudyInFather( Face_Refinementbox_Inlet_1, Edge_Ref_In_Left, 'Edge_Ref_In_Left' )
+            geompy.addToStudyInFather( Face_Refinementbox_Inlet_1, Edge_Ref_In_Bottom, 'Edge_Ref_In_Bottom' )
+            geompy.addToStudyInFather( Face_Refinementbox_Inlet_1, Edge_Ref_In_Top, 'Edge_Ref_In_Top' )
+            geompy.addToStudyInFather( Face_Refinementbox_Inlet_1, Edge_Ref_In_Right, 'Edge_Ref_In_Right' )
+
+            geompy.addToStudyInFather( Face_Refinementbox_Left_1, Edge_Ref_Left_Bottom, 'Edge_Ref_Left_Bottom' )
+            geompy.addToStudyInFather( Face_Refinementbox_Left_1, Edge_Ref_Left_Top, 'Edge_Ref_Left_Top' )
+
+            geompy.addToStudyInFather( Face_Refinementbox_Right_1, Edge_Ref_Right_Bottom, 'Edge_Ref_Right_Bottom' )
+            geompy.addToStudyInFather( Face_Refinementbox_Right_1, Edge_Ref_Right_Top, 'Edge_Ref_Right_Top' )
+
+            geompy.addToStudyInFather( Face_Refinementbox_Outlet_1, Edge_Ref_Out_Left, 'Edge_Ref_Out_Left' )
+            geompy.addToStudyInFather( Face_Refinementbox_Outlet_1, Edge_Ref_Out_Bottom, 'Edge_Ref_Out_Bottom' )
+            geompy.addToStudyInFather( Face_Refinementbox_Outlet_1, Edge_Ref_Out_Top, 'Edge_Ref_Out_Top' )
+            geompy.addToStudyInFather( Face_Refinementbox_Outlet_1, Edge_Ref_Out_Right, 'Edge_Ref_Out_Right' )
+
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Left_Lower, 'Edge_Wing_Left_Lower' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_LE, 'Edge_LE' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_LE, 'Edge_Wing_Right_Lower_LE' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_TE, 'Edge_TE' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_Middle, 'Edge_Wing_Right_Lower_Middle' )
+            geompy.addToStudyInFather( Face_Wing_Lower, Edge_Wing_Right_Lower_TE, 'Edge_Wing_Right_Lower_TE' )
+
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Left_Upper, 'Edge_Wing_Left_Upper' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_LE, 'Edge_Wing_Right_Upper_LE' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_Middle, 'Edge_Wing_Right_Upper_Middle' )
+            geompy.addToStudyInFather( Face_Wing_Upper, Edge_Wing_Right_Upper_TE, 'Edge_Wing_Right_Upper_TE' )
+
+            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_LE_Right, 'Edge_Wing_LE_Right' )
+            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip, 'Edge_Wing_Tip' )
+            geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_TE, 'Edge_Wing_Tip_TE' )
+
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Far_Field_Surface, 'Auto_group_for_Sub-mesh_Far_Field_Surface' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Wing_Surface, 'Auto_group_for_Sub-mesh_Wing_Surface' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Far_Field_Edges, 'Auto_group_for_Sub-mesh_Far_Field_Edges' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Edges_Inlet, 'Auto_group_for_Sub-mesh_Refinement_Box_Edges' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Side_Edges, 'Auto_group_for_Sub_mesh_Refinement_Box_Side_Edges' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Outlet_Edges, 'Auto_group_for_Sub-mesh_Refinement_Box_Outlet_Edges' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Faces_Sides, 'Auto_group_for_Sub-mesh_Refinement_Box_Faces_Sides' )
+            geompy.addToStudyInFather( Partition_Domain, Auto_group_for_Sub_mesh_Refinement_Box_Faces_Coarse, 'Auto_group_for_Sub-mesh_Refinement_Box_Faces_Coarse' )
+
+
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_onera_m6.hdf"
