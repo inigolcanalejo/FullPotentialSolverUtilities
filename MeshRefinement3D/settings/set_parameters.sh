@@ -4,6 +4,7 @@ Generate_Mesh_Wake_Middle_File_Path=$PWD/generate_mdpas/generate_finite_wing_wak
 Generate_Mesh_Wake_Sections_File_Path=$PWD/generate_mdpas/generate_finite_wing_wake_sections.py
 Generate_Mesh_Wake_Sections_No_Wake_File_Path=$PWD/generate_mdpas/generate_finite_wing_wake_sections_no_wake.py
 Generate_Mesh_Wake_Sections_Box_File_Path=$PWD/generate_mdpas/generate_finite_wing_wake_sections_box.py
+Generate_Mesh_Onera_M6_File_Path=$PWD/generate_mdpas/generate_onera_m6.py
 Salome_Converter_File_Path=$PWD/generate_mdpas/use_converter.py
 Potential_Flow_Analysis_File_Path=$PWD/runKratos/potential_flow_analysis_refinement.py
 
@@ -20,6 +21,7 @@ PathNames[Generate_Mesh_Wake_Middle_File_Path]=$PWD/generate_mdpas/generate_fini
 PathNames[Generate_Mesh_Wake_Sections_File_Path]=$PWD/generate_mdpas/generate_finite_wing_wake_sections.py
 PathNames[Generate_Mesh_Wake_Sections_No_Wake_File_Path]=$PWD/generate_mdpas/generate_finite_wing_wake_sections_no_wake.py
 PathNames[Generate_Mesh_Wake_Sections_Box_File_Path]=$PWD/generate_mdpas/generate_finite_wing_wake_sections_box.py
+PathNames[Generate_Mesh_Onera_M6_File_Path]=$PWD/generate_mdpas/generate_onera_m6.py
 PathNames[Salome_Converter_File_Path]=$PWD/generate_mdpas/use_converter.py
 PathNames[Potential_Flow_Analysis_File_Path]=$PWD/runKratos/potential_flow_analysis_refinement.py
 
