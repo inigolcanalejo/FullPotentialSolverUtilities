@@ -175,19 +175,19 @@ for k in range(Number_Of_AOAS):
             # Making groups for submeshes
             # LE edges
             Auto_group_for_Sub_mesh_LE_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Edges, [Edge_LE, Edge_Wing_Tip_LE1, Edge_Wing_Right_Lower_LE1, Edge_Wing_Right_Upper_LE1])
+            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Edges, [Edge_LE, Edge_Wing_Tip_LE1, Edge_Wing_Right_Lower_LE1, Edge_Wing_Right_Upper_LE1, Edge_Wing_Right_Lower_LE2, Edge_Wing_Right_Upper_LE2, Edge_Wing_Tip_LE2])
 
             # TE edges
             Auto_group_for_Sub_mesh_TE_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Edges, [Edge_TE, Edge_Wing_Tip_TE1, Edge_Wing_Right_Lower_TE1, Edge_Wing_Right_Upper_TE1])
+            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Edges, [Edge_TE, Edge_Wing_Tip_TE1, Edge_Wing_Right_Lower_TE1, Edge_Wing_Right_Upper_TE1, Edge_Wing_Right_Lower_TE2, Edge_Wing_Right_Upper_TE2, Edge_Wing_Tip_TE2])
 
             # LE Airfoil edges
             Auto_group_for_Sub_mesh_LE_Airfoils = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Airfoils, [Edge_Wing_Left_Lower_LE, Edge_Wing_Right_Lower_LE2, Edge_Wing_Left_Upper_LE, Edge_Wing_Right_Upper_LE2, Edge_Wing_Tip_LE2])
+            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Airfoils, [Edge_Wing_Left_Lower_LE, Edge_Wing_Left_Upper_LE])
 
             # TE Airfoil edges
             Auto_group_for_Sub_mesh_TE_Airfoils = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Airfoils, [Edge_Wing_Left_Lower_TE, Edge_Wing_Right_Lower_TE2, Edge_Wing_Left_Upper_TE, Edge_Wing_Right_Upper_TE2, Edge_Wing_Tip_TE2])
+            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Airfoils, [Edge_Wing_Left_Lower_TE, Edge_Wing_Left_Upper_TE])
 
             # Wing surface
             Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
