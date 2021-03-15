@@ -113,7 +113,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
 
     def ExecuteBeforeDomainRefinementLoop(self):
-        self.AOA = round(self.AOA, 1)
+        self.AOA = round(self.AOA, 2)
         self.Growth_Rate_Domain = self.Initial_Growth_Rate_Domain
         shutil.rmtree(self.gid_output_path + '/AOA_' + str(self.AOA), ignore_errors=True)
         if not os.path.exists(self.gid_output_path + '/AOA_' + str(self.AOA)):

@@ -114,7 +114,10 @@
                 "growth_rate_domain": 0.0,
                 "growth_rate_wing": 0.0,
                 "angle_of_attack": 0.0,
-                "minimum_mesh_growth_rate": 0.0
+                "minimum_mesh_growth_rate": 0.0,
+                "section_100_model_part_name": "Section_100",
+                "section_150_model_part_name": "Section_150",
+                "section_180_model_part_name": "Section_180"
             }
         }],
         "auxiliar_process_list" :[]
