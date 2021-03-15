@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 5
+        "end_time"      : 1
     },
     "output_processes" : {
         "gid_output" : [{
@@ -50,7 +50,7 @@
         "formulation": {
             "element_type": "perturbation_transonic"
         },
-        "maximum_iterations"     : 10,
+        "maximum_iterations"     : 1,
         "echo_level"             : 1,
         "relative_tolerance": 1e-14,
         "absolute_tolerance": 1e-14,
@@ -114,10 +114,7 @@
                 "growth_rate_domain": 0.0,
                 "growth_rate_wing": 0.0,
                 "angle_of_attack": 0.0,
-                "minimum_mesh_growth_rate": 0.0,
-                "section_100_model_part_name": "Section_100",
-                "section_150_model_part_name": "Section_150",
-                "section_180_model_part_name": "Section_180"
+                "minimum_mesh_growth_rate": 0.0
             }
         }],
         "auxiliar_process_list" :[]
