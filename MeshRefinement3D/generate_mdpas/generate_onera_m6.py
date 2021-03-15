@@ -11,13 +11,6 @@ Wing_span = TBD
 Domain_Length = 25
 Domain_Height = Domain_Length
 Domain_Width = 25
-separating_domains = True
-
-# Outlet_Min_Mesh_Size = 0.05
-# Outlet_Max_Mesh_Size = 0.1
-# Growth_Rate_Wake = 0.7
-Refinement_Box_Face_Min_Mesh_Size = 0.1
-Refinement_Box_Face_Max_Mesh_Size = 0.1
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
@@ -30,12 +23,6 @@ print 'Domain_Length = ', Domain_Length
 print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
 print 'Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 print 'Far_Field_Mesh_Size = ', Far_Field_Mesh_Size
-print 'Refinement_Box_Face_Min_Mesh_Size = ', Refinement_Box_Face_Min_Mesh_Size
-print 'Refinement_Box_Face_Max_Mesh_Size = ', Refinement_Box_Face_Max_Mesh_Size
-
-# print '\nOutlet_Min_Mesh_Size = ', Outlet_Min_Mesh_Size
-# print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size
-# print 'Growth_Rate_Wake = ', Growth_Rate_Wake
 
 Number_Of_AOAS = TBD
 Number_Of_Domains_Refinements = TBD
@@ -50,7 +37,7 @@ Growth_Rate_Wing_Refinement_Factor = TBD
 Initial_Growth_Rate_Domain = TBD
 Growth_Rate_Domain_Refinement_Factor = TBD
 
-Growth_Rate_Refinement_Box = 1.0
+Growth_Rate_Far_Field = 0.2
 
 salome_output_path = 'TBD'
 mdpa_path = 'TBD'
@@ -143,14 +130,21 @@ for k in range(Number_Of_AOAS):
 
             [Obj1, Edge_Wing_Tip_LE1, Obj2, Edge_Wing_Tip_LE2,Obj3, Edge_Wing_Tip_TE2, Obj4, Edge_Wing_Tip_TE1] = geompy.ExtractShapes(Face_Wing_Tip_Upper, geompy.ShapeType["EDGE"], True)
 
+            # Generate stl wake
+            Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
+            Translation_1 = geompy.MakeTranslation(Edge_TE, 0, 0, 0)
+            Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
+            Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
+            Extrusion_Wake_stl = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
+
             # Making groups for submeshes
             # LE edges
             Auto_group_for_Sub_mesh_LE_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Edges, [Edge_LE, Edge_Wing_Tip_LE1, Edge_Wing_Right_Lower_LE1, Edge_Wing_Right_Upper_LE1, Edge_Wing_Right_Lower_LE2, Edge_Wing_Right_Upper_LE2, Edge_Wing_Tip_LE2])
+            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Edges, [Edge_LE, Edge_Wing_Tip_LE1, Edge_Wing_Right_Lower_LE1, Edge_Wing_Right_Upper_LE1, Edge_Wing_Right_Lower_LE2, Edge_Wing_Right_Upper_LE2, Edge_Wing_Tip_LE2, Edge_Wing_Tip_TE1, Edge_Wing_Right_Lower_TE1, Edge_Wing_Right_Upper_TE1, Edge_Wing_Right_Lower_TE2, Edge_Wing_Right_Upper_TE2, Edge_Wing_Tip_TE2])
 
             # TE edges
             Auto_group_for_Sub_mesh_TE_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Edges, [Edge_TE, Edge_Wing_Tip_TE1, Edge_Wing_Right_Lower_TE1, Edge_Wing_Right_Upper_TE1, Edge_Wing_Right_Lower_TE2, Edge_Wing_Right_Upper_TE2, Edge_Wing_Tip_TE2])
+            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Edges, [Edge_TE])
 
             # LE Airfoil edges
             Auto_group_for_Sub_mesh_LE_Airfoils = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
@@ -231,6 +225,8 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_LE2, 'Edge_Wing_Tip_LE2' )
             geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_TE2, 'Edge_Wing_Tip_TE2' )
             geompy.addToStudyInFather( Face_Wing_Tip_Upper, Edge_Wing_Tip_TE1, 'Edge_Wing_Tip_TE1' )
+
+            geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
 
             geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_LE_Edges, 'Auto_group_for_Sub_mesh_LE_Edges' )
             geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_TE_Edges, 'Auto_group_for_Sub_mesh_TE_Edges' )
@@ -317,7 +313,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_FarField.SetMaxSize( Far_Field_Mesh_Size )
             NETGEN_2D_Parameters_FarField.SetOptimize( 1 )
             NETGEN_2D_Parameters_Wing.SetFineness( 5 )
-            NETGEN_2D_Parameters_Wing.SetGrowthRate( 0.2 )
+            NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Far_Field )
             NETGEN_2D_Parameters_FarField.SetMinSize( Smallest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_FarField.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_FarField.SetQuadAllowed( 0 )
@@ -338,6 +334,64 @@ for k in range(Number_Of_AOAS):
             print(' Information about volume mesh:')
             print(' Number of nodes       :', NumberOfNodes)
             print(' Number of elements    :', NumberOfElements)
+
+            # Define paths
+            fluid_path = salome_output_path + '/Mesh_Domain_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+
+            far_field_path = salome_output_path + '/Sub-mesh_FarField_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+
+            body_surface_path = salome_output_path + '/Sub-mesh_Wing_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+
+            te_path = salome_output_path + '/Sub-mesh_TE_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+
+            # Export data files
+            try:
+              Mesh_Domain.ExportDAT( r'/' + fluid_path )
+              pass
+            except:
+              print 'ExportDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + body_surface_path, Sub_mesh_Wing_Surface )
+              pass
+            except:
+              print 'ExportPartToDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + far_field_path, Sub_mesh_Far_Field_Surface )
+              pass
+            except:
+              print 'ExportPartToDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + te_path, Sub_mesh_TE )
+              pass
+            except:
+              print 'ExportPartToDAT() failed. Invalid file name?'
+
+            # Mesh wake and export STL
+            Mesh_Wake_Surface = smesh.Mesh(Extrusion_Wake_stl)
+            status = Mesh_Wake_Surface.AddHypothesis(NETGEN_2D_Parameters_FarField)
+            NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
+
+            isDone = Mesh_Wake_Surface.Compute()
+
+            wake_path = mdpa_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.stl'
+
+            try:
+                Mesh_Wake_Surface.ExportSTL( wake_path, 1 )
+                pass
+            except:
+                print 'ExportSTL() failed. Invalid file name?'
+
+
 
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
@@ -371,6 +425,9 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(NETGEN_2D_Far_Field.GetAlgorithm(), 'NETGEN_2D_Far_Field')
             smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN_2D_Parameters_FarField')
             smesh.SetName(Sub_mesh_Far_Field_Surface, 'Sub_mesh_Far_Field_Surface')
+
+            smesh.SetName(NETGEN_1D_2D_2.GetAlgorithm(), 'NETGEN_1D_2D_2')
+            smesh.SetName(Mesh_Wake_Surface, 'Mesh_Wake_Surface')
 
 
             '''
