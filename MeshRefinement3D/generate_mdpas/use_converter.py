@@ -41,7 +41,7 @@ case = 0
 AOA = Initial_AOA
 
 for k in range(Number_Of_AOAS):
-    AOA = round(AOA, 1)
+    AOA = round(AOA, 2)
     Growth_Rate_Domain = Initial_Growth_Rate_Domain
     for j in range(Number_Of_Domains_Refinements):
         Growth_Rate_Domain = round(Growth_Rate_Domain, 2)
