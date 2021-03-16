@@ -306,7 +306,8 @@ class WriteForcesProcess(ComputeLiftProcess):
             origin = KratosMultiphysics.Vector(3, 0.0)
             plane_normal = KratosMultiphysics.Vector(3, 0.0)
             plane_normal[1] = 1.0
-            sections = [20, 44, 65, 80, 90, 95, 99]
+            sections = [20]
+            #sections = [20, 44, 65, 80, 90, 95, 99]
             wing_span = 1.1963
             cp_dir_name = self.input_dir_path + '/plots/cp_onera/case_' + str(self.case)
             if not os.path.exists(cp_dir_name):
@@ -333,6 +334,11 @@ class WriteForcesProcess(ComputeLiftProcess):
                 x_max = max(x_section)
                 x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
 
+                # Get reference data
+                cp_experiment_file_name = 'references/cp/onera/experiment/cp_' + str(section) + '.dat'
+                x_experiment = [float(line.split()[0]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
+                cp_experiment = [-float(line.split()[1]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
+
                 # Write data to file
                 cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
                 cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
@@ -341,16 +347,21 @@ class WriteForcesProcess(ComputeLiftProcess):
                         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
 
                 # Make plot
-                plt.plot(x_section_normalized,cp_section,'r.',label='Kratos', markersize=1)
+                plt.plot(x_section_normalized,cp_section,'r.',label='Kratos', markersize=5)
+                plt.plot(x_experiment,cp_experiment,'k*',label='Experiment', markersize=5)
 
                 title="Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
                 plt.title(title)
                 plt.legend()
                 plt.ylabel("$C_p$")
                 plt.xlabel("$\hat{x}$")
+                plt.grid()
                 plt.gca().invert_yaxis()
 
                 cp_figure_name = cp_dir_name + '/' + cp_case + '.png'
+                plt.gca().set_xlim([-0.01,1.01])
+                plt.gca().set_ylim([-1.5,1.0])
+                plt.gca().invert_yaxis()
                 plt.savefig(cp_figure_name, bbox_inches='tight')
                 plt.gca().set_xlim([0.9,1.01])
                 plt.gca().set_ylim([0.6,0])
