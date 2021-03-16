@@ -430,23 +430,20 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Mesh_Wake_Surface, 'Mesh_Wake_Surface')
 
 
-            '''
-
             # smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
             # smesh.SetName(Local_Length_Far_Field, 'Local_Length_Far_Field')
             # smesh.SetName(Sub_mesh_Far_Field_Edges, 'Sub_mesh_Far_Field_Edges')
-            '''
-
 
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_onera_m6.hdf"
             salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
+            #'''
 
             #Airfoil_MeshSize *= Airfoil_Refinement_Factor
             #FarField_MeshSize /= FarField_Refinement_Factor
             #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
-            Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
+            #Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
             Smallest_Airfoil_Mesh_Size /= 2.0
             # Biggest_Airfoil_Mesh_Size /= 2.0
             case +=1

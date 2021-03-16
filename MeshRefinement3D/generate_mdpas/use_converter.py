@@ -56,6 +56,7 @@ for k in range(Number_Of_AOAS):
             print('\n case = ', case, ' AOA = ', AOA, ' Growth_Rate_Domain = ', Growth_Rate_Domain, ' Growth_Rate_Wing = ', Growth_Rate_Wing)
             print('Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size)
             model = kratos_utils.MainModelPart() # Main mesh object to which we will add the submeshes (Kratos Name: ModelPart)
+            #'''
 
             # Specifying the names of the submeshes (Kratos Name: SubModelPart)
             smp_dict_fluid           = {"smp_name": "Parts_Parts_Auto1"}
@@ -163,9 +164,10 @@ for k in range(Number_Of_AOAS):
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain)
 
             model.WriteMesh(mdpa_file_name, mdpa_info)
+            #'''
 
             #Growth_Rate_Wing -= Growth_Rate_Wing_Refinement_Factor
-            Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
+            #Growth_Rate_Wing /= Growth_Rate_Wing_Refinement_Factor
             Smallest_Airfoil_Mesh_Size /= 2.0
             case +=1
         Growth_Rate_Domain /= Growth_Rate_Domain_Refinement_Factor
