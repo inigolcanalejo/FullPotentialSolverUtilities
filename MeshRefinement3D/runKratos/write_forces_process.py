@@ -29,7 +29,8 @@ class WriteForcesProcess(ComputeLiftProcess):
             "minimum_mesh_growth_rate": 0.0,
             "section_100_model_part_name": "",
             "section_150_model_part_name": "",
-            "section_180_model_part_name": ""
+            "section_180_model_part_name": "",
+            "reference_case_name": ""
         }''')
 
         settings.ValidateAndAssignDefaults(default_parameters)
@@ -97,6 +98,10 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         self.moment_coefficient = KratosMultiphysics.Vector(3, 0.0)
 
+        self.reference_case_name = settings["reference_case_name"].GetString()
+        if self.reference_case_name == "":
+            raise Exception("Please enter a reference case name (XFLR5, ONERA)")
+
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
 
@@ -138,9 +143,14 @@ class WriteForcesProcess(ComputeLiftProcess):
         #     file.flush()
 
         NumberOfNodes = self.fluid_model_part.NumberOfNodes()
-        self.cl_reference = self.read_cl_reference(self.AOA)
-        self.cd_reference = self.read_cd_reference(self.AOA)
-        self.cm_reference = self.read_cm_reference(self.AOA)
+        if self.reference_case_name == "XFLR5":
+            self.cl_reference = self.read_cl_reference(self.AOA)
+            self.cd_reference = self.read_cd_reference(self.AOA)
+            self.cm_reference = self.read_cm_reference(self.AOA)
+        else:
+            self.cl_reference = 0.271
+            self.cd_reference = 0.0118
+            self.cm_reference = -0.19
 
         if(abs(self.cl_reference) < 1e-6):
             self.cl_p_relative_error = abs(self.lift_coefficient - self.cl_reference)
