@@ -2,6 +2,14 @@ import KratosMultiphysics
 from KratosMultiphysics.CompressiblePotentialFlowApplication.compute_lift_process import ComputeLiftProcess
 import KratosMultiphysics.CompressiblePotentialFlowApplication as CPFApp
 import math
+import matplotlib
+matplotlib.use('Agg')
+matplotlib.rcParams['text.usetex'] = True
+matplotlib.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text command
+import matplotlib.pyplot as plt
+#matplotlib.use('Agg')
+
+import os
 
 def _DotProduct(A,B):
     return sum(i[0]*i[1] for i in zip(A, B))
@@ -102,8 +110,12 @@ class WriteForcesProcess(ComputeLiftProcess):
         if self.reference_case_name == "":
             raise Exception("Please enter a reference case name (XFLR5, ONERA)")
 
+        self.case = -1
+
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
+
+        self.case += 1
 
         nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["PRESSURE_COEFFICIENT"])
         nodal_value_process.Execute()
@@ -288,6 +300,50 @@ class WriteForcesProcess(ComputeLiftProcess):
                     potential_jump = potential - auxiliary_potential
 
                     jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
+
+        aoa_rad = self.AOA * math.pi / 180.0
+        if self.reference_case_name == "ONERA":
+            origin = KratosMultiphysics.Vector(3, 0.0)
+            plane_normal = KratosMultiphysics.Vector(3, 0.0)
+            plane_normal[1] = 1.0
+            sections = [20]
+            wing_span = 1.1963
+            cp_dir_name = self.input_dir_path + '/plots/cp_onera'
+            if not os.path.exists(cp_dir_name):
+                    os.makedirs(cp_dir_name)
+            for section in sections:
+                section_model_part = self.fluid_model_part.CreateSubModelPart("Cut_"+str(section))
+                origin[1] = section/100.0 * wing_span
+                CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
+
+                number_of_conditions = section_model_part.NumberOfConditions()
+                print('number_of_conditions = ', number_of_conditions)
+
+                x_section = []
+                cp_section = []
+                for condition in section_model_part.Conditions:
+                    x0 = condition.GetGeometry().Center().X
+                    z0 = condition.GetGeometry().Center().Z
+                    x = x0 * math.cos(aoa_rad) - z0 * math.sin(aoa_rad)
+                    x_section.append(x)
+                    cp_section.append(condition.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT))
+                x_min = min(x_section)
+                x_max = max(x_section)
+                x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
+
+                plt.plot(x_section_normalized,cp_section,'r.',label='Kratos', markersize=1)
+
+                title="Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                plt.title(title)
+                plt.legend()
+                plt.ylabel("$C_p$")
+                plt.xlabel("$\hat{x}$")
+                plt.gca().invert_yaxis()
+                cp_file_name = cp_dir_name + '/case_' + str(self.case) + '_section_' + str(section) + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '.png'
+                plt.savefig(cp_file_name, bbox_inches='tight')
+                plt.gca().set_xlim([0.9,1.01])
+                plt.gca().set_ylim([0.6,0])
+                plt.close('all')
 
         cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
