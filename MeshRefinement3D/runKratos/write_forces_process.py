@@ -35,6 +35,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             "growth_rate_wing": 0.0,
             "angle_of_attack": 0.0,
             "minimum_mesh_growth_rate": 0.0,
+            "case": 0,
             "section_100_model_part_name": "",
             "section_150_model_part_name": "",
             "section_180_model_part_name": "",
@@ -110,12 +111,10 @@ class WriteForcesProcess(ComputeLiftProcess):
         if self.reference_case_name == "":
             raise Exception("Please enter a reference case name (XFLR5, ONERA)")
 
-        self.case = -1
+        self.case = settings["case"].GetInt()
 
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
-
-        self.case += 1
 
         nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["PRESSURE_COEFFICIENT"])
         nodal_value_process.Execute()
@@ -277,7 +276,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cm_aoa_file.write('{0:15f} {1:15f}\n'.format(self.AOA, self.cm_reference))
                 cm_aoa_file.flush()
 
-        potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
 
         potential_jump_file_name = potential_jump_dir_name + '/potential_jump_results.dat'
@@ -311,7 +310,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             wing_span = 1.1963
             cp_dir_name = self.input_dir_path + '/plots/cp_onera/case_' + str(self.case)
             if not os.path.exists(cp_dir_name):
-                    os.makedirs(cp_dir_name)
+                os.makedirs(cp_dir_name)
             for section in sections:
                 case_name = 'case_' + str(self.case) + '_section_' + str(section)
                 section_model_part = self.fluid_model_part.CreateSubModelPart(case_name)
@@ -374,7 +373,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 plt.savefig(cp_le_figure_name, bbox_inches='tight')
                 plt.close('all')
 
-        cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_dir_name = self.input_dir_path + '/plots/cp/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
 
         cp_file_name = cp_dir_name + '/cp_results.dat'
@@ -426,7 +425,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             '\end{tikzpicture}')
             cp_tikz_file.flush()
 
-        cp_100_dir_name = self.input_dir_path + '/plots/cp_section_100/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_100_dir_name = self.input_dir_path + '/plots/cp_section_100/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
 
         cp_100_file_name = cp_100_dir_name + '/cp_results.dat'
@@ -478,7 +477,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             '\end{tikzpicture}')
             cp_tikz_file.flush()
 
-        cp_150_dir_name = self.input_dir_path + '/plots/cp_section_150/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_150_dir_name = self.input_dir_path + '/plots/cp_section_150/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
 
         cp_150_file_name = cp_150_dir_name + '/cp_results.dat'
@@ -530,7 +529,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             '\end{tikzpicture}')
             cp_tikz_file.flush()
 
-        cp_180_dir_name = self.input_dir_path + '/plots/cp_section_180/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_180_dir_name = self.input_dir_path + '/plots/cp_section_180/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
 
         cp_180_file_name = cp_180_dir_name + '/cp_results.dat'

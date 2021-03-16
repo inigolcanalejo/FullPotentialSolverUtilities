@@ -118,7 +118,8 @@
                 "section_100_model_part_name": "Section_100",
                 "section_150_model_part_name": "Section_150",
                 "section_180_model_part_name": "Section_180",
-                "reference_case_name": "ONERA"
+                "reference_case_name": "ONERA",
+                "case": 0
             }
         }],
         "auxiliar_process_list" :[]

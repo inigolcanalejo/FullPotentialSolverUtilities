@@ -39,7 +39,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
                     #self.OutputCp()
                     #self.Growth_Rate_Wing -= self.Growth_Rate_Wing_Refinement_Factor
-                    self.Growth_Rate_Wing /= self.Growth_Rate_Wing_Refinement_Factor
+                    #self.Growth_Rate_Wing /= self.Growth_Rate_Wing_Refinement_Factor
                     self.Smallest_Airfoil_Mesh_Size /= 2.0
                     #self.FarField_MeshSize /= FarField_Refinement_Factor
 
@@ -193,31 +193,41 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         print("\n\tCase ", self.case, ' AOA = ', self.AOA, ' Growth_Rate_Domain = ', self.Growth_Rate_Domain, ' Growth_Rate_Wing = ', self.Growth_Rate_Wing, "\n")
         print("Smallest_Airfoil_Mesh_Size = ", self.Smallest_Airfoil_Mesh_Size)
 
-        potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        potential_jump_dir_name = self.input_dir_path + '/plots/potential_jump/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        if os.path.exists(potential_jump_dir_name) and os.path.isdir(potential_jump_dir_name):
+            shutil.rmtree(potential_jump_dir_name)
         shutil.copytree(self.potential_jump_results_directory_name, potential_jump_dir_name)
         loads_output.write_jump_figures(potential_jump_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path)
 
-        cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_dir_name = self.input_dir_path + '/plots/cp/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        if os.path.exists(cp_dir_name) and os.path.isdir(cp_dir_name):
+            shutil.rmtree(cp_dir_name)
         shutil.copytree(self.cp_results_directory_name, cp_dir_name)
 
         loads_output.write_cp_figures(cp_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp')
 
-        cp_100_dir_name = self.input_dir_path + '/plots/cp_section_100/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_100_dir_name = self.input_dir_path + '/plots/cp_section_100/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        if os.path.exists(cp_100_dir_name) and os.path.isdir(cp_100_dir_name):
+            shutil.rmtree(cp_100_dir_name)
         shutil.copytree(self.cp_100_results_directory_name, cp_100_dir_name)
 
         loads_output.write_cp_figures(cp_100_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp_section_100')
 
-        cp_150_dir_name = self.input_dir_path + '/plots/cp_section_150/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_150_dir_name = self.input_dir_path + '/plots/cp_section_150/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        if os.path.exists(cp_150_dir_name) and os.path.isdir(cp_150_dir_name):
+            shutil.rmtree(cp_150_dir_name)
         shutil.copytree(self.cp_150_results_directory_name, cp_150_dir_name)
 
         loads_output.write_cp_figures(cp_150_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp_section_150')
 
-        cp_180_dir_name = self.input_dir_path + '/plots/cp_section_180/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
+        cp_180_dir_name = self.input_dir_path + '/plots/cp_section_180/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+        if os.path.exists(cp_180_dir_name) and os.path.isdir(cp_180_dir_name):
+            shutil.rmtree(cp_180_dir_name)
         shutil.copytree(self.cp_180_results_directory_name, cp_180_dir_name)
 
         loads_output.write_cp_figures(cp_180_dir_name, self.AOA, self.case, self.Growth_Rate_Domain, self.Growth_Rate_Wing, self.input_dir_path,'cp_section_180')
@@ -253,6 +263,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.AOA)
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["minimum_mesh_growth_rate"].SetDouble(
             self.minimum_mesh_growth_rate)
+        self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["case"].SetInt(self.case)
 
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["airfoil_meshsize"].SetDouble(
         #     self.Airfoil_MeshSize)
@@ -306,7 +317,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.merger_local_cp_180.append(PdfFileReader(cp_180_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
 
     def Finalize(self):
-        self.newton_convergence_data_directory_name = 'data/AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+        self.newton_convergence_data_directory_name = 'data/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
         shutil.copytree(self.newton_convergence_directory_name, self.input_dir_path + '/plots/newton_convergence/' + self.newton_convergence_data_directory_name)
         loads_output.write_figures_newton_convergence(self.newton_convergence_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
