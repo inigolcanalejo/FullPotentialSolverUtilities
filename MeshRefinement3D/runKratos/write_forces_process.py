@@ -306,9 +306,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             origin = KratosMultiphysics.Vector(3, 0.0)
             plane_normal = KratosMultiphysics.Vector(3, 0.0)
             plane_normal[1] = 1.0
-            sections = [20, 44]
+            sections = [20, 44, 65, 80, 90, 95, 99]
             wing_span = 1.1963
-            cp_dir_name = self.input_dir_path + '/plots/cp_onera'
+            cp_dir_name = self.input_dir_path + '/plots/cp_onera/case_' + str(self.case)
             if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
             for section in sections:
