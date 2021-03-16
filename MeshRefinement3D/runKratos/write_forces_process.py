@@ -306,13 +306,14 @@ class WriteForcesProcess(ComputeLiftProcess):
             origin = KratosMultiphysics.Vector(3, 0.0)
             plane_normal = KratosMultiphysics.Vector(3, 0.0)
             plane_normal[1] = 1.0
-            sections = [20]
+            sections = [20, 44]
             wing_span = 1.1963
             cp_dir_name = self.input_dir_path + '/plots/cp_onera'
             if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
             for section in sections:
-                section_model_part = self.fluid_model_part.CreateSubModelPart("Cut_"+str(section))
+                case_name = 'case_' + str(self.case) + '_section_' + str(section)
+                section_model_part = self.fluid_model_part.CreateSubModelPart(case_name)
                 origin[1] = section/100.0 * wing_span
                 CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
 
@@ -327,10 +328,19 @@ class WriteForcesProcess(ComputeLiftProcess):
                     x = x0 * math.cos(aoa_rad) - z0 * math.sin(aoa_rad)
                     x_section.append(x)
                     cp_section.append(condition.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT))
+
                 x_min = min(x_section)
                 x_max = max(x_section)
                 x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
 
+                # Write data to file
+                cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+                cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
+                with open(cp_file_name, 'w') as cp_file:
+                    for i in range(len(x_section_normalized)):
+                        cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
+
+                # Make plot
                 plt.plot(x_section_normalized,cp_section,'r.',label='Kratos', markersize=1)
 
                 title="Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
@@ -339,10 +349,17 @@ class WriteForcesProcess(ComputeLiftProcess):
                 plt.ylabel("$C_p$")
                 plt.xlabel("$\hat{x}$")
                 plt.gca().invert_yaxis()
-                cp_file_name = cp_dir_name + '/case_' + str(self.case) + '_section_' + str(section) + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '.png'
-                plt.savefig(cp_file_name, bbox_inches='tight')
+
+                cp_figure_name = cp_dir_name + '/' + cp_case + '.png'
+                plt.savefig(cp_figure_name, bbox_inches='tight')
                 plt.gca().set_xlim([0.9,1.01])
                 plt.gca().set_ylim([0.6,0])
+                cp_te_figure_name = cp_dir_name + '/' + cp_case + '_TE_zoom.png'
+                plt.savefig(cp_te_figure_name, bbox_inches='tight')
+                plt.gca().set_xlim([0.0, 0.05])
+                plt.gca().set_ylim([-0.75,-1.3])
+                cp_le_figure_name = cp_dir_name + '/' + cp_case + '_LE_zoom.png'
+                plt.savefig(cp_le_figure_name, bbox_inches='tight')
                 plt.close('all')
 
         cp_dir_name = self.input_dir_path + '/plots/cp/data/AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
