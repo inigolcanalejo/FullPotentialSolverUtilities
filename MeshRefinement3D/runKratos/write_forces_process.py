@@ -350,7 +350,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 # plt.plot(x_experiment,cp_experiment, yerr=0.02,'k*',label='Experiment', markersize=5)
                 plt.errorbar(x_experiment,cp_experiment, yerr=0.02, marker=',',ls=' ',color='k',label='Experiment', markersize=5)
 
-                title="Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                title="y/b: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
                 plt.title(title)
                 plt.legend()
                 plt.ylabel("$C_p$")

@@ -319,7 +319,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
     def Finalize(self):
         self.newton_convergence_data_directory_name = 'data/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
             self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
-        shutil.copytree(self.newton_convergence_directory_name, self.input_dir_path + '/plots/newton_convergence/' + self.newton_convergence_data_directory_name)
+        nw_dir = self.input_dir_path + '/plots/newton_convergence/' + self.newton_convergence_data_directory_name
+        if os.path.exists(nw_dir) and os.path.isdir(nw_dir):
+            shutil.rmtree(nw_dir)
+        shutil.copytree(self.newton_convergence_directory_name, nw_dir)
         loads_output.write_figures_newton_convergence(self.newton_convergence_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
 
 
