@@ -333,21 +333,35 @@ class WriteForcesProcess(ComputeLiftProcess):
                 x_max = max(x_section)
                 x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
 
-                # Get reference data
+                # Get experiment reference data
                 cp_experiment_file_name = 'references/cp/onera/experiment/cp_' + str(section) + '.dat'
                 x_experiment = [float(line.split()[0]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
                 cp_experiment = [-float(line.split()[1]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
 
+                # Plot simulation reference data
+                references = ['cfl3d','fun3d','usm3d']
+                for reference in references:
+                    x_reference, cp_reference = self.GetSimulationReferenceData(reference,section/100.0)
+                    plt.plot(x_reference,cp_reference,ls='-',label=reference, markersize=5)
+
+                    # Write data to file
+                    # cp_case = case_name + '_' + reference
+                    # cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
+                    # with open(cp_file_name, 'w') as cp_file:
+                    #     for i in range(len(x_reference)):
+                    #         cp_file.write('{0:15f} {1:15f}\n'.format(x_reference[i], cp_reference[i]))
+
+
                 # Write data to file
                 cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
                 cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
-                with open(cp_file_name, 'w') as cp_file:
-                    for i in range(len(x_section_normalized)):
-                        cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
+                # with open(cp_file_name, 'w') as cp_file:
+                #     for i in range(len(x_section_normalized)):
+                #         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
 
                 # Make plot
                 plt.plot(x_section_normalized,cp_section,'r.',label='Kratos', markersize=5)
-                # plt.plot(x_experiment,cp_experiment, yerr=0.02,'k*',label='Experiment', markersize=5)
+
                 plt.errorbar(x_experiment,cp_experiment, yerr=0.02, marker=',',ls=' ',color='k',label='Experiment', markersize=5)
 
                 title="y/b: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
@@ -359,18 +373,18 @@ class WriteForcesProcess(ComputeLiftProcess):
                 plt.gca().invert_yaxis()
 
                 cp_figure_name = cp_dir_name + '/' + cp_case + '.png'
-                plt.gca().set_xlim([-0.01,1.01])
+                plt.gca().set_xlim([-0.05,1.05])
                 plt.gca().set_ylim([-1.5,1.0])
                 plt.gca().invert_yaxis()
                 plt.savefig(cp_figure_name, bbox_inches='tight')
-                plt.gca().set_xlim([0.9,1.01])
-                plt.gca().set_ylim([0.6,0])
-                cp_te_figure_name = cp_dir_name + '/' + cp_case + '_TE_zoom.png'
-                plt.savefig(cp_te_figure_name, bbox_inches='tight')
-                plt.gca().set_xlim([0.0, 0.05])
-                plt.gca().set_ylim([-0.75,-1.3])
-                cp_le_figure_name = cp_dir_name + '/' + cp_case + '_LE_zoom.png'
-                plt.savefig(cp_le_figure_name, bbox_inches='tight')
+                # plt.gca().set_xlim([0.9,1.01])
+                # plt.gca().set_ylim([0.6,0])
+                # cp_te_figure_name = cp_dir_name + '/' + cp_case + '_TE_zoom.png'
+                # plt.savefig(cp_te_figure_name, bbox_inches='tight')
+                # plt.gca().set_xlim([0.0, 0.05])
+                # plt.gca().set_ylim([-0.75,-1.3])
+                # cp_le_figure_name = cp_dir_name + '/' + cp_case + '_LE_zoom.png'
+                # plt.savefig(cp_le_figure_name, bbox_inches='tight')
                 plt.close('all')
 
         cp_dir_name = self.input_dir_path + '/plots/cp/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
@@ -699,3 +713,27 @@ class WriteForcesProcess(ComputeLiftProcess):
         #     return 1.7916
         else:
             return 0.0
+
+    def GetSimulationReferenceData(self,reference_name,section):
+        x_position = 7
+        if reference_name == 'usm3d':
+            x_position = 4
+        x_reference = []
+        cp_reference = []
+        section = round(section, 2)
+        cp_reference_file_name = 'references/cp/onera/' + reference_name + '.dat'
+        read_line = False
+        for line in open(cp_reference_file_name).readlines():
+            if 'L2' in line and read_line:
+                break
+            elif read_line:
+                x_reference.append(float(line.split()[x_position]))
+                cp_reference.append(float(line.split()[3]))
+            elif str(section) in line and 'L1' in line:
+                read_line = True
+                # print(line)
+
+
+        return x_reference, cp_reference
+
+        #x_experiment = [float(line.split()[0]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
