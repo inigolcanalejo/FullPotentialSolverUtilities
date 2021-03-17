@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 5
+        "end_time"      : 1
     },
     "output_processes" : {
         "gid_output" : [{
@@ -79,7 +79,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "angle_of_attack" : 0.0,
-                "mach_infinity"   : 0.6,
+                "mach_infinity"   : 0.3,
                 "speed_of_sound"  : 340.0,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
@@ -97,6 +97,8 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
+                "refinement_iterations": 1,
+                "target_wake_h" : 0.5,
                 "output_wake": false,
                 "epsilon"         : 1e-12
             }
@@ -117,7 +119,9 @@
                 "minimum_mesh_growth_rate": 0.0,
                 "section_100_model_part_name": "Section_100",
                 "section_150_model_part_name": "Section_150",
-                "section_180_model_part_name": "Section_180"
+                "section_180_model_part_name": "Section_180",
+                "reference_case_name": "XFLR5",
+                "case": 0
             }
         }],
         "auxiliar_process_list" :[]
