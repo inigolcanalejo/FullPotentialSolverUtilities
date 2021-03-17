@@ -113,6 +113,8 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         self.case = settings["case"].GetInt()
 
+        self.lift_coefficient_jump = 0.0
+
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
 
@@ -281,13 +283,14 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         potential_jump_file_name = potential_jump_dir_name + '/potential_jump_results.dat'
 
-        with open(potential_jump_file_name, 'w') as jump_file:
-            for node in self.trailing_edge_model_part.Nodes:
-                potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
-                auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
-                potential_jump = potential - auxiliary_potential
+        if self.compute_lift_from_jump_3d:
+            with open(potential_jump_file_name, 'w') as jump_file:
+                for node in self.trailing_edge_model_part.Nodes:
+                    potential = node.GetSolutionStepValue(CPFApp.VELOCITY_POTENTIAL)
+                    auxiliary_potential = node.GetSolutionStepValue(CPFApp.AUXILIARY_VELOCITY_POTENTIAL)
+                    potential_jump = potential - auxiliary_potential
 
-                jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
+                    jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
 
         potential_jump_file_name = potential_jump_dir_name + '/potential_jump_trefftz_results.dat'
 
