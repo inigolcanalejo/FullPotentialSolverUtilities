@@ -56,7 +56,7 @@
         "absolute_tolerance": 1e-10,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
-        "no_skin_parts"          : ["Wake3D_Wake_Auto1","Tip3D_Wing_Tips_Auto1","Middle_Airfoil","Section_100","Section_150","Section_180"],
+        "no_skin_parts"          : ["Wake3D_Wake_Auto1"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
             "solver_type": "LinearSolversApplication.pardiso_lu",
@@ -99,7 +99,7 @@
                 "wake_stl_file_name" : "wake_stl_new.stl",
                 "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
                 "refinement_iterations": 1,
-                "target_wake_h" : 0.5,
+                "target_wake_h" : 1.0,
                 "output_wake": false,
                 "epsilon"         : 1e-12
             }

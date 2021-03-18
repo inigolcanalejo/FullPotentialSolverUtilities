@@ -114,6 +114,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.case = settings["case"].GetInt()
 
         self.lift_coefficient_jump = 0.0
+        self.model = Model
 
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
@@ -316,21 +317,21 @@ class WriteForcesProcess(ComputeLiftProcess):
                 os.makedirs(cp_dir_name)
             for section in sections:
                 case_name = 'case_' + str(self.case) + '_section_' + str(section)
-                section_model_part = self.fluid_model_part.CreateSubModelPart(case_name)
+                section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/100.0 * wing_span
                 CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
 
-                number_of_conditions = section_model_part.NumberOfConditions()
-                print('number_of_conditions = ', number_of_conditions)
+                number_of_nodes = section_model_part.NumberOfNodes()
+                print('number_of_nodes = ', number_of_nodes)
 
                 x_section = []
                 cp_section = []
-                for condition in section_model_part.Conditions:
-                    x0 = condition.GetGeometry().Center().X
-                    z0 = condition.GetGeometry().Center().Z
+                for node in section_model_part.Nodes:
+                    x0 = node.X
+                    z0 = node.Z
                     x = x0 * math.cos(aoa_rad) - z0 * math.sin(aoa_rad)
                     x_section.append(x)
-                    cp_section.append(condition.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT))
+                    cp_section.append(node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT))
 
                 x_min = min(x_section)
                 x_max = max(x_section)

@@ -18,3 +18,4 @@ if __name__ == "__main__":
     model = KratosMultiphysics.Model()
     simulation = PotentialFlowAnalysisRefinement(model,parameters)
     simulation.Run()
+    #simulation._GetSolver().ExportModelPart()

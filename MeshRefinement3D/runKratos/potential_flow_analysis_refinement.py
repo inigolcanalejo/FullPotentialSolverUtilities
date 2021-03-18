@@ -325,9 +325,18 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.newton_convergence_directory_name, nw_dir)
         loads_output.write_figures_newton_convergence(self.newton_convergence_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
 
+        ## Model part writing
+        name_out_file = self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].GetString()+".out"
+        KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE | KratosMultiphysics.IO.MESH_ONLY).WriteModelPart(self._GetSolver().main_model_part)
+        #KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE).WriteModelPart(self._GetSolver().main_model_part)
+
+        KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Model export finished.")
+
+        self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
+
 
         super(PotentialFlowAnalysisRefinement,self).Finalize()
-        self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
+
         #self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
         #self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")
         self.model.Reset()
