@@ -13,10 +13,17 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
     def ExecuteInitializeSolutionStep(self):
         self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
 
-        if self.step > 13:
-            self.free_stream_mach += 0.1
+        if self.step > 11:
+            self.upwind_factor_constant -= 0.1
+            self.critical_mach += 0.01
+        elif self.step > 5:
+            self.upwind_factor_constant -= 0.1
+        elif self.step > 4:
+            self.free_stream_mach += 0.0095
         elif self.step > 1:
             self.free_stream_mach += 0.01
+        elif self.step > 1:
+            self.free_stream_mach += 0.1
 
         self.u_inf = round(self.free_stream_mach,2) * self.free_stream_speed_of_sound
         self.free_stream_velocity = KratosMultiphysics.Vector(3)
@@ -24,10 +31,10 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
         self.free_stream_velocity[1] = round(self.u_inf*math.sin(self.angle_of_attack),8)
         self.free_stream_velocity[2] = 0.0
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' step = ', self.step)
-        KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' free_stream_mach = ', round(self.free_stream_mach,3))
+        KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' free_stream_mach = ', round(self.free_stream_mach,4))
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' upwinding_factor_constant = ', round(self.upwind_factor_constant,3))
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' critical_mach = ', round(self.critical_mach,3))
-        self.fluid_model_part.ProcessInfo.SetValue(CPFApp.FREE_STREAM_MACH, round(self.free_stream_mach,3))
+        self.fluid_model_part.ProcessInfo.SetValue(CPFApp.FREE_STREAM_MACH, round(self.free_stream_mach,4))
         self.fluid_model_part.ProcessInfo.SetValue(CPFApp.FREE_STREAM_VELOCITY, self.free_stream_velocity)
         self.fluid_model_part.ProcessInfo.SetValue(CPFApp.CRITICAL_MACH, round(self.critical_mach,3))
         self.fluid_model_part.ProcessInfo.SetValue(CPFApp.UPWIND_FACTOR_CONSTANT, round(self.upwind_factor_constant,3))

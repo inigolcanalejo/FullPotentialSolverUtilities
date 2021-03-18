@@ -116,6 +116,7 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         self.lift_coefficient_jump = 0.0
         self.model = Model
+        self.mach = 0.2
 
     def ExecuteFinalizeSolutionStep(self):
         super(WriteForcesProcess, self).ExecuteFinalizeSolutionStep()
@@ -306,24 +307,30 @@ class WriteForcesProcess(ComputeLiftProcess):
                     jump_file.write('{0:15f} {1:15f}\n'.format(node.Y, potential_jump))
 
         aoa_rad = self.AOA * math.pi / 180.0
-        if self.reference_case_name == "ONERA":
+        self.mach = self.fluid_model_part.ProcessInfo[CPFApp.FREE_STREAM_MACH]
+        self.ufc = self.fluid_model_part.ProcessInfo[CPFApp.UPWIND_FACTOR_CONSTANT]
+        self.cm = self.fluid_model_part.ProcessInfo[CPFApp.CRITICAL_MACH]
+        if self.reference_case_name == "ONERA" and self.mach > 0.83:
+            print('mach number = ', self.mach)
+            print('upwinding_factor_constant = ', self.ufc)
+            print('critical_mach = ', self.cm)
             origin = KratosMultiphysics.Vector(3, 0.0)
             plane_normal = KratosMultiphysics.Vector(3, 0.0)
             plane_normal[1] = 1.0
             #sections = [20]
             sections = [20, 44, 65, 80, 90, 95, 99]
             wing_span = 1.1963
-            cp_dir_name = self.input_dir_path + '/plots/cp_onera/case_' + str(self.case)
-            if not os.path.exists(cp_dir_name):
-                os.makedirs(cp_dir_name)
             for section in sections:
-                case_name = 'case_' + str(self.case) + '_section_' + str(section)
+                cp_dir_name = self.input_dir_path + '/plots/cp_onera/case_' + str(self.case) + '_section_' + str(section)
+                if not os.path.exists(cp_dir_name):
+                    os.makedirs(cp_dir_name)
+                case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10))
                 section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/100.0 * wing_span
                 CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
 
-                number_of_nodes = section_model_part.NumberOfNodes()
-                print('number_of_nodes = ', number_of_nodes)
+                # number_of_nodes = section_model_part.NumberOfNodes()
+                # print('number_of_nodes = ', number_of_nodes)
 
                 x_section = []
                 cp_section = []
@@ -366,10 +373,10 @@ class WriteForcesProcess(ComputeLiftProcess):
 
                 # Make plot
                 plt.plot(x_section_normalized,cp_section,'r.',label='Kratos', markersize=5)
-
                 plt.errorbar(x_experiment,cp_experiment, yerr=0.02, marker=',',ls=' ',color='k',label='Experiment', markersize=5)
 
-                title="y/b: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                #title="y/b: %.2f, Mach: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
                 plt.title(title)
                 plt.legend()
                 plt.ylabel("$C_p$")
