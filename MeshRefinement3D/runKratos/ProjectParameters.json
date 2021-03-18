@@ -110,7 +110,7 @@
                 "model_part_name" : "FluidModelPart.Body3D_Body_Auto1",
                 "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
-                "middle_airfoil_model_part_name": "Middle_Airfoil",
+                "middle_airfoil_model_part_name": "",
                 "trefft_plane_cut_model_part_name": "",
                 "moment_reference_point" : [-0.498097349046,0.0,0.043577871374],
                 "is_infinite_wing": false,
@@ -118,9 +118,9 @@
                 "growth_rate_wing": 0.0,
                 "angle_of_attack": 0.0,
                 "minimum_mesh_growth_rate": 0.0,
-                "section_100_model_part_name": "Section_100",
-                "section_150_model_part_name": "Section_150",
-                "section_180_model_part_name": "Section_180",
+                "section_100_model_part_name": "",
+                "section_150_model_part_name": "",
+                "section_180_model_part_name": "",
                 "reference_case_name": "ONERA",
                 "case": 0
             }

@@ -325,6 +325,16 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.newton_convergence_directory_name, nw_dir)
         loads_output.write_figures_newton_convergence(self.newton_convergence_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
 
+
+
+        self._GetSolver().main_model_part.RemoveSubModelPart("trailing_edge_elements_model_part")
+        self._GetSolver().main_model_part.RemoveSubModelPart("wake_elements_model_part")
+        self._GetSolver().main_model_part.RemoveSubModelPart("Middle_Airfoil")
+        self._GetSolver().main_model_part.RemoveSubModelPart("Section_100")
+        self._GetSolver().main_model_part.RemoveSubModelPart("Section_150")
+        self._GetSolver().main_model_part.RemoveSubModelPart("Section_180")
+        self._GetSolver().main_model_part.RemoveSubModelPart("fluid_computational_model_part")
+
         ## Model part writing
         name_out_file = self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].GetString()+".out"
         KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE | KratosMultiphysics.IO.MESH_ONLY).WriteModelPart(self._GetSolver().main_model_part)

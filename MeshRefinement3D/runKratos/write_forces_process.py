@@ -77,6 +77,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.minimum_mesh_growth_rate = settings["minimum_mesh_growth_rate"].GetDouble()
         self.input_dir_path = 'TBD'
 
+        self.middle_sections = False
         middle_airfoil_model_part_name = settings["middle_airfoil_model_part_name"].GetString()
         if middle_airfoil_model_part_name != "":
             if not self.fluid_model_part.HasSubModelPart(middle_airfoil_model_part_name):
@@ -397,13 +398,14 @@ class WriteForcesProcess(ComputeLiftProcess):
         cp_file_name = cp_dir_name + '/cp_results.dat'
 
         aoa_rad = self.AOA * math.pi / 180.0
-        with open(cp_file_name, 'w') as cp_file:
-            for node in self.middle_airfoil_model_part.Nodes:
-                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
-                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
-                #x = node.X + 0.5
-                #if node.GetValue(CPFApp.UPPER_SURFACE):
-                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
+        if self.middle_sections:
+            with open(cp_file_name, 'w') as cp_file:
+                for node in self.middle_airfoil_model_part.Nodes:
+                    pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                    x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                    #x = node.X + 0.5
+                    #if node.GetValue(CPFApp.UPPER_SURFACE):
+                    cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_dir_name + '/cp.tikz'
         output_file_name = cp_dir_name + '/xflr5/section_0/aoa' + str(int(self.AOA)) + '.dat'
@@ -449,13 +451,14 @@ class WriteForcesProcess(ComputeLiftProcess):
         cp_100_file_name = cp_100_dir_name + '/cp_results.dat'
 
         aoa_rad = self.AOA * math.pi / 180.0
-        with open(cp_100_file_name, 'w') as cp_file:
-            for node in self.section_100_model_part.Nodes:
-                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
-                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
-                #x = node.X + 0.5
-                #if node.GetValue(CPFApp.UPPER_SURFACE):
-                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
+        if self.middle_sections:
+            with open(cp_100_file_name, 'w') as cp_file:
+                for node in self.section_100_model_part.Nodes:
+                    pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                    x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                    #x = node.X + 0.5
+                    #if node.GetValue(CPFApp.UPPER_SURFACE):
+                    cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_100_dir_name + '/cp.tikz'
         output_file_name = cp_100_dir_name + '/xflr5/section_100/aoa' + str(int(self.AOA)) + '.dat'
@@ -501,13 +504,14 @@ class WriteForcesProcess(ComputeLiftProcess):
         cp_150_file_name = cp_150_dir_name + '/cp_results.dat'
 
         aoa_rad = self.AOA * math.pi / 180.0
-        with open(cp_150_file_name, 'w') as cp_file:
-            for node in self.section_150_model_part.Nodes:
-                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
-                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
-                #x = node.X + 0.5
-                #if node.GetValue(CPFApp.UPPER_SURFACE):
-                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
+        if self.middle_sections:
+            with open(cp_150_file_name, 'w') as cp_file:
+                for node in self.section_150_model_part.Nodes:
+                    pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                    x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                    #x = node.X + 0.5
+                    #if node.GetValue(CPFApp.UPPER_SURFACE):
+                    cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_150_dir_name + '/cp.tikz'
         output_file_name = cp_150_dir_name + '/xflr5/section_150/aoa' + str(int(self.AOA)) + '.dat'
@@ -553,13 +557,14 @@ class WriteForcesProcess(ComputeLiftProcess):
         cp_180_file_name = cp_180_dir_name + '/cp_results.dat'
 
         aoa_rad = self.AOA * math.pi / 180.0
-        with open(cp_180_file_name, 'w') as cp_file:
-            for node in self.section_180_model_part.Nodes:
-                pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
-                x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
-                #x = node.X + 0.5
-                #if node.GetValue(CPFApp.UPPER_SURFACE):
-                cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
+        if self.middle_sections:
+            with open(cp_180_file_name, 'w') as cp_file:
+                for node in self.section_180_model_part.Nodes:
+                    pressure_coeffient = node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT)
+                    x = node.X * math.cos(aoa_rad) - node.Z * math.sin(aoa_rad) + 0.5
+                    #x = node.X + 0.5
+                    #if node.GetValue(CPFApp.UPPER_SURFACE):
+                    cp_file.write('{0:15f} {1:15f}\n'.format(x, pressure_coeffient))
 
         cp_tikz_file_name = cp_180_dir_name + '/cp.tikz'
         output_file_name = cp_180_dir_name + '/xflr5/section_180/aoa' + str(int(self.AOA)) + '.dat'
@@ -602,7 +607,10 @@ class WriteForcesProcess(ComputeLiftProcess):
         velocity_nodal_value_process = CPFApp.ComputeNodalValueProcess(self.fluid_model_part, ["VELOCITY"])
         velocity_nodal_value_process.Execute()
 
-
+        self.fluid_model_part.RemoveSubModelPart("Middle_Airfoil")
+        self.fluid_model_part.RemoveSubModelPart("Section_100")
+        self.fluid_model_part.RemoveSubModelPart("Section_150")
+        self.fluid_model_part.RemoveSubModelPart("Section_180")
 
     def read_cl_reference(self,AOA):
         # Values computed with XFLR5 using the 3D inviscid panel method
