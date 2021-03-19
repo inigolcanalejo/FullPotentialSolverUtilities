@@ -174,9 +174,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             self.cl_p_relative_error = abs(self.lift_coefficient - self.cl_reference)/abs(self.cl_reference)*100.0
 
         if(abs(self.cd_reference) < 1e-6):
-            self.cd_p_relative_error = abs(self.drag_coefficient_far_field - self.cd_reference)
+            self.cd_p_relative_error = abs(self.drag_coefficient - self.cd_reference)
         else:
-            self.cd_p_relative_error = abs(self.drag_coefficient_far_field - self.cd_reference)/abs(self.cd_reference)*100.0
+            self.cd_p_relative_error = abs(self.drag_coefficient - self.cd_reference)/abs(self.cd_reference)*100.0
 
         if(abs(self.cm_reference) < 1e-6):
             self.cm_p_relative_error = abs(self.moment_coefficient[1] - self.cm_reference)
@@ -319,10 +319,10 @@ class WriteForcesProcess(ComputeLiftProcess):
             plane_normal = KratosMultiphysics.Vector(3, 0.0)
             plane_normal[1] = 1.0
             #sections = [20]
-            sections = [20, 44, 65, 80, 90, 95, 99]
+            sections = [20, 44, 65, 80, 90, 95]
             wing_span = 1.1963
             for section in sections:
-                cp_dir_name = self.input_dir_path + '/plots/cp_onera/case_' + str(self.case) + '_section_' + str(section)
+                cp_dir_name = self.input_dir_path + '/plots/cp_onera/section_' + str(section)
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
                 case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10)) + '_step_' + str(round(self.step))
@@ -351,11 +351,17 @@ class WriteForcesProcess(ComputeLiftProcess):
                 x_experiment = [float(line.split()[0]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
                 cp_experiment = [-float(line.split()[1]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
 
+                # Get potential solver reference data
+                cp_potentialsolver_file_name = 'references/cp/onera/potential_solver/cp_' + str(section) + '.dat'
+                x_potential = [float(line.split()[0]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
+                cp_potential = [float(line.split()[1]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
+
                 # Plot simulation reference data
-                references = ['cfl3d','fun3d','usm3d']
+                #references = ['cfl3d','fun3d','usm3d']
+                references = ['cfl3d']
                 for reference in references:
                     x_reference, cp_reference = self.GetSimulationReferenceData(reference,section/100.0)
-                    plt.plot(x_reference,cp_reference,ls='-',label=reference, markersize=5)
+                    plt.plot(x_reference,cp_reference,'g*',label='RANS', markersize=5)
 
                     # Write data to file
                     # cp_case = case_name + '_' + reference
@@ -373,11 +379,12 @@ class WriteForcesProcess(ComputeLiftProcess):
                 #         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
 
                 # Make plot
-                plt.plot(x_section_normalized,cp_section,'r.',label='Kratos', markersize=5)
+                plt.plot(x_section_normalized,cp_section,'r.',label='Kratos Finite Element Potential Solver', markersize=5)
+                plt.plot(x_potential,cp_potential,'b.',label='Finite Volume Potential Solver', markersize=5)
                 plt.errorbar(x_experiment,cp_experiment, yerr=0.02, marker=',',ls=' ',color='k',label='Experiment', markersize=5)
 
-                #title="y/b: %.2f, Mach: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
-                title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
+                title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                #title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
                 plt.title(title)
                 plt.legend()
                 plt.ylabel("$C_p$")
