@@ -322,7 +322,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             sections = [20, 44, 65, 80, 90, 95]
             wing_span = 1.1963
             for section in sections:
-                cp_dir_name = self.input_dir_path + '/plots/cp_onera/section_' + str(section)
+                cp_dir_name = self.input_dir_path + '/plots/cp_onera/
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
                 case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10)) + '_step_' + str(round(self.step))
@@ -393,7 +393,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 plt.grid()
                 plt.gca().invert_yaxis()
 
-                cp_figure_name = cp_dir_name + '/' + cp_case + '.png'
+                cp_figure_name = cp_dir_name + cp_case + '.png'
                 plt.gca().set_xlim([-0.05,1.05])
                 plt.gca().set_ylim([-1.5,1.0])
                 plt.gca().invert_yaxis()
