@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 15
+        "end_time"      : 1
     },
     "output_processes" : {
         "gid_output" : [{
@@ -52,8 +52,8 @@
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,
-        "relative_tolerance": 1e-6,
-        "absolute_tolerance": 1e-6,
+        "relative_tolerance": 1e-7,
+        "absolute_tolerance": 1e-7,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
         "no_skin_parts"          : ["Wake3D_Wake_Auto1"],
@@ -70,7 +70,7 @@
             "verbosity": 2,
             "scaling": false
         },
-        "reference_chord": 1.15315084119231
+        "reference_chord": 0.7532
     },
     "processes"        : {
         "boundary_conditions_process_list" : [{
@@ -79,14 +79,14 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "angle_of_attack" : 0.0,
-                "mach_infinity"   : 0.8,
+                "mach_infinity"   : 0.8395,
                 "speed_of_sound"  : 340.0,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
                 "mach_number_limit": 0.94,
                 "mach_number_squared_limit": 3.0,
                 "critical_mach": 0.95,
-                "upwind_factor_constant": 2.0,
+                "upwind_factor_constant": 1.6,
                 "initialize_flow_field": false,
                 "perturbation_field": true
             }
@@ -112,7 +112,7 @@
                 "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
                 "middle_airfoil_model_part_name": "",
                 "trefft_plane_cut_model_part_name": "",
-                "moment_reference_point" : [-0.498097349046,0.0,0.043577871374],
+                "moment_reference_point" : [0.0,0.0,0.0],
                 "is_infinite_wing": false,
                 "growth_rate_domain": 0.0,
                 "growth_rate_wing": 0.0,
