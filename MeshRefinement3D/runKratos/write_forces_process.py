@@ -354,14 +354,14 @@ class WriteForcesProcess(ComputeLiftProcess):
                 #         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
 
                 #plt.plot(x_section_normalized,cp_section,'r-',label='Kratos Finite Element Potential Solver', markersize=5)
-                plt.plot(x_section_normalized,cp_section,'r.',label='Finite Element Potential Solver (Kratos)', markersize=5)
+                plt.plot(x_section_normalized,cp_section,'r.',label='FE Potential Solver (Kratos)', markersize=5)
 
                 # Get potential solver reference data
                 cp_potentialsolver_file_name = 'references/cp/onera/potential_solver/cp_' + str(section) + '.dat'
                 x_potential = [float(line.split()[0]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
                 cp_potential = [float(line.split()[1]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
                 #plt.plot(x_potential,cp_potential,'b--',label='Finite Volume Potential Solver', markersize=5)
-                plt.plot(x_potential,cp_potential,'bx',label='Finite Volume  Potential Solver', markersize=5)
+                plt.plot(x_potential,cp_potential,'bx',label='FV Potential Solver', markersize=5)
 
                 # Plot simulation reference data
                 #references = ['cfl3d','fun3d','usm3d']
