@@ -346,22 +346,30 @@ class WriteForcesProcess(ComputeLiftProcess):
                 x_max = max(x_section)
                 x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
 
-                # Get experiment reference data
-                cp_experiment_file_name = 'references/cp/onera/experiment/cp_' + str(section) + '.dat'
-                x_experiment = [float(line.split()[0]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
-                cp_experiment = [-float(line.split()[1]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
+                # Write data to file
+                cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+                cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
+                # with open(cp_file_name, 'w') as cp_file:
+                #     for i in range(len(x_section_normalized)):
+                #         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
+
+                #plt.plot(x_section_normalized,cp_section,'r-',label='Kratos Finite Element Potential Solver', markersize=5)
+                plt.plot(x_section_normalized,cp_section,'r.',label='Finite Element Potential Solver (Kratos)', markersize=5)
 
                 # Get potential solver reference data
                 cp_potentialsolver_file_name = 'references/cp/onera/potential_solver/cp_' + str(section) + '.dat'
                 x_potential = [float(line.split()[0]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
                 cp_potential = [float(line.split()[1]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
+                #plt.plot(x_potential,cp_potential,'b--',label='Finite Volume Potential Solver', markersize=5)
+                plt.plot(x_potential,cp_potential,'bx',label='Finite Volume  Potential Solver', markersize=5)
 
                 # Plot simulation reference data
                 #references = ['cfl3d','fun3d','usm3d']
                 references = ['cfl3d']
                 for reference in references:
                     x_reference, cp_reference = self.GetSimulationReferenceData(reference,section/100.0)
-                    plt.plot(x_reference,cp_reference,'g*',label='RANS', markersize=5)
+                    #plt.plot(x_reference,cp_reference,'g-',label='RANS', markersize=5)
+                    plt.plot(x_reference,cp_reference,'g+',label='RANS', markersize=5)
 
                     # Write data to file
                     # cp_case = case_name + '_' + reference
@@ -370,18 +378,11 @@ class WriteForcesProcess(ComputeLiftProcess):
                     #     for i in range(len(x_reference)):
                     #         cp_file.write('{0:15f} {1:15f}\n'.format(x_reference[i], cp_reference[i]))
 
-
-                # Write data to file
-                cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
-                cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
-                # with open(cp_file_name, 'w') as cp_file:
-                #     for i in range(len(x_section_normalized)):
-                #         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
-
-                # Make plot
-                plt.plot(x_section_normalized,cp_section,'r.',label='Kratos Finite Element Potential Solver', markersize=5)
-                plt.plot(x_potential,cp_potential,'b.',label='Finite Volume Potential Solver', markersize=5)
-                plt.errorbar(x_experiment,cp_experiment, yerr=0.02, marker=',',ls=' ',color='k',label='Experiment', markersize=5)
+                # Get experiment reference data
+                cp_experiment_file_name = 'references/cp/onera/experiment/cp_' + str(section) + '.dat'
+                x_experiment = [float(line.split()[0]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
+                cp_experiment = [-float(line.split()[1]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
+                plt.errorbar(x_experiment,cp_experiment, yerr=0.02, marker=',',ls=' ',color='k',label='Experiment', markersize=10)
 
                 title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
                 #title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
