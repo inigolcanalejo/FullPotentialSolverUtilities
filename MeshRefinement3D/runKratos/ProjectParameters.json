@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 5
+        "end_time"      : 6
     },
     "output_processes" : {
         "gid_output" : [{
@@ -86,7 +86,7 @@
                 "mach_number_limit": 0.94,
                 "mach_number_squared_limit": 3.0,
                 "critical_mach": 0.95,
-                "upwind_factor_constant": 2.0,
+                "upwind_factor_constant": 2.1,
                 "initialize_flow_field": false,
                 "perturbation_field": true
             }
