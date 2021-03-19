@@ -164,9 +164,9 @@ class WriteForcesProcess(ComputeLiftProcess):
             self.cd_reference = self.read_cd_reference(self.AOA)
             self.cm_reference = self.read_cm_reference(self.AOA)
         else:
-            self.cl_reference = 0.271
-            self.cd_reference = 0.0118
-            self.cm_reference = -0.19
+            self.cl_reference = 0.288
+            self.cd_reference = 0.0111
+            self.cm_reference = -0.212
 
         if(abs(self.cl_reference) < 1e-6):
             self.cl_p_relative_error = abs(self.lift_coefficient - self.cl_reference)
@@ -310,6 +310,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.mach = self.fluid_model_part.ProcessInfo[CPFApp.FREE_STREAM_MACH]
         self.ufc = self.fluid_model_part.ProcessInfo[CPFApp.UPWIND_FACTOR_CONSTANT]
         self.cm = self.fluid_model_part.ProcessInfo[CPFApp.CRITICAL_MACH]
+        self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
         if self.reference_case_name == "ONERA" and self.mach > 0.83:
             print('mach number = ', self.mach)
             print('upwinding_factor_constant = ', self.ufc)
@@ -324,7 +325,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_dir_name = self.input_dir_path + '/plots/cp_onera/case_' + str(self.case) + '_section_' + str(section)
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
-                case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10))
+                case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10)) + '_step_' + str(round(self.step))
                 section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/100.0 * wing_span
                 CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
