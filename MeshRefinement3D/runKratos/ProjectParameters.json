@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 12
+        "end_time"      : 1
     },
     "output_processes" : {
         "gid_output" : [{
@@ -30,7 +30,7 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["LOWER_SURFACE","UPPER_SURFACE","PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL","KUTTA"],
+                        "nodal_nonhistorical_results" : ["LOWER_SURFACE","UPPER_SURFACE","PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL","KUTTA","DEACTIVATED_WAKE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
                         "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","VECTOR_TO_UPWIND_ELEMENT"]
                     },
@@ -50,10 +50,10 @@
         "formulation": {
             "element_type": "perturbation_transonic"
         },
-        "maximum_iterations"     : 5,
+        "maximum_iterations"     : 2,
         "echo_level"             : 1,
-        "relative_tolerance": 1e-6,
-        "absolute_tolerance": 1e-6,
+        "relative_tolerance": 1e-5,
+        "absolute_tolerance": 1e-5,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
         "no_skin_parts"          : ["Wake3D_Wake_Auto1"],
@@ -79,7 +79,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "angle_of_attack" : 0.0,
-                "mach_infinity"   : 0.5,
+                "mach_infinity"   : 0.8395,
                 "speed_of_sound"  : 340.0,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
@@ -98,8 +98,8 @@
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
                 "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
-                "refinement_iterations": 1,
-                "target_wake_h" : 1.0,
+                "refinement_iterations": 0,
+                "target_wake_h" : 0.8,
                 "output_wake": false,
                 "epsilon"         : 1e-12
             }
