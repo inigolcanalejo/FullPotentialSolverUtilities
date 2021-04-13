@@ -311,7 +311,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.ufc = self.fluid_model_part.ProcessInfo[CPFApp.UPWIND_FACTOR_CONSTANT]
         self.cm = self.fluid_model_part.ProcessInfo[CPFApp.CRITICAL_MACH]
         self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
-        if self.reference_case_name == "ONERA" and self.mach > 0.83 and self.ufc < 1.7:
+        if self.reference_case_name == "ONERA" and self.mach > 0.83 and self.ufc < 2.1:
             print('mach number = ', self.mach)
             print('upwinding_factor_constant = ', self.ufc)
             print('critical_mach = ', self.cm)
