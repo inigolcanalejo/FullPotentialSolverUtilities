@@ -127,6 +127,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             self.cl_reference = self.read_cl_reference(self.AOA)
             self.cm_reference = self.read_cm_reference(self.AOA)
 
+        #compute relative errors
         if(abs(self.cl_reference) < 1e-6):
             self.cl_relative_error = abs(self.lift_coefficient)*100.0
             self.cl_jump_relative_error = abs(self.lift_coefficient_jump)*100.0
@@ -136,6 +137,13 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             self.cl_jump_relative_error = abs(self.lift_coefficient_jump - self.cl_reference)/abs(self.cl_reference)*100.0
             self.cl_far_field_relative_error = abs(self.lift_coefficient_far_field - self.cl_reference)/abs(self.cl_reference)*100.0
 
+        self.moment_coefficient *= -1
+        if(abs(self.cm_reference) < 1e-6):
+            self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)
+        else:
+            self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)/abs(self.cm_reference)*100.0
+
+        #output results
         cl_error_results_h_file_name = 'TBD'
         with open(cl_error_results_h_file_name,'a') as cl_error_file:
             cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_relative_error))
@@ -181,17 +189,23 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             #absolute value
             cl_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_results_domain.dat'
             with open(cl_results_domain_file_name,'a') as cl_error_file:
-                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.lift_coefficient))
+                cl_error_file.write('{0:16.2e} {1:.15f}\n'.format(self.domain_size, self.lift_coefficient))
                 cl_error_file.flush()
 
             cl_jump_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_jump_results_domain.dat'
             with open(cl_jump_results_domain_file_name,'a') as cl_error_file:
-                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.lift_coefficient_jump))
+                cl_error_file.write('{0:16.2e} {1:.15f}\n'.format(self.domain_size, self.lift_coefficient_jump))
                 cl_error_file.flush()
 
             cl_far_field_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_far_field_results_domain.dat'
             with open(cl_far_field_results_domain_file_name,'a') as cl_error_file:
-                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.lift_coefficient_far_field))
+                cl_error_file.write('{0:16.2e} {1:.15f}\n'.format(self.domain_size, self.lift_coefficient_far_field))
+                cl_error_file.flush()
+
+            #moment
+            cm_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cm_results_domain.dat'
+            with open(cm_results_domain_file_name,'a') as cl_error_file:
+                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.cm_relative_error))
                 cl_error_file.flush()
 
 
@@ -312,7 +326,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             aoa_file.write('{0:16.2e} {1:15f} {2:15f} {3:15f} {4:15f}\n'.format(NumberOfNodes, self.lift_coefficient, self.lift_coefficient_jump, self.cl_reference, self.drag_coefficient))
             aoa_file.flush()
 
-        self.moment_coefficient *= -1
         cm_results_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_results_h.dat'
         with open(cm_results_h_file_name,'a') as cm_file:
             cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.moment_coefficient[2]))
@@ -322,11 +335,6 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         with open(cm_reference_h_file_name,'a') as cm_file:
             cm_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cm_reference))
             cm_file.flush()
-
-        if(abs(self.cm_reference) < 1e-6):
-            self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)
-        else:
-            self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)/abs(self.cm_reference)*100.0
 
         cm_error_results_h_file_name = self.input_dir_path + '/plots/cm_error/data/cm_error/cm_error_results_h.dat'
         with open(cm_error_results_h_file_name,'a') as cm_file:
