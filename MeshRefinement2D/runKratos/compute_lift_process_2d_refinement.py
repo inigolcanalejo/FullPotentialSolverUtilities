@@ -178,6 +178,24 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 cl_aoa_file.flush()
 
             cl_error_results_domain_directory_name = 'TBD'
+            #absolute value
+            cl_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_results_domain.dat'
+            with open(cl_results_domain_file_name,'a') as cl_error_file:
+                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.lift_coefficient))
+                cl_error_file.flush()
+
+            cl_jump_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_jump_results_domain.dat'
+            with open(cl_jump_results_domain_file_name,'a') as cl_error_file:
+                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.lift_coefficient_jump))
+                cl_error_file.flush()
+
+            cl_far_field_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_far_field_results_domain.dat'
+            with open(cl_far_field_results_domain_file_name,'a') as cl_error_file:
+                cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.lift_coefficient_far_field))
+                cl_error_file.flush()
+
+
+            # relative error
             cl_error_results_domain_file_name = cl_error_results_domain_directory_name + '/AOA_'+ str(self.AOA) + '/cl_error_results_domain.dat'
             with open(cl_error_results_domain_file_name,'a') as cl_error_file:
                 cl_error_file.write('{0:16.2e} {1:15f}\n'.format(self.domain_size, self.cl_relative_error))
