@@ -161,6 +161,11 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             cl_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.lift_coefficient_jump))
             cl_file.flush()
 
+        cl_far_field_results_h_file_name = 'TBD'
+        with open(cl_far_field_results_h_file_name,'a') as cl_file:
+            cl_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.lift_coefficient_far_field))
+            cl_file.flush()
+
         cl_reference_h_file_name = 'TBD'
         with open(cl_reference_h_file_name,'a') as cl_reference_file:
             cl_reference_file.write('{0:16.2e} {1:15f}\n'.format(self.mesh_size, self.cl_reference))
@@ -386,7 +391,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             print('There is no reference for this AOA')
 
     def read_cm_reference(self,AOA):
-        #values computed with the panel method from xfoil
+        #values computed with the panel method from xfoil (around 0.0, 0.0)
         if(abs(AOA - 0.0) < 1e-3):
             return 0.0
         elif(abs(AOA - 1.0) < 1e-3):
