@@ -129,9 +129,9 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         #compute relative errors
         if(abs(self.cl_reference) < 1e-6):
-            self.cl_relative_error = abs(self.lift_coefficient)*100.0
-            self.cl_jump_relative_error = abs(self.lift_coefficient_jump)*100.0
-            self.cl_far_field_relative_error = abs(self.lift_coefficient_far_field)*100.0
+            self.cl_relative_error = abs(self.lift_coefficient)
+            self.cl_jump_relative_error = abs(self.lift_coefficient_jump)
+            self.cl_far_field_relative_error = abs(self.lift_coefficient_far_field)
         else:
             self.cl_relative_error = abs(self.lift_coefficient - self.cl_reference)/abs(self.cl_reference)*100.0
             self.cl_jump_relative_error = abs(self.lift_coefficient_jump - self.cl_reference)/abs(self.cl_reference)*100.0
