@@ -57,7 +57,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         if self.reference_case_name == "":
             raise Exception("Please enter a reference case name (XFOIL, AGARD, Lock, FLO36, KORN or TAU)")
 
-    def ExecuteFinalizeSolutionStep(self):
+    def ExecuteFinalize(self):
         self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
         self.upwind_factor_constant = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.UPWIND_FACTOR_CONSTANT)
         self.critical_mach_number = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.CRITICAL_MACH)
@@ -81,7 +81,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         print ('reference_area = ', self.reference_area)
         print ('plot_reference_chord_projected = ', plot_reference_chord_projected)
 
-        super(ComputeLiftProcessRefinement, self).ExecuteFinalizeSolutionStep()
+        super(ComputeLiftProcessRefinement, self).ExecuteFinalize()
 
         cp_results_file_name = 'TBD'
         cp_file = open(cp_results_file_name,'w')
@@ -128,7 +128,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             self.cm_reference = self.read_cm_reference(self.AOA)
 
         #compute relative errors
-        if(abs(self.cl_reference) < 1e-6):
+        if(abs(self.cl_reference) < 1e-2):
             self.cl_relative_error = abs(self.lift_coefficient)
             self.cl_jump_relative_error = abs(self.lift_coefficient_jump)
             self.cl_far_field_relative_error = abs(self.lift_coefficient_far_field)
@@ -138,7 +138,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             self.cl_far_field_relative_error = abs(self.lift_coefficient_far_field - self.cl_reference)/abs(self.cl_reference)*100.0
 
         self.moment_coefficient *= -1
-        if(abs(self.cm_reference) < 1e-6):
+        if(abs(self.cm_reference) < 1e-2):
             self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)
         else:
             self.cm_relative_error = abs(self.moment_coefficient[2] - self.cm_reference)/abs(self.cm_reference)*100.0

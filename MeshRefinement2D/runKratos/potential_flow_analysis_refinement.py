@@ -160,21 +160,21 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cp_data_directory_name = self.cp_data_directory_start + '/Case_' + str(self.case) + '_DS_' + str(self.Domain_Length) + '_AOA_' + str(
             self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize) + '_Step_' + str(self.step)
 
-    def FinalizeSolutionStep(self):
-        super(PotentialFlowAnalysisRefinement, self).FinalizeSolutionStep()
-        loads_output.write_cp_figures(self.cp_data_directory_name, self.AOA, self.case, self.Airfoil_MeshSize, self.FarField_MeshSize, self.input_dir_path)
-        shutil.copytree(self.cp_results_directory_name, self.cp_data_directory_name)
+    # def FinalizeSolutionStep(self):
+    #     super(PotentialFlowAnalysisRefinement, self).FinalizeSolutionStep()
+    #     loads_output.write_cp_figures(self.cp_data_directory_name, self.AOA, self.case, self.Airfoil_MeshSize, self.FarField_MeshSize, self.input_dir_path)
+    #     shutil.copytree(self.cp_results_directory_name, self.cp_data_directory_name)
 
-        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp/cp.tex'], stdout=self.latex_output)
-        latex.communicate()
+    #     latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp/cp.tex'], stdout=self.latex_output)
+    #     latex.communicate()
 
-        self.step = self._GetSolver().GetComputingModelPart().ProcessInfo[KratosMultiphysics.STEP]
+    #     self.step = self._GetSolver().GetComputingModelPart().ProcessInfo[KratosMultiphysics.STEP]
 
-        cp_file_name = self.input_dir_path + '/plots/cp/plots/cp_Case_' + str(self.case) + '_DS_' + str(self.Domain_Length) + '_AOA_' + str(
-                self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize) + '_Step_' + str(self.step) + '.pdf'
-        shutil.copyfile('cp.pdf',cp_file_name)
-        self.merger_refinement_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
-        self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
+    #     cp_file_name = self.input_dir_path + '/plots/cp/plots/cp_Case_' + str(self.case) + '_DS_' + str(self.Domain_Length) + '_AOA_' + str(
+    #             self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize) + '_Step_' + str(self.step) + '.pdf'
+    #     shutil.copyfile('cp.pdf',cp_file_name)
+    #     self.merger_refinement_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
+    #     self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
 
     def SetParametersBeforeInitialize(self):
         loads_output.write_case(self.case, self.AOA, self.FarField_MeshSize, self.Airfoil_MeshSize, self.input_dir_path)
@@ -203,6 +203,14 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.Minimum_Airfoil_MeshSize)
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["domain_size"].SetDouble(
             self.Domain_Length)
+
+        # adding end time and mach
+        if self.Airfoil_MeshSize < 1e-3:
+            self.project_parameters["problem_data"]["end_time"].SetDouble(3.0)
+            self.project_parameters["processes"]["boundary_conditions_process_list"][0]["Parameters"]["mach_infinity"].SetDouble(0.70)
+        else:
+            self.project_parameters["problem_data"]["end_time"].SetDouble(1.0)
+            self.project_parameters["processes"]["boundary_conditions_process_list"][0]["Parameters"]["mach_infinity"].SetDouble(0.72)
 
         self._solver = self._CreateSolver()
         self._GetSolver().AddVariables()
@@ -246,6 +254,23 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
     def Finalize(self):
         super(PotentialFlowAnalysisRefinement,self).Finalize()
+
+        # do cp stuff
+        loads_output.write_cp_figures(self.cp_data_directory_name, self.AOA, self.case, self.Airfoil_MeshSize, self.FarField_MeshSize, self.input_dir_path)
+        shutil.copytree(self.cp_results_directory_name, self.cp_data_directory_name)
+
+        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp/cp.tex'], stdout=self.latex_output)
+        latex.communicate()
+
+        self.step = self._GetSolver().GetComputingModelPart().ProcessInfo[KratosMultiphysics.STEP]
+
+        cp_file_name = self.input_dir_path + '/plots/cp/plots/cp_Case_' + str(self.case) + '_DS_' + str(self.Domain_Length) + '_AOA_' + str(
+                self.AOA) + '_Far_Field_Mesh_Size_' + str(self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize) + '_Step_' + str(self.step) + '.pdf'
+        shutil.copyfile('cp.pdf',cp_file_name)
+        self.merger_refinement_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
+        self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
+
+        # do finalize stuff
         self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
         #self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
         #self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")

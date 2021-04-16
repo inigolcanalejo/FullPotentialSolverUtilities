@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 1
+        "end_time"        : 4
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -21,9 +21,9 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "perturbation_compressible"
+            "element_type": "perturbation_transonic"
         },
-        "maximum_iterations"     : 20,
+        "maximum_iterations"     : 10,
         "echo_level"             : 0,
         "relative_tolerance": 1e-15,
         "absolute_tolerance": 1e-15,
@@ -52,12 +52,12 @@
             "Parameters"    : {
                 "model_part_name"   : "MainModelPart.PotentialWallCondition2D_Far_field_Auto1",
                 "angle_of_attack": 0.0,
-                "mach_infinity": 0.72,
+                "mach_infinity": 0.69,
                 "free_stream_density"  : 1.225,
                 "speed_of_sound": 340.3,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
-                "mach_number_limit": 1.0,
+                "mach_number_limit": 2.0,
                 "critical_mach": 1.0,
                 "upwind_factor_constant": 1.0,
                 "initialize_flow_field": false,
@@ -82,9 +82,9 @@
                 "angle_of_attack": 0.0,
                 "airfoil_meshsize": 1.0,
                 "minimum_airfoil_meshsize": 1.0,
-                "moment_reference_point" : [-0.5,0.0,0.0],
+                "moment_reference_point" : [-0.25,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "Lock"
+                "reference_case_name": "FLO36"
             }
         }],
         "auxiliar_process_list" :[]
