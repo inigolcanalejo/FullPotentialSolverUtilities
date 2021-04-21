@@ -204,13 +204,13 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["domain_size"].SetDouble(
             self.Domain_Length)
 
-        # # adding end time and mach
-        # if self.Airfoil_MeshSize < 1e-3:
-        #     self.project_parameters["problem_data"]["end_time"].SetDouble(3.0)
-        #     self.project_parameters["processes"]["boundary_conditions_process_list"][0]["Parameters"]["mach_infinity"].SetDouble(0.70)
-        # else:
-        #     self.project_parameters["problem_data"]["end_time"].SetDouble(1.0)
-        #     self.project_parameters["processes"]["boundary_conditions_process_list"][0]["Parameters"]["mach_infinity"].SetDouble(0.72)
+        # adding end time and mach
+        if self.Airfoil_MeshSize < 1e-3:
+            self.project_parameters["problem_data"]["end_time"].SetDouble(3.0)
+            self.project_parameters["processes"]["boundary_conditions_process_list"][0]["Parameters"]["mach_infinity"].SetDouble(0.70)
+        else:
+            self.project_parameters["problem_data"]["end_time"].SetDouble(1.0)
+            self.project_parameters["processes"]["boundary_conditions_process_list"][0]["Parameters"]["mach_infinity"].SetDouble(0.72)
 
         self._solver = self._CreateSolver()
         self._GetSolver().AddVariables()
