@@ -57,7 +57,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         if self.reference_case_name == "":
             raise Exception("Please enter a reference case name (XFOIL, AGARD, Lock, FLO36, KORN or TAU)")
 
-    def ExecuteFinalize(self):
+    def ExecuteFinalizeSolutionStep(self):
         self.free_stream_mach = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.FREE_STREAM_MACH)
         self.upwind_factor_constant = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.UPWIND_FACTOR_CONSTANT)
         self.critical_mach_number = self.fluid_model_part.ProcessInfo.GetValue(CPFApp.CRITICAL_MACH)
@@ -81,7 +81,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
         print ('reference_area = ', self.reference_area)
         print ('plot_reference_chord_projected = ', plot_reference_chord_projected)
 
-        super(ComputeLiftProcessRefinement, self).ExecuteFinalize()
+        super(ComputeLiftProcessRefinement, self).ExecuteFinalizeSolutionStep()
 
         cp_results_file_name = 'TBD'
         cp_file = open(cp_results_file_name,'w')
@@ -303,12 +303,12 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
             '    table {' + cp_critical_reference_file_name + '};  \n' +
             '    \\addlegendentry{$c_p^*$ = ' + "{:.2f}".format(self.critical_cp) + '}\n\n' +
             '\\addplot[\n' +
+            # '    color=black,\n' +
+            # '    mark=none,\n' +
+            # '    mark options={dashed},\n' +
+            '    only marks,\n' +
             '    color=black,\n' +
-            '    mark=none,\n' +
-            '    mark options={dashed},\n' +
-            # '    only marks,\n' +
-            # '    color=red,\n' +
-            # '    mark=triangle*,\n' +
+            '    mark=x,\n' +
             # '    mark size=1.5,\n' +
             # '    mark options={solid},\n' +
             # '    densely dotted,\n' +

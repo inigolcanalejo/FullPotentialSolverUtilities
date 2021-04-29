@@ -4,7 +4,7 @@
         "parallel_type"   : "OpenMP",
         "echo_level"      : 0,
         "start_time"      : 0.0,
-        "end_time"        : 6
+        "end_time"        : 1
     },
     "restart_options"                  : {
         "SaveRestart"      : "False",
@@ -26,7 +26,7 @@
         "maximum_iterations"     : 20,
         "echo_level"             : 0,
         "relative_tolerance": 1e-16,
-        "absolute_tolerance": 1e-13,
+        "absolute_tolerance": 1e-11,
         "linear_solver_settings"  : {
                 "solver_type"             : "LinearSolversApplication.pardiso_lu",
                 "max_iteration": 1000,
@@ -58,8 +58,8 @@
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
                 "mach_number_limit": 2.0,
-                "critical_mach": 0.90,
-                "upwind_factor_constant": 1.1,
+                "critical_mach": 0.85,
+                "upwind_factor_constant": 2.5,
                 "initialize_flow_field": false,
                 "perturbation_field": true
             }
@@ -84,7 +84,7 @@
                 "minimum_airfoil_meshsize": 1.0,
                 "moment_reference_point" : [-0.25,0.0,0.0],
                 "domain_size": 1.0,
-                "reference_case_name": "FLO36"
+                "reference_case_name": "KORN"
             }
         }],
         "auxiliar_process_list" :[]

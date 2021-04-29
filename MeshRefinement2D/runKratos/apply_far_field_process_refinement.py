@@ -13,11 +13,14 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
     def ExecuteInitializeSolutionStep(self):
         self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
 
-        if self.step > 6:
-            self.upwind_factor_constant -= 0.1
+        if self.step > 106:
+            self.free_stream_mach += 0.001
+            # self.upwind_factor_constant -= 0.1
+            # self.critical_mach +=0.01
             #self.free_stream_mach += 0.01
         elif self.step > 1:
-            self.free_stream_mach += 0.01
+            self.free_stream_mach += 0.001
+            # self.critical_mach +=0.01
 
         self.u_inf = round(self.free_stream_mach,2) * self.free_stream_speed_of_sound
         self.free_stream_velocity = KratosMultiphysics.Vector(3)

@@ -58,7 +58,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Initial_Domain_Size = TBD
         self.Domain_Size_Factor = TBD
 
-        self.case = 2
+        self.case = 0
         self.Domain_Length = self.Initial_Domain_Size
         self.Domain_Width = self.Initial_Domain_Size
 
@@ -252,9 +252,22 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         cp_final_global_file_name = self.input_dir_path + '/plots/cp/cp_all.pdf'
         self.merger_all_cp.write(cp_final_global_file_name)
 
+    def FinalizeSolutionStep(self):
+        super(PotentialFlowAnalysisRefinement,self).FinalizeSolutionStep()
+        self.ExportCp()
+
     def Finalize(self):
         super(PotentialFlowAnalysisRefinement,self).Finalize()
 
+        # self.ExportCp()
+
+        # do finalize stuff
+        self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
+        #self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
+        #self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")
+        self.model.Reset()
+
+    def ExportCp(self):
         # do cp stuff
         loads_output.write_cp_figures(self.cp_data_directory_name, self.AOA, self.case, self.Airfoil_MeshSize, self.FarField_MeshSize, self.input_dir_path)
         shutil.copytree(self.cp_results_directory_name, self.cp_data_directory_name)
@@ -269,9 +282,3 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copyfile('cp.pdf',cp_file_name)
         self.merger_refinement_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
         self.merger_all_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case))
-
-        # do finalize stuff
-        self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
-        #self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
-        #self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")
-        self.model.Reset()
