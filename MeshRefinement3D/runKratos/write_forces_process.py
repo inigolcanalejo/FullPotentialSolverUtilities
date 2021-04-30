@@ -311,7 +311,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.ufc = self.fluid_model_part.ProcessInfo[CPFApp.UPWIND_FACTOR_CONSTANT]
         self.cm = self.fluid_model_part.ProcessInfo[CPFApp.CRITICAL_MACH]
         self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
-        if self.reference_case_name == "ONERA" and self.mach > 0.83 and self.ufc < 2.1:
+        if self.reference_case_name == "ONERA" and self.mach > 0.4 and self.ufc < 2.1:
             print('mach number = ', self.mach)
             print('upwinding_factor_constant = ', self.ufc)
             print('critical_mach = ', self.cm)
@@ -349,9 +349,9 @@ class WriteForcesProcess(ComputeLiftProcess):
                 # Write data to file
                 cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
                 cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
-                # with open(cp_file_name, 'w') as cp_file:
-                #     for i in range(len(x_section_normalized)):
-                #         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
+                with open(cp_file_name, 'w') as cp_file:
+                    for i in range(len(x_section_normalized)):
+                        cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
 
                 #plt.plot(x_section_normalized,cp_section,'r-',label='Kratos Finite Element Potential Solver', markersize=5)
                 plt.plot(x_section_normalized,cp_section,'r.',label='FE Potential Solver (Kratos)', markersize=5)

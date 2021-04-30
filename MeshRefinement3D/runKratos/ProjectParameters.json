@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 28
+        "end_time"      : 12
     },
     "output_processes" : {
         "gid_output" : [{
@@ -50,10 +50,10 @@
         "formulation": {
             "element_type": "perturbation_transonic"
         },
-        "maximum_iterations"     : 10,
+        "maximum_iterations"     : 5,
         "echo_level"             : 1,
-        "relative_tolerance": 1e-8,
-        "absolute_tolerance": 1e-8,
+        "relative_tolerance": 1e-6,
+        "absolute_tolerance": 1e-6,
         "volume_model_part_name" : "Parts_Parts_Auto1",
         "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
         "no_skin_parts"          : ["Wake3D_Wake_Auto1"],
@@ -85,8 +85,8 @@
                 "inlet_potential": 0.0,
                 "mach_number_limit": 0.94,
                 "mach_number_squared_limit": 3.0,
-                "critical_mach": 0.90,
-                "upwind_factor_constant": 3.0,
+                "critical_mach": 0.95,
+                "upwind_factor_constant": 2.0,
                 "initialize_flow_field": false,
                 "perturbation_field": true
             }
@@ -98,7 +98,7 @@
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
                 "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
-                "refinement_iterations": 5,
+                "refinement_iterations": 0,
                 "target_wake_h" : 0.8,
                 "output_wake": false,
                 "epsilon"         : 1e-12
