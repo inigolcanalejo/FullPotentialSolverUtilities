@@ -311,7 +311,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.ufc = self.fluid_model_part.ProcessInfo[CPFApp.UPWIND_FACTOR_CONSTANT]
         self.cm = self.fluid_model_part.ProcessInfo[CPFApp.CRITICAL_MACH]
         self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
-        if self.reference_case_name == "ONERA" and self.mach > 0.4 and self.ufc < 2.1:
+        if self.reference_case_name == "ONERA" and self.mach > 0.83 and self.ufc < 2.1:
             print('mach number = ', self.mach)
             print('upwinding_factor_constant = ', self.ufc)
             print('critical_mach = ', self.cm)
@@ -372,17 +372,24 @@ class WriteForcesProcess(ComputeLiftProcess):
                     plt.plot(x_reference,cp_reference,'g+',label='RANS', markersize=5)
 
                     # Write data to file
-                    # cp_case = case_name + '_' + reference
-                    # cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
-                    # with open(cp_file_name, 'w') as cp_file:
-                    #     for i in range(len(x_reference)):
-                    #         cp_file.write('{0:15f} {1:15f}\n'.format(x_reference[i], cp_reference[i]))
+                    cp_case = case_name + '_' + reference
+                    cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
+                    with open(cp_file_name, 'w') as cp_file:
+                        for i in range(len(x_reference)):
+                            cp_file.write('{0:15f} {1:15f}\n'.format(x_reference[i], cp_reference[i]))
 
                 # Get experiment reference data
                 cp_experiment_file_name = 'references/cp/onera/experiment/cp_' + str(section) + '.dat'
                 x_experiment = [float(line.split()[0]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
                 cp_experiment = [-float(line.split()[1]) for line in open(cp_experiment_file_name).readlines() if len(line.split()) > 0]
                 plt.errorbar(x_experiment,cp_experiment, yerr=0.02, marker=',',ls=' ',color='k',label='Experiment', markersize=10)
+
+                # write experiment data to file
+                cp_case = case_name + '_experiment'
+                cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
+                with open(cp_file_name, 'w') as cp_file:
+                    for i in range(len(x_experiment)):
+                        cp_file.write('{0:15f} {1:15f}\n'.format(x_experiment[i], cp_experiment[i]))
 
                 title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
                 #title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
