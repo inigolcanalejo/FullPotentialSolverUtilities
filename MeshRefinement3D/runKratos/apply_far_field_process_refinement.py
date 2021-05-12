@@ -22,7 +22,7 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
             # self.critical_mach += 0.01
         elif self.step > 7:
             self.free_stream_mach += 0.0095
-        elif self.step > 4:
+        elif self.step > 3:
             self.free_stream_mach += 0.01
         elif self.step > 1:
             self.free_stream_mach += 0.1

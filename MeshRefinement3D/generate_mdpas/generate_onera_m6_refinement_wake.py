@@ -348,7 +348,7 @@ for k in range(Number_Of_AOAS):
 
             # TE Airfoils
             Regular_1D_2 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Airfoils)
-            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size,[])
+            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size*2.0,[])
             Start_and_End_Length_TE.SetObjectEntry( 'Partition_Domain' )
             Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
 
