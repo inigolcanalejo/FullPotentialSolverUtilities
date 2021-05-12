@@ -421,13 +421,13 @@ class WriteForcesProcess(ComputeLiftProcess):
             plane_normal = KratosMultiphysics.Vector(3, 0.0)
             plane_normal[1] = 1.0
             #sections = [20]
-            sections = [0, 100, 150, 180]
+            sections = [0.01, 100, 150, 180]
             wing_span = 2.0
             for section in sections:
                 cp_dir_name = self.input_dir_path + '/plots/cp_xflr5'
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
-                case_name = 'case_' + str(self.case) + '_section_' + str(section)
+                case_name = 'case_' + str(self.case) + '_section_' + str(round(section))
                 section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/100.0 #* wing_span
                 CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
@@ -448,8 +448,8 @@ class WriteForcesProcess(ComputeLiftProcess):
                 x_max = max(x_section)
                 x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
 
-                # # Write data to file
-                # cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+                # Write data to file
+                cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
                 # cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
                 # with open(cp_file_name, 'w') as cp_file:
                 #     for i in range(len(x_section_normalized)):
@@ -459,7 +459,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 plt.plot(x_section_normalized,cp_section,'r.',label='FE Potential Solver (Kratos)', markersize=5)
 
                 # Get XFLR5 solver reference data
-                cp_potentialsolver_file_name = 'references/cp/xflr5/cp_' + str(section) + '/aoa' + str(round(self.AOA)) +'.dat'
+                cp_potentialsolver_file_name = 'references/cp/xflr5/section_' + str(round(section)) + '/aoa' + str(round(self.AOA)) +'.dat'
                 x_potential = [float(line.split()[0]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
                 cp_potential = [float(line.split()[1]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
                 plt.plot(x_potential,cp_potential,'b--',label='XFLR5', markersize=5)
