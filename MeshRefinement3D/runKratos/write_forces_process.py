@@ -415,6 +415,70 @@ class WriteForcesProcess(ComputeLiftProcess):
                 # plt.savefig(cp_le_figure_name, bbox_inches='tight')
                 plt.close('all')
 
+        if self.reference_case_name == "XFLR5":
+            print('mach number = ', self.mach)
+            origin = KratosMultiphysics.Vector(3, 0.0)
+            plane_normal = KratosMultiphysics.Vector(3, 0.0)
+            plane_normal[1] = 1.0
+            #sections = [20]
+            sections = [0, 100, 150, 180]
+            wing_span = 2.0
+            for section in sections:
+                cp_dir_name = self.input_dir_path + '/plots/cp_xflr5'
+                if not os.path.exists(cp_dir_name):
+                    os.makedirs(cp_dir_name)
+                case_name = 'case_' + str(self.case) + '_section_' + str(section)
+                section_model_part = self.model.CreateModelPart(case_name)
+                origin[1] = section/100.0 #* wing_span
+                CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
+
+                # number_of_nodes = section_model_part.NumberOfNodes()
+                # print('number_of_nodes = ', number_of_nodes)
+
+                x_section = []
+                cp_section = []
+                for node in section_model_part.Nodes:
+                    x0 = node.X
+                    z0 = node.Z
+                    x = x0 * math.cos(aoa_rad) - z0 * math.sin(aoa_rad)
+                    x_section.append(x)
+                    cp_section.append(node.GetValue(KratosMultiphysics.PRESSURE_COEFFICIENT))
+
+                x_min = min(x_section)
+                x_max = max(x_section)
+                x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
+
+                # # Write data to file
+                # cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+                # cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
+                # with open(cp_file_name, 'w') as cp_file:
+                #     for i in range(len(x_section_normalized)):
+                #         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
+
+                #plt.plot(x_section_normalized,cp_section,'r-',label='Kratos Finite Element Potential Solver', markersize=5)
+                plt.plot(x_section_normalized,cp_section,'r.',label='FE Potential Solver (Kratos)', markersize=5)
+
+                # Get XFLR5 solver reference data
+                cp_potentialsolver_file_name = 'references/cp/xflr5/cp_' + str(section) + '/aoa' + str(round(self.AOA)) +'.dat'
+                x_potential = [float(line.split()[0]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
+                cp_potential = [float(line.split()[1]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
+                plt.plot(x_potential,cp_potential,'b--',label='XFLR5', markersize=5)
+
+                title="y/b: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                plt.title(title)
+                plt.legend()
+                plt.ylabel("$C_p$")
+                plt.xlabel("$\hat{x}$")
+                plt.grid()
+                plt.gca().invert_yaxis()
+
+                cp_figure_name = cp_dir_name + '/' + cp_case + '.png'
+                plt.gca().set_xlim([-0.05,1.05])
+                plt.gca().set_ylim([-1.5,1.0])
+                plt.gca().invert_yaxis()
+                plt.savefig(cp_figure_name, bbox_inches='tight')
+                plt.close('all')
+
         cp_dir_name = self.input_dir_path + '/plots/cp/data/case_' + str(self.case) + '_AOA_' + str(self.AOA) + '/Growth_Rate_Domain_' + str(
         self.Growth_Rate_Domain) + '/Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
 
