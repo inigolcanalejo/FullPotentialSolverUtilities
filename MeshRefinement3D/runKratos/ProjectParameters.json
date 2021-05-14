@@ -97,7 +97,7 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
-                "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
+                "wake_normal": [0.0, 0.0, 1.0],
                 "refinement_iterations": 0,
                 "target_wake_h" : 0.8,
                 "output_wake": false,
