@@ -126,7 +126,18 @@
                 "case": 0
             }
         }],
-        "auxiliar_process_list" :[]
+        "auxiliar_process_list" :[{
+            "python_module"   : "json_output_process",
+            "kratos_module" : "KratosMultiphysics",
+            "help"                  : "",
+            "process_name"          : "JsonOutputProcess",
+            "Parameters"            : {
+                "output_variables" : ["VELOCITY_POTENTIAL"],
+                "output_file_name" : "default.json",
+                "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
+                "time_frequency"   : -2
+            }
+        }]
     },
     "_linear_solver_settings"  : {
             "solver_type": "amgcl",
