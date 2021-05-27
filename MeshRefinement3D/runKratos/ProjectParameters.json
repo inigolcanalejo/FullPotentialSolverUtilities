@@ -51,7 +51,7 @@
             "element_type": "perturbation_incompressible"
         },
         "maximum_iterations"     : 20,
-        "echo_level"             : 1,
+        "echo_level"             : 0,
         "relative_tolerance": 1e-12,
         "absolute_tolerance": 1e-12,
         "volume_model_part_name" : "Parts_Parts_Auto1",
@@ -70,7 +70,7 @@
             "verbosity": 2,
             "scaling": false
         },
-        "reference_chord": 2.0
+        "reference_chord": 0.7532
     },
     "processes"        : {
         "boundary_conditions_process_list" : [{
@@ -97,7 +97,7 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
-                "wake_normal": [0.0, 0.0, 1.0],
+                "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
                 "refinement_iterations": 0,
                 "target_wake_h" : 0.8,
                 "output_wake": false,
@@ -113,6 +113,7 @@
                 "middle_airfoil_model_part_name": "",
                 "trefft_plane_cut_model_part_name": "",
                 "moment_reference_point" : [0.0,0.0,0.0],
+                "mean_aerodynamic_chord" : 0.64607,
                 "is_infinite_wing": false,
                 "growth_rate_domain": 0.0,
                 "growth_rate_wing": 0.0,
@@ -121,24 +122,11 @@
                 "section_100_model_part_name": "",
                 "section_150_model_part_name": "",
                 "section_180_model_part_name": "",
-                "reference_case_name": "XFLR5",
+                "reference_case_name": "ONERA",
                 "case": 0
             }
         }],
-        "auxiliar_process_list" :[{
-            "python_module"   : "from_json_check_result_process",
-            "kratos_module" : "KratosMultiphysics",
-            "help"                  : "",
-            "process_name"          : "FromJsonCheckResultProcess",
-            "Parameters"            : {
-                "check_variables"  : ["VELOCITY_POTENTIAL"],
-                "input_file_name"  : "default.json",
-                "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
-                "tolerance"            : 1e-14,
-                "relative_tolerance"   : 1e-12,
-                "time_frequency"   : -2
-            }
-        }]
+        "auxiliar_process_list" :[]
     },
     "_linear_solver_settings"  : {
             "solver_type": "amgcl",

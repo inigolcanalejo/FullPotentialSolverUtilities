@@ -28,6 +28,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             "far_field_model_part_name": "",
             "middle_airfoil_model_part_name": "",
             "moment_reference_point" : [0.0,0.0,0.0],
+            "mean_aerodynamic_chord" : 1.0,
             "trailing_edge_model_part_name": "",
             "trefft_plane_cut_model_part_name": "",
             "is_infinite_wing": false,
@@ -56,6 +57,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             self.compute_lift_from_jump_3d = True
         self.fluid_model_part = self.body_model_part.GetRootModelPart()
         self.reference_area =  self.fluid_model_part.ProcessInfo.GetValue(CPFApp.REFERENCE_CHORD)
+        self.mean_aerodynamic_chord = settings["mean_aerodynamic_chord"].GetDouble()
         self.moment_reference_point = settings["moment_reference_point"].GetVector()
         self.is_infinite_wing = settings["is_infinite_wing"].GetBool()
 
@@ -68,8 +70,8 @@ class WriteForcesProcess(ComputeLiftProcess):
                 self.trefft_plane_cut_model_part = self.fluid_model_part.CreateSubModelPart(trefft_plane_cut_model_part_name)
             else: self.trefft_plane_cut_model_part = self.fluid_model_part.GetSubModelPart(trefft_plane_cut_model_part_name)
 
-        if not self.reference_area > 0.0:
-            raise Exception('The reference area should be larger than 0.')
+        if not self.reference_area > 0.0 or not self.mean_aerodynamic_chord > 0.0:
+            raise Exception('The reference area and mean aerodynamic chord should be larger than 0.')
 
         self.Growth_Rate_Domain = settings["growth_rate_domain"].GetDouble()
         self.Growth_Rate_Wing = settings["growth_rate_wing"].GetDouble()
