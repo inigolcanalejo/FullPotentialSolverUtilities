@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 21
+        "end_time"      : 1
     },
     "output_processes" : {
         "gid_output" : [{
@@ -48,7 +48,7 @@
             "input_filename" : ""
         },
         "formulation": {
-            "element_type": "perturbation_transonic"
+            "element_type": "perturbation_incompressible"
         },
         "maximum_iterations"     : 20,
         "echo_level"             : 1,
@@ -70,7 +70,7 @@
             "verbosity": 2,
             "scaling": false
         },
-        "reference_chord": 0.7532
+        "reference_chord": 2.0
     },
     "processes"        : {
         "boundary_conditions_process_list" : [{
@@ -79,7 +79,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "angle_of_attack" : 0.0,
-                "mach_infinity"   : 0.5,
+                "mach_infinity"   : 0.01,
                 "speed_of_sound"  : 340.0,
                 "heat_capacity_ratio": 1.4,
                 "inlet_potential": 0.0,
@@ -97,7 +97,7 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
-                "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
+                "wake_normal": [0.0, 0.0, 1.0],
                 "refinement_iterations": 0,
                 "target_wake_h" : 0.8,
                 "output_wake": false,
@@ -121,7 +121,7 @@
                 "section_100_model_part_name": "",
                 "section_150_model_part_name": "",
                 "section_180_model_part_name": "",
-                "reference_case_name": "ONERA",
+                "reference_case_name": "XFLR5",
                 "case": 0
             }
         }],
