@@ -137,7 +137,7 @@
                 "input_file_name"  : "default.json",
                 "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
                 "tolerance"            : 1e-8,
-                "relative_tolerance"   : 1e-8,
+                "relative_tolerance"   : 1e-10,
                 "time_frequency"   : -2
             }
         }]
