@@ -156,10 +156,10 @@ for k in range(Number_Of_AOAS):
 
             # Generate stl wake
             Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
-            Translation_1 = geompy.MakeTranslation(Edge_TE, 0, 0, 0)
-            Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
-            Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
-            Extrusion_Wake_stl = geompy.MakePrismVecH(Scale_1, Vector_Wake_Direction, Domain_Length*0.5)
+            # Translation_1 = geompy.MakeTranslation(Edge_TE, 0, 0, 0)
+            # Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
+            # Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
+            Extrusion_Wake_stl = geompy.MakePrismVecH(Edge_TE, Vector_Wake_Direction, Domain_Length*0.5)
 
             # Making groups for submeshes
             # LE edges
