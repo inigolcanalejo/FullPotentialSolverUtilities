@@ -272,9 +272,9 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["case"].SetInt(self.case)
 
         reference_file_path = '/media/inigo/10740FB2740F9A1C/Results/06_wing_mesh_refinement/2021_05_27_43_naca0012_test/kratos_tests_reference_results'
-        output_file_name = reference_file_path + '/naca0012_wing_case_' + str(self.case) + '_reference.json'
+        input_file_name = reference_file_path + '/naca0012_wing_case_' + str(self.case) + '_reference.json'
         self.project_parameters["processes"]["auxiliar_process_list"][0]["Parameters"]["input_file_name"].SetString(
-            output_file_name)
+            input_file_name)
 
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["airfoil_meshsize"].SetDouble(
         #     self.Airfoil_MeshSize)
