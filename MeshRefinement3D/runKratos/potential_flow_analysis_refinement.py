@@ -71,7 +71,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Initial_Growth_Rate_Domain = TBD
         self.Growth_Rate_Domain_Refinement_Factor = TBD
 
-        self.case = 1
+        self.case = 0
         self.Domain_Length = 100
         self.Domain_Width = self.Domain_Length
         self.FarField_MeshSize = int(self.Domain_Length / 10.0)
