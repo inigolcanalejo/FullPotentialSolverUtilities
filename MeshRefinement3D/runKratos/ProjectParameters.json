@@ -138,8 +138,8 @@
                 "check_variables"  : ["VELOCITY_POTENTIAL"],
                 "input_file_name"  : "default.json",
                 "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
-                "tolerance"            : 1e-13,
-                "relative_tolerance"   : 1e-11,
+                "tolerance"            : 1e-5,
+                "relative_tolerance"   : 1e-1,
                 "time_frequency"   : -2
             }
         }]
