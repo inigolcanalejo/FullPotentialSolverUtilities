@@ -20,33 +20,37 @@ def round_to_1(x):
 class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
     def Run(self):
-        self.SetParameters()
-        self.ExecuteBeforeAOALoop()
-        # Loop over domains
-        for _ in range(self.Number_Of_AOAS):
-            self.ExecuteBeforeDomainRefinementLoop()
-            # Loop over AOAs
-            for _ in range(self.Number_Of_Domains_Refinements):
-                self.ExecuteBeforeWingRefinementLoop()
-                # Loop over Refinements
-                for _ in range(self.Number_Of_Wing_Refinements):
-                    #self.MakeCpDir()
-                    self.SetParametersBeforeInitialize()
+        counter = 0
+        for _ in range(1):
+            print('\nRUN NUMBER = ', counter)
+            counter += 1
+            self.SetParameters()
+            self.ExecuteBeforeAOALoop()
+            # Loop over domains
+            for _ in range(self.Number_Of_AOAS):
+                self.ExecuteBeforeDomainRefinementLoop()
+                # Loop over AOAs
+                for _ in range(self.Number_Of_Domains_Refinements):
+                    self.ExecuteBeforeWingRefinementLoop()
+                    # Loop over Refinements
+                    for _ in range(self.Number_Of_Wing_Refinements):
+                        #self.MakeCpDir()
+                        self.SetParametersBeforeInitialize()
 
-                    self.Initialize()
-                    self.RunSolutionLoop()
-                    self.Finalize()
+                        self.Initialize()
+                        self.RunSolutionLoop()
+                        self.Finalize()
 
-                    #self.OutputCp()
-                    #self.Growth_Rate_Wing -= self.Growth_Rate_Wing_Refinement_Factor
-                    #self.Growth_Rate_Wing /= self.Growth_Rate_Wing_Refinement_Factor
-                    self.Smallest_Airfoil_Mesh_Size /= 2.0
-                    #self.FarField_MeshSize /= FarField_Refinement_Factor
+                        #self.OutputCp()
+                        #self.Growth_Rate_Wing -= self.Growth_Rate_Wing_Refinement_Factor
+                        #self.Growth_Rate_Wing /= self.Growth_Rate_Wing_Refinement_Factor
+                        self.Smallest_Airfoil_Mesh_Size /= 2.0
+                        #self.FarField_MeshSize /= FarField_Refinement_Factor
 
-                    self.case += 1
-                self.ExecuteAfterWingRefinementLoop()
-            self.ExecuteAfterDomainRefinementLoop()
-        #self.ExecuteAfterAOALoop()
+                        self.case += 1
+                    self.ExecuteAfterWingRefinementLoop()
+                self.ExecuteAfterDomainRefinementLoop()
+            #self.ExecuteAfterAOALoop()
 
     def SetParameters(self):
         self.Wing_span = TBD
@@ -108,9 +112,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.latex_output = open(self.input_dir_path + '/plots/latex_output.txt', 'w')
         self.latex_output.flush()
         self.AOA = self.Initial_AOA
-        shutil.copytree(self.cl_aoa_results_directory_name, self.cl_aoa_results_directory_name + 'oa')
-        shutil.copytree(self.cd_aoa_results_directory_name, self.cd_aoa_results_directory_name + 'oa')
-        shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
+        if not os.path.exists(self.cl_aoa_results_directory_name + 'oa'):
+            shutil.copytree(self.cl_aoa_results_directory_name, self.cl_aoa_results_directory_name + 'oa')
+            shutil.copytree(self.cd_aoa_results_directory_name, self.cd_aoa_results_directory_name + 'oa')
+            shutil.copytree(self.cm_aoa_results_directory_name, self.cm_aoa_results_directory_name + 'oa')
 
     def ExecuteBeforeDomainRefinementLoop(self):
         self.AOA = round(self.AOA, 2)
@@ -126,12 +131,13 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.cd_error_data_directory_name = 'data/cd_error_AOA_' + str(self.AOA)
         self.cm_error_data_directory_name = 'data/cm_error_AOA_' + str(self.AOA)
 
-        shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
-        shutil.copytree(self.cd_results_directory_name, self.input_dir_path + '/plots/cd/' + self.cd_data_directory_name)
-        shutil.copytree(self.cm_results_directory_name, self.input_dir_path + '/plots/cm/' + self.cm_data_directory_name)
-        shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' + self.cl_error_data_directory_name)
-        shutil.copytree(self.cd_error_results_directory_name, self.input_dir_path + '/plots/cd_error/' + self.cd_error_data_directory_name)
-        shutil.copytree(self.cm_error_results_directory_name, self.input_dir_path + '/plots/cm_error/' + self.cm_error_data_directory_name)
+        if not os.path.exists(self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name):
+            shutil.copytree(self.cl_results_directory_name, self.input_dir_path + '/plots/cl/' + self.cl_data_directory_name)
+            shutil.copytree(self.cd_results_directory_name, self.input_dir_path + '/plots/cd/' + self.cd_data_directory_name)
+            shutil.copytree(self.cm_results_directory_name, self.input_dir_path + '/plots/cm/' + self.cm_data_directory_name)
+            shutil.copytree(self.cl_error_results_directory_name, self.input_dir_path + '/plots/cl_error/' +    self.cl_error_data_directory_name)
+            shutil.copytree(self.cd_error_results_directory_name, self.input_dir_path + '/plots/cd_error/' +    self.cd_error_data_directory_name)
+            shutil.copytree(self.cm_error_results_directory_name, self.input_dir_path + '/plots/cm_error/' +    self.cm_error_data_directory_name)
 
         self.Growth_Rate_Domain_Counter = 0
 
