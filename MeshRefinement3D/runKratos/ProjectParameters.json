@@ -103,7 +103,7 @@
                 "target_wake_h" : 0.8,
                 "output_wake": false,
                 "epsilon"         : 1e-12,
-                "switch_wake_stl_normal" : true,
+                "switch_wake_stl_normal" : false,
                 "count_elements_number": true,
                 "write_elements_ids_to_file": false
             }
@@ -138,8 +138,8 @@
                 "check_variables"  : ["VELOCITY_POTENTIAL"],
                 "input_file_name"  : "default.json",
                 "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
-                "tolerance"            : 1e-5,
-                "relative_tolerance"   : 1e-1,
+                "tolerance"            : 1e-13,
+                "relative_tolerance"   : 1e-11,
                 "time_frequency"   : -2
             }
         }]
