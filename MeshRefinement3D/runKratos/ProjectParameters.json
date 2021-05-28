@@ -101,7 +101,7 @@
                 "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
                 "refinement_iterations": 0,
                 "target_wake_h" : 0.8,
-                "output_wake": true,
+                "output_wake": false,
                 "epsilon"         : 1e-12,
                 "count_elements_number": true,
                 "write_elements_ids_to_file": false
@@ -176,5 +176,31 @@
                 "output_wake": true,
                 "epsilon"         : 1e-12
             }
+    },
+    "_check_process":{
+        "python_module"   : "from_json_check_result_process",
+        "kratos_module" : "KratosMultiphysics",
+        "help"                  : "",
+        "process_name"          : "FromJsonCheckResultProcess",
+        "Parameters"            : {
+            "check_variables"  : ["VELOCITY_POTENTIAL"],
+            "input_file_name"  : "default.json",
+            "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
+            "tolerance"            : 1e-8,
+            "relative_tolerance"   : 1e-10,
+            "time_frequency"   : -2
+        }
+    },
+    "_output_process":{
+        "python_module"   : "json_output_process",
+        "kratos_module" : "KratosMultiphysics",
+        "help"                  : "",
+        "process_name"          : "JsonOutputProcess",
+        "Parameters"            : {
+            "output_variables" : ["VELOCITY_POTENTIAL"],
+            "output_file_name" : "default.json",
+            "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
+            "time_frequency"   : -2
+        }
     }
 }
