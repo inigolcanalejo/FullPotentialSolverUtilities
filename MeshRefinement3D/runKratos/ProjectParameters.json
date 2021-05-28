@@ -98,7 +98,7 @@
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "shed_wake_from_trailing_edge": true,
                 "wake_stl_file_name" : "wake_stl_new.stl",
-                "switch_wake_stl_normal" : true,
+                "switch_wake_stl_normal" : false,
                 "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
                 "refinement_iterations": 0,
                 "target_wake_h" : 0.8,
