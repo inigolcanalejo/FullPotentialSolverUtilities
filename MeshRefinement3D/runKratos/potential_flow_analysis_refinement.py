@@ -71,7 +71,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.Initial_Growth_Rate_Domain = TBD
         self.Growth_Rate_Domain_Refinement_Factor = TBD
 
-        self.case = 1
+        self.case = 0
         self.Domain_Length = 100
         self.Domain_Width = self.Domain_Length
         self.FarField_MeshSize = int(self.Domain_Length / 10.0)
@@ -272,7 +272,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["case"].SetInt(self.case)
 
         reference_file_path = '/media/inigo/10740FB2740F9A1C/Results/06_wing_mesh_refinement/2021_05_27_43_naca0012_test/kratos_tests_reference_results'
-        input_file_name = reference_file_path + '/onera_wing_case_' + str(self.case) + '_reference.json'
+        input_file_name = reference_file_path + '/onera_wing_case_' + str(self.case) + '_reference_shedding_cpp.json'
         self.project_parameters["processes"]["auxiliar_process_list"][0]["Parameters"]["input_file_name"].SetString(
             input_file_name)
 
