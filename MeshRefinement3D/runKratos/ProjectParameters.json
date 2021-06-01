@@ -100,8 +100,6 @@
                 "wake_stl_file_name" : "wake_stl_new.stl",
                 "switch_wake_stl_normal" : false,
                 "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
-                "refinement_iterations": 0,
-                "target_wake_h" : 0.8,
                 "output_wake": false,
                 "epsilon"         : 1e-12,
                 "count_elements_number": true,
