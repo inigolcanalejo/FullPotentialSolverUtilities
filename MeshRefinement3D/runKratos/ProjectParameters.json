@@ -96,7 +96,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
-                "shed_wake_from_trailing_edge": true,
+                "shed_wake_from_trailing_edge": false,
                 "wake_stl_file_name" : "wake_stl_new.stl",
                 "switch_wake_stl_normal" : false,
                 "wake_normal": [0.0, 0.014994950614245, 0.999887569407719],
