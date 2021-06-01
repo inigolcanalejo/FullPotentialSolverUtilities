@@ -99,8 +99,6 @@
                 "shed_wake_from_trailing_edge": false,
                 "wake_stl_file_name" : "wake_stl_new.stl",
                 "wake_normal": [0.0, 0.0, 1.0],
-                "refinement_iterations": 0,
-                "target_wake_h" : 0.8,
                 "output_wake": false,
                 "epsilon"         : 1e-12,
                 "switch_wake_stl_normal" : false,
