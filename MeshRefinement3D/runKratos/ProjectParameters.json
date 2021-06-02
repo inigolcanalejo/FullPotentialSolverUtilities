@@ -133,16 +133,14 @@
             }
         }],
         "auxiliar_process_list" :[{
-            "python_module"   : "from_json_check_result_process",
+            "python_module"   : "json_output_process",
             "kratos_module" : "KratosMultiphysics",
             "help"                  : "",
-            "process_name"          : "FromJsonCheckResultProcess",
+            "process_name"          : "JsonOutputProcess",
             "Parameters"            : {
-                "check_variables"  : ["VELOCITY_POTENTIAL"],
-                "input_file_name"  : "default.json",
+                "output_variables" : ["VELOCITY_POTENTIAL"],
+                "output_file_name" : "default.json",
                 "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
-                "tolerance"            : 1e-8,
-                "relative_tolerance"   : 1e-10,
                 "time_frequency"   : -2
             }
         }]
