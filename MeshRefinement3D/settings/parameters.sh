@@ -1,7 +1,7 @@
 #Parameters
 Number_Of_AOAS=1
 Number_Of_Domains_Refinements=1
-Number_Of_Wing_Refinements=4
+Number_Of_Wing_Refinements=2
 
 Initial_AOA=3.06
 AOA_Increment=1.0

@@ -21,7 +21,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
     def Run(self):
         counter = 1
-        for _ in range(1):
+        for _ in range(20):
             print('\nRUN NUMBER = ', counter)
             counter += 1
             self.SetParameters()
