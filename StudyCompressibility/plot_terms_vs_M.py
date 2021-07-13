@@ -5,6 +5,12 @@ import math
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text command
 
+directory = '/media/inigo/10740FB2740F9A1C/Results/12_phd/method/terms_dat'
+def WritePlotToFile(file_name, x, y):
+    with open(file_name, 'w') as file_write:
+        for i in range(len(x)):
+            file_write.write('{0:15f} {1:15f}\n'.format(x[i], y[i]))
+
 # Input
 free_stream_speed_of_sound = 340.0
 heat_capacity_ratio = 1.4
@@ -36,6 +42,15 @@ for free_stream_mach_number in np.arange(0.8, 0.85, 1):
 
     print('\n free_sream_mach_number     = ', round(free_stream_mach_number,1))
     print(' free_stream_velocity       = ', round(free_stream_velocity,1))
+
+    filename = directory + '/term1.dat'
+    WritePlotToFile(filename, local_mach, density)
+
+    filename = directory + '/term2.dat'
+    WritePlotToFile(filename, local_mach, term_2)
+
+    filename = directory + '/jacobian.dat'
+    WritePlotToFile(filename, local_mach, density - term_2)
 
     plt.plot(local_mach, density, label='term 1 $M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
     plt.plot(local_mach, term_2,  label='term 2 $M_{\infty}$ = ' + str(round(free_stream_mach_number,1)))
