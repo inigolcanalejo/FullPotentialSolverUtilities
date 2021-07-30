@@ -24,6 +24,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
                 "minimum_airfoil_meshsize": 1.0,
                 "domain_size": 1.0,
                 "moment_reference_point" : [0.0,0.0,0.0],
+                "mean_aerodynamic_chord" : 1.0,
                 "reference_case_name": "",
                 "is_infinite_wing": false
             }  """)
@@ -46,6 +47,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         self.input_dir_path = 'TBD'
         self.moment_reference_point = settings["moment_reference_point"].GetVector()
+        self.mean_aerodynamic_chord = settings["mean_aerodynamic_chord"].GetDouble()
         self.is_infinite_wing = settings["is_infinite_wing"].GetBool()
 
         aoa_rad = self.AOA * math.pi / 180.0
@@ -323,7 +325,7 @@ class ComputeLiftProcessRefinement(ComputeLiftProcess):
 
         NumberOfNodes = self.fluid_model_part.NumberOfNodes()
         with open(self.input_dir_path + "/plots/results/all_cases.dat",'a') as aoa_file:
-            aoa_file.write('{0:16.2e} {1:15f} {2:15f} {3:15f} {4:15f}\n'.format(NumberOfNodes, self.lift_coefficient, self.lift_coefficient_jump, self.cl_reference, self.drag_coefficient))
+            aoa_file.write('{0:15.4f} {1:15.4f} {2:15.4f} {3:15.4f} {4:15.4f} {5:15.4f} {6:15.4f} {7:15.4f} {8:15.4f} {9:15.4f}\n'.format(self.lift_coefficient, self.lift_coefficient_jump, self.lift_coefficient_far_field, self.cl_reference, self.moment_coefficient[2], self.cm_reference, self.cl_relative_error, self.cl_jump_relative_error, self.cl_far_field_relative_error,self.cm_relative_error))
             aoa_file.flush()
 
         cm_results_h_file_name = self.input_dir_path + '/plots/cm/data/cm/cm_results_h.dat'

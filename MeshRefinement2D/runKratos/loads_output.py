@@ -14,8 +14,8 @@ def write_header_all_cases(work_dir):
     create_plot_directory_tree(work_dir + '/plots/results')
     all_cases = open(work_dir + "/plots/results/all_cases.dat", 'w')
     all_cases.write("FULL POTENTIAL APPLICATION ALL CASES LOADS FILE\n\n")
-    all_cases.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s\n\n' %
-                   ("Case", "AOA", "FF_MS", "A_MS", "# Nodes", "Cl", "Cl_jump", "Cl_ref", "Cd"))
+    all_cases.write('%4s %6s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s %15s\n\n' %
+                   ("Case", "AOA", "FF_MS", "A_MS", "Cl", "Cl_jump", "Cl_far", "Cl_ref", "Cm", "Cm_ref", "Cler", "Cl_jumper", "Cl_farer", "Cmer"))
     all_cases.flush()
 
 
