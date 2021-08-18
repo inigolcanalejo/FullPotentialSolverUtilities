@@ -12,7 +12,7 @@ heat_capacity_ratio = 1.4
 hcr = heat_capacity_ratio
 
 # Definning range of free stream mach numbers
-free_stream_mach_number = 0.8395
+free_stream_mach_number = 0.84
 
 # Computing squares and shortening names
 Mi2 = free_stream_mach_number**2
@@ -26,4 +26,19 @@ cp_crit = 2.0 / hcr / Mi2 * (pow(term, hcr/(hcr - 1)) - 1)
 
 # Print found values
 print('Critical cp = ', round(cp_crit,4))
+
+free_stream_mach_number = np.arange(0.1, 10.0, 0.1)
+
+# Computing squares and shortening names
+Mi2 = free_stream_mach_number**2
+
+# Applying formula 8.169 from FVA
+term = (1 + (hcr - 1) / 2 * Mi2) / (1 + (hcr - 1) / 2)
+cp_crit = 2.0 / hcr / Mi2 * (pow(term, hcr/(hcr - 1)) - 1)
+
+plt.plot(free_stream_mach_number, cp_crit)
+plt.xlabel('Mach number')
+plt.ylabel('Critical pressure coefficient')
+plt.grid()
+plt.show()
 
