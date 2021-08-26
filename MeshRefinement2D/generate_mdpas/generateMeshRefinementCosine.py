@@ -78,9 +78,10 @@ for k in range(Number_Of_Domains_Size):
 
             #Create naca0012 with center in origin and trailing edge at x = 0.5
             Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
-            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 1, 999, GEOM.Interpolation, True)
+            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 0.997, 999, GEOM.Interpolation, True)
+            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0.5, 0.997, 999, GEOM.Interpolation, True)
             Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
+
 
             # #Create original naca0012
             # Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1015*t**4)", "0", 0, 0.5, 999, GEOM.Interpolation, True)
@@ -91,8 +92,15 @@ for k in range(Number_Of_Domains_Size):
             geompy.ChangeOrientationShell(Curve_UpperSurface_TE)
             geompy.ChangeOrientationShell(Curve_LowerSurface_TE)
 
+            [UpperMiddle,UpperTE] = geompy.ExtractShapes(Curve_UpperSurface_TE, geompy.ShapeType["VERTEX"], True)
+            [LowerMiddle,LowerTE] = geompy.ExtractShapes(Curve_LowerSurface_TE, geompy.ShapeType["VERTEX"], True)
+
+            TE = geompy.MakeLineTwoPnt(LowerTE, UpperTE)
+
+
+
             #Create face
-            Face_Airfoil = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE], 1)
+            Face_Airfoil = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE, TE], 1)
 
             #Rotate around center to AOA
             geompy.Rotate(Face_Airfoil, OZ, -AOA*math.pi/180.0)
@@ -104,9 +112,7 @@ for k in range(Number_Of_Domains_Size):
             Cut_Domain = geompy.MakeCutList(Face_Domain, [Face_Airfoil], True)
 
             #Explode edges
-            [Edge_1,Edge_2,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
-
-            [Auto_group_for_Sub_mesh_1,Auto_group_for_Sub_mesh_1_1] = geompy.ExtractShapes(Edge_LowerSurface_TE, geompy.ShapeType["VERTEX"], True)
+            [Edge_1,Edge_2,Edge_LowerSurface_LE,Edge_UpperSurface_LE,Edge_LowerSurface_TE,Edge_UpperSurface_TE,Edge_TE,Edge_7,Edge_8] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["EDGE"], True)
 
             #LowerSurface
             Auto_group_for_Sub_mesh_1 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
@@ -120,9 +126,13 @@ for k in range(Number_Of_Domains_Size):
             Auto_group_for_Sub_mesh_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_2, [Edge_UpperSurface_LE, Edge_UpperSurface_TE])
 
-            #Body
+            #Upper Lower Surfaces
+            Upper_Lower_Surfaces = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Upper_Lower_Surfaces, [Edge_LowerSurface_LE, Edge_LowerSurface_TE, Edge_UpperSurface_LE, Edge_UpperSurface_TE])
+
+            # Body
             Body_Sub_mesh = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface_LE, Edge_LowerSurface_TE, Edge_UpperSurface_LE, Edge_UpperSurface_TE])
+            geompy.UnionList(Body_Sub_mesh, [Edge_LowerSurface_LE, Edge_LowerSurface_TE, Edge_UpperSurface_LE, Edge_UpperSurface_TE, Edge_TE])
 
             #FarField
             Auto_group_for_Sub_mesh_1_2 = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
@@ -137,21 +147,33 @@ for k in range(Number_Of_Domains_Size):
             geompy.addToStudy( Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
+            geompy.addToStudyInFather( Curve_UpperSurface_TE, UpperMiddle, 'UpperMiddle' )
+            geompy.addToStudyInFather( Curve_UpperSurface_TE, UpperTE, 'UpperTE' )
+            geompy.addToStudyInFather( Curve_LowerSurface_TE, LowerMiddle, 'LowerMiddle' )
+            geompy.addToStudyInFather( Curve_LowerSurface_TE, LowerTE, 'LowerTE' )
+            geompy.addToStudy( TE, 'TE' )
+            geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
+
+            geompy.addToStudy( Face_Domain, 'Face_Domain' )
+            geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
+
+
             geompy.addToStudyInFather( Cut_Domain, Edge_2, 'Edge_2' )
             geompy.addToStudyInFather( Cut_Domain, Edge_1, 'Edge_1' )
-            geompy.addToStudy( Face_Domain, 'Face_Domain' )
-            geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
             geompy.addToStudyInFather( Cut_Domain, Edge_LowerSurface_LE, 'Edge_LowerSurface_LE' )
             geompy.addToStudyInFather( Cut_Domain, Edge_UpperSurface_LE, 'Edge_UpperSurface_LE' )
-            geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
             geompy.addToStudyInFather( Cut_Domain, Edge_LowerSurface_TE, 'Edge_LowerSurface_TE' )
             geompy.addToStudyInFather( Cut_Domain, Edge_UpperSurface_TE, 'Edge_UpperSurface_TE' )
+            geompy.addToStudyInFather( Cut_Domain, Edge_TE, 'Edge_TE' )
             geompy.addToStudyInFather( Cut_Domain, Edge_7, 'Edge_7' )
             geompy.addToStudyInFather( Cut_Domain, Edge_8, 'Edge_8' )
+
             geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_1, 'Auto_group_for_Sub-mesh_1' )
             geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_1_1, 'Auto_group_for_Sub-mesh_1' )
             geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_2, 'Auto_group_for_Sub-mesh_2' )
             geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_1_2, 'Auto_group_for_Sub-mesh_1' )
+            geompy.addToStudyInFather( Cut_Domain, Body_Sub_mesh, 'Body_Sub_mesh' )
+            geompy.addToStudyInFather( Cut_Domain, Upper_Lower_Surfaces, 'Upper_Lower_Surfaces' )
 
             ###
             ### SMESH component
@@ -195,6 +217,10 @@ for k in range(Number_Of_Domains_Size):
             Geometric_Progression_1.SetReversedEdges( [] )
             Geometric_Progression_1.SetObjectEntry( "0:1:1:14" )
 
+            # Trailing Edge
+            Regular_1D_3 = Fluid.Segment(geom=Edge_TE)
+            Local_Length_2 = Regular_1D_3.LocalLength(Airfoil_MeshSize*2.0,None,1e-07)
+
             #Set farfield mesh
             Regular_1D_2 = Fluid.Segment(geom=Auto_group_for_Sub_mesh_1_2)
             Local_Length_1 = Regular_1D_2.LocalLength(FarField_MeshSize,None,1e-07)
@@ -202,6 +228,7 @@ for k in range(Number_Of_Domains_Size):
             #Mesh
             isDone = Fluid.Compute()
             Body = Regular_1D.GetSubMesh()
+            TE = Regular_1D_3.GetSubMesh()
             #UpperSurface = Regular_1D_1.GetSubMesh()
             FarField = Regular_1D_2.GetSubMesh()
 
@@ -213,11 +240,15 @@ for k in range(Number_Of_Domains_Size):
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_1D_2D, 'NETGEN 1D-2D')
             smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
+            smesh.SetName(Regular_1D_2.GetAlgorithm(), 'Regular_1D_2')
+            smesh.SetName(Regular_1D_3.GetAlgorithm(), 'Regular_1D_3')
             smesh.SetName(Geometric_Progression_1, 'Geometric Progression_1')
             smesh.SetName(NETGEN_2D_Parameters_1, 'NETGEN 2D Parameters_1')
             smesh.SetName(FarField, 'FarField')
             smesh.SetName(Local_Length_1, 'Local Length_1')
+            smesh.SetName(Local_Length_2, 'Local Length_2')
             smesh.SetName(Body, 'Body')
+            smesh.SetName(TE, 'TE')
             #smesh.SetName(UpperSurface, 'UpperSurface')
             smesh.SetName(Fluid.GetMesh(), 'Fluid')
 
