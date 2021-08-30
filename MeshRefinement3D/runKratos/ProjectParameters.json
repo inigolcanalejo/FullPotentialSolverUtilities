@@ -62,11 +62,11 @@
             "solver_type": "LinearSolversApplication.pardiso_lu",
             "max_iteration": 400,
             "gmres_krylov_space_dimension": 100,
-            "smoother_type":"damped_jacobi",
+            "smoother_type":"ilu0",
             "coarsening_type":"ruge_stuben",
             "coarse_enough" : 1000,
             "krylov_type": "lgmres",
-            "tolerance": 1e-3,
+            "tolerance": 1e-8,
             "verbosity": 2,
             "scaling": false
         },
