@@ -219,7 +219,7 @@ for k in range(Number_Of_Domains_Size):
 
             # Trailing Edge
             Regular_1D_3 = Fluid.Segment(geom=Edge_TE)
-            Local_Length_2 = Regular_1D_3.LocalLength(Airfoil_MeshSize*2.0,None,1e-07)
+            Local_Length_2 = Regular_1D_3.LocalLength(Airfoil_MeshSize,None,1e-07)
 
             #Set farfield mesh
             Regular_1D_2 = Fluid.Segment(geom=Auto_group_for_Sub_mesh_1_2)
