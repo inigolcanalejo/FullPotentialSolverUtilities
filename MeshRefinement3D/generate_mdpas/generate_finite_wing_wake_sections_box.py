@@ -121,21 +121,23 @@ for k in range(Number_Of_AOAS):
 
             # Create naca0012
             Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.0", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0, 0.5, 999, GEOM.Interpolation, True)
-            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.0", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0.5, 1, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.0", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0.5, 1, 999, GEOM.Interpolation, True)
+            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.0", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0.5, 0.99, 999, GEOM.Interpolation, True)
+            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.0", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0.5, 0.99, 999, GEOM.Interpolation, True)
             Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.0", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0, 0.5, 999, GEOM.Interpolation, True)
 
-            Wire_Airfoil = geompy.MakeWire([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE], 1e-07)
-            geompy.Rotate(Wire_Airfoil, OY, AOA*math.pi/180.0)
+            geompy.ChangeOrientationShell(Curve_UpperSurface_TE)
+            geompy.ChangeOrientationShell(Curve_LowerSurface_TE)
+
+            [UpperMiddle,UpperTE] = geompy.ExtractShapes(Curve_UpperSurface_TE, geompy.ShapeType["VERTEX"], True)
+            [LowerMiddle,LowerTE] = geompy.ExtractShapes(Curve_LowerSurface_TE, geompy.ShapeType["VERTEX"], True)
+
+            TE = geompy.MakeLineTwoPnt(LowerTE, UpperTE)
 
             # Create face
-            Face_Airfoil = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE], 1)
+            Face_Airfoil = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE, TE], 1)
 
             # Rotate around center to AOA
             geompy.Rotate(Face_Airfoil, OY, AOA*math.pi/180.0)
-            Face_Airfoil_Section_100 = geompy.MakeTranslation(Wire_Airfoil, 0, 1, 0)
-            Face_Airfoil_Section_150 = geompy.MakeTranslation(Wire_Airfoil, 0, 1.5, 0)
-            Face_Airfoil_Section_180 = geompy.MakeTranslation(Wire_Airfoil, 0, 1.8, 0)
 
             # Extrusion of the wing
             Extrusion_Wing = geompy.MakePrismVecH(Face_Airfoil, OY, Wing_span/2.0)
@@ -170,7 +172,7 @@ for k in range(Number_Of_AOAS):
             [Face_Inlet,Face_Wing_Lower_LE,\
                 Face_Wing_Upper_LE,Face_Left_Wall,\
                 Face_Wing_Tip,Face_Wing_Lower_TE,\
-                Face_Wing_Upper_TE,Face_Down_Wall,\
+                Face_Wing_Upper_TE,Face_Wing_TE,Face_Down_Wall,\
                 Face_Top_Wall,Obj1,\
                 Face_Right_Wall,Obj2,\
                 Obj3,Obj4,\
@@ -182,18 +184,20 @@ for k in range(Number_Of_AOAS):
 
             # Exploding far field
             [Edge_1,Edge_2,Edge_3,Edge_4] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
-            [Obj1,Obj2,Obj3,Edge_6,Edge_7,Obj4,Obj5,Obj6,Obj7,Obj8,Obj9,Obj10] = geompy.ExtractShapes(Face_Left_Wall, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Obj3,Edge_6,Edge_7,Obj4,Obj11,Obj5,Obj6,Obj7,Obj8,Obj9,Obj10] = geompy.ExtractShapes(Face_Left_Wall, geompy.ShapeType["EDGE"], True)
             [Obj1,Edge_8,Edge_9,Obj2] = geompy.ExtractShapes(Face_Right_Wall, geompy.ShapeType["EDGE"], True)
             [Edge_17,Edge_18,Obj1,Obj2,Obj3,Edge_10,Edge_11,Edge_12] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
 
             # Exploding wing
             [Edge_LE,Edge_Wing_Left_Lower_LE, Edge_Wing_Right_Lower_LE, Edge_Lower_Middle] = geompy.ExtractShapes(Face_Wing_Lower_LE, geompy.ShapeType["EDGE"], True)
 
-            [Obj1,Edge_Wing_Left_Lower_TE, Edge_Wing_Right_Lower_TE, Edge_TE] = geompy.ExtractShapes(Face_Wing_Lower_TE, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_Wing_Left_Lower_TE, Edge_Wing_Right_Lower_TE, Edge_TE_Lower] = geompy.ExtractShapes(Face_Wing_Lower_TE, geompy.ShapeType["EDGE"], True)
 
             [Obj1,Edge_Wing_Left_Upper_LE, Edge_Wing_Right_Upper_LE, Edge_Upper_Middle] = geompy.ExtractShapes(Face_Wing_Upper_LE, geompy.ShapeType["EDGE"], True)
 
-            [Obj1,Edge_Wing_Left_Upper_TE, Edge_Wing_Right_Upper_TE, Obj2] = geompy.ExtractShapes(Face_Wing_Upper_TE, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_Wing_Left_Upper_TE, Edge_Wing_Right_Upper_TE, Edge_TE_Upper] = geompy.ExtractShapes(Face_Wing_Upper_TE, geompy.ShapeType["EDGE"], True)
+
+            [Edge_TE_Left,Obj1, Obj2, Edge_TE_Right] = geompy.ExtractShapes(Face_Wing_TE, geompy.ShapeType["EDGE"], True)
 
             # Exploding refinement box faces
             [Edge_Ref_In_Left,Edge_Ref_In_Bottom,Edge_Ref_In_Top,Edge_Ref_In_Right] = geompy.ExtractShapes(Face_Refinementbox_Inlet_1, geompy.ShapeType["EDGE"], True)
@@ -203,10 +207,10 @@ for k in range(Number_Of_AOAS):
 
             # Generate stl wake
             Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(1, 0, 0)
-            Translation_1 = geompy.MakeTranslation(Edge_TE, 0, 0, 0)
+            Translation_1 = geompy.MakeTranslation(Edge_TE_Upper, 0, 0, 0)
             Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
             Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
-            Extrusion_Wake_stl = geompy.MakePrismVecH(Edge_TE, Vector_Wake_Direction, Domain_Length*0.5)
+            Extrusion_Wake_stl = geompy.MakePrismVecH(Edge_TE_Upper, Vector_Wake_Direction, Domain_Length*0.5)
 
             # Making groups for submeshes
             # LE Airfoil edges
@@ -221,9 +225,13 @@ for k in range(Number_Of_AOAS):
             Auto_group_for_Sub_mesh_Middle = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Middle, [Edge_Upper_Middle, Edge_Lower_Middle])
 
+            # TE Edges
+            Auto_group_for_Sub_mesh_TE = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_TE, [Edge_TE_Left, Edge_TE_Lower, Edge_TE_Right, Edge_TE_Upper])
+
             # Wing surface
             Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Wing_Lower_LE, Face_Wing_Lower_TE,Face_Wing_Upper_LE, Face_Wing_Upper_TE, Face_Wing_Tip])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Wing_Lower_LE, Face_Wing_Lower_TE,Face_Wing_Upper_LE, Face_Wing_Upper_TE, Face_Wing_Tip, Face_Wing_TE])
 
             # Refinement box edges
             Auto_group_for_Sub_mesh_Refinement_Box_Edges = geompy.CreateGroup(Partition_Domain, geompy.ShapeType["EDGE"])
@@ -258,13 +266,9 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudy( Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
             geompy.addToStudy( Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
+            geompy.addToStudy( TE, 'TE' )
 
-
-            geompy.addToStudy( Wire_Airfoil, 'Wire_Airfoil' )
             geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
-            geompy.addToStudy( Face_Airfoil_Section_100, 'Face_Airfoil_Section_100' )
-            geompy.addToStudy( Face_Airfoil_Section_150, 'Face_Airfoil_Section_150' )
-            geompy.addToStudy( Face_Airfoil_Section_180, 'Face_Airfoil_Section_180' )
             geompy.addToStudy( Extrusion_Wing, 'Extrusion_Wing' )
             geompy.addToStudy( Extrusion_Refinement_Box, 'Extrusion_Refinement_Box' )
 
@@ -287,6 +291,7 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Solid_Domain, Face_Wing_Upper_LE, 'Face_Wing_Upper_LE' )
             geompy.addToStudyInFather( Solid_Domain, Face_Wing_Upper_TE, 'Face_Wing_Upper_TE' )
             geompy.addToStudyInFather( Solid_Domain, Face_Wing_Tip, 'Face_Wing_Tip' )
+            geompy.addToStudyInFather( Solid_Domain, Face_Wing_TE, 'Face_Wing_TE' )
 
             geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Inlet_1, 'Face_Refinementbox_Inlet_1' )
             geompy.addToStudyInFather( Solid_Refinement_Box, Face_Refinementbox_Left_1, 'Face_Refinementbox_Left_1' )
@@ -316,15 +321,20 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Face_Wing_Lower_LE, Edge_Wing_Left_Lower_LE, 'Edge_Wing_Left_Lower_LE' )
             geompy.addToStudyInFather( Face_Wing_Lower_LE, Edge_Wing_Right_Lower_LE, 'Edge_Wing_Right_Lower_LE' )
             geompy.addToStudyInFather( Face_Wing_Lower_LE, Edge_Lower_Middle, 'Edge_Lower_Middle' )
+
             geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_Wing_Left_Lower_TE, 'Edge_Wing_Left_Lower_TE' )
             geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_Wing_Right_Lower_TE, 'Edge_Wing_Right_Lower_TE' )
-            geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_TE, 'Edge_TE' )
+            geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_TE_Lower, 'Edge_TE' )
 
             geompy.addToStudyInFather( Face_Wing_Upper_LE, Edge_Wing_Left_Upper_LE, 'Edge_Wing_Left_Upper_LE' )
             geompy.addToStudyInFather( Face_Wing_Upper_LE, Edge_Wing_Right_Upper_LE, 'Edge_Wing_Right_Upper_LE' )
             geompy.addToStudyInFather( Face_Wing_Upper_LE, Edge_Upper_Middle, 'Edge_Upper_Middle' )
-            geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_Wing_Left_Upper_TE, 'Edge_Wing_Left_Upper_TE' )
-            geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_Wing_Right_Upper_TE, 'Edge_Wing_Right_Upper_TE' )
+            geompy.addToStudyInFather( Face_Wing_Upper_TE, Edge_Wing_Left_Upper_TE, 'Edge_Wing_Left_Upper_TE' )
+            geompy.addToStudyInFather( Face_Wing_Upper_TE, Edge_Wing_Right_Upper_TE, 'Edge_Wing_Right_Upper_TE' )
+            geompy.addToStudyInFather( Face_Wing_Upper_TE, Edge_TE_Upper, 'Edge_TE_Upper' )
+
+            geompy.addToStudyInFather( Face_Wing_TE, Edge_TE_Left, 'Edge_TE_Left' )
+            geompy.addToStudyInFather( Edge_TE_Right, Edge_TE_Right, 'Edge_TE_Left' )
 
             geompy.addToStudyInFather( Face_Refinementbox_Inlet_1, Edge_Ref_In_Left, 'Edge_Ref_In_Left' )
             geompy.addToStudyInFather( Face_Refinementbox_Inlet_1, Edge_Ref_In_Bottom, 'Edge_Ref_In_Bottom' )
@@ -386,7 +396,7 @@ for k in range(Number_Of_AOAS):
             Local_Length_LE = Regular_1D_4.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
 
             # TE
-            Regular_1D_3 = Mesh_Domain.Segment(geom=Edge_TE)
+            Regular_1D_3 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE)
             Sub_mesh_TE = Regular_1D_3.GetSubMesh()
             Local_Length_TE = Regular_1D_3.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
 

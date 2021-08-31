@@ -97,7 +97,7 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
-                "output_wake": false,
+                "output_wake": true,
                 "wake_process_cpp_parameters":    {
                     "tolerance"                     : 1e-12,
                     "wake_normal"                   : [0.0, 0.0, 1.0],
@@ -132,20 +132,7 @@
                 "case": 0
             }
         }],
-        "auxiliar_process_list" :[{
-            "python_module"   : "from_json_check_result_process",
-            "kratos_module" : "KratosMultiphysics",
-            "help"                  : "",
-            "process_name"          : "FromJsonCheckResultProcess",
-            "Parameters"            : {
-                "check_variables"  : ["VELOCITY_POTENTIAL"],
-                "input_file_name"  : "default.json",
-                "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
-                "tolerance"            : 1e-13,
-                "relative_tolerance"   : 1e-11,
-                "time_frequency"   : -2
-            }
-        }]
+        "auxiliar_process_list" :[]
     },
     "_linear_solver_settings"  : {
             "solver_type": "amgcl",
