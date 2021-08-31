@@ -417,6 +417,22 @@ for k in range(Number_Of_AOAS):
             Start_and_End_Length_TE.SetObjectEntry( 'Partition_Domain' )
             Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
 
+            # TE surface
+            NETGEN_2D_TE = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_Wing_TE)
+            NETGEN_2D_Parameters_TE = NETGEN_2D_TE.Parameters()
+            NETGEN_2D_Parameters_TE.SetMaxSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_TE.SetOptimize( 1 )
+            NETGEN_2D_Parameters_TE.SetFineness( 5 )
+            NETGEN_2D_Parameters_TE.SetGrowthRate( Growth_Rate_Wing )
+            NETGEN_2D_Parameters_TE.SetNbSegPerEdge( 6.92154e-310 )
+            NETGEN_2D_Parameters_TE.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_TE.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_TE.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_TE.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_TE.SetSecondOrder( 106 )
+            NETGEN_2D_Parameters_TE.SetFuseEdges( 80 )
+            Sub_mesh_TE_Surface = NETGEN_2D_TE.GetSubMesh()
+
             # Wing surface
             NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Surface)
             NETGEN_2D_Parameters_Wing = NETGEN_2D.Parameters()
@@ -543,7 +559,7 @@ for k in range(Number_Of_AOAS):
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
             try:
-              Mesh_Domain.ExportDAT( r'/' + te_path, Sub_mesh_TE )
+              Mesh_Domain.ExportDAT( r'/' + te_path, Sub_mesh_TE_Surface )
               pass
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
