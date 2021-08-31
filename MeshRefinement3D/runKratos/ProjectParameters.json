@@ -30,9 +30,9 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["LOWER_SURFACE","UPPER_SURFACE","PRESSURE_COEFFICIENT","VELOCITY","POTENTIAL_JUMP","NUMBER_OF_NEIGHBOUR_ELEMENTS","ZERO_VELOCITY_CONDITION","WING_TIP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","WATER_PRESSURE","NORMAL","KUTTA","DEACTIVATED_WAKE"],
+                        "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","VECTOR_TO_UPWIND_ELEMENT"]
+                        "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION"]
                     },
                     "point_data_configuration"  : []
                 }
@@ -46,17 +46,17 @@
             "Parameters"    : {
                 "model_part_name"                             : "FluidModelPart.fluid_computational_model_part",
                 "output_control_type"                         : "step",
-                "output_frequency"                            : 1,
+                "output_interval"                            : 1,
                 "file_format"                                 : "ascii",
                 "output_precision"                            : 7,
                 "output_sub_model_parts"                      : false,
-                "folder_name"                                 : "vtk_output",
+                "output_path"                                 : "vtk_output",
                 "save_output_files_in_folder"                 : true,
-                "nodal_solution_step_data_variables"          : ["DISPLACEMENT","REACTION"],
-                "nodal_data_value_variables"                  : [],
-                "element_data_value_variables"                : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","VECTOR_TO_UPWIND_ELEMENT"],
+                "nodal_solution_step_data_variables"          : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
+                "nodal_data_value_variables"                  : ["PRESSURE_COEFFICIENT","VELOCITY","WAKE_DISTANCE"],
+                "element_data_value_variables"                : ["WING_TIP","VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","ZERO_VELOCITY_CONDITION"],
                 "condition_data_value_variables"              : [],
-                "gauss_point_variables_extrapolated_to_nodes" : []
+                "gauss_point_variables_extrapolated_to_nodes" : ["VELOCITY","PRESSURE_COEFFICIENT"]
             }
         }]
     },
@@ -124,7 +124,7 @@
                     "wake_normal"                   : [0.0, 0.0, 1.0],
                     "switch_wake_normal"            : false,
                     "count_elements_number"         : true,
-                    "write_elements_ids_to_file"    : false,
+                    "write_elements_ids_to_file"    : true,
                     "shed_wake_from_trailing_edge"  : false,
                     "shedded_wake_distance"         : 12.5,
                     "shedded_wake_element_size"     : 0.2,
