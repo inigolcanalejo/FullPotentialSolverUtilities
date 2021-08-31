@@ -138,9 +138,9 @@
                 "save_output_files_in_folder"                 : true,
                 "nodal_solution_step_data_variables"          : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
                 "nodal_data_value_variables"                  : ["POTENTIAL_JUMP","TRAILING_EDGE","KUTTA"],
-                "element_data_value_variables"                : ["WING_TIP","VELOCITY","WAKE","DECOUPLED_TRAILING_EDGE_ELEMENT","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","VECTOR_TO_UPWIND_ELEMENT"],
-                "condition_data_value_variables"              : [],
-                "gauss_point_variables_extrapolated_to_nodes" : []
+                "element_data_value_variables"                : ["WAKE"],
+                "condition_data_value_variables"              : ["VELOCITY"],
+                "gauss_point_variables_extrapolated_to_nodes" : ["VELOCITY","PRESSURE_COEFFICIENT"]
             }
         }]
     }
