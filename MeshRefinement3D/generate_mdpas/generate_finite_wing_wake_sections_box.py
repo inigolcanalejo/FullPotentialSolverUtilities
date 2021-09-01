@@ -125,8 +125,8 @@ for k in range(Number_Of_AOAS):
             Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.0", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0.5, 0.99, 999, GEOM.Interpolation, True)
             Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.0", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0, 0.5, 999, GEOM.Interpolation, True)
 
-            geompy.ChangeOrientationShell(Curve_UpperSurface_TE)
-            geompy.ChangeOrientationShell(Curve_LowerSurface_TE)
+            # geompy.ChangeOrientationShell(Curve_UpperSurface_TE)
+            # geompy.ChangeOrientationShell(Curve_LowerSurface_TE)
 
             [UpperMiddle,UpperTE] = geompy.ExtractShapes(Curve_UpperSurface_TE, geompy.ShapeType["VERTEX"], True)
             [LowerMiddle,LowerTE] = geompy.ExtractShapes(Curve_LowerSurface_TE, geompy.ShapeType["VERTEX"], True)
@@ -413,7 +413,7 @@ for k in range(Number_Of_AOAS):
 
             # TE Airfoils
             Regular_1D_2 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Airfoils)
-            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size*2.0,[])
+            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size,[])
             Start_and_End_Length_TE.SetObjectEntry( 'Partition_Domain' )
             Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
 
