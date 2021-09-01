@@ -32,7 +32,7 @@
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION"]
+                        "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE"]
                     },
                     "point_data_configuration"  : []
                 }
@@ -118,7 +118,7 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
-                "output_wake": false,
+                "output_wake": true,
                 "wake_process_cpp_parameters":    {
                     "tolerance"                     : 1e-12,
                     "wake_normal"                   : [0.0, 0.0, 1.0],
