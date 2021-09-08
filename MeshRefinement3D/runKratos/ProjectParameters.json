@@ -32,7 +32,8 @@
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE"]
+                        "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE"],
+                        "elemental_conditional_flags_results": ["STRUCTURE"]
                     },
                     "point_data_configuration"  : []
                 }
@@ -70,7 +71,7 @@
         },
         "formulation": {
             "element_type": "perturbation_incompressible",
-            "penalty_coefficient": 1e5
+            "penalty_coefficient": 1.0
         },
         "maximum_iterations"     : 20,
         "echo_level"             : 1,
