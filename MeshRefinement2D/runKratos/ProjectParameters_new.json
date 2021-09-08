@@ -21,7 +21,8 @@
             "input_filename" : "naca0012_Case_5_AOA_5.0_Far_Field_Mesh_Size_2.0_Airfoil_Mesh_Size_0.001"
         },
         "formulation": {
-            "element_type": "perturbation_incompressible"
+            "element_type": "perturbation_incompressible",
+            "penalty_coefficient": 1.0
         },
         "maximum_iterations"     : 10,
         "echo_level"             : 1,
@@ -70,6 +71,7 @@
             "Parameters"    : {
                 "model_part_name" : "MainModelPart.Body2D_BodySurface",
                 "epsilon"         : 1e-9,
+                "kutta_condition_rotation_angle" : 0.0,
                 "echo_level": 0
             }
         },{
