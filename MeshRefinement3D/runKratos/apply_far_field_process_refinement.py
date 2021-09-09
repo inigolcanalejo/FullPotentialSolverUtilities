@@ -29,9 +29,22 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
 
         self.u_inf = round(self.free_stream_mach,2) * self.free_stream_speed_of_sound
         self.free_stream_velocity = KratosMultiphysics.Vector(3)
-        self.free_stream_velocity[0] = round(self.u_inf*math.cos(self.angle_of_attack),8)
-        self.free_stream_velocity[1] = round(self.u_inf*math.sin(self.angle_of_attack),8)
-        self.free_stream_velocity[2] = 0.0
+
+        self.domain_size = self.fluid_model_part.ProcessInfo.GetValue(KratosMultiphysics.DOMAIN_SIZE)
+        if self.domain_size == 2:
+            # By convention 2D airfoils are in the xy plane
+            self.free_stream_velocity[0] = round(self.u_inf*math.cos(self.angle_of_attack),8)
+            self.free_stream_velocity[1] = round(self.u_inf*math.sin(self.angle_of_attack),8)
+            self.free_stream_velocity[2] = 0.0
+        else: # self.domain_size == 3
+            # By convention 3D wings and aircrafts:
+            # y axis along the span
+            # z axis pointing upwards
+            # TODO: Add sideslip angle beta
+            self.free_stream_velocity[0] = round(self.u_inf*math.cos(self.angle_of_attack),8)
+            self.free_stream_velocity[1] = 0.0
+            self.free_stream_velocity[2] = round(self.u_inf*math.sin(self.angle_of_attack),8)
+
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' step = ', self.step)
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' free_stream_mach = ', round(self.free_stream_mach,4))
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' upwinding_factor_constant = ', round(self.upwind_factor_constant,3))

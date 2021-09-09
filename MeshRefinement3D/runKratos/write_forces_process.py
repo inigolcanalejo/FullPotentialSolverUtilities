@@ -162,9 +162,9 @@ class WriteForcesProcess(ComputeLiftProcess):
 
         NumberOfNodes = self.fluid_model_part.NumberOfNodes()
         if self.reference_case_name == "XFLR5":
-            self.cl_reference = self.read_cl_reference(self.AOA)
-            self.cd_reference = self.read_cd_reference(self.AOA)
-            self.cm_reference = self.read_cm_reference(self.AOA)
+            self.cl_reference = self.read_cl_reference(self.AOA+5.0)
+            self.cd_reference = self.read_cd_reference(self.AOA+5.0)
+            self.cm_reference = self.read_cm_reference(self.AOA+5.0)
         else:
             self.cl_reference = 0.288
             self.cd_reference = 0.0111
@@ -454,7 +454,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 x_section_normalized = [(x-x_min)/abs(x_max-x_min) for x in x_section]
 
                 # Write data to file
-                cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
+                cp_case = case_name + '_aoa_' + str(self.AOA+5.0) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
                 # cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
                 # with open(cp_file_name, 'w') as cp_file:
                 #     for i in range(len(x_section_normalized)):
@@ -464,7 +464,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 plt.plot(x_section_normalized,cp_section,'r.',label='FE Potential Solver (Kratos)', markersize=5)
 
                 # Get XFLR5 solver reference data
-                cp_potentialsolver_file_name = 'references/cp/xflr5/section_' + str(round(section)) + '/aoa' + str(round(self.AOA)) +'.dat'
+                cp_potentialsolver_file_name = 'references/cp/xflr5/section_' + str(round(section)) + '/aoa' + str(round(self.AOA+5.0)) +'.dat'
                 x_potential = [float(line.split()[0]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
                 cp_potential = [float(line.split()[1]) for line in open(cp_potentialsolver_file_name).readlines() if len(line.split()) > 0]
                 plt.plot(x_potential,cp_potential,'b--',label='XFLR5', markersize=5)

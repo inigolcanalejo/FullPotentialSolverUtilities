@@ -30,7 +30,7 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA","DEACTIVATED_WAKE"],
+                        "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA","DEACTIVATED_WAKE","REACTION_WATER_PRESSURE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
                         "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE","DEACTIVATED_WAKE"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
@@ -78,8 +78,8 @@
         "relative_tolerance": 1e-12,
         "absolute_tolerance": 1e-12,
         "volume_model_part_name" : "Parts_Parts_Auto1",
-        "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1","Wake3D_Wake_Auto1"],
-        "no_skin_parts"          : [],
+        "skin_parts"             : ["PotentialWallCondition3D_Far_field_Auto1","Body3D_Body_Auto1"],
+        "no_skin_parts"          : ["Wake3D_Wake_Auto1"],
         "auxiliary_variables_list" : ["DISTANCE","WAKE_DISTANCE"],
         "linear_solver_settings"  : {
             "solver_type": "LinearSolversApplication.pardiso_lu",
@@ -121,10 +121,10 @@
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
                 "output_wake": false,
-                "kutta_condition_rotation_angle" : 5.0,
+                "kutta_condition_rotation_angle" : 0.0,
                 "wake_process_cpp_parameters":    {
                     "tolerance"                     : 1e-12,
-                    "wake_normal"                   : [0.0, 0.0, 1.0],
+                    "wake_normal"                   : [-0.08715574275, 0.0, 0.9961946981],
                     "is_sharp_trailing_edge"        : false,
                     "switch_wake_normal"            : false,
                     "count_elements_number"         : true,
@@ -134,8 +134,8 @@
                     "shedded_wake_element_size"     : 0.2,
                     "echo_level"                    : 1
                 },
-                "refinement_iterations": 0,
-                "target_wake_h" : 1.0
+                "refinement_iterations": 5,
+                "target_wake_h" : 0.8
             }
         },{
             "python_module" : "write_forces_process",

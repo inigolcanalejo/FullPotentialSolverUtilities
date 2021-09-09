@@ -240,7 +240,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         mdpa_file_name = self.mdpa_path + '/wing_Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Wing_Span_' + str(
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain)
+                self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain)# + '.out'
 
         self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(
             mdpa_file_name)
@@ -343,14 +343,14 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
 
 
-        # KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Exporting Model...")
-        # self._GetSolver().main_model_part.RemoveSubModelPart("trailing_edge_elements_model_part")
-        # self._GetSolver().main_model_part.RemoveSubModelPart("wake_elements_model_part")
+        KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Exporting Model...")
+        self._GetSolver().main_model_part.RemoveSubModelPart("trailing_edge_elements_model_part")
+        self._GetSolver().main_model_part.RemoveSubModelPart("wake_elements_model_part")
         # self._GetSolver().main_model_part.RemoveSubModelPart("Middle_Airfoil")
         # self._GetSolver().main_model_part.RemoveSubModelPart("Section_100")
         # self._GetSolver().main_model_part.RemoveSubModelPart("Section_150")
         # self._GetSolver().main_model_part.RemoveSubModelPart("Section_180")
-        # self._GetSolver().main_model_part.RemoveSubModelPart("fluid_computational_model_part")
+        self._GetSolver().main_model_part.RemoveSubModelPart("fluid_computational_model_part")
 
         ## Model part writing
         name_out_file = self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].GetString()+".out"

@@ -200,7 +200,7 @@ for k in range(Number_Of_AOAS):
 
             # Wing surface
             Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Wing_Lower_LE, Face_Wing_Lower_TE,Face_Wing_Upper_LE, Face_Wing_Upper_TE, Face_Wing_Tip])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Wing_Lower_LE, Face_Wing_Lower_TE,Face_Wing_Upper_LE, Face_Wing_Upper_TE, Face_Wing_Tip, Face_Wing_TE])
 
             # Far field edges
             Auto_group_for_Sub_mesh_Far_Field_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
