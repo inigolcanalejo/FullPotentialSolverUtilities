@@ -66,6 +66,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             (self.Airfoil_Refinement_Factor**(self.Number_Of_Refinements-1))
 
         self.SetFilePaths()
+        self.vtk_output_set = False
 
     def SetFilePaths(self):
         self.input_dir_path = 'TBD'
@@ -195,12 +196,15 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.case) + '_DS_' + str(self.Domain_Length) + '_AOA_' + str(self.AOA) + '_Far_Field_Mesh_Size_' + str(
             self.FarField_MeshSize) + '_Airfoil_Mesh_Size_' + str(self.Airfoil_MeshSize)
 
-        vtk_output_folder_name = self.gid_output_path + '/vtk_output'
+        if not self.vtk_output_set:
+            vtk_output_folder_name = self.gid_output_path + '/vtk_output'
+            self.project_parameters["output_processes"]["vtk_output"][0]["Parameters"]["folder_name"].SetString(
+                vtk_output_folder_name)
+            self.vtk_output_set = True
 
         self.project_parameters["output_processes"]["gid_output"][0]["Parameters"]["output_name"].SetString(
             gid_output_file_name)
-        self.project_parameters["output_processes"]["vtk_output"][0]["Parameters"]["folder_name"].SetString(
-            vtk_output_folder_name)
+
 
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["angle_of_attack"].SetDouble(
             self.AOA)
