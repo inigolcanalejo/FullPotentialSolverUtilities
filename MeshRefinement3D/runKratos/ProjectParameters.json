@@ -30,9 +30,9 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA"],
+                        "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA","DEACTIVATED_WAKE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
-                        "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE"],
+                        "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE","DEACTIVATED_WAKE"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
                     },
                     "point_data_configuration"  : []
@@ -133,7 +133,9 @@
                     "shedded_wake_distance"         : 12.5,
                     "shedded_wake_element_size"     : 0.2,
                     "echo_level"                    : 1
-                }
+                },
+                "refinement_iterations": 1,
+                "target_wake_h" : 0.5
             }
         },{
             "python_module" : "write_forces_process",
