@@ -276,10 +276,10 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
             self.minimum_mesh_growth_rate)
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["case"].SetInt(self.case)
 
-        reference_file_path = '/media/inigo/10740FB2740F9A1C/Results/13_blunt_te_naca_wing/07_penalty_kutta_elements_wake_middle_mesh_refinement/kratos_tests_reference_results'
-        input_file_name = reference_file_path + '/naca0012_wing_case_' + str(self.case) + '_reference_stl_wide_wake.json'
-        self.project_parameters["processes"]["auxiliar_process_list"][0]["Parameters"]["input_file_name"].SetString(
-            input_file_name)
+        # reference_file_path = '/media/inigo/10740FB2740F9A1C/Results/13_blunt_te_naca_wing/07_penalty_kutta_elements_wake_middle_mesh_refinement/kratos_tests_reference_results'
+        # input_file_name = reference_file_path + '/naca0012_wing_case_' + str(self.case) + '_reference_stl_wide_wake.json'
+        # self.project_parameters["processes"]["auxiliar_process_list"][0]["Parameters"]["input_file_name"].SetString(
+        #     input_file_name)
 
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["airfoil_meshsize"].SetDouble(
         #     self.Airfoil_MeshSize)
