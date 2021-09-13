@@ -120,12 +120,12 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "wake_stl_new.stl",
-                "output_wake": true,
+                "output_wake": false,
                 "kutta_condition_rotation_angle" : 0.0,
                 "wake_process_cpp_parameters":    {
                     "tolerance"                     : 1e-12,
                     "wake_normal"                   : [-0.08715574275, 0.0, 0.9961946981],
-                    "is_sharp_trailing_edge"        : true,
+                    "is_sharp_trailing_edge"        : false,
                     "switch_wake_normal"            : false,
                     "count_elements_number"         : true,
                     "write_elements_ids_to_file"    : false,
@@ -155,7 +155,7 @@
                 "section_100_model_part_name": "",
                 "section_150_model_part_name": "",
                 "section_180_model_part_name": "",
-                "reference_case_name": "ONERA",
+                "reference_case_name": "XFLR5",
                 "case": 0
             }
         }],
