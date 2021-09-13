@@ -343,21 +343,21 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
 
 
-        KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Exporting Model...")
-        self._GetSolver().main_model_part.RemoveSubModelPart("trailing_edge_elements_model_part")
-        self._GetSolver().main_model_part.RemoveSubModelPart("wake_elements_model_part")
-        # self._GetSolver().main_model_part.RemoveSubModelPart("Middle_Airfoil")
-        # self._GetSolver().main_model_part.RemoveSubModelPart("Section_100")
-        # self._GetSolver().main_model_part.RemoveSubModelPart("Section_150")
-        # self._GetSolver().main_model_part.RemoveSubModelPart("Section_180")
-        self._GetSolver().main_model_part.RemoveSubModelPart("fluid_computational_model_part")
+        # KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Exporting Model...")
+        # self._GetSolver().main_model_part.RemoveSubModelPart("trailing_edge_elements_model_part")
+        # self._GetSolver().main_model_part.RemoveSubModelPart("wake_elements_model_part")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Middle_Airfoil")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Section_100")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Section_150")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Section_180")
+        # self._GetSolver().main_model_part.RemoveSubModelPart("fluid_computational_model_part")
 
-        ## Model part writing
-        name_out_file = self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].GetString()+".out"
-        KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE | KratosMultiphysics.IO.MESH_ONLY).WriteModelPart(self._GetSolver().main_model_part)
-        #KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE).WriteModelPart(self._GetSolver().main_model_part)
+        # ## Model part writing
+        # name_out_file = self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].GetString()+".out"
+        # KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE | KratosMultiphysics.IO.MESH_ONLY).WriteModelPart(self._GetSolver().main_model_part)
+        # #KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE).WriteModelPart(self._GetSolver().main_model_part)
 
-        KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Model export finished.")
+        # KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Model export finished.")
 
         self.project_parameters["solver_settings"].RemoveValue("element_replace_settings")
 

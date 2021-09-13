@@ -134,7 +134,7 @@
                     "shedded_wake_element_size"     : 0.2,
                     "echo_level"                    : 1
                 },
-                "refinement_iterations": 5,
+                "refinement_iterations": 0,
                 "target_wake_h" : 0.8
             }
         },{
@@ -155,7 +155,7 @@
                 "section_100_model_part_name": "",
                 "section_150_model_part_name": "",
                 "section_180_model_part_name": "",
-                "reference_case_name": "XFLR5",
+                "reference_case_name": "ONERA",
                 "case": 0
             }
         }],
