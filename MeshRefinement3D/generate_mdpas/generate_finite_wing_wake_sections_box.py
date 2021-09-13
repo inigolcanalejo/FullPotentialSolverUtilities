@@ -8,18 +8,10 @@ import killSalome
 import math
 
 # Parameters:
-Wing_span = TBD
-Domain_Length = 25
+Domain_Length = 200
 Domain_Height = Domain_Length
-Domain_Width = 25
-separating_domains = True
-wake_angle_deg = 5.0
-
-# Outlet_Min_Mesh_Size = 0.05
-# Outlet_Max_Mesh_Size = 0.1
-# Growth_Rate_Wake = 0.7
-Refinement_Box_Face_Min_Mesh_Size = 0.1
-Refinement_Box_Face_Max_Mesh_Size = 0.1
+Domain_Width = 200
+wake_angle_deg = 0.0
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
@@ -27,17 +19,10 @@ LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/20.0
 
-print '\nWing_span = ', Wing_span
 print 'Domain_Length = ', Domain_Length
 print 'Smallest_Airfoil_Mesh_Size = ', Smallest_Airfoil_Mesh_Size
 print 'Biggest_Airfoil_Mesh_Size = ', Biggest_Airfoil_Mesh_Size
 print 'Far_Field_Mesh_Size = ', Far_Field_Mesh_Size
-print 'Refinement_Box_Face_Min_Mesh_Size = ', Refinement_Box_Face_Min_Mesh_Size
-print 'Refinement_Box_Face_Max_Mesh_Size = ', Refinement_Box_Face_Max_Mesh_Size
-
-# print '\nOutlet_Min_Mesh_Size = ', Outlet_Min_Mesh_Size
-# print 'Outlet_Max_Mesh_Size = ', Outlet_Max_Mesh_Size
-# print 'Growth_Rate_Wake = ', Growth_Rate_Wake
 
 Number_Of_AOAS = TBD
 Number_Of_Domains_Refinements = TBD
@@ -69,7 +54,7 @@ AOA = Initial_AOA
 Initial_Smallest_Airfoil_Mesh_Size = Smallest_Airfoil_Mesh_Size
 Initial_Biggest_Airfoil_Mesh_Size = Biggest_Airfoil_Mesh_Size
 
-geometry_path = "/home/inigo/software/FullPotentialSolverUtilities/MeshRefinement3D/generate_mdpas/naca_domain/Partition_Domain.step"
+geometry_path = "/media/inigo/10740FB2740F9A1C/Results/15_nasa_crm/03_model_gid/11_divide.igs"
 
 for k in range(Number_Of_AOAS):
     AOA = round(AOA, 1)
@@ -120,95 +105,72 @@ for k in range(Number_Of_AOAS):
             OY = geompy.MakeVectorDXDYDZ(0, 1, 0)
             OZ = geompy.MakeVectorDXDYDZ(0, 0, 1)
 
-            # Create naca0012
-            Curve_UpperSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.0", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0, 0.5, 999, GEOM.Interpolation, True)
-            Curve_UpperSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.0", "0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0.5, 0.99, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_TE = geompy.MakeCurveParametric("t - 0.5", "0.0", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0.5, 0.99, 999, GEOM.Interpolation, True)
-            Curve_LowerSurface_LE = geompy.MakeCurveParametric("t - 0.5", "0.0", "-0.6*(0.2969*sqrt(t) - 0.1260*t - 0.3516*t**2 + 0.2843*t**3 - 0.1036*t**4)", 0, 0.5, 999, GEOM.Interpolation, True)
+            nasa_crm_igs = geompy.ImportIGES(geometry_path, True)
 
-            # geompy.ChangeOrientationShell(Curve_UpperSurface_TE)
-            # geompy.ChangeOrientationShell(Curve_LowerSurface_TE)
-
-            [UpperMiddle,UpperTE] = geompy.ExtractShapes(Curve_UpperSurface_TE, geompy.ShapeType["VERTEX"], True)
-            [LowerMiddle,LowerTE] = geompy.ExtractShapes(Curve_LowerSurface_TE, geompy.ShapeType["VERTEX"], True)
-
-            TE = geompy.MakeLineTwoPnt(LowerTE, UpperTE)
-
-            # Create face
-            Face_Airfoil = geompy.MakeFaceWires([Curve_UpperSurface_LE, Curve_UpperSurface_TE, Curve_LowerSurface_TE, Curve_LowerSurface_LE, TE], 1)
-
-            # Rotate around center to AOA
-            geompy.Rotate(Face_Airfoil, OY, AOA*math.pi/180.0)
-
-            # Extrusion of the wing
-            Extrusion_Wing = geompy.MakePrismVecH(Face_Airfoil, OY, Wing_span/2.0)
-
-            # Making Domain
-            Face_Domain = geompy.MakeFaceHW(Domain_Length, Domain_Height, 3)
-            Extrusion_Domain = geompy.MakePrismVecH(Face_Domain, OY,  Domain_Width/2.0)
-            Cut_Domain = geompy.MakeCutList(Extrusion_Domain, [Extrusion_Wing], True)
-
-            # Explode Domain
-            [Face_Inlet,Face_Wing_Lower_LE,\
-                Face_Wing_Upper_LE,Face_Left_Wall,\
-                Face_Wing_Tip,Face_Wing_Lower_TE,\
-                Face_Wing_Upper_TE,Face_Wing_TE,Face_Down_Wall,\
-                Face_Top_Wall,Face_Right_Wall,\
-                Face_Outlet] = geompy.ExtractShapes(Cut_Domain, geompy.ShapeType["FACE"], True)
+            [Face_Inlet,Face_crm_cockpit,Face_crm_fuselage_middle_down,\
+            Face_crm_fuselage_middle_middle,Face_crm_fuselage_middle_up,\
+            Face_crm_fuselage_root_down,\
+            Face_crm_fuselage_root_up,\
+            Face_crm_fuselage_root,\
+            Face_crm_wing_root_down,\
+            Face_crm_wing_root_up,Face_Left_Wall,Face_crm_wing_root_te,\
+            Face_crm_wing_down,Face_crm_wing_up,Face_crm_fuselage_ring_up,\
+            Face_crm_fuselage_ring_down,Face_crm_fuselage_ring_middle,Face_crm_wing_te,\
+            Face_crm_wing_tip_down,Face_crm_wing_tip_up,Face_crm_wing_tip_te,\
+            Face_crm_fuselage_back,Face_Down_Wall,Face_Top_Wall,\
+            Face_crm_tail_down,Face_crm_tail_up,Face_crm_tail_te,\
+            Face_crm_tail_tip_le_down,Face_crm_tail_tip_le_up,Face_crm_tail_tip_te_down,\
+            Face_crm_tail_tip_te_up,Face_Right_Wall,\
+            Face_Outlet] = geompy.ExtractShapes(nasa_crm_igs, geompy.ShapeType["FACE"], True)
 
             # Exploding far field
             [Edge_1,Edge_2,Edge_3,Edge_4] = geompy.ExtractShapes(Face_Inlet, geompy.ShapeType["EDGE"], True)
-            [Obj1,Obj2,Obj3,Edge_6,Edge_7,Obj4,Obj11,Obj5,Obj6] = geompy.ExtractShapes(Face_Left_Wall, geompy.ShapeType["EDGE"], True)
-            [Obj1,Edge_8,Edge_9,Obj2] = geompy.ExtractShapes(Face_Right_Wall, geompy.ShapeType["EDGE"], True)
-            [Edge_10,Edge_11,Edge_12,Edge_13] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Obj3,Obj4,Obj5,Obj6,Obj7,Edge_5,Edge_6,Obj10,Obj11,Obj12,Obj13,Obj14,Obj15] = geompy.ExtractShapes(Face_Left_Wall, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_7,Edge_8,Obj2] = geompy.ExtractShapes(Face_Right_Wall, geompy.ShapeType["EDGE"], True)
+            [Edge_9,Edge_10,Edge_11,Edge_12] = geompy.ExtractShapes(Face_Outlet, geompy.ShapeType["EDGE"], True)
 
-            # Exploding wing
-            [Edge_LE,Edge_Wing_Left_Lower_LE, Edge_Wing_Right_Lower_LE, Edge_Lower_Middle] = geompy.ExtractShapes(Face_Wing_Lower_LE, geompy.ShapeType["EDGE"], True)
+            ######
+            # Explode nasa crm
+            ######
+            # Fuselage
+            [Edge_105,Edge_106,Edge_107,Edge_108,Edge_109,Edge_110] = geompy.ExtractShapes(Face_crm_cockpit, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_112,Edge_113,Edge_114,Edge_115] = geompy.ExtractShapes(Face_crm_fuselage_middle_down, geompy.ShapeType["EDGE"],           True)
+            [Obj1,Obj2,Edge_118,Edge_119] = geompy.ExtractShapes(Face_crm_fuselage_middle_middle, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_121,Obj2,Edge_123] = geompy.ExtractShapes(Face_crm_fuselage_middle_up, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_125,Edge_126,Edge_127] = geompy.ExtractShapes(Face_crm_fuselage_root_down, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_129,Edge_130,Edge_131] = geompy.ExtractShapes(Face_crm_fuselage_root_up, geompy.ShapeType["EDGE"], True)
 
-            [Obj1,Edge_Wing_Left_Lower_TE, Edge_Wing_Right_Lower_TE, Edge_TE_Lower] = geompy.ExtractShapes(Face_Wing_Lower_TE, geompy.ShapeType["EDGE"], True)
+            # Root
+            [Obj1,Obj2,Obj3,Obj4,Obj5,Obj6,Obj7,Obj8,Edge_140,Obj9,Obj10,Edge_143,Edge_144,Edge_145,Edge_146] =             geompy.ExtractShapes(Face_crm_fuselage_root, geompy.ShapeType["EDGE"], True)
 
-            [Obj1,Edge_Wing_Left_Upper_LE, Edge_Wing_Right_Upper_LE, Edge_Upper_Middle] = geompy.ExtractShapes(Face_Wing_Upper_LE, geompy.ShapeType["EDGE"], True)
+            # Wing
+            # Root
+            [Edge_wing_root_down_le,Edge_wing_root_le,Edge_wing_middle_down_le,Edge_wing_root_down_te,Edge_wing_middle_down_te,Edge_wing_root_te_down] = geompy.ExtractShapes(Face_crm_wing_root_down, geompy.ShapeType["EDGE"],             True)
+            [Edge_wing_root_up_le,Obj1,Edge_wing_middle_up_le,Edge_wing_root_up_te,Edge_wing_middle_up_te,Edge_wing_root_te_up] = geompy.ExtractShapes(Face_crm_wing_root_up, geompy.ShapeType["EDGE"],           True)
 
-            [Obj1,Edge_Wing_Left_Upper_TE, Edge_Wing_Right_Upper_TE, Edge_TE_Upper] = geompy.ExtractShapes(Face_Wing_Upper_TE, geompy.ShapeType["EDGE"], True)
+            [Edge_root_te_down,Edge_root_te_up,Obj1,Obj2,Edge_wing_middle_te] = geompy.ExtractShapes(Face_crm_wing_root_te, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Edge_wing_le,Edge_wing_te_down,Edge_wing_tip_down_le,Edge_wing_tip_down_te] = geompy.ExtractShapes(Face_crm_wing_down, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Obj3,Edge_wing_te_up,Edge_wing_tip_up_le,Edge_wing_tip_up_te] = geompy.ExtractShapes(Face_crm_wing_up, geompy.ShapeType["EDGE"], True)
 
-            [Edge_TE_Left,Obj1, Obj2, Edge_TE_Right] = geompy.ExtractShapes(Face_Wing_TE, geompy.ShapeType["EDGE"], True)
+            # Fuselage
+            [Obj1,Edge_192,Edge_193,Edge_194] = geompy.ExtractShapes(Face_crm_fuselage_ring_up, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Edge_197,Obj3,Edge_199,Edge_1100] = geompy.ExtractShapes(Face_crm_fuselage_ring_down, geompy.ShapeType         ["EDGE"], True)
+            [Obj1,Obj2,Obj3,Edge_1104] = geompy.ExtractShapes(Face_crm_fuselage_ring_middle, geompy.ShapeType["EDGE"], True)
 
-            # Generate stl wake
-            wake_angle_rad = wake_angle_deg*math.pi/180.0
-            Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(math.cos(wake_angle_rad), 0, math.sin(wake_angle_rad))
-            # Translation_1 = geompy.MakeTranslation(Edge_TE_Upper, 0, 0, 0)
-            # Vertex_1 = geompy.MakeVertex(0.5*math.cos(AOA*math.pi/180.0), 0, -0.5*math.sin(AOA*math.pi/180.0))
-            # Scale_1 = geompy.MakeScaleTransform(Translation_1, Vertex_1, 0.999875)
-            Extrusion_Wake_stl = geompy.MakePrismVecH(Edge_TE_Upper, Vector_Wake_Direction, Domain_Length*0.6)
+            # Wing
+            [Obj1,Obj2,Obj3,Edge_wing_tip_te1] = geompy.ExtractShapes(Face_crm_wing_te, geompy.ShapeType["EDGE"], True)
+            [Obj1,Edge_wing_tip_middle_le,Obj2,Edge_wing_tip_middle_te,Edge_wing_tip_te2] = geompy.ExtractShapes(Face_crm_wing_tip_down, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Obj3,Obj4,Edge_wing_tip_te3] = geompy.ExtractShapes(Face_crm_wing_tip_up, geompy.ShapeType["EDGE"], True)
+            [Edge_1119,Obj1,Obj2,Obj3] = geompy.ExtractShapes(Face_crm_wing_tip_te, geompy.ShapeType["EDGE"], True)
 
-            # Making groups for submeshes
-            # LE Airfoil edges
-            Auto_group_for_Sub_mesh_LE_Airfoils = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_LE_Airfoils, [Edge_Wing_Left_Lower_LE, Edge_Wing_Left_Upper_LE,Edge_Wing_Right_Lower_LE, Edge_Wing_Right_Upper_LE])
-
-            # TE Airfoil edges
-            Auto_group_for_Sub_mesh_TE_Airfoils = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_TE_Airfoils, [Edge_Wing_Left_Lower_TE, Edge_Wing_Left_Upper_TE,Edge_Wing_Right_Lower_TE, Edge_Wing_Right_Upper_TE])
-
-            # Middle
-            Auto_group_for_Sub_mesh_Middle = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Middle, [Edge_Upper_Middle, Edge_Lower_Middle])
-
-            # TE Edges
-            Auto_group_for_Sub_mesh_TE = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_TE, [Edge_TE_Left, Edge_TE_Lower, Edge_TE_Right, Edge_TE_Upper])
-
-            # Wing surface
-            Auto_group_for_Sub_mesh_Wing_Surface = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surface, [Face_Wing_Lower_LE, Face_Wing_Lower_TE,Face_Wing_Upper_LE, Face_Wing_Upper_TE, Face_Wing_Tip, Face_Wing_TE])
-
-            # Far field edges
-            Auto_group_for_Sub_mesh_Far_Field_Edges = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Edges, [Edge_1, Edge_2, Edge_3, Edge_4, Edge_6, Edge_7, Edge_8, Edge_9, Edge_10, Edge_11, Edge_12, Edge_13])
-
-            # Far field surface
-            Auto_group_for_Sub_mesh_Far_Field_Surface = geompy.CreateGroup(Cut_Domain, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Far_Field_Surface, [Face_Inlet, Face_Left_Wall, Face_Down_Wall, Face_Top_Wall, Face_Right_Wall, Face_Outlet])
+            [Edge_123,Edge_124,Edge_125,Edge_126,Edge_127,Edge_128,Edge_129,Edge_130,Edge_131,Edge_132,Edge_133] = geompy.ExtractShapes         (Face_crm_fuselage_back, geompy.ShapeType["EDGE"], True)
+            [Edge_142,Edge_143,Edge_144,Edge_145,Edge_146,Edge_147] = geompy.ExtractShapes(Face_crm_tail_down, geompy.ShapeType["EDGE"],            True)
+            [Edge_148,Edge_149,Edge_150,Edge_151,Edge_152,Edge_153] = geompy.ExtractShapes(Face_crm_tail_up, geompy.ShapeType["EDGE"],          True)
+            [Edge_154,Edge_155,Edge_156,Edge_157,Edge_158] = geompy.ExtractShapes(Face_crm_tail_te, geompy.ShapeType["EDGE"], True)
+            [Edge_159,Edge_160,Edge_161] = geompy.ExtractShapes(Face_crm_tail_tip_le_down, geompy.ShapeType["EDGE"], True)
+            [Edge_162,Edge_163,Edge_164] = geompy.ExtractShapes(Face_crm_tail_tip_le_up, geompy.ShapeType["EDGE"], True)
+            [Edge_165,Edge_166,Edge_167,Edge_168] = geompy.ExtractShapes(Face_crm_tail_tip_te_down, geompy.ShapeType["EDGE"], True)
+            [Edge_169,Edge_170,Edge_171,Edge_172] = geompy.ExtractShapes(Face_crm_tail_tip_te_up, geompy.ShapeType["EDGE"], True)
 
             exe_time = time.time() - start_time
             print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
@@ -219,295 +181,198 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudy( OX, 'OX' )
             geompy.addToStudy( OY, 'OY' )
             geompy.addToStudy( OZ, 'OZ' )
-            geompy.addToStudy( Curve_UpperSurface_LE, 'Curve_UpperSurface_LE' )
-            geompy.addToStudy( Curve_UpperSurface_TE, 'Curve_UpperSurface_TE' )
-            geompy.addToStudy( Curve_LowerSurface_TE, 'Curve_LowerSurface_TE' )
-            geompy.addToStudy( Curve_LowerSurface_LE, 'Curve_LowerSurface_LE' )
-            geompy.addToStudy( TE, 'TE' )
+            geompy.addToStudy( nasa_crm_igs, 'nasa_crm_igs' )
 
-            geompy.addToStudy( Face_Airfoil, 'Face_Airfoil' )
-            geompy.addToStudy( Extrusion_Wing, 'Extrusion_Wing' )
-
-            geompy.addToStudy( Face_Domain, 'Face_Domain' )
-            geompy.addToStudy( Extrusion_Domain, 'Extrusion_Domain' )
-            geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
-
-            geompy.addToStudyInFather( Cut_Domain, Face_Inlet, 'Face_Inlet' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Left_Wall, 'Face_Left_Wall' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Down_Wall, 'Face_Down_Wall' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Top_Wall, 'Face_Top_Wall' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Right_Wall, 'Face_Right_Wall' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Outlet, 'Face_Outlet' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Wing_Lower_LE, 'Face_Wing_Lower_LE' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Wing_Lower_TE, 'Face_Wing_Lower_TE' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Wing_Upper_LE, 'Face_Wing_Upper_LE' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Wing_Upper_TE, 'Face_Wing_Upper_TE' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Wing_Tip, 'Face_Wing_Tip' )
-            geompy.addToStudyInFather( Cut_Domain, Face_Wing_TE, 'Face_Wing_TE' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_Inlet, 'Face_Inlet' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_cockpit, 'Face_crm_cockpit' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_middle_down, 'Face_crm_fuselage_middle_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_middle_middle, 'Face_crm_fuselage_middle_middle' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_middle_up, 'Face_crm_fuselage_middle_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_root_down, 'Face_crm_fuselage_root_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_root_up, 'Face_crm_fuselage_root_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_root, 'Face_crm_fuselage_root' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_root_down, 'Face_crm_wing_root_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_root_up, 'Face_crm_wing_root_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_Left_Wall, 'Face_Left_Wall' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_root_te, 'Face_crm_wing_root_te' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_down, 'Face_crm_wing_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_up, 'Face_crm_wing_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_ring_up, 'Face_crm_fuselage_ring_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_ring_down, 'Face_crm_fuselage_ring_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_ring_middle, 'Face_crm_fuselage_ring_middle' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_te, 'Face_crm_wing_te' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_tip_down, 'Face_crm_wing_tip_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_tip_up, 'Face_crm_wing_tip_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_tip_te, 'Face_crm_wing_tip_te' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_back, 'Face_crm_fuselage_back' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_Down_Wall, 'Face_Down_Wall' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_Top_Wall, 'Face_Top_Wall' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_down, 'Face_crm_tail_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_up, 'Face_crm_tail_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_te, 'Face_crm_tail_te' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_le_down, 'Face_crm_tail_tip_le_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_le_up, 'Face_crm_tail_tip_le_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_te_down, 'Face_crm_tail_tip_te_down' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_te_up, 'Face_crm_tail_tip_te_up' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_Right_Wall, 'Face_Right_Wall' )
+            geompy.addToStudyInFather( nasa_crm_igs, Face_Outlet, 'Face_Outlet' )
 
             geompy.addToStudyInFather( Face_Inlet, Edge_1, 'Edge_1' )
             geompy.addToStudyInFather( Face_Inlet, Edge_2, 'Edge_2' )
             geompy.addToStudyInFather( Face_Inlet, Edge_3, 'Edge_3' )
             geompy.addToStudyInFather( Face_Inlet, Edge_4, 'Edge_4' )
 
+            geompy.addToStudyInFather( Face_Left_Wall, Edge_5, 'Edge_5' )
             geompy.addToStudyInFather( Face_Left_Wall, Edge_6, 'Edge_6' )
-            geompy.addToStudyInFather( Face_Left_Wall, Edge_7, 'Edge_7' )
 
+            geompy.addToStudyInFather( Face_Right_Wall, Edge_7, 'Edge_7' )
             geompy.addToStudyInFather( Face_Right_Wall, Edge_8, 'Edge_8' )
-            geompy.addToStudyInFather( Face_Right_Wall, Edge_9, 'Edge_9' )
 
+            geompy.addToStudyInFather( Face_Outlet, Edge_9, 'Edge_9' )
             geompy.addToStudyInFather( Face_Outlet, Edge_10, 'Edge_10' )
             geompy.addToStudyInFather( Face_Outlet, Edge_11, 'Edge_11' )
             geompy.addToStudyInFather( Face_Outlet, Edge_12, 'Edge_12' )
-            geompy.addToStudyInFather( Face_Outlet, Edge_13, 'Edge_13' )
 
-            geompy.addToStudyInFather( Face_Wing_Lower_LE, Edge_LE, 'Edge_LE' )
-            geompy.addToStudyInFather( Face_Wing_Lower_LE, Edge_Wing_Left_Lower_LE, 'Edge_Wing_Left_Lower_LE' )
-            geompy.addToStudyInFather( Face_Wing_Lower_LE, Edge_Wing_Right_Lower_LE, 'Edge_Wing_Right_Lower_LE' )
-            geompy.addToStudyInFather( Face_Wing_Lower_LE, Edge_Lower_Middle, 'Edge_Lower_Middle' )
+            geompy.addToStudyInFather( Face_crm_cockpit, Edge_105, 'Edge_105' )
+            geompy.addToStudyInFather( Face_crm_cockpit, Edge_106, 'Edge_106' )
+            geompy.addToStudyInFather( Face_crm_cockpit, Edge_107, 'Edge_107' )
+            geompy.addToStudyInFather( Face_crm_cockpit, Edge_108, 'Edge_108' )
+            geompy.addToStudyInFather( Face_crm_cockpit, Edge_109, 'Edge_109' )
+            geompy.addToStudyInFather( Face_crm_cockpit, Edge_110, 'Edge_110' )
 
-            geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_Wing_Left_Lower_TE, 'Edge_Wing_Left_Lower_TE' )
-            geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_Wing_Right_Lower_TE, 'Edge_Wing_Right_Lower_TE' )
-            geompy.addToStudyInFather( Face_Wing_Lower_TE, Edge_TE_Lower, 'Edge_TE' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_down, Edge_112, 'Edge_112' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_down, Edge_113, 'Edge_113' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_down, Edge_114, 'Edge_114' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_down, Edge_115, 'Edge_115' )
 
-            geompy.addToStudyInFather( Face_Wing_Upper_LE, Edge_Wing_Left_Upper_LE, 'Edge_Wing_Left_Upper_LE' )
-            geompy.addToStudyInFather( Face_Wing_Upper_LE, Edge_Wing_Right_Upper_LE, 'Edge_Wing_Right_Upper_LE' )
-            geompy.addToStudyInFather( Face_Wing_Upper_LE, Edge_Upper_Middle, 'Edge_Upper_Middle' )
-            geompy.addToStudyInFather( Face_Wing_Upper_TE, Edge_Wing_Left_Upper_TE, 'Edge_Wing_Left_Upper_TE' )
-            geompy.addToStudyInFather( Face_Wing_Upper_TE, Edge_Wing_Right_Upper_TE, 'Edge_Wing_Right_Upper_TE' )
-            geompy.addToStudyInFather( Face_Wing_Upper_TE, Edge_TE_Upper, 'Edge_TE_Upper' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_middle, Edge_118, 'Edge_118' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_middle, Edge_119, 'Edge_119' )
 
-            geompy.addToStudyInFather( Face_Wing_TE, Edge_TE_Left, 'Edge_TE_Left' )
-            geompy.addToStudyInFather( Edge_TE_Right, Edge_TE_Right, 'Edge_TE_Left' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_up, Edge_121, 'Edge_121' )
+            geompy.addToStudyInFather( Face_crm_fuselage_middle_up, Edge_123, 'Edge_123' )
 
-            geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root_down, Edge_125, 'Edge_125' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root_down, Edge_126, 'Edge_126' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root_down, Edge_127, 'Edge_127' )
 
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_LE_Airfoils, 'Auto_group_for_Sub-mesh_LE_Airfoils' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_TE_Airfoils, 'Auto_group_for_Sub-mesh_TE_Airfoils' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Middle, 'Auto_group_for_Sub-mesh_Middle' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Wing_Surface, 'Auto_group_for_Sub-mesh_Wing_Surface' )
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Far_Field_Edges, 'Auto_group_for_Sub-mesh_Far_Field_Edges' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root_up, Edge_129, 'Edge_129' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root_up, Edge_130, 'Edge_130' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root_up, Edge_131, 'Edge_131' )
 
-            geompy.addToStudyInFather( Cut_Domain, Auto_group_for_Sub_mesh_Far_Field_Surface, 'Auto_group_for_Sub-mesh_Far_Field_Surface' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root, Edge_140, 'Edge_140' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root, Edge_143, 'Edge_143' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root, Edge_144, 'Edge_144' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root, Edge_145, 'Edge_145' )
+            geompy.addToStudyInFather( Face_crm_fuselage_root, Edge_146, 'Edge_146' )
 
-            ###
-            ### SMESH component
-            ###
+            geompy.addToStudyInFather( Face_crm_wing_root_down, Edge_wing_root_down_le, 'Edge_wing_root_down_le' )
+            geompy.addToStudyInFather( Face_crm_wing_root_down, Edge_wing_root_le, 'Edge_wing_root_le' )
+            geompy.addToStudyInFather( Face_crm_wing_root_down, Edge_wing_middle_down_le, 'Edge_wing_middle_down_le' )
+            geompy.addToStudyInFather( Face_crm_wing_root_down, Edge_wing_root_down_te, 'Edge_wing_root_down_te' )
+            geompy.addToStudyInFather( Face_crm_wing_root_down, Edge_wing_middle_down_te, 'Edge_wing_middle_down_te' )
+            geompy.addToStudyInFather( Face_crm_wing_root_down, Edge_wing_root_te_down, 'Edge_wing_root_te_down' )
 
-            import  SMESH, SALOMEDS
-            from salome.smesh import smeshBuilder
+            geompy.addToStudyInFather( Face_crm_wing_root_up, Edge_wing_root_up_le, 'Edge_wing_root_up_le' )
+            geompy.addToStudyInFather( Face_crm_wing_root_up, Edge_wing_middle_up_le, 'Edge_wing_middle_up_le' )
+            geompy.addToStudyInFather( Face_crm_wing_root_up, Edge_wing_root_up_te, 'Edge_wing_root_up_te' )
+            geompy.addToStudyInFather( Face_crm_wing_root_up, Edge_wing_middle_up_te, 'Edge_wing_middle_up_te' )
+            geompy.addToStudyInFather( Face_crm_wing_root_up, Edge_wing_root_te_up, 'Edge_wing_root_te_up' )
 
-            smesh = smeshBuilder.New(theStudy)
+            geompy.addToStudyInFather( Face_crm_wing_root_te, Edge_root_te_down, 'Edge_root_te_down' )
+            geompy.addToStudyInFather( Face_crm_wing_root_te, Edge_root_te_up, 'Edge_root_te_up' )
+            geompy.addToStudyInFather( Face_crm_wing_root_te, Edge_wing_middle_te, 'Edge_wing_middle_te' )
 
-            # Set NETGEN 3D
-            Mesh_Domain = smesh.Mesh(Cut_Domain)
+            geompy.addToStudyInFather( Face_crm_wing_down, Edge_wing_le, 'Edge_wing_le' )
+            geompy.addToStudyInFather( Face_crm_wing_down, Edge_wing_te_down, 'Edge_wing_te_down' )
+            geompy.addToStudyInFather( Face_crm_wing_down, Edge_wing_tip_down_le, 'Edge_wing_tip_down_le' )
+            geompy.addToStudyInFather( Face_crm_wing_down, Edge_wing_tip_down_te, 'Edge_wing_tip_down_te' )
 
-            NETGEN_3D = Mesh_Domain.Tetrahedron()
-            NETGEN_3D_Parameters = NETGEN_3D.Parameters()
-            NETGEN_3D_Parameters.SetMaxSize( Far_Field_Mesh_Size )
-            NETGEN_3D_Parameters.SetOptimize( 1 )
-            NETGEN_3D_Parameters.SetFineness( 5 )
-            NETGEN_3D_Parameters.SetGrowthRate( Growth_Rate_Domain )
-            NETGEN_3D_Parameters.SetNbSegPerEdge( 3 )
-            NETGEN_3D_Parameters.SetNbSegPerRadius( 5 )
-            NETGEN_3D_Parameters.SetMinSize( Smallest_Airfoil_Mesh_Size )
-            NETGEN_3D_Parameters.SetUseSurfaceCurvature( 0 )
-            NETGEN_3D_Parameters.SetSecondOrder( 106 )
-            NETGEN_3D_Parameters.SetFuseEdges( 80 )
-            NETGEN_3D_Parameters.SetQuadAllowed( 127 )
+            geompy.addToStudyInFather( Face_crm_wing_up, Edge_wing_te_up, 'Edge_wing_te_up' )
+            geompy.addToStudyInFather( Face_crm_wing_up, Edge_wing_tip_up_le, 'Edge_wing_tip_up_le' )
+            geompy.addToStudyInFather( Face_crm_wing_up, Edge_wing_tip_up_te, 'Edge_wing_tip_up_te' )
 
-            # LE
-            Regular_1D_4 = Mesh_Domain.Segment(geom=Edge_LE)
-            Sub_mesh_LE = Regular_1D_4.GetSubMesh()
-            Local_Length_LE = Regular_1D_4.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
+            geompy.addToStudyInFather( Face_crm_fuselage_ring_up, Edge_192, 'Edge_192' )
+            geompy.addToStudyInFather( Face_crm_fuselage_ring_up, Edge_193, 'Edge_193' )
+            geompy.addToStudyInFather( Face_crm_fuselage_ring_up, Edge_194, 'Edge_194' )
 
-            # TE
-            Regular_1D_3 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE)
-            Sub_mesh_TE = Regular_1D_3.GetSubMesh()
-            Local_Length_TE = Regular_1D_3.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
+            geompy.addToStudyInFather( Face_crm_fuselage_ring_down, Edge_197, 'Edge_197' )
+            geompy.addToStudyInFather( Face_crm_fuselage_ring_down, Edge_199, 'Edge_199' )
+            geompy.addToStudyInFather( Face_crm_fuselage_ring_down, Edge_1100, 'Edge_1100' )
 
-            # Middle
-            Regular_1D_5 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Middle)
-            Local_Length_Middle = Regular_1D_5.LocalLength(Biggest_Airfoil_Mesh_Size,None,1e-07)
-            Sub_mesh_Middle = Regular_1D_5.GetSubMesh()
+            geompy.addToStudyInFather( Face_crm_fuselage_ring_middle, Edge_1104, 'Edge_1104' )
 
-            # LE Airfoils
-            Regular_1D_1 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_Airfoils)
-            Start_and_End_Length_LE = Regular_1D_1.StartEndLength(Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[])
-            Start_and_End_Length_LE.SetObjectEntry( 'Cut_Domain' )
-            Sub_mesh_LE_Airfoils = Regular_1D_1.GetSubMesh()
+            geompy.addToStudyInFather( Face_crm_wing_te, Edge_wing_tip_te1, 'Edge_wing_tip_te1' )
 
-            # TE Airfoils
-            Regular_1D_2 = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_TE_Airfoils)
-            Start_and_End_Length_TE = Regular_1D_2.StartEndLength(Biggest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size,[])
-            Start_and_End_Length_TE.SetObjectEntry( 'Cut_Domain' )
-            Sub_mesh_TE_Airfoils = Regular_1D_2.GetSubMesh()
+            geompy.addToStudyInFather( Face_crm_wing_tip_down, Edge_wing_tip_middle_le, 'Edge_wing_tip_middle_le' )
+            geompy.addToStudyInFather( Face_crm_wing_tip_down, Edge_wing_tip_middle_te, 'Edge_wing_tip_middle_te' )
+            geompy.addToStudyInFather( Face_crm_wing_tip_down, Edge_wing_tip_te2, 'Edge_wing_tip_te2' )
 
-            # TE surface
-            NETGEN_2D_TE = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_Wing_TE)
-            NETGEN_2D_Parameters_TE = NETGEN_2D_TE.Parameters()
-            NETGEN_2D_Parameters_TE.SetMaxSize( Smallest_Airfoil_Mesh_Size )
-            NETGEN_2D_Parameters_TE.SetOptimize( 1 )
-            NETGEN_2D_Parameters_TE.SetFineness( 5 )
-            NETGEN_2D_Parameters_TE.SetGrowthRate( Growth_Rate_Wing )
-            NETGEN_2D_Parameters_TE.SetNbSegPerEdge( 6.92154e-310 )
-            NETGEN_2D_Parameters_TE.SetNbSegPerRadius( 5.32336e-317 )
-            NETGEN_2D_Parameters_TE.SetMinSize( Smallest_Airfoil_Mesh_Size )
-            NETGEN_2D_Parameters_TE.SetUseSurfaceCurvature( 1 )
-            NETGEN_2D_Parameters_TE.SetQuadAllowed( 0 )
-            NETGEN_2D_Parameters_TE.SetSecondOrder( 106 )
-            NETGEN_2D_Parameters_TE.SetFuseEdges( 80 )
-            Sub_mesh_TE_Surface = NETGEN_2D_TE.GetSubMesh()
+            geompy.addToStudyInFather( Face_crm_wing_tip_up, Edge_wing_tip_te3, 'Edge_wing_tip_te3' )
 
-            # Wing surface
-            NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Surface)
-            NETGEN_2D_Parameters_Wing = NETGEN_2D.Parameters()
-            NETGEN_2D_Parameters_Wing.SetMaxSize( Biggest_Airfoil_Mesh_Size )
-            NETGEN_2D_Parameters_Wing.SetOptimize( 1 )
-            NETGEN_2D_Parameters_Wing.SetFineness( 5 )
-            NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wing )
-            NETGEN_2D_Parameters_Wing.SetNbSegPerEdge( 6.92154e-310 )
-            NETGEN_2D_Parameters_Wing.SetNbSegPerRadius( 5.32336e-317 )
-            NETGEN_2D_Parameters_Wing.SetMinSize( Smallest_Airfoil_Mesh_Size )
-            NETGEN_2D_Parameters_Wing.SetUseSurfaceCurvature( 1 )
-            NETGEN_2D_Parameters_Wing.SetQuadAllowed( 0 )
-            NETGEN_2D_Parameters_Wing.SetSecondOrder( 106 )
-            NETGEN_2D_Parameters_Wing.SetFuseEdges( 80 )
-            Sub_mesh_Wing_Surface = NETGEN_2D.GetSubMesh()
+            geompy.addToStudyInFather( Face_crm_wing_tip_te, Edge_1119, 'Edge_1119' )
 
-            # Far field edges
-            Regular_1D = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Far_Field_Edges)
-            Local_Length_Far_Field = Regular_1D.LocalLength(Far_Field_Mesh_Size,None,1e-07)
-            Sub_mesh_Far_Field_Edges = Regular_1D.GetSubMesh()
-
-            # Far field surface
-            NETGEN_2D_Far_Field = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Far_Field_Surface)
-            Sub_mesh_Far_Field_Surface = NETGEN_2D_Far_Field.GetSubMesh()
-            NETGEN_2D_Parameters_FarField = NETGEN_2D_Far_Field.Parameters()
-            NETGEN_2D_Parameters_FarField.SetMaxSize( Far_Field_Mesh_Size )
-            NETGEN_2D_Parameters_FarField.SetOptimize( 1 )
-            NETGEN_2D_Parameters_FarField.SetFineness( 5 )
-            NETGEN_2D_Parameters_FarField.SetGrowthRate( Growth_Rate_Far_Field )
-            NETGEN_2D_Parameters_FarField.SetMinSize( Smallest_Airfoil_Mesh_Size )
-            NETGEN_2D_Parameters_FarField.SetUseSurfaceCurvature( 1 )
-            NETGEN_2D_Parameters_FarField.SetQuadAllowed( 0 )
-            NETGEN_2D_Parameters_FarField.SetSecondOrder( 106 )
-            NETGEN_2D_Parameters_FarField.SetFuseEdges( 80 )
-
-            import time as time
-            print(' Starting meshing ')
-            start_time = time.time()
-            # Compute mesh
-            isDone = Mesh_Domain.Compute()
-            exe_time = time.time() - start_time
-            print(' Mesh execution took ', str(round(exe_time, 2)), ' sec')
-            print(' Mesh execution took ' + str(round(exe_time/60, 2)) + ' min')
-
-            NumberOfNodes = Mesh_Domain.NbNodes()
-            NumberOfElements = Mesh_Domain.NbTetras()
-            print(' Information about volume mesh:')
-            print(' Number of nodes       :', NumberOfNodes)
-            print(' Number of elements    :', NumberOfElements)
-
-            fluid_path = salome_output_path + '/Mesh_Domain_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
-
-            far_field_path = salome_output_path + '/Sub-mesh_FarField_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
-
-            body_surface_path = salome_output_path + '/Sub-mesh_Wing_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
-
-            te_path = salome_output_path + '/Sub-mesh_TE_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
-
-            # Export data files
-            try:
-              Mesh_Domain.ExportDAT( r'/' + fluid_path )
-              pass
-            except:
-              print 'ExportDAT() failed. Invalid file name?'
-            try:
-              Mesh_Domain.ExportDAT( r'/' + body_surface_path, Sub_mesh_Wing_Surface )
-              pass
-            except:
-              print 'ExportPartToDAT() failed. Invalid file name?'
-            try:
-              Mesh_Domain.ExportDAT( r'/' + far_field_path, Sub_mesh_Far_Field_Surface )
-              pass
-            except:
-              print 'ExportPartToDAT() failed. Invalid file name?'
-            try:
-              Mesh_Domain.ExportDAT( r'/' + te_path, Sub_mesh_TE_Surface )
-              pass
-            except:
-              print 'ExportPartToDAT() failed. Invalid file name?'
-
-            # Mesh wake and export STL
-            Mesh_Wake_Surface = smesh.Mesh(Extrusion_Wake_stl)
-            status = Mesh_Wake_Surface.AddHypothesis(NETGEN_2D_Parameters_FarField)
-            NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
-            isDone = Mesh_Wake_Surface.Compute()
-            wake_path = mdpa_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
-              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
-                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.stl'
-            try:
-                Mesh_Wake_Surface.ExportSTL( wake_path, 1 )
-                pass
-            except:
-                print 'ExportSTL() failed. Invalid file name?'
-
-            # Set names of Mesh objects
-            smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
-            smesh.SetName(NETGEN_3D_Parameters, 'NETGEN_3D_Parameters')
-            smesh.SetName(Mesh_Domain.GetMesh(), 'Mesh_Domain')
-
-            smesh.SetName(Regular_1D_4.GetAlgorithm(), 'Regular_1D_4')
-            smesh.SetName(Local_Length_LE, 'Local_Length_LE')
-            smesh.SetName(Sub_mesh_LE, 'Sub_mesh_LE')
-
-            smesh.SetName(Regular_1D_3.GetAlgorithm(), 'Regular_1D_3')
-            smesh.SetName(Local_Length_TE, 'Local_Length_TE')
-            smesh.SetName(Sub_mesh_TE, 'Sub_mesh_TE')
-
-            smesh.SetName(Regular_1D_5.GetAlgorithm(), 'Regular_1D_5')
-            smesh.SetName(Local_Length_Middle, 'Local_Length_Middle')
-            smesh.SetName(Sub_mesh_Middle, 'Sub_mesh_Middle')
-
-            smesh.SetName(Regular_1D_1.GetAlgorithm(), 'Regular_1D_1')
-            smesh.SetName(Start_and_End_Length_LE, 'Start_and_End_Length_LE')
-            smesh.SetName(Sub_mesh_LE_Airfoils, 'Sub_mesh_LE_Airfoils')
-
-            smesh.SetName(Regular_1D_2.GetAlgorithm(), 'Regular_1D_2')
-            smesh.SetName(Start_and_End_Length_TE, 'Start_and_End_Length_TE')
-            smesh.SetName(Sub_mesh_TE_Airfoils, 'Sub_mesh_TE_Airfoils')
-
-            smesh.SetName(NETGEN_2D.GetAlgorithm(), 'NETGEN_2D')
-            smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
-            smesh.SetName(Sub_mesh_Wing_Surface, 'Sub-mesh_Wing_Surface')
-
-            smesh.SetName(Regular_1D.GetAlgorithm(), 'Regular_1D')
-            smesh.SetName(Local_Length_Far_Field, 'Local_Length_Far_Field')
-            smesh.SetName(Sub_mesh_Far_Field_Edges, 'Sub_mesh_Far_Field_Edges')
-
-            smesh.SetName(NETGEN_2D_Far_Field.GetAlgorithm(), 'NETGEN_2D_Far_Field')
-            smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN_2D_Parameters_FarField')
-            smesh.SetName(Sub_mesh_Far_Field_Surface, 'Sub_mesh_Far_Field_Surface')
-
-            smesh.SetName(NETGEN_1D_2D_2.GetAlgorithm(), 'NETGEN_1D_2D_2')
-            smesh.SetName(Mesh_Wake_Surface, 'Mesh_Wake_Surface')
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_123, 'Edge_123' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_124, 'Edge_124' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_125, 'Edge_125' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_126, 'Edge_126' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_127, 'Edge_127' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_128, 'Edge_128' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_129, 'Edge_129' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_130, 'Edge_130' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_131, 'Edge_131' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_132, 'Edge_132' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_133, 'Edge_133' )
+            geompy.addToStudyInFather( Face_Down_Wall, Edge_134, 'Edge_134' )
+            geompy.addToStudyInFather( Face_Down_Wall, Edge_135, 'Edge_135' )
+            geompy.addToStudyInFather( Face_Down_Wall, Edge_136, 'Edge_136' )
+            geompy.addToStudyInFather( Face_Down_Wall, Edge_137, 'Edge_137' )
+            geompy.addToStudyInFather( Face_Top_Wall, Edge_138, 'Edge_138' )
+            geompy.addToStudyInFather( Face_Top_Wall, Edge_139, 'Edge_139' )
+            geompy.addToStudyInFather( Face_Top_Wall, Edge_140, 'Edge_140' )
+            geompy.addToStudyInFather( Face_Top_Wall, Edge_141, 'Edge_141' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_142, 'Edge_142' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_143, 'Edge_143' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_144, 'Edge_144' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_145, 'Edge_145' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_146, 'Edge_146' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_147, 'Edge_147' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_148, 'Edge_148' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_149, 'Edge_149' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_150, 'Edge_150' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_151, 'Edge_151' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_152, 'Edge_152' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_153, 'Edge_153' )
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_154, 'Edge_154' )
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_155, 'Edge_155' )
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_156, 'Edge_156' )
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_157, 'Edge_157' )
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_158, 'Edge_158' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_159, 'Edge_159' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_160, 'Edge_160' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_161, 'Edge_161' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_up, Edge_162, 'Edge_162' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_up, Edge_163, 'Edge_163' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_up, Edge_164, 'Edge_164' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_165, 'Edge_165' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_166, 'Edge_166' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_167, 'Edge_167' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_168, 'Edge_168' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_169, 'Edge_169' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_170, 'Edge_170' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_171, 'Edge_171' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_172, 'Edge_172' )
+            geompy.addToStudyInFather( Face_Right, Edge_173, 'Edge_173' )
+            geompy.addToStudyInFather( Face_Right, Edge_174, 'Edge_174' )
+            geompy.addToStudyInFather( Face_Right, Edge_175, 'Edge_175' )
+            geompy.addToStudyInFather( Face_Right, Edge_176, 'Edge_176' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_177, 'Edge_177' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_178, 'Edge_178' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_179, 'Edge_179' )
+            geompy.addToStudyInFather( Face_Outlet, Edge_180, 'Edge_180' )
 
             # Saving file to open from salome's gui
-            if separating_domains:
-                file_name = salome_output_path + "/generate_finite_wing_sections_box_separating.hdf"
-                salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
-            else:
-                file_name = salome_output_path + "/generate_finite_wing_sections_box_together.hdf"
-                salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
+            file_name = salome_output_path + "/generate_finite_wing_sections_box_separating.hdf"
+            salome.myStudyManager.SaveAs(file_name, salome.myStudy, 0)
 
             # with open('case/results_3d_finite_wing.dat', 'a+') as file:
             #   file.write('\n{0:5.0f} {1:5.0f} {2:10.0f} {3:10.4f} {4:10.3f} {5:10.0f} {6:10.2f} {7:10.2f} {8:15.1e} {9:15.1e} {10:10.1f}'.format(
