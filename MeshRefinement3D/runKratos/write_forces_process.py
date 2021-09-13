@@ -313,7 +313,7 @@ class WriteForcesProcess(ComputeLiftProcess):
         self.ufc = self.fluid_model_part.ProcessInfo[CPFApp.UPWIND_FACTOR_CONSTANT]
         self.cm = self.fluid_model_part.ProcessInfo[CPFApp.CRITICAL_MACH]
         self.step = self.fluid_model_part.ProcessInfo[KratosMultiphysics.STEP]
-        if self.reference_case_name == "ONERA" and self.mach > 0.83 and self.ufc < 2.1:
+        if self.reference_case_name == "ONERA":# and self.mach > 0.83 and self.ufc < 2.1:
             print('mach number = ', self.mach)
             print('upwinding_factor_constant = ', self.ufc)
             print('critical_mach = ', self.cm)
@@ -333,7 +333,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10)) + '_step_' + str(round(self.step))
                 section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/100.0 * wing_span
-                CPFApp.FindCutSkinEntitiesProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
+                CPFApp.ComputeWingSectionVariableProcess(self.body_model_part, section_model_part, plane_normal, origin).Execute()
 
                 # number_of_nodes = section_model_part.NumberOfNodes()
                 # print('number_of_nodes = ', number_of_nodes)
