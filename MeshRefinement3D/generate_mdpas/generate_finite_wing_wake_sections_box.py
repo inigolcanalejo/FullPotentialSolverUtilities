@@ -8,9 +8,9 @@ import killSalome
 import math
 
 # Parameters:
-Domain_Length = 200
+Domain_Length = 1000
 Domain_Height = Domain_Length
-Domain_Width = 200
+Domain_Width = 1000
 wake_angle_deg = 0.0
 
 Smallest_Airfoil_Mesh_Size = TBD
@@ -157,20 +157,53 @@ for k in range(Number_Of_AOAS):
             [Obj1,Obj2,Edge_197,Obj3,Edge_199,Edge_1100] = geompy.ExtractShapes(Face_crm_fuselage_ring_down, geompy.ShapeType         ["EDGE"], True)
             [Obj1,Obj2,Obj3,Edge_1104] = geompy.ExtractShapes(Face_crm_fuselage_ring_middle, geompy.ShapeType["EDGE"], True)
 
-            # Wing
+            # Wing tip
             [Obj1,Obj2,Obj3,Edge_wing_tip_te1] = geompy.ExtractShapes(Face_crm_wing_te, geompy.ShapeType["EDGE"], True)
             [Obj1,Edge_wing_tip_middle_le,Obj2,Edge_wing_tip_middle_te,Edge_wing_tip_te2] = geompy.ExtractShapes(Face_crm_wing_tip_down, geompy.ShapeType["EDGE"], True)
             [Obj1,Obj2,Obj3,Obj4,Edge_wing_tip_te3] = geompy.ExtractShapes(Face_crm_wing_tip_up, geompy.ShapeType["EDGE"], True)
             [Edge_1119,Obj1,Obj2,Obj3] = geompy.ExtractShapes(Face_crm_wing_tip_te, geompy.ShapeType["EDGE"], True)
 
-            [Edge_123,Edge_124,Edge_125,Edge_126,Edge_127,Edge_128,Edge_129,Edge_130,Edge_131,Edge_132,Edge_133] = geompy.ExtractShapes         (Face_crm_fuselage_back, geompy.ShapeType["EDGE"], True)
-            [Edge_142,Edge_143,Edge_144,Edge_145,Edge_146,Edge_147] = geompy.ExtractShapes(Face_crm_tail_down, geompy.ShapeType["EDGE"],            True)
-            [Edge_148,Edge_149,Edge_150,Edge_151,Edge_152,Edge_153] = geompy.ExtractShapes(Face_crm_tail_up, geompy.ShapeType["EDGE"],          True)
-            [Edge_154,Edge_155,Edge_156,Edge_157,Edge_158] = geompy.ExtractShapes(Face_crm_tail_te, geompy.ShapeType["EDGE"], True)
-            [Edge_159,Edge_160,Edge_161] = geompy.ExtractShapes(Face_crm_tail_tip_le_down, geompy.ShapeType["EDGE"], True)
-            [Edge_162,Edge_163,Edge_164] = geompy.ExtractShapes(Face_crm_tail_tip_le_up, geompy.ShapeType["EDGE"], True)
-            [Edge_165,Edge_166,Edge_167,Edge_168] = geompy.ExtractShapes(Face_crm_tail_tip_te_down, geompy.ShapeType["EDGE"], True)
-            [Edge_169,Edge_170,Edge_171,Edge_172] = geompy.ExtractShapes(Face_crm_tail_tip_te_up, geompy.ShapeType["EDGE"], True)
+            # Fuselage back
+            [Obj1,Obj2,Obj3,Edge_1126,Edge_1127,Obj4,Obj5,Obj6,Obj7,Obj8,Edge_1133] = geompy.ExtractShapes         (Face_crm_fuselage_back, geompy.ShapeType["EDGE"], True)
+
+            # Tail
+            [Edge_tail_root_down_le,Edge_tail_root_down_te,Edge_tail_le,Edge_tail_te_down,Edge_tail_tip_down_le,Edge_tail_tip_down_te] = geompy.ExtractShapes(Face_crm_tail_down, geompy.ShapeType["EDGE"],            True)
+            [Edge_tail_root_up_le,Edge_tail_root_up_te,Obj1,Edge_tail_te_up,Edge_tail_tip_up_le,Edge_tail_tip_up_te] = geompy.ExtractShapes(Face_crm_tail_up, geompy.ShapeType["EDGE"],          True)
+            [Edge_tail_root_te,Obj1,Obj2,Edge_tail_tip_te_down,Edge_tail_tip_te_up] = geompy.ExtractShapes(Face_crm_tail_te, geompy.ShapeType["EDGE"], True)
+
+            # Tail tip
+            [Obj1,Edge_tail_tip_middle_le,Edge_tail_tip_middle_down] = geompy.ExtractShapes(Face_crm_tail_tip_le_down, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Edge_tail_tip_middle_up] = geompy.ExtractShapes(Face_crm_tail_tip_le_up, geompy.ShapeType["EDGE"], True)
+            [Obj1,Obj2,Edge_tail_tip_middle_te,Obj3] = geompy.ExtractShapes(Face_crm_tail_tip_te_down, geompy.ShapeType["EDGE"], True)
+
+            # Making groups for submeshes
+            # LE and TE edges
+            Auto_group_for_Sub_mesh_LE_TE_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_LE_TE_Edges, [Edge_wing_root_le,Edge_wing_root_te_down,Edge_wing_root_te_up,Edge_root_te_down,Edge_root_te_up,Edge_wing_middle_te,Edge_wing_le,Edge_wing_te_down,Edge_wing_te_up,Edge_wing_tip_te1,Edge_wing_tip_te2,Edge_wing_tip_te3,Edge_1119,Edge_tail_le,Edge_tail_te_down,Edge_tail_te_up,Edge_tail_root_te,Edge_tail_tip_te_down,Edge_tail_tip_te_up])
+
+            # Airfoils' edges
+            Auto_group_for_Sub_mesh_Airfoil_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Airfoil_Edges, [Edge_wing_root_down_le,Edge_wing_middle_down_le,Edge_wing_root_down_te,Edge_wing_middle_down_te,Edge_wing_root_up_le,Edge_wing_middle_up_le,Edge_wing_root_up_te,Edge_wing_middle_up_te,Edge_tail_root_down_le,Edge_tail_root_down_te,Edge_tail_root_up_le,Edge_tail_root_up_te])
+
+            # Tip airfoils' edges
+            Auto_group_for_Sub_mesh_Tip_Airfoil_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Tip_Airfoil_Edges, [Edge_wing_tip_down_le,Edge_wing_tip_down_te,Edge_wing_tip_up_le,Edge_wing_tip_up_te,Edge_tail_tip_down_le,Edge_tail_tip_down_te,Edge_tail_tip_up_le,Edge_tail_tip_up_te,Edge_tail_tip_middle_le,Edge_tail_tip_middle_te,Edge_wing_tip_middle_le,Edge_wing_tip_middle_te])
+
+            # Tip middle edges
+            Auto_group_for_Sub_mesh_Tip_Middle_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Tip_Middle_Edges, [Edge_tail_tip_middle_down,Edge_tail_tip_middle_up])
+
+            # Wing and tail surfaces
+            Auto_group_for_Sub_mesh_Wing_Tail_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Tail_Surfaces, [Face_crm_wing_root_down,Face_crm_wing_root_up,Face_crm_wing_down,Face_crm_wing_up,Face_crm_tail_down,Face_crm_tail_up])
+
+            # Trailing edge surfaces
+            Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces, [Face_crm_wing_tip_down,Face_crm_wing_tip_up,Face_crm_tail_tip_le_down,Face_crm_tail_tip_le_up,Face_crm_tail_tip_te_down,Face_crm_tail_tip_te_up])
+
+            # Trailing edge surfaces
+            Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces, [Face_crm_wing_root_te,Face_crm_wing_te,Face_crm_wing_tip_te,Face_crm_tail_te])
 
             exe_time = time.time() - start_time
             print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
@@ -311,64 +344,169 @@ for k in range(Number_Of_AOAS):
 
             geompy.addToStudyInFather( Face_crm_wing_tip_te, Edge_1119, 'Edge_1119' )
 
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_123, 'Edge_123' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_124, 'Edge_124' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_125, 'Edge_125' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_126, 'Edge_126' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_127, 'Edge_127' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_128, 'Edge_128' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_129, 'Edge_129' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_130, 'Edge_130' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_131, 'Edge_131' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_132, 'Edge_132' )
-            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_133, 'Edge_133' )
-            geompy.addToStudyInFather( Face_Down_Wall, Edge_134, 'Edge_134' )
-            geompy.addToStudyInFather( Face_Down_Wall, Edge_135, 'Edge_135' )
-            geompy.addToStudyInFather( Face_Down_Wall, Edge_136, 'Edge_136' )
-            geompy.addToStudyInFather( Face_Down_Wall, Edge_137, 'Edge_137' )
-            geompy.addToStudyInFather( Face_Top_Wall, Edge_138, 'Edge_138' )
-            geompy.addToStudyInFather( Face_Top_Wall, Edge_139, 'Edge_139' )
-            geompy.addToStudyInFather( Face_Top_Wall, Edge_140, 'Edge_140' )
-            geompy.addToStudyInFather( Face_Top_Wall, Edge_141, 'Edge_141' )
-            geompy.addToStudyInFather( Face_crm_tail_down, Edge_142, 'Edge_142' )
-            geompy.addToStudyInFather( Face_crm_tail_down, Edge_143, 'Edge_143' )
-            geompy.addToStudyInFather( Face_crm_tail_down, Edge_144, 'Edge_144' )
-            geompy.addToStudyInFather( Face_crm_tail_down, Edge_145, 'Edge_145' )
-            geompy.addToStudyInFather( Face_crm_tail_down, Edge_146, 'Edge_146' )
-            geompy.addToStudyInFather( Face_crm_tail_down, Edge_147, 'Edge_147' )
-            geompy.addToStudyInFather( Face_crm_tail_up, Edge_148, 'Edge_148' )
-            geompy.addToStudyInFather( Face_crm_tail_up, Edge_149, 'Edge_149' )
-            geompy.addToStudyInFather( Face_crm_tail_up, Edge_150, 'Edge_150' )
-            geompy.addToStudyInFather( Face_crm_tail_up, Edge_151, 'Edge_151' )
-            geompy.addToStudyInFather( Face_crm_tail_up, Edge_152, 'Edge_152' )
-            geompy.addToStudyInFather( Face_crm_tail_up, Edge_153, 'Edge_153' )
-            geompy.addToStudyInFather( Face_crm_tail_te, Edge_154, 'Edge_154' )
-            geompy.addToStudyInFather( Face_crm_tail_te, Edge_155, 'Edge_155' )
-            geompy.addToStudyInFather( Face_crm_tail_te, Edge_156, 'Edge_156' )
-            geompy.addToStudyInFather( Face_crm_tail_te, Edge_157, 'Edge_157' )
-            geompy.addToStudyInFather( Face_crm_tail_te, Edge_158, 'Edge_158' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_159, 'Edge_159' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_160, 'Edge_160' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_161, 'Edge_161' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_le_up, Edge_162, 'Edge_162' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_le_up, Edge_163, 'Edge_163' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_le_up, Edge_164, 'Edge_164' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_165, 'Edge_165' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_166, 'Edge_166' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_167, 'Edge_167' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_168, 'Edge_168' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_169, 'Edge_169' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_170, 'Edge_170' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_171, 'Edge_171' )
-            geompy.addToStudyInFather( Face_crm_tail_tip_te_up, Edge_172, 'Edge_172' )
-            geompy.addToStudyInFather( Face_Right, Edge_173, 'Edge_173' )
-            geompy.addToStudyInFather( Face_Right, Edge_174, 'Edge_174' )
-            geompy.addToStudyInFather( Face_Right, Edge_175, 'Edge_175' )
-            geompy.addToStudyInFather( Face_Right, Edge_176, 'Edge_176' )
-            geompy.addToStudyInFather( Face_Outlet, Edge_177, 'Edge_177' )
-            geompy.addToStudyInFather( Face_Outlet, Edge_178, 'Edge_178' )
-            geompy.addToStudyInFather( Face_Outlet, Edge_179, 'Edge_179' )
-            geompy.addToStudyInFather( Face_Outlet, Edge_180, 'Edge_180' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_1126, 'Edge_1126' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_1127, 'Edge_1127' )
+            geompy.addToStudyInFather( Face_crm_fuselage_back, Edge_1133, 'Edge_1133' )
+
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_tail_root_down_le, 'Edge_tail_root_down_le' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_tail_root_down_te, 'Edge_tail_root_down_te' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_tail_le, 'Edge_tail_le' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_tail_te_down, 'Edge_tail_te_down' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_tail_tip_down_le, 'Edge_tail_tip_down_le' )
+            geompy.addToStudyInFather( Face_crm_tail_down, Edge_tail_tip_down_te, 'Edge_tail_tip_down_te' )
+
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_tail_root_up_le, 'Edge_tail_root_up_le' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_tail_root_up_te, 'Edge_tail_root_up_te' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_tail_te_up, 'Edge_tail_te_up' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_tail_tip_up_le, 'Edge_tail_tip_up_le' )
+            geompy.addToStudyInFather( Face_crm_tail_up, Edge_tail_tip_up_te, 'Edge_tail_tip_up_te' )
+
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_tail_root_te, 'Edge_tail_root_te' )
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_tail_tip_te_down, 'Edge_tail_tip_te_down' )
+            geompy.addToStudyInFather( Face_crm_tail_te, Edge_tail_tip_te_up, 'Edge_tail_tip_te_up' )
+
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_tail_tip_middle_le, 'Edge_tail_tip_middle_le' )
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_down, Edge_tail_tip_middle_down, 'Edge_tail_tip_middle_down' )
+
+            geompy.addToStudyInFather( Face_crm_tail_tip_le_up, Edge_tail_tip_middle_up, 'Edge_tail_tip_middle_up' )
+
+            geompy.addToStudyInFather( Face_crm_tail_tip_te_down, Edge_tail_tip_middle_te, 'Edge_tail_tip_middle_te' )
+
+            # Groups
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_LE_TE_Edges, 'Auto_group_for_Sub_mesh_LE_TE_Edges' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Airfoil_Edges, 'Auto_group_for_Sub_mesh_Airfoil_Edges' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Tip_Airfoil_Edges, 'Auto_group_for_Sub_mesh_Tip_Airfoil_Edges' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Tip_Middle_Edges, 'Auto_group_for_Sub_mesh_Tip_Middle_Edges' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Wing_Tail_Surfaces, 'Auto_group_for_Sub_mesh_Wing_Tail_Surfaces' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces, 'Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces, 'Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces' )
+
+            ###
+            ### SMESH component
+            ###
+
+            import  SMESH, SALOMEDS
+            from salome.smesh import smeshBuilder
+
+            smesh = smeshBuilder.New(theStudy)
+
+            # Set NETGEN 3D
+            Mesh_Domain = smesh.Mesh(nasa_crm_igs)
+
+            NETGEN_3D = Mesh_Domain.Tetrahedron()
+            NETGEN_3D_Parameters = NETGEN_3D.Parameters()
+            NETGEN_3D_Parameters.SetMaxSize( Far_Field_Mesh_Size )
+            NETGEN_3D_Parameters.SetOptimize( 1 )
+            NETGEN_3D_Parameters.SetFineness( 5 )
+            NETGEN_3D_Parameters.SetGrowthRate( Growth_Rate_Domain )
+            NETGEN_3D_Parameters.SetNbSegPerEdge( 3 )
+            NETGEN_3D_Parameters.SetNbSegPerRadius( 5 )
+            NETGEN_3D_Parameters.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_3D_Parameters.SetUseSurfaceCurvature( 0 )
+            NETGEN_3D_Parameters.SetSecondOrder( 106 )
+            NETGEN_3D_Parameters.SetFuseEdges( 80 )
+            NETGEN_3D_Parameters.SetQuadAllowed( 127 )
+
+            # Leading and trailing edges
+            Regular_1D_LE_TE = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_LE_TE_Edges)
+            Sub_mesh_LE_TE = Regular_1D_LE_TE.GetSubMesh()
+            Local_Length_LE_TE = Regular_1D_LE_TE.LocalLength(Smallest_Airfoil_Mesh_Size,None,1e-07)
+
+            # Airfoils
+            Regular_1D_Airfoils = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Airfoil_Edges)
+            Start_and_End_Length_Airfoils = Regular_1D_Airfoils.StartEndLength(Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size,[Edge_wing_root_down_te,Edge_wing_middle_down_te,Edge_wing_root_up_le,Edge_wing_middle_up_le,Edge_tail_root_down_te,Edge_tail_root_up_le,Edge_tail_root_up_te])
+            Start_and_End_Length_Airfoils.SetObjectEntry( 'nasa_crm_igs' )
+            Sub_mesh_Airfoils = Regular_1D_Airfoils.GetSubMesh()
+
+            # Wing and tail tip airfoils
+            Regular_1D_Tip_Airfoils = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Tip_Airfoil_Edges)
+            Start_and_End_Length_Tip_Airfoils = Regular_1D_Tip_Airfoils.StartEndLength(Smallest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size*5.0,[Edge_wing_tip_down_te,Edge_wing_tip_up_le,Edge_tail_tip_up_le,Edge_tail_tip_down_te,Edge_tail_tip_middle_le,Edge_wing_tip_middle_te])
+            Start_and_End_Length_Airfoils.SetObjectEntry( 'nasa_crm_igs' )
+            Sub_mesh_Tip_Airfoils = Regular_1D_Tip_Airfoils.GetSubMesh()
+
+            # Tail tip middle airfoils
+            Regular_1D_Middle_Tip_Edges = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Tip_Middle_Edges)
+            Sub_mesh_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.GetSubMesh()
+            Local_Length_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.LocalLength(Smallest_Airfoil_Mesh_Size*5.0,None,1e-07)
+
+            # Wing surface
+            NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Tail_Surfaces)
+            NETGEN_2D_Parameters_Wing = NETGEN_2D.Parameters()
+            NETGEN_2D_Parameters_Wing.SetMaxSize( Biggest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Wing.SetFineness( 5 )
+            NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wing )
+            NETGEN_2D_Parameters_Wing.SetNbSegPerEdge( 6.92154e-310 )
+            NETGEN_2D_Parameters_Wing.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Wing.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Wing.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Wing.SetSecondOrder( 106 )
+            NETGEN_2D_Parameters_Wing.SetFuseEdges( 80 )
+            Sub_mesh_Wing_Surface = NETGEN_2D.GetSubMesh()
+
+            NETGEN_2D_Tip = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces)
+            NETGEN_2D_Parameters_Wing_Tip = NETGEN_2D_Tip.Parameters()
+            NETGEN_2D_Parameters_Wing_Tip.SetMaxSize( Smallest_Airfoil_Mesh_Size*5.0 )
+            NETGEN_2D_Parameters_Wing_Tip.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Wing_Tip.SetFineness( 5 )
+            NETGEN_2D_Parameters_Wing_Tip.SetGrowthRate( Growth_Rate_Wing )
+            NETGEN_2D_Parameters_Wing_Tip.SetNbSegPerEdge( 6.92154e-310 )
+            NETGEN_2D_Parameters_Wing_Tip.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Wing_Tip.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Tip.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Wing_Tip.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Wing_Tip.SetSecondOrder( 106 )
+            NETGEN_2D_Parameters_Wing_Tip.SetFuseEdges( 80 )
+            Sub_mesh_Wing_Tip_Surface = NETGEN_2D_Tip.GetSubMesh()
+
+            NETGEN_2D_Trailing_Edges = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces)
+            NETGEN_2D_Parameters_Trailing_Edges = NETGEN_2D_Trailing_Edges.Parameters()
+            NETGEN_2D_Parameters_Trailing_Edges.SetMaxSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Trailing_Edges.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Trailing_Edges.SetFineness( 5 )
+            NETGEN_2D_Parameters_Trailing_Edges.SetGrowthRate( Growth_Rate_Wing )
+            NETGEN_2D_Parameters_Trailing_Edges.SetNbSegPerEdge( 6.92154e-310 )
+            NETGEN_2D_Parameters_Trailing_Edges.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Trailing_Edges.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Trailing_Edges.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Trailing_Edges.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Trailing_Edges.SetSecondOrder( 106 )
+            NETGEN_2D_Parameters_Trailing_Edges.SetFuseEdges( 80 )
+            Sub_mesh_Trailing_Edge_Surface = NETGEN_2D_Trailing_Edges.GetSubMesh()
+
+            ## Set names of Mesh objects
+            smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
+            smesh.SetName(NETGEN_3D_Parameters, 'NETGEN_3D_Parameters')
+            smesh.SetName(Mesh_Domain.GetMesh(), 'Mesh_Domain')
+
+            smesh.SetName(Regular_1D_LE_TE.GetAlgorithm(), 'Regular_1D_LE_TE')
+            smesh.SetName(Local_Length_LE_TE, 'Local_Length_LE_TE')
+            smesh.SetName(Sub_mesh_LE_TE, 'Sub_mesh_LE_TE')
+
+            smesh.SetName(Regular_1D_Airfoils.GetAlgorithm(), 'Regular_1D_Airfoils')
+            smesh.SetName(Start_and_End_Length_Airfoils, 'Start_and_End_Length_Airfoils')
+            smesh.SetName(Sub_mesh_Airfoils, 'Sub_mesh_Airfoils')
+
+            smesh.SetName(Regular_1D_Tip_Airfoils.GetAlgorithm(), 'Regular_1D_Tip_Airfoils')
+            smesh.SetName(Start_and_End_Length_Tip_Airfoils, 'Start_and_End_Length_Tip_Airfoils')
+            smesh.SetName(Sub_mesh_Tip_Airfoils, 'Sub_mesh_Tip_Airfoils')
+
+            smesh.SetName(Regular_1D_Middle_Tip_Edges.GetAlgorithm(), 'Regular_1D_Middle_Tip_Edges')
+            smesh.SetName(Local_Length_Middle_Tip_Edges, 'Local_Length_Middle_Tip_Edges')
+            smesh.SetName(Sub_mesh_Middle_Tip_Edges, 'Sub_mesh_Middle_Tip_Edges')
+
+            smesh.SetName(NETGEN_2D.GetAlgorithm(), 'NETGEN_2D')
+            smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
+            smesh.SetName(Sub_mesh_Wing_Surface, 'Sub-mesh_Wing_Surface')
+
+            smesh.SetName(NETGEN_2D_Tip.GetAlgorithm(), 'NETGEN_2D_Tip')
+            smesh.SetName(NETGEN_2D_Parameters_Wing_Tip, 'NETGEN_2D_Parameters_Wing_Tip')
+            smesh.SetName(Sub_mesh_Wing_Tip_Surface, 'Sub_mesh_Wing_Tip_Surface')
+
+            smesh.SetName(NETGEN_2D_Trailing_Edges.GetAlgorithm(), 'NETGEN_2D_Trailing_Edges')
+            smesh.SetName(NETGEN_2D_Parameters_Trailing_Edges, 'NETGEN_2D_Parameters_Trailing_Edges')
+            smesh.SetName(Sub_mesh_Trailing_Edge_Surface, 'Sub_mesh_Trailing_Edge_Surface')
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_finite_wing_sections_box_separating.hdf"
