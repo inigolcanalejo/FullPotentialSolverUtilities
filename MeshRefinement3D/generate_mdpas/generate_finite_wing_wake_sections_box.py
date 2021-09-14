@@ -15,6 +15,8 @@ wake_angle_deg = 0.0
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
+Wing_Tip_Mesh_Size = Smallest_Airfoil_Mesh_Size# * 5.0
+Root_Mesh_Size = Biggest_Airfoil_Mesh_Size * 0.5
 LE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 TE_Mesh_Size = Smallest_Airfoil_Mesh_Size
 Far_Field_Mesh_Size = Domain_Length/20.0
@@ -211,7 +213,7 @@ for k in range(Number_Of_AOAS):
 
             # Fuselage surfaces
             Auto_group_for_Sub_mesh_Fuselage_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Surfaces, [Face_crm_cockpit])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Surfaces, [Face_crm_fuselage_root])
 
             #Face_crm_cockpit,Face_crm_fuselage_middle_down,Face_crm_fuselage_middle_middle,Face_crm_fuselage_middle_up,Face_crm_fuselage_root_down,Face_crm_fuselage_root_up,Face_crm_fuselage_root,Face_crm_fuselage_ring_up,Face_crm_fuselage_ring_down,Face_crm_fuselage_ring_middle,Face_crm_fuselage_back
 
@@ -433,23 +435,23 @@ for k in range(Number_Of_AOAS):
 
             # Wing and tail tip airfoils
             Regular_1D_Tip_Airfoils = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Tip_Airfoil_Edges)
-            Start_and_End_Length_Tip_Airfoils = Regular_1D_Tip_Airfoils.StartEndLength(Smallest_Airfoil_Mesh_Size,Smallest_Airfoil_Mesh_Size*5.0,[Edge_wing_tip_down_te,Edge_wing_tip_up_le,Edge_tail_tip_up_le,Edge_tail_tip_down_te,Edge_tail_tip_middle_le,Edge_wing_tip_middle_te])
+            Start_and_End_Length_Tip_Airfoils = Regular_1D_Tip_Airfoils.StartEndLength(Smallest_Airfoil_Mesh_Size,Wing_Tip_Mesh_Size,[Edge_wing_tip_down_te,Edge_wing_tip_up_le,Edge_tail_tip_up_le,Edge_tail_tip_down_te,Edge_tail_tip_middle_le,Edge_wing_tip_middle_te])
             Start_and_End_Length_Airfoils.SetObjectEntry( 'nasa_crm_igs' )
             Sub_mesh_Tip_Airfoils = Regular_1D_Tip_Airfoils.GetSubMesh()
 
             # Tail tip middle airfoils
             Regular_1D_Middle_Tip_Edges = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Tip_Middle_Edges)
             Sub_mesh_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.GetSubMesh()
-            Local_Length_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.LocalLength(Smallest_Airfoil_Mesh_Size*5.0,None,1e-07)
+            Local_Length_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.LocalLength(Wing_Tip_Mesh_Size,None,1e-07)
 
             # Fuselage edges
             Regular_1D_Fuselage = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Fuselage_Edges)
             Sub_mesh_Fuselage_Edges = Regular_1D_Fuselage.GetSubMesh()
-            Local_Length_Fuselage = Regular_1D_Fuselage.LocalLength(Biggest_Airfoil_Mesh_Size*10.0,None,1e-07)
+            Local_Length_Fuselage = Regular_1D_Fuselage.LocalLength(Root_Mesh_Size,None,1e-07)
 
             # Fuselage 143 Edge
             Regular_1D_Fuselage_143_Edge = Mesh_Domain.Segment(geom=Edge_143)
-            Start_and_End_Length_Fuselage_143_Edge = Regular_1D_Fuselage_143_Edge.StartEndLength(Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size*10.0,[])
+            Start_and_End_Length_Fuselage_143_Edge = Regular_1D_Fuselage_143_Edge.StartEndLength(0.005,Root_Mesh_Size,[])
             Start_and_End_Length_Fuselage_143_Edge.SetObjectEntry( 'nasa_crm_igs' )
             Sub_mesh_Fuselage_143_Edge = Regular_1D_Fuselage_143_Edge.GetSubMesh()
 
@@ -471,7 +473,7 @@ for k in range(Number_Of_AOAS):
 
             NETGEN_2D_Tip = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces)
             NETGEN_2D_Parameters_Wing_Tip = NETGEN_2D_Tip.Parameters()
-            NETGEN_2D_Parameters_Wing_Tip.SetMaxSize( Smallest_Airfoil_Mesh_Size*5.0 )
+            NETGEN_2D_Parameters_Wing_Tip.SetMaxSize( Wing_Tip_Mesh_Size )
             NETGEN_2D_Parameters_Wing_Tip.SetOptimize( 1 )
             NETGEN_2D_Parameters_Wing_Tip.SetFineness( 5 )
             NETGEN_2D_Parameters_Wing_Tip.SetGrowthRate( Growth_Rate_Wing )
@@ -501,13 +503,13 @@ for k in range(Number_Of_AOAS):
 
             NETGEN_2D_Fuselage = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Fuselage_Surfaces)
             NETGEN_2D_Parameters_Fuselage = NETGEN_2D_Fuselage.Parameters()
-            NETGEN_2D_Parameters_Fuselage.SetMaxSize( Biggest_Airfoil_Mesh_Size*10.0 )
+            NETGEN_2D_Parameters_Fuselage.SetMaxSize( Biggest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Fuselage.SetOptimize( 1 )
             NETGEN_2D_Parameters_Fuselage.SetFineness( 5 )
-            NETGEN_2D_Parameters_Fuselage.SetGrowthRate( Growth_Rate_Wing*4.0 )
+            NETGEN_2D_Parameters_Fuselage.SetGrowthRate( Growth_Rate_Wing*3.0 )
             NETGEN_2D_Parameters_Fuselage.SetNbSegPerEdge( 6.92154e-310 )
             NETGEN_2D_Parameters_Fuselage.SetNbSegPerRadius( 5.32336e-317 )
-            NETGEN_2D_Parameters_Fuselage.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Fuselage.SetMinSize( 0.005 )
             NETGEN_2D_Parameters_Fuselage.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_Fuselage.SetQuadAllowed( 0 )
             NETGEN_2D_Parameters_Fuselage.SetSecondOrder( 106 )
