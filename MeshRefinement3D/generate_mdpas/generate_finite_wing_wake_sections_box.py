@@ -205,6 +205,16 @@ for k in range(Number_Of_AOAS):
             Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces, [Face_crm_wing_root_te,Face_crm_wing_te,Face_crm_wing_tip_te,Face_crm_tail_te])
 
+            # Fuselage edges
+            Auto_group_for_Sub_mesh_Fuselage_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Edges, [Edge_105,Edge_106,Edge_107,Edge_108,Edge_109,Edge_110,Edge_112,Edge_113,Edge_114,Edge_115,Edge_118,Edge_119,Edge_121,Edge_123,Edge_125,Edge_126,Edge_127,Edge_129,Edge_130,Edge_131,Edge_140,Edge_144,Edge_145,Edge_146,Edge_192,Edge_193,Edge_194,Edge_197,Edge_199,Edge_1100,Edge_1104,Edge_1126,Edge_1127,Edge_1133])
+
+            # Fuselage surfaces
+            Auto_group_for_Sub_mesh_Fuselage_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Surfaces, [Face_crm_cockpit])
+
+            #Face_crm_cockpit,Face_crm_fuselage_middle_down,Face_crm_fuselage_middle_middle,Face_crm_fuselage_middle_up,Face_crm_fuselage_root_down,Face_crm_fuselage_root_up,Face_crm_fuselage_root,Face_crm_fuselage_ring_up,Face_crm_fuselage_ring_down,Face_crm_fuselage_ring_middle,Face_crm_fuselage_back
+
             exe_time = time.time() - start_time
             print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
             print(' Geometry execution took ' + str(round(exe_time/60, 2)) + ' min')
@@ -381,6 +391,9 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces, 'Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces' )
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces, 'Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces' )
 
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Fuselage_Edges, 'Auto_group_for_Sub_mesh_Fuselage_Edges' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Fuselage_Surfaces, 'Auto_group_for_Sub_mesh_Fuselage_Surfaces' )
+
             ###
             ### SMESH component
             ###
@@ -429,6 +442,17 @@ for k in range(Number_Of_AOAS):
             Sub_mesh_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.GetSubMesh()
             Local_Length_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.LocalLength(Smallest_Airfoil_Mesh_Size*5.0,None,1e-07)
 
+            # Fuselage edges
+            Regular_1D_Fuselage = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Fuselage_Edges)
+            Sub_mesh_Fuselage_Edges = Regular_1D_Fuselage.GetSubMesh()
+            Local_Length_Fuselage = Regular_1D_Fuselage.LocalLength(Biggest_Airfoil_Mesh_Size*10.0,None,1e-07)
+
+            # Fuselage 143 Edge
+            Regular_1D_Fuselage_143_Edge = Mesh_Domain.Segment(geom=Edge_143)
+            Start_and_End_Length_Fuselage_143_Edge = Regular_1D_Fuselage_143_Edge.StartEndLength(Smallest_Airfoil_Mesh_Size,Biggest_Airfoil_Mesh_Size*10.0,[])
+            Start_and_End_Length_Fuselage_143_Edge.SetObjectEntry( 'nasa_crm_igs' )
+            Sub_mesh_Fuselage_143_Edge = Regular_1D_Fuselage_143_Edge.GetSubMesh()
+
             # Wing surface
             NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Tail_Surfaces)
             NETGEN_2D_Parameters_Wing = NETGEN_2D.Parameters()
@@ -475,6 +499,21 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Trailing_Edges.SetFuseEdges( 80 )
             Sub_mesh_Trailing_Edge_Surface = NETGEN_2D_Trailing_Edges.GetSubMesh()
 
+            NETGEN_2D_Fuselage = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Fuselage_Surfaces)
+            NETGEN_2D_Parameters_Fuselage = NETGEN_2D_Fuselage.Parameters()
+            NETGEN_2D_Parameters_Fuselage.SetMaxSize( Biggest_Airfoil_Mesh_Size*10.0 )
+            NETGEN_2D_Parameters_Fuselage.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Fuselage.SetFineness( 5 )
+            NETGEN_2D_Parameters_Fuselage.SetGrowthRate( Growth_Rate_Wing*4.0 )
+            NETGEN_2D_Parameters_Fuselage.SetNbSegPerEdge( 6.92154e-310 )
+            NETGEN_2D_Parameters_Fuselage.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Fuselage.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Fuselage.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Fuselage.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Fuselage.SetSecondOrder( 106 )
+            NETGEN_2D_Parameters_Fuselage.SetFuseEdges( 80 )
+            Sub_mesh_Fuselage_Surface = NETGEN_2D_Fuselage.GetSubMesh()
+
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
             smesh.SetName(NETGEN_3D_Parameters, 'NETGEN_3D_Parameters')
@@ -496,6 +535,14 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Local_Length_Middle_Tip_Edges, 'Local_Length_Middle_Tip_Edges')
             smesh.SetName(Sub_mesh_Middle_Tip_Edges, 'Sub_mesh_Middle_Tip_Edges')
 
+            smesh.SetName(Regular_1D_Fuselage.GetAlgorithm(), 'Regular_1D_Fuselage')
+            smesh.SetName(Local_Length_Fuselage, 'Local_Length_Fuselage')
+            smesh.SetName(Sub_mesh_Fuselage_Edges, 'Sub_mesh_Fuselage_Edges')
+
+            smesh.SetName(Regular_1D_Fuselage_143_Edge.GetAlgorithm(), 'Regular_1D_Fuselage_143_Edge')
+            smesh.SetName(Start_and_End_Length_Fuselage_143_Edge, 'Start_and_End_Length_Fuselage_143_Edge')
+            smesh.SetName(Sub_mesh_Fuselage_143_Edge, 'Sub_mesh_Fuselage_143_Edge')
+
             smesh.SetName(NETGEN_2D.GetAlgorithm(), 'NETGEN_2D')
             smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
             smesh.SetName(Sub_mesh_Wing_Surface, 'Sub-mesh_Wing_Surface')
@@ -507,6 +554,10 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(NETGEN_2D_Trailing_Edges.GetAlgorithm(), 'NETGEN_2D_Trailing_Edges')
             smesh.SetName(NETGEN_2D_Parameters_Trailing_Edges, 'NETGEN_2D_Parameters_Trailing_Edges')
             smesh.SetName(Sub_mesh_Trailing_Edge_Surface, 'Sub_mesh_Trailing_Edge_Surface')
+
+            smesh.SetName(NETGEN_2D_Fuselage.GetAlgorithm(), 'NETGEN_2D_Fuselage')
+            smesh.SetName(NETGEN_2D_Parameters_Fuselage, 'NETGEN_2D_Parameters_Fuselage')
+            smesh.SetName(Sub_mesh_Fuselage_Surface, 'Sub_mesh_Fuselage_Surface')
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_finite_wing_sections_box_separating.hdf"
