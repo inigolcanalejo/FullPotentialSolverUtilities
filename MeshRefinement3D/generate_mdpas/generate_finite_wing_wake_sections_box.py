@@ -8,7 +8,7 @@ import killSalome
 import math
 
 # Parameters:
-Wing_span = 6.0
+Wing_span = TBD
 Domain_Length = 1000
 Domain_Height = Domain_Length
 Domain_Width = 1000
@@ -59,6 +59,8 @@ Initial_Smallest_Airfoil_Mesh_Size = Smallest_Airfoil_Mesh_Size
 Initial_Biggest_Airfoil_Mesh_Size = Biggest_Airfoil_Mesh_Size
 
 geometry_path = "/media/inigo/10740FB2740F9A1C/Results/15_nasa_crm/03_model_gid/11_divide.igs"
+
+trailing_edge_path = "/media/inigo/10740FB2740F9A1C/Results/15_nasa_crm/05_trailing_edge/trailing_edges.igs"
 
 for k in range(Number_Of_AOAS):
     AOA = round(AOA, 1)
@@ -250,6 +252,25 @@ for k in range(Number_Of_AOAS):
             Face_crm_tail_tip_le_down,Face_crm_tail_tip_le_up,Face_crm_tail_tip_te_down,\
             Face_crm_tail_tip_te_up])
 
+            # Generate stl wake
+            wake_angle_rad = wake_angle_deg*math.pi/180.0
+            Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(math.cos(wake_angle_rad), 0, math.sin(wake_angle_rad))
+            trailing_edge = geompy.ImportIGES(trailing_edge_path, True)
+            Extrusion_Wake_stl = geompy.MakePrismVecH(trailing_edge, Vector_Wake_Direction, Domain_Length*0.6)
+
+            [Wake_Face_Wing_Fuselage,Wake_Face_Wing_Root,Wake_Face_Wing_Out,Wake_Face_Wing_Tip,Wake_Face_Tail_Fuselage,Wake_Face_Tail] = geompy.ExtractShapes(Extrusion_Wake_stl, geompy.ShapeType["FACE"], True)
+
+            [Trailing_Edge_1,Wake_Side_Edge_2,Wake_Side_Edge_3,Outlet_Edge_4] = geompy.ExtractShapes(Wake_Face_Wing_Fuselage, geompy.ShapeType["EDGE"], True)
+            [Trailing_Edge_2,Obj1,Wake_Side_Edge_4,Outlet_Edge_5] = geompy.ExtractShapes(Wake_Face_Wing_Root, geompy.ShapeType["EDGE"], True)
+            [Trailing_Edge_3,Obj1,Wake_Side_Edge_5,Outlet_Edge_6] = geompy.ExtractShapes(Wake_Face_Wing_Out, geompy.ShapeType["EDGE"], True)
+            [Trailing_Edge_4,Obj1,Wake_Side_Edge_6,Outlet_Edge_7] = geompy.ExtractShapes(Wake_Face_Wing_Tip, geompy.ShapeType["EDGE"], True)
+            [Trailing_Edge_5,Wake_Side_Edge_7,Wake_Side_Edge_8,Outlet_Edge_8] = geompy.ExtractShapes(Wake_Face_Tail_Fuselage, geompy.ShapeType["EDGE"], True)
+            [Trailing_Edge_6,Obj1,Wake_Side_Edge_9,Outlet_Edge_9] = geompy.ExtractShapes(Wake_Face_Tail, geompy.ShapeType["EDGE"], True)
+
+            # Wake trailing edges
+            Auto_group_for_Sub_mesh_Wake_Trailing_Edges = geompy.CreateGroup(Extrusion_Wake_stl, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Trailing_Edges, [Trailing_Edge_2,Trailing_Edge_3,Trailing_Edge_4,Trailing_Edge_6])
+
             exe_time = time.time() - start_time
             print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
             print(' Geometry execution took ' + str(round(exe_time/60, 2)) + ' min')
@@ -437,6 +458,19 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Far_Field_Edges, 'Auto_group_for_Sub_mesh_Far_Field_Edges' )
 
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Far_Field_Surfaces, 'Auto_group_for_Sub_mesh_Far_Field_Surfaces' )
+
+            geompy.addToStudy( trailing_edge, 'trailing_edge' )
+            geompy.addToStudy( Vector_Wake_Direction, 'Vector_Wake_Direction' )
+            geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
+
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Fuselage, 'Wake_Face_Wing_Fuselage' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Root, 'Wake_Face_Wing_Root' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Out, 'Wake_Face_Wing_Out' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Tip, 'Wake_Face_Wing_Tip' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Tail_Fuselage, 'Wake_Face_Tail_Fuselage' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Tail, 'Wake_Face_Tail' )
+
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Trailing_Edges, 'Auto_group_for_Sub_mesh_Wake_Trailing_Edges' )
 
             ###
             ### SMESH component
@@ -678,6 +712,35 @@ for k in range(Number_Of_AOAS):
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
 
+            # Mesh wake and export STL
+            Mesh_Wake_Surface = smesh.Mesh(Extrusion_Wake_stl)
+            NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
+            NETGEN_2D_Parameters_Wake = NETGEN_1D_2D_2.Parameters()
+            NETGEN_2D_Parameters_Wake.SetSecondOrder( 0 )
+            NETGEN_2D_Parameters_Wake.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Wake.SetMinSize( 0.01 )
+            NETGEN_2D_Parameters_Wake.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Wake.SetFuseEdges( 1 )
+            NETGEN_2D_Parameters_Wake.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Wake.SetMaxSize( 2.0 )
+            NETGEN_2D_Parameters_Wake.SetFineness( 4 )
+
+            # TE edges
+            Regular_1D_Wake_TE = Mesh_Wake_Surface.Segment(geom=Auto_group_for_Sub_mesh_Wake_Trailing_Edges)
+            Sub_mesh_Wake_TE_Edges = Regular_1D_Wake_TE.GetSubMesh()
+            Local_Length_Wake_TE = Regular_1D_Wake_TE.LocalLength(0.1,None,1e-07)
+
+            isDone = Mesh_Wake_Surface.Compute()
+            wake_path = mdpa_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.stl'
+            try:
+                Mesh_Wake_Surface.ExportSTL( wake_path, 1 )
+                pass
+            except:
+                print 'ExportSTL() failed. Invalid file name?'
+
+
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
             smesh.SetName(NETGEN_3D_Parameters, 'NETGEN_3D_Parameters')
@@ -746,6 +809,15 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(NETGEN_2D_Far_Field.GetAlgorithm(), 'NETGEN_2D_Far_Field')
             smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN_2D_Parameters_FarField')
             smesh.SetName(Sub_mesh_Far_Field_Surface, 'Sub_mesh_Far_Field_Surface')
+
+            # Wake stuff
+            smesh.SetName(NETGEN_1D_2D_2.GetAlgorithm(), 'NETGEN_1D_2D_2')
+            smesh.SetName(NETGEN_2D_Parameters_Wake, 'NETGEN_2D_Parameters_Wake')
+            smesh.SetName(Mesh_Wake_Surface, 'Mesh_Wake_Surface')
+
+            smesh.SetName(Regular_1D_Wake_TE.GetAlgorithm(), 'Regular_1D_Wake_TE')
+            smesh.SetName(Local_Length_Wake_TE, 'Local_Length_Wake_TE')
+            smesh.SetName(Sub_mesh_Wake_TE_Edges, 'Sub_mesh_Wake_TE_Edges')
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_finite_wing_sections_box_separating.hdf"
