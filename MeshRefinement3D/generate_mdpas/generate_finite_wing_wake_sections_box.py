@@ -269,7 +269,19 @@ for k in range(Number_Of_AOAS):
 
             # Wake trailing edges
             Auto_group_for_Sub_mesh_Wake_Trailing_Edges = geompy.CreateGroup(Extrusion_Wake_stl, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Trailing_Edges, [Trailing_Edge_2,Trailing_Edge_3,Trailing_Edge_4,Trailing_Edge_6])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Trailing_Edges, [Trailing_Edge_2,Trailing_Edge_3,Trailing_Edge_4,Trailing_Edge_6, Trailing_Edge_1, Trailing_Edge_5])
+
+            # Wake transition edges
+            Auto_group_for_Sub_mesh_Wake_Transition_Edges = geompy.CreateGroup(Extrusion_Wake_stl, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Transition_Edges, [Wake_Side_Edge_2,Wake_Side_Edge_3,Wake_Side_Edge_4,Wake_Side_Edge_5,Wake_Side_Edge_6,Wake_Side_Edge_7,Wake_Side_Edge_8,Wake_Side_Edge_9])
+
+            # Wake outlet edges
+            Auto_group_for_Sub_mesh_Wake_Outlet_Edges = geompy.CreateGroup(Extrusion_Wake_stl, geompy.ShapeType["EDGE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Outlet_Edges, [Outlet_Edge_4,Outlet_Edge_5,Outlet_Edge_6,Outlet_Edge_7,Outlet_Edge_8,Outlet_Edge_9])
+
+            # Wake surfaces
+            Auto_group_for_Sub_mesh_Wake_Surfaces = geompy.CreateGroup(Extrusion_Wake_stl, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wake_Surfaces, [Wake_Face_Wing_Fuselage,Wake_Face_Wing_Root,Wake_Face_Wing_Out,Wake_Face_Wing_Tip,Wake_Face_Tail_Fuselage,Wake_Face_Tail])
 
             exe_time = time.time() - start_time
             print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
@@ -471,6 +483,9 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Tail, 'Wake_Face_Tail' )
 
             geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Trailing_Edges, 'Auto_group_for_Sub_mesh_Wake_Trailing_Edges' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Transition_Edges, 'Auto_group_for_Sub_mesh_Wake_Transition_Edges' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Outlet_Edges, 'Auto_group_for_Sub_mesh_Wake_Outlet_Edges' )
+            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Surfaces, 'Auto_group_for_Sub_mesh_Wake_Surfaces' )
 
             ###
             ### SMESH component
@@ -657,6 +672,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Aircraft.SetFuseEdges( 80 )
             Sub_mesh_Aircraft_Surface = NETGEN_2D_Aircraft.GetSubMesh()
 
+            '''
             import time as time
             print(' Starting meshing ')
             start_time = time.time()
@@ -712,6 +728,8 @@ for k in range(Number_Of_AOAS):
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
 
+            '''
+
             # Mesh wake and export STL
             Mesh_Wake_Surface = smesh.Mesh(Extrusion_Wake_stl)
             NETGEN_1D_2D_2 = Mesh_Wake_Surface.Triangle(algo=smeshBuilder.NETGEN_1D2D)
@@ -727,8 +745,23 @@ for k in range(Number_Of_AOAS):
 
             # TE edges
             Regular_1D_Wake_TE = Mesh_Wake_Surface.Segment(geom=Auto_group_for_Sub_mesh_Wake_Trailing_Edges)
-            Sub_mesh_Wake_TE_Edges = Regular_1D_Wake_TE.GetSubMesh()
             Local_Length_Wake_TE = Regular_1D_Wake_TE.LocalLength(0.1,None,1e-07)
+            status = Mesh_Wake_Surface.AddHypothesis(Regular_1D_Wake_TE,Auto_group_for_Sub_mesh_Wake_Trailing_Edges)
+            Sub_mesh_Wake_TE_Edges = Regular_1D_Wake_TE.GetSubMesh()
+
+            # # Outlet edges
+            # Regular_1D_Wake_Outlet_Edges = Mesh_Wake_Surface.Segment(geom=Auto_group_for_Sub_mesh_Wake_Outlet_Edges)
+            # Sub_mesh_Wake_Outlet_Edges = Regular_1D_Wake_Outlet_Edges.GetSubMesh()
+            # Local_Length_Wake_Outlet_Edges = Regular_1D_Wake_Outlet_Edges.LocalLength(2.0,None,1e-07)
+
+            # # Fuselage Transition Edges
+            # Regular_1D_Wake_Transition_Edges = Mesh_Wake_Surface.Segment(geom=Auto_group_for_Sub_mesh_Wake_Transition_Edges)
+            # Start_and_End_Length_Wake_Transition_Edges = Regular_1D_Wake_Transition_Edges.StartEndLength(0.1,2.0,[])
+            # Start_and_End_Length_Wake_Transition_Edges.SetObjectEntry( 'Extrusion_Wake_stl' )
+            # Sub_mesh_Wake_Transition_Edges = Regular_1D_Wake_Transition_Edges.GetSubMesh()
+
+            '''
+            isDone = Mesh_Wake_Surface.SetMeshOrder( [ [ Sub_mesh_Wake_TE_Edges] ])
 
             isDone = Mesh_Wake_Surface.Compute()
             wake_path = mdpa_path + '/wake_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
@@ -739,6 +772,7 @@ for k in range(Number_Of_AOAS):
                 pass
             except:
                 print 'ExportSTL() failed. Invalid file name?'
+            '''
 
 
             ## Set names of Mesh objects
@@ -818,6 +852,14 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Regular_1D_Wake_TE.GetAlgorithm(), 'Regular_1D_Wake_TE')
             smesh.SetName(Local_Length_Wake_TE, 'Local_Length_Wake_TE')
             smesh.SetName(Sub_mesh_Wake_TE_Edges, 'Sub_mesh_Wake_TE_Edges')
+
+            # smesh.SetName(Regular_1D_Wake_Outlet_Edges.GetAlgorithm(), 'Regular_1D_Wake_Outlet_Edges')
+            # smesh.SetName(Local_Length_Wake_Outlet_Edges, 'Local_Length_Wake_Outlet_Edges')
+            # smesh.SetName(Sub_mesh_Wake_Outlet_Edges, 'Sub_mesh_Wake_Outlet_Edges')
+
+            # smesh.SetName(Regular_1D_Wake_Transition_Edges.GetAlgorithm(), 'Regular_1D_Wake_Transition_Edges')
+            # smesh.SetName(Start_and_End_Length_Wake_Transition_Edges, 'Start_and_End_Length_Wake_Transition_Edges')
+            # smesh.SetName(Sub_mesh_Wake_Transition_Edges, 'Sub_mesh_Wake_Transition_Edges')
 
             # Saving file to open from salome's gui
             file_name = salome_output_path + "/generate_finite_wing_sections_box_separating.hdf"
