@@ -134,7 +134,7 @@
                     "shedded_wake_element_size"     : 0.2,
                     "echo_level"                    : 1
                 },
-                "refinement_iterations": 5,
+                "refinement_iterations": 1,
                 "target_wake_h" : 0.8
             }
         },{
@@ -159,20 +159,7 @@
                 "case": 0
             }
         }],
-        "auxiliar_process_list" :[{
-            "python_module"   : "from_json_check_result_process",
-            "kratos_module" : "KratosMultiphysics",
-            "help"                  : "",
-            "process_name"          : "FromJsonCheckResultProcess",
-            "Parameters"            : {
-                "check_variables"  : ["VELOCITY_POTENTIAL"],
-                "input_file_name"  : "default.json",
-                "model_part_name"  : "FluidModelPart.Parts_Parts_Auto1",
-                "tolerance"            : 1e-1,
-                "relative_tolerance"   : 1e-1,
-                "time_frequency"   : -2
-            }
-        }]
+        "auxiliar_process_list" :[]
     },
     "_linear_solver_settings"  : {
             "solver_type": "amgcl",
