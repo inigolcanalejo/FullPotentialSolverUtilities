@@ -278,7 +278,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
         reference_file_path = '/media/inigo/10740FB2740F9A1C/Results/13_blunt_te_naca_wing/09_automatic_mesh_refinement_all_cases/kratos_reference_test_results'
         input_file_name = reference_file_path + '/naca0012_wing_case_' + str(self.case) + '_reference_stl_wide_wake.json'
-        self.project_parameters["processes"]["auxiliar_process_list"][0]["Parameters"]["output_file_name"].SetString(
+        self.project_parameters["processes"]["auxiliar_process_list"][0]["Parameters"]["input_file_name"].SetString(
             input_file_name)
 
         # self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["airfoil_meshsize"].SetDouble(
