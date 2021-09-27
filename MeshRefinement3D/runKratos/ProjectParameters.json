@@ -30,7 +30,7 @@
                         "node_output"         : false,
                         "skin_output"         : false,
                         "plane_output"        : [],
-                        "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA","DEACTIVATED_WAKE","REACTION_WATER_PRESSURE"],
+                        "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA","DEACTIVATED_WAKE","REACTION_WATER_PRESSURE","WATER_PRESSURE"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
                         "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE","DEACTIVATED_WAKE"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
@@ -120,7 +120,7 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "17_wake_mesh_0_degree.stl",
-                "output_wake": false,
+                "output_wake": true,
                 "kutta_condition_rotation_angle" : 0.0,
                 "wake_process_cpp_parameters":    {
                     "tolerance"                     : 1e-12,
@@ -128,14 +128,14 @@
                     "is_sharp_trailing_edge"        : false,
                     "switch_wake_normal"            : false,
                     "count_elements_number"         : true,
-                    "write_elements_ids_to_file"    : false,
+                    "write_elements_ids_to_file"    : true,
                     "shed_wake_from_trailing_edge"  : false,
                     "shedded_wake_distance"         : 12.5,
                     "shedded_wake_element_size"     : 0.2,
                     "echo_level"                    : 1
                 },
-                "refinement_iterations": 1,
-                "target_wake_h" : 0.8
+                "refinement_iterations": 0,
+                "target_wake_h" : 32
             }
         },{
             "python_module" : "write_forces_process",
