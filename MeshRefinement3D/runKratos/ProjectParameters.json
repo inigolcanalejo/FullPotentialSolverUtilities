@@ -67,7 +67,7 @@
         "solver_type"            : "potential_flow",
         "model_import_settings"  : {
             "input_type"     : "mdpa",
-            "input_filename" : ""
+            "input_filename" : "14_coarse_mesh"
         },
         "formulation": {
             "element_type": "perturbation_incompressible",
@@ -119,7 +119,7 @@
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
-                "wake_stl_file_name" : "wake_stl_new.stl",
+                "wake_stl_file_name" : "17_wake_mesh_0_degree.stl",
                 "output_wake": false,
                 "kutta_condition_rotation_angle" : 0.0,
                 "wake_process_cpp_parameters":    {

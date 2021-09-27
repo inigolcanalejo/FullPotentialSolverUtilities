@@ -242,8 +242,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain)# + '.out'
 
-        self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(
-            mdpa_file_name)
+        # self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(
+        #     mdpa_file_name)
 
         gid_output_file_name = self.gid_output_path + '/AOA_' + str(self.AOA) + '/DR_' + str(
             self.Growth_Rate_Domain) + '/' + self.project_parameters["problem_data"]["problem_name"].GetString() + '_Case_' + str(
@@ -263,8 +263,8 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '.stl'
 
-        self.project_parameters["processes"]["boundary_conditions_process_list"][1]["Parameters"]["wake_stl_file_name"].SetString(
-            wake_file_name)
+        # self.project_parameters["processes"]["boundary_conditions_process_list"][1]["Parameters"]["wake_stl_file_name"].SetString(
+        #     wake_file_name)
 
         self.project_parameters["processes"]["boundary_conditions_process_list"][2]["Parameters"]["growth_rate_domain"].SetDouble(
             self.Growth_Rate_Domain)
