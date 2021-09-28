@@ -93,7 +93,7 @@
             "verbosity": 2,
             "scaling": false
         },
-        "reference_chord": 2.0
+        "reference_chord": 383.689555
     },
     "processes"        : {
         "boundary_conditions_process_list" : [{
@@ -144,9 +144,10 @@
                 "model_part_name" : "FluidModelPart.Body3D_Body_Auto1",
                 "far_field_model_part_name"   : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
                 "trailing_edge_model_part_name": "FluidModelPart.Wake3D_Wake_Auto1",
+                "mean_aerodynamic_chord" : 7.00532,
                 "middle_airfoil_model_part_name": "",
                 "trefft_plane_cut_model_part_name": "",
-                "moment_reference_point" : [-0.4980974,0.0,0.04357787],
+                "moment_reference_point" : [33.68,11.91,4.520],
                 "is_infinite_wing": false,
                 "growth_rate_domain": 0.0,
                 "growth_rate_wing": 0.0,
