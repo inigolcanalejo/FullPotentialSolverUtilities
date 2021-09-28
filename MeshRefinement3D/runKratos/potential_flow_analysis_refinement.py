@@ -242,7 +242,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain)# + '.out'
 
-        mdpa_file_name = self.mdpa_path + '/14_coarse_mesh'
+        mdpa_file_name = self.mdpa_path + '/14_coarse_mesh_wake_refined'
 
         self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(
             mdpa_file_name)

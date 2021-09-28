@@ -120,7 +120,7 @@
                 "model_part_name" : "FluidModelPart.Wake3D_Wake_Auto1",
                 "body_model_part_name": "FluidModelPart.Body3D_Body_Auto1",
                 "wake_stl_file_name" : "17_wake_mesh_0_degree.stl",
-                "output_wake": true,
+                "output_wake": false,
                 "kutta_condition_rotation_angle" : 0.0,
                 "wake_process_cpp_parameters":    {
                     "tolerance"                     : 1e-12,
@@ -128,7 +128,7 @@
                     "is_sharp_trailing_edge"        : false,
                     "switch_wake_normal"            : false,
                     "count_elements_number"         : true,
-                    "write_elements_ids_to_file"    : true,
+                    "write_elements_ids_to_file"    : false,
                     "shed_wake_from_trailing_edge"  : false,
                     "shedded_wake_distance"         : 12.5,
                     "shedded_wake_element_size"     : 0.2,
