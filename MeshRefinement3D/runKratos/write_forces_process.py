@@ -535,7 +535,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_potential = [float(line.split()[1]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
                 plt.plot(x_potential,cp_potential,'bx',label='RANS', markersize=5)
 
-                title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/10000.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
                 #title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
                 plt.title(title)
                 plt.legend()
@@ -596,7 +596,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_potential = [float(line.split()[1]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
                 plt.plot(x_potential,cp_potential,'bx',label='RANS', markersize=5)
 
-                title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/100.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
+                title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/10000.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
                 #title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
                 plt.title(title)
                 plt.legend()
