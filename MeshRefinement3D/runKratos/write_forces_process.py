@@ -497,6 +497,9 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_dir_name = self.input_dir_path + '/plots/cp_crm'
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
+                cp_dir_name = self.input_dir_path + '/plots/cp_crm' + '/mach_' + str(round(self.mach*1e2))
+                if not os.path.exists(cp_dir_name):
+                    os.makedirs(cp_dir_name)
                 case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10)) + '_step_' + str(round(self.step))
                 section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/10000.0 * wing_span
@@ -558,10 +561,13 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_dir_name = self.input_dir_path + '/plots/cp_crm_tail'
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
+                cp_dir_name = self.input_dir_path + '/plots/cp_crm_tail' + '/mach_' + str(round(self.mach*1e2))
+                if not os.path.exists(cp_dir_name):
+                    os.makedirs(cp_dir_name)
                 case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10)) + '_step_' + str(round(self.step))
                 section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/10000.0 * wing_span
-                CPFApp.ComputeWingSectionVariableProcess(self.body_model_part, section_model_part, plane_normal, origin, 56.0, 67.0).Execute()
+                CPFApp.ComputeWingSectionVariableProcess(self.body_model_part, section_model_part, plane_normal, origin, 56.89, 66.72).Execute()
 
                 number_of_nodes = section_model_part.NumberOfNodes()
                 print('number_of_nodes = ', number_of_nodes)
