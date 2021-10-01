@@ -4,7 +4,7 @@
         "parallel_type" : "OpenMP",
         "echo_level"    : 0,
         "start_time"    : 0.0,
-        "end_time"      : 8
+        "end_time"      : 1
     },
     "output_processes" : {
         "gid_output" : [{
@@ -31,6 +31,7 @@
                         "skin_output"         : false,
                         "plane_output"        : [],
                         "nodal_nonhistorical_results" : ["VELOCITY","PRESSURE_COEFFICIENT","POTENTIAL_JUMP","WAKE_DISTANCE","TRAILING_EDGE","WAKE","NORMAL","KUTTA","DEACTIVATED_WAKE","REACTION_WATER_PRESSURE","WATER_PRESSURE"],
+                        "nodal_flags_results": ["SOLID"],
                         "nodal_results"       : ["VELOCITY_POTENTIAL","AUXILIARY_VELOCITY_POTENTIAL"],
                         "gauss_point_results" : ["VELOCITY","WAKE","TRAILING_EDGE_ELEMENT","KUTTA","PRESSURE_COEFFICIENT","MACH","ZERO_VELOCITY_CONDITION","ALL_TRAILING_EDGE","DEACTIVATED_WAKE"],
                         "elemental_conditional_flags_results": ["STRUCTURE"]
@@ -50,7 +51,7 @@
             "input_filename" : "14_coarse_mesh"
         },
         "formulation": {
-            "element_type": "perturbation_transonic",
+            "element_type": "perturbation_incompressible",
             "penalty_coefficient": 1.0
         },
         "maximum_iterations"     : 20,
@@ -81,7 +82,7 @@
             "process_name"  : "FarFieldProcessRefinement",
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
-                "angle_of_attack" : 2.0,
+                "angle_of_attack" : 0.0,
                 "mach_infinity"   : 0.6,
                 "speed_of_sound"  : 340.0,
                 "heat_capacity_ratio": 1.4,
@@ -115,7 +116,7 @@
                     "echo_level"                    : 1
                 },
                 "refinement_iterations": 0,
-                "target_wake_h" : 0.5
+                "target_wake_h" : 32
             }
         },{
             "python_module" : "write_forces_process",
