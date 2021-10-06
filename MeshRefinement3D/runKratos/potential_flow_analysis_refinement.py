@@ -242,7 +242,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain)# + '.out'
 
-        mdpa_file_name = self.mdpa_path + '/14_coarse_mesh_wake_refined_0_degree'
+        mdpa_file_name = self.mdpa_path + '/18_fine_mesh_transition1_wake_refined_2_5'
 
         self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(
             mdpa_file_name)
@@ -264,7 +264,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '.stl'
 
-        wake_file_name = self.mdpa_path + '/41_wake_0_degree_only_wing.stl'
+        wake_file_name = self.mdpa_path + '/925_wake_mesh_2_5_degree.stl'
 
         self.project_parameters["processes"]["boundary_conditions_process_list"][1]["Parameters"]["wake_stl_file_name"].SetString(wake_file_name)
 
@@ -299,40 +299,40 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
     def FinalizeSolutionStep(self):
         super(PotentialFlowAnalysisRefinement, self).FinalizeSolutionStep()
-        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/potential_jump/main_potential_jump.tex'], stdout=self.latex_output)
-        latex.communicate()
-        jump_file_name = self.input_dir_path + '/plots/potential_jump/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
-            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
-        shutil.copyfile('main_potential_jump.pdf',jump_file_name)
-        self.merger_local_jump.append(PdfFileReader(jump_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
+        # latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/potential_jump/main_potential_jump.tex'], stdout=self.latex_output)
+        # latex.communicate()
+        # jump_file_name = self.input_dir_path + '/plots/potential_jump/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+        #     self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
+        # shutil.copyfile('main_potential_jump.pdf',jump_file_name)
+        # self.merger_local_jump.append(PdfFileReader(jump_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
 
-        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp/main_cp.tex'], stdout=self.latex_output)
-        latex.communicate()
-        cp_file_name = self.input_dir_path + '/plots/cp/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
-            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
-        shutil.copyfile('main_cp.pdf',cp_file_name)
-        self.merger_local_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
+        # latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp/main_cp.tex'], stdout=self.latex_output)
+        # latex.communicate()
+        # cp_file_name = self.input_dir_path + '/plots/cp/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+        #     self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
+        # shutil.copyfile('main_cp.pdf',cp_file_name)
+        # self.merger_local_cp.append(PdfFileReader(cp_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
 
-        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_100/main_cp_100.tex'], stdout=self.latex_output)
-        latex.communicate()
-        cp_100_file_name = self.input_dir_path + '/plots/cp_section_100/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
-            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
-        shutil.copyfile('main_cp_100.pdf',cp_100_file_name)
-        self.merger_local_cp_100.append(PdfFileReader(cp_100_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
+        # latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_100/main_cp_100.tex'], stdout=self.latex_output)
+        # latex.communicate()
+        # cp_100_file_name = self.input_dir_path + '/plots/cp_section_100/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+        #     self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
+        # shutil.copyfile('main_cp_100.pdf',cp_100_file_name)
+        # self.merger_local_cp_100.append(PdfFileReader(cp_100_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
 
-        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_150/main_cp_150.tex'], stdout=self.latex_output)
-        latex.communicate()
-        cp_150_file_name = self.input_dir_path + '/plots/cp_section_150/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
-            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
-        shutil.copyfile('main_cp_150.pdf',cp_150_file_name)
-        self.merger_local_cp_150.append(PdfFileReader(cp_150_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
+        # latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_150/main_cp_150.tex'], stdout=self.latex_output)
+        # latex.communicate()
+        # cp_150_file_name = self.input_dir_path + '/plots/cp_section_150/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+        #     self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
+        # shutil.copyfile('main_cp_150.pdf',cp_150_file_name)
+        # self.merger_local_cp_150.append(PdfFileReader(cp_150_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
 
-        latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_180/main_cp_180.tex'], stdout=self.latex_output)
-        latex.communicate()
-        cp_180_file_name = self.input_dir_path + '/plots/cp_section_180/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
-            self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
-        shutil.copyfile('main_cp_180.pdf',cp_180_file_name)
-        self.merger_local_cp_180.append(PdfFileReader(cp_180_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
+        # latex = subprocess.Popen(['pdflatex', '-interaction=batchmode', self.input_dir_path + '/plots/cp_section_180/main_cp_180.tex'], stdout=self.latex_output)
+        # latex.communicate()
+        # cp_180_file_name = self.input_dir_path + '/plots/cp_section_180/plots/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(
+        #     self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing) + '_Step_' + str(self.step) + '.pdf'
+        # shutil.copyfile('main_cp_180.pdf',cp_180_file_name)
+        # self.merger_local_cp_180.append(PdfFileReader(cp_180_file_name), 'case_' + str(self.case) + '_Step_' + str(self.step))
 
     def Finalize(self):
         self.newton_convergence_data_directory_name = 'data/Case_' + str(self.case) + '_AOA_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(

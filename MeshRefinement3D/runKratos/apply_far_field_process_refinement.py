@@ -50,6 +50,7 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' free_stream_mach = ', round(self.free_stream_mach,4))
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' upwinding_factor_constant = ', round(self.upwind_factor_constant,3))
         KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' critical_mach = ', round(self.critical_mach,3))
+        KratosMultiphysics.Logger.PrintInfo('ApplyFarFieldProcess',' free_stream_velocity = ', self.free_stream_velocity)
         self.fluid_model_part.ProcessInfo.SetValue(CPFApp.FREE_STREAM_MACH, round(self.free_stream_mach,4))
         self.fluid_model_part.ProcessInfo.SetValue(CPFApp.FREE_STREAM_VELOCITY, self.free_stream_velocity)
         self.fluid_model_part.ProcessInfo.SetValue(CPFApp.CRITICAL_MACH, round(self.critical_mach,3))
