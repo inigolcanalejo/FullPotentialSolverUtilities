@@ -491,7 +491,7 @@ class WriteForcesProcess(ComputeLiftProcess):
             origin = KratosMultiphysics.Vector(3, 0.0)
             plane_normal = KratosMultiphysics.Vector(3, 0.0)
             plane_normal[1] = 1.0
-            sections = [1306,2828,3700,5024,7268,8456,9700]
+            sections = [1306,1640,2700,2828,3700,3860,4990,5024,6090,7200,7268,8330,8456,9440,9700]
             wing_span = 29.38145
             for section in sections:
                 cp_dir_name = self.input_dir_path + '/plots/cp_crm'
@@ -534,9 +534,16 @@ class WriteForcesProcess(ComputeLiftProcess):
 
                 # Get potential solver reference data
                 cp_cfl3d_file_name = 'references/cp/crm/cfl3d/cfl3d_' + str(section) + '.dat'
-                x_potential = [float(line.split()[0]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
-                cp_potential = [float(line.split()[1]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
-                plt.plot(x_potential,cp_potential,'bx',label='RANS', markersize=5)
+                if os.path.exists(cp_cfl3d_file_name):
+                    x_potential = [float(line.split()[0]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
+                    cp_potential = [float(line.split()[1]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
+                    plt.plot(x_potential,cp_potential,'g+',label='RANS', markersize=5)
+
+                cp_tranair_file_name = 'references/cp/crm/tranair/' + str(section) + '.dat'
+                if os.path.exists(cp_tranair_file_name):
+                    x_potential = [float(line.split()[0]) for line in open(cp_tranair_file_name).readlines() if len(line.split()) > 0]
+                    cp_potential = [float(line.split()[1]) for line in open(cp_tranair_file_name).readlines() if len(line.split()) > 0]
+                    plt.plot(x_potential,cp_potential,'bx',label='TRANAIR', markersize=5)
 
                 title="y/b: %.2f, $M$: %.2f, Cl: %.4f, Cd: %.4f, Clref: %.4f, Cdref: %.4f," % (section/10000.0, self.mach, self.lift_coefficient, self.drag_coefficient, self.cl_reference, self.cd_reference)
                 #title="y/b: %.2f, $M$: %.2f, $\mu$: %.2f, $M_c$: %.2f" % (section/100.0, self.mach, self.ufc, self.cm)
