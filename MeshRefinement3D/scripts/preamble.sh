@@ -3,22 +3,32 @@ export PYTHONPATH=""
 export LD_LIBRARY_PATH=""
 
 # Setting paths
-source /path/to/salomeConverter.sh
-source /path/to/kratosMaster.sh
-#source /path/to/intel/mkl/bin/mklvars.sh intel64 lp64
+source /home/inigo/Documents/paths/salomeConverter.sh
+# source /home/inigo/Documents/paths/kratosMaster5.sh
+#source /home/inigo/Documents/paths/kratosMaster5FullDebug.sh
+source /home/inigo/Documents/paths/kratosMaster6.sh
+# source /home/inigo/Documents/paths/kratosMaster6FullDebug.sh
+#source /home/inigo/intel/mkl/bin/mklvars.sh intel64 lp64
 
 echo "PYTHONPATH = $PYTHONPATH"
 echo "LD_LIBRARY_PATH = $LD_LIBRARY_PATH"
 
 # Path where mdpas and outputs are created
-input_dir_path=/path/to/desired/directory
+input_dir_path=/media/inigo/10740FB2740F9A1C/3d_results_test2
 
 # Path where mdpas and output are saved
-output_dir_path=/path/to/desired/directory
+output_dir_path=/media/inigo/10740FB2740F9A1C/Results/11_onera/
 
 # Further paths
 salome_output_path=$input_dir_path/output_salome
-mdpa_path=$input_dir_path/mdpas
+# mdpa_path=$input_dir_path/mdpas
+# mdpa_path=$input_dir_path/mdpas_naca_wake_ref
+# mdpa_path=$input_dir_path/mdpas_naca_no_refinement_box
+# mdpa_path=$input_dir_path/mdpas_onera_wake_ref
+# mdpa_path=$input_dir_path/mdpas_onera_mesh_refinement
+# mdpa_path=$input_dir_path/mdpas_naca_blunt_te_coarse_wake_0_deg/wake_size_01
+# mdpa_path=$input_dir_path/mdpas_naca_blunt_te_coarse_wake_0_deg
+mdpa_path=$input_dir_path/mdpas_nasa_crm_salome
 gid_output_path=$input_dir_path/output_gid
 
 DATE=`date '+%Y%m%d_%H%M%S'`
