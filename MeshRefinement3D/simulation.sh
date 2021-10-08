@@ -21,8 +21,8 @@ source settings/set_parameters.sh
 cd generate_mdpas/
 
 # Run salome: generate geometry and mesh
-# rm $input_dir_path/output_salome/*
-# rm $input_dir_path/mdpas/wa*
+rm $input_dir_path/output_salome/*
+rm $input_dir_path/mdpas/wa*
 python3 runSalome.py
 
 # # Convert salomes mesh into mdpa

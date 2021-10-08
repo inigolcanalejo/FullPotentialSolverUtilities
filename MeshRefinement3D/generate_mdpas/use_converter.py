@@ -59,11 +59,11 @@ for k in range(Number_Of_AOAS):
             #'''
 
             # Specifying the names of the submeshes (Kratos Name: SubModelPart)
-            smp_dict_fluid           = {"smp_name": "Parts_Parts_Auto1"}
+            smp_dict_fluid           = {"smp_name": "FluidParts_Parts_Auto1"}
             smp_dict_far_field       = {"smp_name": "PotentialWallCondition3D_Far_field_Auto1"}
             smp_dict_body_surface   = {"smp_name": "Body3D_Body_Auto1"}
             smp_dict_trailing_edge   = {"smp_name": "Wake3D_Wake_Auto1"}
-            smp_dict_middle_airfoil   = {"smp_name": "Middle_Airfoil"}
+            # smp_dict_middle_airfoil   = {"smp_name": "Middle_Airfoil"}
             # smp_dict_trefft_plane_cut   = {"smp_name": "Trefft_Plane_Cut"}
             # smp_dict_section_100   = {"smp_name": "Section_100"}
             # smp_dict_section_150   = {"smp_name": "Section_150"}

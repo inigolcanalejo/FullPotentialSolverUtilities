@@ -200,8 +200,11 @@ for k in range(Number_Of_AOAS):
             geompy.UnionList(Auto_group_for_Sub_mesh_Tip_Middle_Edges, [Edge_tail_tip_middle_down,Edge_tail_tip_middle_up])
 
             # Wing and tail surfaces
+            # Auto_group_for_Sub_mesh_Wing_Tail_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
+            # geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Tail_Surfaces, [Face_crm_wing_root_down])
+
             Auto_group_for_Sub_mesh_Wing_Tail_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Tail_Surfaces, [Face_crm_wing_root_down,Face_crm_wing_root_up,Face_crm_wing_down,Face_crm_wing_up,Face_crm_tail_down,Face_crm_tail_up])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Tail_Surfaces, [Face_crm_tail_down,Face_crm_tail_up])
 
             # Trailing edge surfaces
             Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
@@ -600,22 +603,101 @@ for k in range(Number_Of_AOAS):
             Sub_mesh_Far_Field_Edges = Regular_1D_Far_Field_Edges.GetSubMesh()
             Local_Length_Far_Field = Regular_1D_Far_Field_Edges.LocalLength(Far_Field_Mesh_Size,None,1e-07)
 
+            # Wing root up surface
+            NETGEN_2D_Wing_Root_Up = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_crm_wing_root_up)
+            NETGEN_2D_Parameters_Wing_Root_Up = NETGEN_2D_Wing_Root_Up.Parameters()
+            NETGEN_2D_Parameters_Wing_Root_Up.SetMaxSize( Biggest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Root_Up.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Wing_Root_Up.SetFineness( 3 )
+            # NETGEN_2D_Parameters_Wing_Root_Up.SetGrowthRate( Growth_Rate_Wing )
+            # NETGEN_2D_Parameters_Wing_Root_Up.SetNbSegPerEdge( 6.92154e-310 )
+            # NETGEN_2D_Parameters_Wing_Root_Up.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Wing_Root_Up.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Root_Up.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Wing_Root_Up.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Wing_Root_Up.SetSecondOrder( 203 )
+            NETGEN_2D_Parameters_Wing_Root_Up.SetFuseEdges( 160 )
+            Sub_mesh_Wing_Root_Up_Surface = NETGEN_2D_Wing_Root_Up.GetSubMesh()
+
+            # Wing root down surface
+            NETGEN_2D_Wing_Root_Down = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_crm_wing_root_down)
+            NETGEN_2D_Parameters_Wing_Root_Down = NETGEN_2D_Wing_Root_Down.Parameters()
+            NETGEN_2D_Parameters_Wing_Root_Down.SetMaxSize( Biggest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Root_Down.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Wing_Root_Down.SetFineness( 3 )
+            # NETGEN_2D_Parameters_Wing_Root_Down.SetGrowthRate( Growth_Rate_Wing )
+            # NETGEN_2D_Parameters_Wing_Root_Down.SetNbSegPerEdge( 6.92154e-310 )
+            # NETGEN_2D_Parameters_Wing_Root_Down.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Wing_Root_Down.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Root_Down.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Wing_Root_Down.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Wing_Root_Down.SetSecondOrder( 203 )
+            NETGEN_2D_Parameters_Wing_Root_Down.SetFuseEdges( 160 )
+            Sub_mesh_Wing_Root_Down_Surface = NETGEN_2D_Wing_Root_Down.GetSubMesh()
+
+            # Wing up surface
+            NETGEN_2D_Wing_Up = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_crm_wing_up)
+            NETGEN_2D_Parameters_Wing_Up = NETGEN_2D_Wing_Up.Parameters()
+            NETGEN_2D_Parameters_Wing_Up.SetMaxSize( Biggest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Up.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Wing_Up.SetFineness( 3 )
+            # NETGEN_2D_Parameters_Wing_Up.SetGrowthRate( Growth_Rate_Wing )
+            # NETGEN_2D_Parameters_Wing_Up.SetNbSegPerEdge( 6.92154e-310 )
+            # NETGEN_2D_Parameters_Wing_Up.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Wing_Up.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Up.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Wing_Up.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Wing_Up.SetSecondOrder( 203 )
+            NETGEN_2D_Parameters_Wing_Up.SetFuseEdges( 160 )
+            Sub_mesh_Wing_Up_Surface = NETGEN_2D_Wing_Up.GetSubMesh()
+
+            # Wing down surface
+            NETGEN_2D_Wing_Down = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_crm_wing_down)
+            NETGEN_2D_Parameters_Wing_Down = NETGEN_2D_Wing_Down.Parameters()
+            NETGEN_2D_Parameters_Wing_Down.SetMaxSize( Biggest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Down.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Wing_Down.SetFineness( 3 )
+            # NETGEN_2D_Parameters_Wing_Down.SetGrowthRate( Growth_Rate_Wing )
+            # NETGEN_2D_Parameters_Wing_Down.SetNbSegPerEdge( 6.92154e-310 )
+            # NETGEN_2D_Parameters_Wing_Down.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Wing_Down.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Wing_Down.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Wing_Down.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Wing_Down.SetSecondOrder( 203 )
+            NETGEN_2D_Parameters_Wing_Down.SetFuseEdges( 160 )
+            Sub_mesh_Wing_Down_Surface = NETGEN_2D_Wing_Down.GetSubMesh()
+
+            # Wing tail up surface
+            NETGEN_2D_Wing_Tail_Up = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_crm_tail_up)
+            NETGEN_2D_Parameters_Tail_Up = NETGEN_2D_Wing_Tail_Up.Parameters()
+            NETGEN_2D_Parameters_Tail_Up.SetMaxSize( Biggest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Tail_Up.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Tail_Up.SetFineness( 5 )
+            NETGEN_2D_Parameters_Tail_Up.SetGrowthRate( 0.3 )
+            NETGEN_2D_Parameters_Tail_Up.SetNbSegPerEdge( 6.92154e-310 )
+            NETGEN_2D_Parameters_Tail_Up.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Tail_Up.SetMinSize( Smallest_Airfoil_Mesh_Size )
+            NETGEN_2D_Parameters_Tail_Up.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Tail_Up.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Tail_Up.SetSecondOrder( 203 )
+            NETGEN_2D_Parameters_Tail_Up.SetFuseEdges( 160 )
+            Sub_mesh_Tail_Up_Surface = NETGEN_2D_Wing_Tail_Up.GetSubMesh()
+
             # Wing surface
-            NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Tail_Surfaces)
+            NETGEN_2D = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Face_crm_tail_down)
             NETGEN_2D_Parameters_Wing = NETGEN_2D.Parameters()
             NETGEN_2D_Parameters_Wing.SetMaxSize( Biggest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Wing.SetOptimize( 1 )
             NETGEN_2D_Parameters_Wing.SetFineness( 5 )
-            NETGEN_2D_Parameters_Wing.SetGrowthRate( Growth_Rate_Wing )
+            NETGEN_2D_Parameters_Wing.SetGrowthRate( 0.3 )
             NETGEN_2D_Parameters_Wing.SetNbSegPerEdge( 6.92154e-310 )
             NETGEN_2D_Parameters_Wing.SetNbSegPerRadius( 5.32336e-317 )
             NETGEN_2D_Parameters_Wing.SetMinSize( Smallest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Wing.SetUseSurfaceCurvature( 1 )
             NETGEN_2D_Parameters_Wing.SetQuadAllowed( 0 )
-            NETGEN_2D_Parameters_Wing.SetSecondOrder( 106 )
-            NETGEN_2D_Parameters_Wing.SetFuseEdges( 80 )
+            NETGEN_2D_Parameters_Wing.SetSecondOrder( 203 )
+            NETGEN_2D_Parameters_Wing.SetFuseEdges( 160 )
             Sub_mesh_Wing_Surface = NETGEN_2D.GetSubMesh()
-
 
             NETGEN_2D_Tip = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces)
             NETGEN_2D_Parameters_Wing_Tip = NETGEN_2D_Tip.Parameters()
@@ -710,8 +792,6 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_FarField.SetSecondOrder( 106 )
             NETGEN_2D_Parameters_FarField.SetFuseEdges( 80 )
 
-
-
             # Aircraft surface
             NETGEN_2D_Aircraft = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Aircraft_Surfaces)
             NETGEN_2D_Parameters_Aircraft = NETGEN_2D_Aircraft.Parameters()
@@ -728,6 +808,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Aircraft.SetFuseEdges( 80 )
             Sub_mesh_Aircraft_Surface = NETGEN_2D_Aircraft.GetSubMesh()
 
+            #'''
             import time as time
             print(' Starting meshing ')
             start_time = time.time()
@@ -782,6 +863,7 @@ for k in range(Number_Of_AOAS):
               pass
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
+            #'''
 
             '''
             # Mesh wake and export STL
@@ -870,6 +952,26 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Regular_1D_Far_Field_Edges.GetAlgorithm(), 'Regular_1D_Far_Field_Edges')
             smesh.SetName(Local_Length_Far_Field, 'Local_Length_Far_Field')
             smesh.SetName(Sub_mesh_Far_Field_Edges, 'Sub_mesh_Far_Field_Edges')
+
+            smesh.SetName(NETGEN_2D_Wing_Root_Up.GetAlgorithm(), 'NETGEN_2D_Wing_Root_Up')
+            smesh.SetName(NETGEN_2D_Parameters_Wing_Root_Up, 'NETGEN_2D_Parameters_Wing_Root_Up')
+            smesh.SetName(Sub_mesh_Wing_Root_Up_Surface, 'Sub_mesh_Wing_Root_Up_Surface')
+
+            smesh.SetName(NETGEN_2D_Wing_Root_Down.GetAlgorithm(), 'NETGEN_2D_Wing_Root_Down')
+            smesh.SetName(NETGEN_2D_Parameters_Wing_Root_Down, 'NETGEN_2D_Parameters_Wing_Root_Down')
+            smesh.SetName(Sub_mesh_Wing_Root_Down_Surface, 'Sub_mesh_Wing_Root_Down_Surface')
+
+            smesh.SetName(NETGEN_2D_Wing_Up.GetAlgorithm(), 'NETGEN_2D_Wing_Up')
+            smesh.SetName(NETGEN_2D_Parameters_Wing_Up, 'NETGEN_2D_Parameters_Wing_Up')
+            smesh.SetName(Sub_mesh_Wing_Up_Surface, 'Sub_mesh_Wing_Up_Surface')
+
+            smesh.SetName(NETGEN_2D_Wing_Down.GetAlgorithm(), 'NETGEN_2D_Wing_Down')
+            smesh.SetName(NETGEN_2D_Parameters_Wing_Down, 'NETGEN_2D_Parameters_Wing_Down')
+            smesh.SetName(Sub_mesh_Wing_Down_Surface, 'Sub_mesh_Wing_Down_Surface')
+
+            smesh.SetName(NETGEN_2D_Wing_Tail_Up.GetAlgorithm(), 'NETGEN_2D_Wing_Tail_Up')
+            smesh.SetName(NETGEN_2D_Parameters_Tail_Up, 'NETGEN_2D_Parameters_Tail_Up')
+            smesh.SetName(Sub_mesh_Tail_Up_Surface, 'Sub_mesh_Tail_Up_Surface')
 
             smesh.SetName(NETGEN_2D.GetAlgorithm(), 'NETGEN_2D')
             smesh.SetName(NETGEN_2D_Parameters_Wing, 'NETGEN 2D Parameters_Wing')
