@@ -809,7 +809,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Aircraft.SetFuseEdges( 80 )
             Sub_mesh_Aircraft_Surface = NETGEN_2D_Aircraft.GetSubMesh()
 
-            '''
+            #'''
             import time as time
             print(' Starting meshing ')
             start_time = time.time()
@@ -824,6 +824,11 @@ for k in range(Number_Of_AOAS):
             print(' Information about volume mesh:')
             print(' Number of nodes       :', NumberOfNodes)
             print(' Number of elements    :', NumberOfElements)
+
+            filter = smesh.GetFilter(SMESH.NODE, SMESH.FT_EqualNodes, Tolerance=1e-7)
+            print( ' Equal nodes: ', Mesh_Domain.GetIdsFromFilter( filter ) )
+            print( ' Number of equal nodes: ', len( Mesh_Domain.GetIdsFromFilter( filter ) ))
+
 
             #isDone = Mesh_Domain.SetMeshOrder( [ [ Sub_mesh_Fuselage, smeshObj_1, Sub_mesh_LE_TE, Sub_mesh_Airfoils ] ])
 
