@@ -829,6 +829,18 @@ for k in range(Number_Of_AOAS):
             print( ' Equal nodes: ', Mesh_Domain.GetIdsFromFilter( filter ) )
             print( ' Number of equal nodes: ', len( Mesh_Domain.GetIdsFromFilter( filter ) ))
 
+            equalEdgesFilter   = smesh.GetFilter(SMESH.EDGE, SMESH.FT_EqualEdges)
+            print( ' Equal edges: ', Mesh_Domain.GetIdsFromFilter( equalEdgesFilter ) )
+            print( ' Number of equal edges: ', len( Mesh_Domain.GetIdsFromFilter( equalEdgesFilter ) ))
+
+            equalFacesFilter   = smesh.GetFilter(SMESH.FACE, SMESH.FT_EqualFaces)
+            print( ' Equal faces: ', Mesh_Domain.GetIdsFromFilter( equalFacesFilter ) )
+            print( ' Number of equal faces: ', len( Mesh_Domain.GetIdsFromFilter( equalFacesFilter ) ))
+
+            equalVolumesFilter = smesh.GetFilter(SMESH.VOLUME, SMESH.FT_EqualVolumes)
+            print( ' Equal volumes: ', Mesh_Domain.GetIdsFromFilter( equalVolumesFilter ) )
+            print( ' Number of equal volumes: ', len( Mesh_Domain.GetIdsFromFilter( equalVolumesFilter ) ))
+
 
             #isDone = Mesh_Domain.SetMeshOrder( [ [ Sub_mesh_Fuselage, smeshObj_1, Sub_mesh_LE_TE, Sub_mesh_Airfoils ] ])
 
