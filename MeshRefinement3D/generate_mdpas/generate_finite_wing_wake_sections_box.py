@@ -539,6 +539,7 @@ for k in range(Number_Of_AOAS):
             Mesh_Domain = smesh.Mesh(nasa_crm_igs)
 
             NETGEN_3D = Mesh_Domain.Tetrahedron()
+            #Viscous_Layers_1 = NETGEN_3D.ViscousLayers(0.01,2,2,[ 85, 102, 141, 155 ],0,StdMeshersBuilder.SURF_OFFSET_SMOOTH)
             NETGEN_3D_Parameters = NETGEN_3D.Parameters()
             NETGEN_3D_Parameters.SetMaxSize( Far_Field_Mesh_Size )
             NETGEN_3D_Parameters.SetOptimize( 1 )
@@ -808,7 +809,7 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Aircraft.SetFuseEdges( 80 )
             Sub_mesh_Aircraft_Surface = NETGEN_2D_Aircraft.GetSubMesh()
 
-            #'''
+            '''
             import time as time
             print(' Starting meshing ')
             start_time = time.time()
@@ -912,6 +913,7 @@ for k in range(Number_Of_AOAS):
 
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
+            #smesh.SetName(Viscous_Layers_1, 'Viscous Layers_1')
             smesh.SetName(NETGEN_3D_Parameters, 'NETGEN_3D_Parameters')
             smesh.SetName(Mesh_Domain.GetMesh(), 'Mesh_Domain')
 
