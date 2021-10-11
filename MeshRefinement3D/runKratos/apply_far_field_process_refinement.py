@@ -17,11 +17,10 @@ class ApplyFarFieldProcessRefinement(ApplyFarFieldProcess):
         #     self.upwind_factor_constant -= 0.1
         if self.step > 160:
             self.upwind_factor_constant -= 0.1
-        elif self.step > 17:
+        elif self.step > 13:
             self.upwind_factor_constant -= 0.1
-            # self.critical_mach += 0.01
         elif self.step > 8:
-            # self.free_stream_mach += 0.0095
+            self.critical_mach += 0.01
             self.upwind_factor_constant -= 0.1
         elif self.step > 3:
             self.free_stream_mach += 0.01

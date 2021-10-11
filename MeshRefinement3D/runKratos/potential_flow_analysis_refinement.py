@@ -242,7 +242,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain)# + '.out'
 
-        mdpa_file_name = self.mdpa_path + '/18_fine_mesh_transition1_wake_refined_2_5'
+        # mdpa_file_name = self.mdpa_path + '/15_medium_mesh_wake_refined_2_degree_domain_refined2'
 
         self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(
             mdpa_file_name)
@@ -264,7 +264,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '.stl'
 
-        wake_file_name = self.mdpa_path + '/925_wake_mesh_2_5_degree.stl'
+        wake_file_name = self.mdpa_path + '/920_wake_mesh_2_degree.stl'
 
         self.project_parameters["processes"]["boundary_conditions_process_list"][1]["Parameters"]["wake_stl_file_name"].SetString(wake_file_name)
 
@@ -343,8 +343,6 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
         shutil.copytree(self.newton_convergence_directory_name, nw_dir)
         loads_output.write_figures_newton_convergence(self.newton_convergence_data_directory_name, self.AOA, self.input_dir_path, self.Domain_Length, self.Wing_span, self.Smallest_Airfoil_Mesh_Size)
 
-
-
         # KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Exporting Model...")
         # self._GetSolver().main_model_part.RemoveSubModelPart("trailing_edge_elements_model_part")
         # self._GetSolver().main_model_part.RemoveSubModelPart("wake_elements_model_part")
@@ -365,6 +363,22 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
 
 
         super(PotentialFlowAnalysisRefinement,self).Finalize()
+
+        # KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Exporting Model...")
+        # self._GetSolver().main_model_part.RemoveSubModelPart("trailing_edge_elements_model_part")
+        # self._GetSolver().main_model_part.RemoveSubModelPart("wake_elements_model_part")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Middle_Airfoil")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Section_100")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Section_150")
+        # # self._GetSolver().main_model_part.RemoveSubModelPart("Section_180")
+        # self._GetSolver().main_model_part.RemoveSubModelPart("fluid_computational_model_part")
+
+        # ## Model part writing
+        # name_out_file = self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].GetString()+".out"
+        # KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE | KratosMultiphysics.IO.MESH_ONLY).WriteModelPart(self._GetSolver().main_model_part)
+        # #KratosMultiphysics.ModelPartIO(name_out_file, KratosMultiphysics.IO.WRITE).WriteModelPart(self._GetSolver().main_model_part)
+
+        # KratosMultiphysics.Logger.PrintInfo(self.__class__.__name__, "Model export finished.")
 
         #self.project_parameters["solver_settings"]["element_replace_settings"]["element_name"].SetString("IncompressiblePotentialFlowElement")
         #self.project_parameters["solver_settings"]["element_replace_settings"]["condition_name"].SetString("PotentialWallCondition")
