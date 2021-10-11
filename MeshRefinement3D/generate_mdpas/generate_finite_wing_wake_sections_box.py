@@ -6,13 +6,14 @@
 import os
 import killSalome
 import math
+import numpy as np
 
 # Parameters:
 Wing_span = TBD
 Domain_Length = 1000
 Domain_Height = Domain_Length
 Domain_Width = 1000
-wake_angle_deg = 0.0
+wake_angle_deg = 2.0
 
 Smallest_Airfoil_Mesh_Size = TBD
 Biggest_Airfoil_Mesh_Size = TBD
@@ -59,6 +60,8 @@ Initial_Smallest_Airfoil_Mesh_Size = Smallest_Airfoil_Mesh_Size
 Initial_Biggest_Airfoil_Mesh_Size = Biggest_Airfoil_Mesh_Size
 
 geometry_path = "/media/inigo/10740FB2740F9A1C/Results/15_nasa_crm/07_gid_final/20_geometry_for_salom.igs"
+tail_trailing_edge_path = "/media/inigo/10740FB2740F9A1C/Results/15_nasa_crm/05_trailing_edge/50_only_tail_trailing_edge.igs"
+wing_trailing_edge_path = "/media/inigo/10740FB2740F9A1C/Results/15_nasa_crm/05_trailing_edge/42_only_wing_trailing_edge.igs"
 
 trailing_edge_path = "/media/inigo/10740FB2740F9A1C/Results/15_nasa_crm/05_trailing_edge/trailing_edges.igs"
 
@@ -111,7 +114,140 @@ for k in range(Number_Of_AOAS):
             OY = geompy.MakeVectorDXDYDZ(0, 1, 0)
             OZ = geompy.MakeVectorDXDYDZ(0, 0, 1)
 
+            print(' Importing nasa_crm_igs ...')
             nasa_crm_igs = geompy.ImportIGES(geometry_path, True)
+
+            # [Face_Inlet, Face_crm_cockpit, Face_crm_fuselage_middle_down,\
+            # Face_crm_fuselage_middle_middle, Face_crm_fuselage_middle_up,\
+            # Face_crm_fuselage_root_down, Face_crm_fuselage_root_down_down,\
+            # Face_crm_fuselage_root_up_up, Face_crm_wing_root_down,\
+            # Face_crm_wing_root_up, Face_Left_Wall, Face_crm_fuselage_root_up,\
+            # Face_crm_wing_root_te, Face_crm_wing_down, Face_crm_wing_up,\
+            # Face_crm_fuselage_ring_up, Face_crm_fuselage_ring_down,\
+            # Face_crm_fuselage_ring_middle, Face_crm_wing_te,\
+            # Face_crm_wing_tip_down, Face_crm_wing_tip_up, Face_crm_wing_tip_te,\
+            # Face_crm_fuselage_back, Face_Down_Wall, Face_Top_Wall,\
+            # Face_crm_tail_down, Face_crm_tail_up, Face_crm_tail_te,\
+            # Face_crm_tail_tip_le_down, Face_crm_tail_tip_le_up, Face_crm_tail_tip_te_down,\
+            # Face_crm_tail_tip_te_up, Face_Right_Wall,\
+            # Face_Outlet] = geompy.ExtractShapes(nasa_crm_igs, geompy.ShapeType["FACE"], True)
+
+            # nasa_crm_igs = 0.0
+
+            # Wake direction vector
+            wake_angle_rad = wake_angle_deg*math.pi/180.0
+            wake_direction_list = [math.cos(wake_angle_rad), 0, math.sin(wake_angle_rad)]
+            wake_direction_vector = np.array(wake_direction_list)
+            Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(wake_direction_vector[0], wake_direction_vector[1], wake_direction_vector[2])
+
+            print(' Generating tail refinement boxes ...')
+            # Generate tail refinement boxes
+            tail_trailing_edge = geompy.ImportIGES(tail_trailing_edge_path, True)
+            tail_translate_vector = 10.0 * wake_direction_vector
+            geompy.TranslateDXDYDZ(tail_trailing_edge, tail_translate_vector[0], tail_translate_vector[1], tail_translate_vector[2] - 0.5)
+            Extrusion_Tail_Face = geompy.MakePrismVecH(tail_trailing_edge, OZ, 1)
+            Extrusion_Refinement_Box_Tail = geompy.MakePrismVecH(Extrusion_Tail_Face, Vector_Wake_Direction, 600.0)
+            [Solid_Tail_Root,Solid_Tail_Tip] = geompy.ExtractShapes(Extrusion_Refinement_Box_Tail, geompy.ShapeType["SOLID"], True)
+            print(' Generating common tail refinement boxes ...')
+            Common_Tail_Root = geompy.MakeCommonList([nasa_crm_igs, Solid_Tail_Root], True)
+            Common_Tail_Tip = geompy.MakeCommonList([nasa_crm_igs, Solid_Tail_Tip], True)
+
+            print(' Generating wing refinement boxes ...')
+            # Generate wing refinement boxes
+            wing_trailing_edge = geompy.ImportIGES(wing_trailing_edge_path, True)
+            wing_translate_vector = 35.0 * wake_direction_vector
+            geompy.TranslateDXDYDZ(wing_trailing_edge, wing_translate_vector[0], wing_translate_vector[1], wing_translate_vector[2] - 0.5)
+            Extrusion_Wing_Face = geompy.MakePrismVecH(wing_trailing_edge, OZ, 1)
+            Extrusion_Refinement_Box_Wing = geompy.MakePrismVecH(Extrusion_Wing_Face, Vector_Wake_Direction, 600.0)
+            [Solid_Wing_Root,Solid_Wing_Middle,Solid_Wing_Tip] = geompy.ExtractShapes(Extrusion_Refinement_Box_Wing, geompy.ShapeType["SOLID"], True)
+            print(' Generating common wing refinement boxes ...')
+            Common_Wing_Root = geompy.MakeCommonList([nasa_crm_igs, Solid_Wing_Root], True)
+            Common_Wing_Middle = geompy.MakeCommonList([nasa_crm_igs, Solid_Wing_Middle], True)
+            Common_Wing_Tip = geompy.MakeCommonList([nasa_crm_igs, Solid_Wing_Tip], True)
+
+            # Generate domain
+            print(' Cutting domain ...')
+            Cut_Domain = geompy.MakeCutList(nasa_crm_igs, [Common_Tail_Root, Common_Tail_Tip, Common_Wing_Root, Common_Wing_Middle, Common_Wing_Tip], True)
+            print(' Making partition ...')
+            Partition_Domain = geompy.MakePartition([Cut_Domain, Common_Tail_Root, Common_Tail_Tip, Common_Wing_Root, Common_Wing_Middle, Common_Wing_Tip], [], [], [], geompy.ShapeType["SOLID"], 0, [], 0)
+
+            # Generate wake surface
+            trailing_edge = geompy.ImportIGES(trailing_edge_path, True)
+            Extrusion_Wake_stl = geompy.MakePrismVecH(trailing_edge, Vector_Wake_Direction, Domain_Length*0.6)
+
+
+            exe_time = time.time() - start_time
+            print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
+            print(' Geometry execution took ' + str(round(exe_time/60, 2)) + ' min')
+
+            # Adding to study
+            geompy.addToStudy( O, 'O' )
+            geompy.addToStudy( OX, 'OX' )
+            geompy.addToStudy( OY, 'OY' )
+            geompy.addToStudy( OZ, 'OZ' )
+            geompy.addToStudy( nasa_crm_igs, 'nasa_crm_igs' )
+
+            geompy.addToStudy( Vector_Wake_Direction, 'Vector_Wake_Direction' )
+            # geompy.addToStudy( tail_trailing_edge, 'tail_trailing_edge' )
+            # geompy.addToStudy( Extrusion_Tail_Face, 'Extrusion_Tail_Face' )
+            geompy.addToStudy( Extrusion_Refinement_Box_Tail, 'Extrusion_Refinement_Box_Tail' )
+            geompy.addToStudyInFather( Extrusion_Refinement_Box_Tail, Solid_Tail_Root, 'Solid_Tail_Root' )
+            geompy.addToStudyInFather( Extrusion_Refinement_Box_Tail, Solid_Tail_Tip, 'Solid_Tail_Tip' )
+            geompy.addToStudy( Common_Tail_Root, 'Common_Tail_Root' )
+            geompy.addToStudy( Common_Tail_Tip, 'Common_Tail_Tip' )
+
+            geompy.addToStudy( Extrusion_Refinement_Box_Wing, 'Extrusion_Refinement_Box_Wing' )
+            geompy.addToStudyInFather( Extrusion_Refinement_Box_Wing, Solid_Wing_Root, 'Solid_Wing_Root' )
+            geompy.addToStudyInFather( Extrusion_Refinement_Box_Wing, Solid_Wing_Middle, 'Solid_Wing_Middle' )
+            geompy.addToStudyInFather( Extrusion_Refinement_Box_Wing, Solid_Wing_Tip, 'Solid_Wing_Tip' )
+            geompy.addToStudy( Common_Wing_Root, 'Common_Wing_Root' )
+            geompy.addToStudy( Common_Wing_Middle, 'Common_Wing_Middle' )
+            geompy.addToStudy( Common_Wing_Tip, 'Common_Wing_Tip' )
+
+            geompy.addToStudy( Cut_Domain, 'Cut_Domain' )
+            geompy.addToStudy( Partition_Domain, 'Partition_Domain' )
+
+            geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
+
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_Inlet, 'Face_Inlet' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_cockpit, 'Face_crm_cockpit' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_middle_down, 'Face_crm_fuselage_middle_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_middle_middle, 'Face_crm_fuselage_middle_middle' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_middle_up, 'Face_crm_fuselage_middle_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_root_down, 'Face_crm_fuselage_root_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_root_down_down, 'Face_crm_fuselage_root_down_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_root_up_up, 'Face_crm_fuselage_root_up_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_root_down, 'Face_crm_wing_root_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_root_up, 'Face_crm_wing_root_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_Left_Wall, 'Face_Left_Wall' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_root_up, 'Face_crm_fuselage_root_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_root_te, 'Face_crm_wing_root_te' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_down, 'Face_crm_wing_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_up, 'Face_crm_wing_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_ring_up, 'Face_crm_fuselage_ring_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_ring_down, 'Face_crm_fuselage_ring_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_ring_middle, 'Face_crm_fuselage_ring_middle' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_te, 'Face_crm_wing_te' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_tip_down, 'Face_crm_wing_tip_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_tip_up, 'Face_crm_wing_tip_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_wing_tip_te, 'Face_crm_wing_tip_te' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_fuselage_back, 'Face_crm_fuselage_back' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_Down_Wall, 'Face_Down_Wall' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_Top_Wall, 'Face_Top_Wall' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_down, 'Face_crm_tail_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_up, 'Face_crm_tail_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_te, 'Face_crm_tail_te' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_le_down, 'Face_crm_tail_tip_le_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_le_up, 'Face_crm_tail_tip_le_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_te_down, 'Face_crm_tail_tip_te_down' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_crm_tail_tip_te_up, 'Face_crm_tail_tip_te_up' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_Right_Wall, 'Face_Right_Wall' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Face_Outlet, 'Face_Outlet' )
+
+
+
+            '''
+            Extrusion_Wake_stl = geompy.MakePrismVecH(trailing_edge, Vector_Wake_Direction, Domain_Length*0.6)
 
             [Face_Inlet, Face_crm_cockpit, Face_crm_fuselage_middle_down,\
             Face_crm_fuselage_middle_middle, Face_crm_fuselage_middle_up,\
@@ -224,17 +360,17 @@ for k in range(Number_Of_AOAS):
             geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Transition_Edges, [Edge_127])
 
             '''
-            # Fuselage edges
-            Auto_group_for_Sub_mesh_Fuselage_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Edges, [Edge_105,Edge_106,Edge_107,Edge_108,Edge_109,Edge_110,Edge_113,Edge_121,Edge_129,Edge_192,Edge_194,Edge_1100,Edge_1104])
+            # # Fuselage edges
+            # Auto_group_for_Sub_mesh_Fuselage_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            # geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Edges, [Edge_105,Edge_106,Edge_107,Edge_108,Edge_109,Edge_110,Edge_113,Edge_121,Edge_129,Edge_192,Edge_194,Edge_1100,Edge_1104])
 
-            # Fuselage transition edges
-            Auto_group_for_Sub_mesh_Fuselage_Transition_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Transition_Edges, [Edge_112,Edge_115,Edge_118,Edge_123,Edge_126,Edge_131,Edge_193,Edge_197,Edge_199,Edge_1126,Edge_1127])
+            # # Fuselage transition edges
+            # Auto_group_for_Sub_mesh_Fuselage_Transition_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            # geompy.UnionList(Auto_group_for_Sub_mesh_Fuselage_Transition_Edges, [Edge_112,Edge_115,Edge_118,Edge_123,Edge_126,Edge_131,Edge_193,Edge_197,Edge_199,Edge_1126,Edge_1127])
 
-            # Root edges
-            Auto_group_for_Sub_mesh_Root_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
-            geompy.UnionList(Auto_group_for_Sub_mesh_Root_Edges, [Edge_114,Edge_119,Edge_125,Edge_127,Edge_130,Edge_140,Edge_144,Edge_145,Edge_146, Edge_1133])
+            # # Root edges
+            # Auto_group_for_Sub_mesh_Root_Edges = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["EDGE"])
+            # geompy.UnionList(Auto_group_for_Sub_mesh_Root_Edges, [Edge_114,Edge_119,Edge_125,Edge_127,Edge_130,Edge_140,Edge_144,Edge_145,Edge_146, Edge_1133])
             '''
 
             # Fuselage surfaces
@@ -269,6 +405,7 @@ for k in range(Number_Of_AOAS):
             Face_crm_tail_tip_te_up])
 
             '''
+            '''
             # Generate stl wake
             wake_angle_rad = wake_angle_deg*math.pi/180.0
             Vector_Wake_Direction = geompy.MakeVectorDXDYDZ(math.cos(wake_angle_rad), 0, math.sin(wake_angle_rad))
@@ -302,16 +439,22 @@ for k in range(Number_Of_AOAS):
 
             #'''
 
-            exe_time = time.time() - start_time
-            print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
-            print(' Geometry execution took ' + str(round(exe_time/60, 2)) + ' min')
+            # exe_time = time.time() - start_time
+            # print(' Geometry execution took ', str(round(exe_time, 2)), ' sec')
+            # print(' Geometry execution took ' + str(round(exe_time/60, 2)) + ' min')
 
-            # Adding to study
-            geompy.addToStudy( O, 'O' )
-            geompy.addToStudy( OX, 'OX' )
-            geompy.addToStudy( OY, 'OY' )
-            geompy.addToStudy( OZ, 'OZ' )
-            geompy.addToStudy( nasa_crm_igs, 'nasa_crm_igs' )
+            # # Adding to study
+            # geompy.addToStudy( O, 'O' )
+            # geompy.addToStudy( OX, 'OX' )
+            # geompy.addToStudy( OY, 'OY' )
+            # geompy.addToStudy( OZ, 'OZ' )
+            # geompy.addToStudy( nasa_crm_igs, 'nasa_crm_igs' )
+
+            # geompy.addToStudy( Vector_Wake_Direction, 'Vector_Wake_Direction' )
+            # geompy.addToStudy( tail_trailing_edge, 'tail_trailing_edge' )
+            # geompy.addToStudy( Extrusion_Tail_Face, 'Extrusion_Tail_Face' )
+
+            '''
 
 
             geompy.addToStudyInFather( nasa_crm_igs, Face_Inlet, 'Face_Inlet' )
@@ -493,7 +636,7 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Fuselage_Transition_Edges, 'Auto_group_for_Sub_mesh_Fuselage_Transition_Edges' )
 
             '''
-            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Root_Edges, 'Auto_group_for_Sub_mesh_Root_Edges' )
+            # geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Root_Edges, 'Auto_group_for_Sub_mesh_Root_Edges' )
             '''
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Fuselage_Surfaces, 'Auto_group_for_Sub_mesh_Fuselage_Surfaces' )
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Root_Surfaces, 'Auto_group_for_Sub_mesh_Root_Surfaces' )
@@ -508,21 +651,21 @@ for k in range(Number_Of_AOAS):
 
 
 
-            geompy.addToStudy( trailing_edge, 'trailing_edge' )
-            geompy.addToStudy( Vector_Wake_Direction, 'Vector_Wake_Direction' )
-            geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
+            # geompy.addToStudy( trailing_edge, 'trailing_edge' )
+            # geompy.addToStudy( Vector_Wake_Direction, 'Vector_Wake_Direction' )
+            # geompy.addToStudy( Extrusion_Wake_stl, 'Extrusion_Wake_stl' )
 
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Fuselage, 'Wake_Face_Wing_Fuselage' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Root, 'Wake_Face_Wing_Root' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Out, 'Wake_Face_Wing_Out' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Tip, 'Wake_Face_Wing_Tip' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Tail_Fuselage, 'Wake_Face_Tail_Fuselage' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Tail, 'Wake_Face_Tail' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Fuselage, 'Wake_Face_Wing_Fuselage' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Root, 'Wake_Face_Wing_Root' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Out, 'Wake_Face_Wing_Out' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Wing_Tip, 'Wake_Face_Wing_Tip' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Tail_Fuselage, 'Wake_Face_Tail_Fuselage' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Wake_Face_Tail, 'Wake_Face_Tail' )
 
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Trailing_Edges, 'Auto_group_for_Sub_mesh_Wake_Trailing_Edges' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Transition_Edges, 'Auto_group_for_Sub_mesh_Wake_Transition_Edges' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Outlet_Edges, 'Auto_group_for_Sub_mesh_Wake_Outlet_Edges' )
-            geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Surfaces, 'Auto_group_for_Sub_mesh_Wake_Surfaces' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Trailing_Edges, 'Auto_group_for_Sub_mesh_Wake_Trailing_Edges' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Transition_Edges, 'Auto_group_for_Sub_mesh_Wake_Transition_Edges' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Outlet_Edges, 'Auto_group_for_Sub_mesh_Wake_Outlet_Edges' )
+            # geompy.addToStudyInFather( Extrusion_Wake_stl, Auto_group_for_Sub_mesh_Wake_Surfaces, 'Auto_group_for_Sub_mesh_Wake_Surfaces' )
 
             '''
 
@@ -576,10 +719,10 @@ for k in range(Number_Of_AOAS):
             Local_Length_Middle_Tip_Edges = Regular_1D_Middle_Tip_Edges.LocalLength(Wing_Tip_Mesh_Size,None,1e-07)
 
             '''
-            # Root edges
-            Regular_1D_Root = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Root_Edges)
-            Sub_mesh_Root_Edges = Regular_1D_Root.GetSubMesh()
-            Local_Length_Root = Regular_1D_Root.LocalLength(Root_Mesh_Size,None,1e-07)
+            # # Root edges
+            # Regular_1D_Root = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Root_Edges)
+            # Sub_mesh_Root_Edges = Regular_1D_Root.GetSubMesh()
+            # Local_Length_Root = Regular_1D_Root.LocalLength(Root_Mesh_Size,None,1e-07)
             '''
 
             # Fuselage 177 Edge
@@ -809,7 +952,6 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Aircraft.SetFuseEdges( 80 )
             Sub_mesh_Aircraft_Surface = NETGEN_2D_Aircraft.GetSubMesh()
 
-            '''
             import time as time
             print(' Starting meshing ')
             start_time = time.time()
@@ -910,6 +1052,7 @@ for k in range(Number_Of_AOAS):
                 print 'ExportSTL() failed. Invalid file name?'
 
             '''
+            '''
 
             ## Set names of Mesh objects
             smesh.SetName(NETGEN_3D.GetAlgorithm(), 'NETGEN 3D')
@@ -934,9 +1077,9 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(Sub_mesh_Middle_Tip_Edges, 'Sub_mesh_Middle_Tip_Edges')
 
             '''
-            smesh.SetName(Regular_1D_Root.GetAlgorithm(), 'Regular_1D_Root')
-            smesh.SetName(Local_Length_Root, 'Local_Length_Root')
-            smesh.SetName(Sub_mesh_Root_Edges, 'Sub_mesh_Root_Edges')
+            # smesh.SetName(Regular_1D_Root.GetAlgorithm(), 'Regular_1D_Root')
+            # smesh.SetName(Local_Length_Root, 'Local_Length_Root')
+            # smesh.SetName(Sub_mesh_Root_Edges, 'Sub_mesh_Root_Edges')
 
             '''
             smesh.SetName(Regular_1D_Fuselage_143_Edge.GetAlgorithm(), 'Regular_1D_Fuselage_143_Edge')
@@ -1007,6 +1150,7 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN_2D_Parameters_FarField')
             smesh.SetName(Sub_mesh_Far_Field_Surface, 'Sub_mesh_Far_Field_Surface')
 
+            '''
             '''
             # Wake stuff
             smesh.SetName(NETGEN_1D_2D_2.GetAlgorithm(), 'NETGEN_1D_2D_2')
