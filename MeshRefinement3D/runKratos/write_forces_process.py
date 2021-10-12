@@ -497,9 +497,15 @@ class WriteForcesProcess(ComputeLiftProcess):
                 cp_dir_name = self.input_dir_path + '/plots/cp_crm'
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
-                cp_dir_name = self.input_dir_path + '/plots/cp_crm' + '/mach_' + str(round(self.mach*1e2))
+                cp_dir_name = self.input_dir_path + '/plots/cp_crm' + '/mach_' + str(round(self.mach*1e2)) + '/ufc_' + str(round(self.ufc*10))
                 if not os.path.exists(cp_dir_name):
                     os.makedirs(cp_dir_name)
+                cp_dir_cfl3d = cp_dir_name + '/cfl3d'
+                if not os.path.exists(cp_dir_cfl3d):
+                    os.makedirs(cp_dir_cfl3d)
+                cp_dir_tranair = cp_dir_name + '/tranair'
+                if not os.path.exists(cp_dir_tranair):
+                    os.makedirs(cp_dir_tranair)
                 case_name = 'case_' + str(self.case) + '_section_' + str(section) + '_mach_' + str(round(self.mach*1e4)) + '_ufc_' + str(round(self.ufc*10)) + '_step_' + str(round(self.step))
                 section_model_part = self.model.CreateModelPart(case_name)
                 origin[1] = section/10000.0 * wing_span
@@ -523,7 +529,16 @@ class WriteForcesProcess(ComputeLiftProcess):
 
                 # Write data to file
                 cp_case = case_name + '_aoa_' + str(self.AOA) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '_Growth_Rate_Wing_' + str(self.Growth_Rate_Wing)
-                cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
+
+                cp_cfl3d_file_name = 'references/cp/crm/cfl3d/cfl3d_' + str(section) + '.dat'
+                if os.path.exists(cp_cfl3d_file_name):
+                    cp_file_name = cp_dir_cfl3d + '/' + cp_case + '.dat'
+
+                cp_tranair_file_name = 'references/cp/crm/tranair/' + str(section) + '.dat'
+                if os.path.exists(cp_tranair_file_name):
+                    cp_file_name = cp_dir_tranair + '/' + cp_case + '.dat'
+
+                # cp_file_name = cp_dir_name + '/' + cp_case + '.dat'
                 with open(cp_file_name, 'w') as cp_file:
                     for i in range(len(x_section_normalized)):
                         cp_file.write('{0:15f} {1:15f}\n'.format(x_section_normalized[i], cp_section[i]))
@@ -531,16 +546,17 @@ class WriteForcesProcess(ComputeLiftProcess):
                 #plt.plot(x_section_normalized,cp_section,'r-',label='Kratos Finite Element Potential Solver', markersize=5)
                 plt.plot(x_section_normalized,cp_section,'r.',label='FE Potential Solver (Kratos)', markersize=5)
 
-
                 # Get potential solver reference data
                 cp_cfl3d_file_name = 'references/cp/crm/cfl3d/cfl3d_' + str(section) + '.dat'
                 if os.path.exists(cp_cfl3d_file_name):
+                    cp_figure_name = cp_dir_cfl3d + '/cfl3d_' + cp_case + '.png'
                     x_potential = [float(line.split()[0]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
                     cp_potential = [float(line.split()[1]) for line in open(cp_cfl3d_file_name).readlines() if len(line.split()) > 0]
                     plt.plot(x_potential,cp_potential,'g+',label='RANS', markersize=5)
 
                 cp_tranair_file_name = 'references/cp/crm/tranair/' + str(section) + '.dat'
                 if os.path.exists(cp_tranair_file_name):
+                    cp_figure_name = cp_dir_tranair + '/tranair_' + cp_case + '.png'
                     x_potential = [float(line.split()[0]) for line in open(cp_tranair_file_name).readlines() if len(line.split()) > 0]
                     cp_potential = [float(line.split()[1]) for line in open(cp_tranair_file_name).readlines() if len(line.split()) > 0]
                     plt.plot(x_potential,cp_potential,'bx',label='TRANAIR', markersize=5)
@@ -554,7 +570,7 @@ class WriteForcesProcess(ComputeLiftProcess):
                 plt.grid()
                 plt.gca().invert_yaxis()
 
-                cp_figure_name = cp_dir_name + '/' + cp_case + '.png'
+                # cp_figure_name = cp_dir_name + '/' + cp_case + '.png'
                 plt.gca().set_xlim([-0.05,1.05])
                 plt.gca().set_ylim([-1.5,1.0])
                 plt.gca().invert_yaxis()
