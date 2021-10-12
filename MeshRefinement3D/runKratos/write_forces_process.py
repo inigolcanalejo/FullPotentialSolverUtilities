@@ -165,10 +165,14 @@ class WriteForcesProcess(ComputeLiftProcess):
             self.cl_reference = self.read_cl_reference(self.AOA+5.0)
             self.cd_reference = self.read_cd_reference(self.AOA+5.0)
             self.cm_reference = self.read_cm_reference(self.AOA+5.0)
-        else:
+        elif self.reference_case_name == "ONERA":
             self.cl_reference = 0.288
             self.cd_reference = 0.0111
             self.cm_reference = -0.212
+        else:
+            self.cl_reference = 0.50
+            self.cd_reference = 0.0140
+            self.cm_reference = -0.039
 
         if(abs(self.cl_reference) < 1e-6):
             self.cl_p_relative_error = abs(self.lift_coefficient - self.cl_reference)
