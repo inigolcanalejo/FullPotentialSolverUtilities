@@ -11,7 +11,7 @@ mpl.rcParams['text.latex.preamble'] = [r'\usepackage{amsmath}'] #for \text comma
 heat_capacity_ratio = 1.4
 hcr = heat_capacity_ratio
 
-free_stream_mach_number = 0.62
+free_stream_mach_number = 0.85
 free_stream_speed_of_sound = 340.0
 free_streem_velocity = free_stream_mach_number*free_stream_speed_of_sound
 

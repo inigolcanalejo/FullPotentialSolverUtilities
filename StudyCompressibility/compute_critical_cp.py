@@ -12,7 +12,7 @@ heat_capacity_ratio = 1.4
 hcr = heat_capacity_ratio
 
 # Definning range of free stream mach numbers
-free_stream_mach_number = 0.8395
+free_stream_mach_number = 0.85
 
 # Computing squares and shortening names
 Mi2 = free_stream_mach_number**2

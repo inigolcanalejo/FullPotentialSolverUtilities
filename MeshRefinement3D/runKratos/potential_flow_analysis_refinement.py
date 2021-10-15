@@ -242,7 +242,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain)# + '.out'
 
-        mdpa_file_name = self.mdpa_path + '/03_fine_fuselage_wake_refined_2_degree'
+        mdpa_file_name = self.mdpa_path + '/03_fine_fuselage_wake_refined_2_31_degree'
 
         self.project_parameters["solver_settings"]["model_import_settings"]["input_filename"].SetString(
             mdpa_file_name)
@@ -264,7 +264,7 @@ class PotentialFlowAnalysisRefinement(PotentialFlowAnalysis):
               self.Wing_span) + '_Airfoil_Mesh_Size_' + str(self.Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 self.Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(self.Growth_Rate_Domain) + '.stl'
 
-        wake_file_name = self.mdpa_path + '/920_wake_mesh_2_degree.stl'
+        wake_file_name = self.mdpa_path + '/9231_wake_mesh_2_31_degree.stl'
 
         self.project_parameters["processes"]["boundary_conditions_process_list"][1]["Parameters"]["wake_stl_file_name"].SetString(wake_file_name)
 

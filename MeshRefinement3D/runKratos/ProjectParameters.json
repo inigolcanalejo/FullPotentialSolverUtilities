@@ -82,7 +82,7 @@
             "process_name"  : "FarFieldProcessRefinement",
             "Parameters"    : {
                 "model_part_name" : "FluidModelPart.PotentialWallCondition3D_Far_field_Auto1",
-                "angle_of_attack" : 2.0,
+                "angle_of_attack" : 2.31,
                 "mach_infinity"   : 0.6,
                 "speed_of_sound"  : 340.0,
                 "heat_capacity_ratio": 1.4,
@@ -105,7 +105,7 @@
                 "kutta_condition_rotation_angle" : 0.0,
                 "wake_process_cpp_parameters":    {
                     "tolerance"                     : 1e-12,
-                    "wake_normal"                   : [-0.03489949670250097, 0.0, 0.9993908270190958],
+                    "wake_normal"                   : [-0.040306184241054394, 0.0, 0.9991873755767364],
                     "is_sharp_trailing_edge"        : false,
                     "switch_wake_normal"            : false,
                     "count_elements_number"         : true,
