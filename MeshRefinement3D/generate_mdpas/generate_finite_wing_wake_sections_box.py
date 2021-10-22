@@ -303,6 +303,9 @@ for k in range(Number_Of_AOAS):
             Auto_group_for_Sub_mesh_Wing_Tail_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Tail_Surfaces, [Face_crm_tail_down,Face_crm_tail_up])
 
+            Auto_group_for_Sub_mesh_Wing_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
+            geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Surfaces, [Face_crm_wing_root_down,Face_crm_wing_root_up,Face_crm_wing_down,Face_crm_wing_up,Face_crm_wing_tip_down,Face_crm_wing_tip_up])
+
             # Trailing edge surfaces
             Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces = geompy.CreateGroup(nasa_crm_igs, geompy.ShapeType["FACE"])
             geompy.UnionList(Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces, [Face_crm_wing_tip_down,Face_crm_wing_tip_up,Face_crm_tail_tip_le_down,Face_crm_tail_tip_le_up,Face_crm_tail_tip_te_down,Face_crm_tail_tip_te_up])
@@ -637,6 +640,8 @@ for k in range(Number_Of_AOAS):
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces, 'Auto_group_for_Sub_mesh_Wing_Tail_Tip_Surfaces' )
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces, 'Auto_group_for_Sub_mesh_Trailing_Edge_Surfaces' )
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Engine_Surfaces, 'Auto_group_for_Sub_mesh_Engine_Surfaces' )
+            geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Wing_Surfaces, 'Auto_group_for_Sub_mesh_Wing_Surfaces' )
+
 
             # Fuselage edges
             geompy.addToStudyInFather( nasa_crm_igs, Auto_group_for_Sub_mesh_Fuselage_Edges, 'Auto_group_for_Sub_mesh_Fuselage_Edges' )
@@ -745,14 +750,15 @@ for k in range(Number_Of_AOAS):
             Sub_mesh_Fuselage_Edges = Regular_1D_Fuselage.GetSubMesh()
             Local_Length_Fuselage = Regular_1D_Fuselage.LocalLength(Fuselage_Mesh_Size,None,1e-07)
 
-            # Engine edges
+            # Outlet Engine edges
             Regular_1D_Engine_Outlet = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Engine_Outlet_Edges)
             Sub_mesh_Engine_Outlet_Edges = Regular_1D_Engine_Outlet.GetSubMesh()
-            Local_Length_Engine_Outlet = Regular_1D_Engine_Outlet.LocalLength(Fuselage_Mesh_Size,None,1e-07)
+            Local_Length_Engine_Outlet = Regular_1D_Engine_Outlet.LocalLength(Biggest_Airfoil_Mesh_Size,None,1e-07)
 
+            # Engine edges
             Regular_1D_Engine = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Engine_Edges)
             Sub_mesh_Engine_Edges = Regular_1D_Engine.GetSubMesh()
-            Local_Length_Engine = Regular_1D_Engine.LocalLength(Fuselage_Mesh_Size,None,1e-07)
+            Local_Length_Engine = Regular_1D_Engine.LocalLength(Biggest_Airfoil_Mesh_Size,None,1e-07)
 
             # Wing hole edges
             Regular_1D_Wing_Hole = Mesh_Domain.Segment(geom=Auto_group_for_Sub_mesh_Wing_Hole_Edges)
@@ -910,7 +916,7 @@ for k in range(Number_Of_AOAS):
             # Engine surface
             NETGEN_2D_Engine_Outlet = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Engine_Outlet_Surfaces)
             NETGEN_2D_Parameters_Engine_Outlet = NETGEN_2D_Engine_Outlet.Parameters()
-            NETGEN_2D_Parameters_Engine_Outlet.SetMaxSize( Fuselage_Mesh_Size )
+            NETGEN_2D_Parameters_Engine_Outlet.SetMaxSize( 0.02 )
             NETGEN_2D_Parameters_Engine_Outlet.SetOptimize( 1 )
             NETGEN_2D_Parameters_Engine_Outlet.SetFineness( 5 )
             NETGEN_2D_Parameters_Engine_Outlet.SetGrowthRate( 0.3 )
@@ -925,7 +931,7 @@ for k in range(Number_Of_AOAS):
 
             NETGEN_2D_Engine = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Engine_Surfaces)
             NETGEN_2D_Parameters_Engine = NETGEN_2D_Engine.Parameters()
-            NETGEN_2D_Parameters_Engine.SetMaxSize( Fuselage_Mesh_Size )
+            NETGEN_2D_Parameters_Engine.SetMaxSize( Biggest_Airfoil_Mesh_Size )
             NETGEN_2D_Parameters_Engine.SetOptimize( 1 )
             NETGEN_2D_Parameters_Engine.SetFineness( 5 )
             NETGEN_2D_Parameters_Engine.SetGrowthRate( 0.3 )
@@ -1000,8 +1006,25 @@ for k in range(Number_Of_AOAS):
             NETGEN_2D_Parameters_Aircraft.SetFuseEdges( 80 )
             Sub_mesh_Aircraft_Surface = NETGEN_2D_Aircraft.GetSubMesh()
 
+
+            # Wing surface
+            NETGEN_2D_Only_Wing = Mesh_Domain.Triangle(algo=smeshBuilder.NETGEN_2D,geom=Auto_group_for_Sub_mesh_Wing_Surfaces)
+            NETGEN_2D_Parameters_Only_Wing = NETGEN_2D_Only_Wing.Parameters()
+            NETGEN_2D_Parameters_Only_Wing.SetMaxSize( Fuselage_Mesh_Size )
+            NETGEN_2D_Parameters_Only_Wing.SetOptimize( 1 )
+            NETGEN_2D_Parameters_Only_Wing.SetFineness( 5 )
+            NETGEN_2D_Parameters_Only_Wing.SetGrowthRate( 0.3 )
+            NETGEN_2D_Parameters_Only_Wing.SetNbSegPerEdge( 6.92154e-310 )
+            NETGEN_2D_Parameters_Only_Wing.SetNbSegPerRadius( 5.32336e-317 )
+            NETGEN_2D_Parameters_Only_Wing.SetMinSize( 0.005 )
+            NETGEN_2D_Parameters_Only_Wing.SetUseSurfaceCurvature( 1 )
+            NETGEN_2D_Parameters_Only_Wing.SetQuadAllowed( 0 )
+            NETGEN_2D_Parameters_Only_Wing.SetSecondOrder( 106 )
+            NETGEN_2D_Parameters_Only_Wing.SetFuseEdges( 80 )
+            Sub_mesh_Only_Wing_Surface = NETGEN_2D_Only_Wing.GetSubMesh()
+
+
             #'''
-            '''
             import time as time
             print(' Starting meshing ')
             start_time = time.time()
@@ -1048,6 +1071,10 @@ for k in range(Number_Of_AOAS):
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
 
+            wing_surface_path = salome_output_path + '/Sub-mesh_Only_Wing_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
+              Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
+                Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
+
             te_path = salome_output_path + '/Sub-mesh_TE_Case_' + str(case) + '_AOA_' + str(AOA) + '_Wing_Span_' + str(
               Wing_span) + '_Airfoil_Mesh_Size_' + str(Smallest_Airfoil_Mesh_Size) + '_Growth_Rate_Wing_' + str(
                 Growth_Rate_Wing) + '_Growth_Rate_Domain_' + str(Growth_Rate_Domain) + '.dat'
@@ -1060,6 +1087,11 @@ for k in range(Number_Of_AOAS):
               print 'ExportDAT() failed. Invalid file name?'
             try:
               Mesh_Domain.ExportDAT( r'/' + body_surface_path, Sub_mesh_Aircraft_Surface )
+              pass
+            except:
+              print 'ExportPartToDAT() failed. Invalid file name?'
+            try:
+              Mesh_Domain.ExportDAT( r'/' + wing_surface_path, Sub_mesh_Only_Wing_Surface )
               pass
             except:
               print 'ExportPartToDAT() failed. Invalid file name?'
@@ -1271,6 +1303,10 @@ for k in range(Number_Of_AOAS):
             smesh.SetName(NETGEN_2D_Aircraft.GetAlgorithm(), 'NETGEN_2D_Aircraft')
             smesh.SetName(NETGEN_2D_Parameters_Aircraft, 'NETGEN_2D_Parameters_Aircraft')
             smesh.SetName(Sub_mesh_Aircraft_Surface, 'Sub_mesh_Aircraft_Surface')
+
+            smesh.SetName(NETGEN_2D_Only_Wing.GetAlgorithm(), 'NETGEN_2D_Only_Wing')
+            smesh.SetName(NETGEN_2D_Parameters_Only_Wing, 'NETGEN_2D_Parameters_Only_Wing')
+            smesh.SetName(Sub_mesh_Only_Wing_Surface, 'Sub_mesh_Only_Wing_Surface')
 
             smesh.SetName(NETGEN_2D_Far_Field.GetAlgorithm(), 'NETGEN_2D_Far_Field')
             smesh.SetName(NETGEN_2D_Parameters_FarField, 'NETGEN_2D_Parameters_FarField')
